@@ -1,11 +1,8 @@
+using IDomain;
+
 namespace Domain;
 
-public class SecurityCamera
+public class SecurityCamera : IDevice
 {
-    public bool IsConnected { get; private set; }
-    
-    public void Connect()
-    {
-        IsConnected = true;
-    }
+    public bool IsConnected { get; set; }
 }

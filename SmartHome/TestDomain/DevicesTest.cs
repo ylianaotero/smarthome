@@ -15,7 +15,7 @@ public class DevicesTest
         var device = new SecurityCamera();
 
         // Act
-        device.Connect();
+        device.IsConnected = true;
 
         // Assert
         Assert.IsTrue(device.IsConnected);
