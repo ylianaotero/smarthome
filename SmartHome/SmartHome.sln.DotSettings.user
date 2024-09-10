@@ -1,4 +1,24 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5453a3f3_002D9406_002D4a7b_002D88a7_002D2b5569063651/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestDomain&amp;gt; #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=74a9e13d_002D150a_002D4f72_002D9615_002Dc3a0f880333b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestDomain&amp;gt; #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8b9b7f84_002Dabaa_002D443e_002Dbc48_002Db7f045f2dc83/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="DevicesTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;MSTest::91433531-CBD6-48B6-9CC4-AA68A191CA6B::net8.0::TestDomain.DevicesTest&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4b9cb9c_002Ddef2_002D49c2_002D869b_002D18bdc5b1dae5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestDomain&amp;gt; #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c7a40da9_002D5ab9_002D4e35_002D8d16_002D75d1f1d74239/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestDomain&amp;gt; #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cd4bb87d_002D50c7_002D4d82_002D9f7d_002D4a399324123e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from DevicesTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;ProjectFile&gt;91433531-CBD6-48B6-9CC4-AA68A191CA6B/f:DevicesTest.cs&lt;/ProjectFile&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd3bc9c9_002Dd96b_002D4717_002D81f1_002D9d4a59059448/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestDomain&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
