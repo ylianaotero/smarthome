@@ -14,4 +14,6 @@ public class Notification
         Read = false;  
         ReadAt = DateTime.MinValue;  
     }
+    
+    
 }

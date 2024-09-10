@@ -6,9 +6,9 @@ namespace DomainTest;
 public class NotificationTest
 {
     private string _event = "Door Opened";
-    private DateTime _createdAt = DateTime.Today.Date;
+    private DateTime _todayDate = DateTime.Today.Date;
     private bool _read = false;
-    private DateTime _readAt = DateTime.MinValue;
+    private DateTime _minValueDate = DateTime.MinValue;
 
     private Notification _notification; 
     
@@ -17,6 +17,7 @@ public class NotificationTest
     {
         _notification = new Notification(_event);
     }
+    
     [TestMethod]
     public void CreateNewNotification()
     {
@@ -26,7 +27,18 @@ public class NotificationTest
         // Assert
         Assert.AreEqual(_event, notification.Event);
         Assert.AreEqual(_read, notification.Read);
-        Assert.AreEqual(_createdAt, notification.CreatedAt.Date);
-        Assert.AreEqual(_readAt, notification.ReadAt);
+        Assert.AreEqual(_todayDate, notification.CreatedAt.Date);
+        Assert.AreEqual(_minValueDate, notification.ReadAt);
+    }
+    
+    [TestMethod]
+    public void ReadNotification()
+    {
+        // Act
+        _notification.MarkAsRead(); 
+
+        // Assert
+        Assert.AreEqual(true, notification.Read);
+        Assert.AreEqual(_todayDate, notification.ReadAt.Date);
     }
 }
