@@ -20,4 +20,17 @@ public class DevicesTest
         // Assert
         Assert.IsTrue(device.IsConnected);
     }
+    
+    [TestMethod]
+    public void TestAddNameToSecurityCamera()
+    {
+        // Arrange
+        var device = new SecurityCamera();
+
+        // Act
+        device.Name = "Camera 1";
+
+        // Assert
+        Assert.AreEqual("Camera 1", device.Name);
+    }
 }
