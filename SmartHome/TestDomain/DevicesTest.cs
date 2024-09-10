@@ -33,4 +33,17 @@ public class DevicesTest
         // Assert
         Assert.AreEqual("Camera 1", device.Name);
     }
+    
+    [TestMethod]
+    public void TestAddModelToSecurityCamera()
+    {
+        // Arrange
+        var device = new SecurityCamera();
+
+        // Act
+        device.Model = 1345354616346;
+
+        // Assert
+        Assert.AreEqual(1345354616346, device.Model);
+    }
 }
