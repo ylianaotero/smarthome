@@ -2,6 +2,7 @@ namespace Domain;
 
 public class Home
 {
+    public int Id { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public int Latitude { get; set; }
