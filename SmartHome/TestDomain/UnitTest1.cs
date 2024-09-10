@@ -1,15 +1,11 @@
 namespace TestDomain;
 
-public class Tests
+[TestClass]
+public class NotificationTests
 {
-    [SetUp]
+    [TestMethod]
     public void Setup()
     {
     }
-
-    [Test]
-    public void Test1()
-    {
-        Assert.Pass();
-    }
+    
 }
