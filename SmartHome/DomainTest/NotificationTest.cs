@@ -38,7 +38,7 @@ public class NotificationTest
         _notification.MarkAsRead(); 
 
         // Assert
-        Assert.AreEqual(true, notification.Read);
-        Assert.AreEqual(_todayDate, notification.ReadAt.Date);
+        Assert.AreEqual(true, _notification.Read);
+        Assert.AreEqual(_todayDate, _notification.ReadAt.Date);
     }
 }

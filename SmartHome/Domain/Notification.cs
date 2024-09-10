@@ -15,5 +15,9 @@ public class Notification
         ReadAt = DateTime.MinValue;  
     }
     
-    
+    public void MarkAsRead()
+    {
+        Read = true;
+        ReadAt = DateTime.Now; 
+    }
 }
