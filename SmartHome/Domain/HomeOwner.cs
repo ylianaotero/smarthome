@@ -1,6 +1,8 @@
+using IDomain;
+
 namespace Domain;
 
-public class HomeOwner
+public class HomeOwner : IRole
 {
     public string Name { get; set; }
     public string Surname { get; set; }
