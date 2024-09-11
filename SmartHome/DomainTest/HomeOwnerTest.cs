@@ -17,4 +17,17 @@ public class HomeOwnerTest
         // Assert
         Assert.AreEqual("Pedro", homeOwner.Name);
     }
+    
+    [TestMethod]
+    public void TestAddSurnameToHomeOwner()
+    {
+        // Arrange
+        HomeOwner homeOwner = new HomeOwner();
+        
+        // Act
+        homeOwner.Surname = "Gonzalez";
+
+        // Assert
+        Assert.AreEqual("Gonzalez", homeOwner.Surname);
+    }
 }
