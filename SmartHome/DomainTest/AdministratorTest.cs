@@ -1,3 +1,5 @@
+using Domain;
+
 namespace DomainTest;
 
 [TestClass]
@@ -10,10 +12,23 @@ public class AdministratorTest
         Administrator administrator = new Administrator();
         
         // Act
-        administrator.Surname = "Juan";
+        administrator.Name = "Juan";
 
         // Assert
-        Assert.AreEqual("Juan", administrator.Surname);
+        Assert.AreEqual("Juan", administrator.Name);
+    }
+    
+    [TestMethod]
+    public void TestAddSurnameToAdministrator()
+    {
+        // Arrange
+        Administrator administrator = new Administrator();
+        
+        // Act
+        administrator.Surname = "Perez";
+
+        // Assert
+        Assert.AreEqual("Perez", administrator.Surname);
     }
 
 }
