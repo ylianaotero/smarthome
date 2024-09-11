@@ -43,4 +43,17 @@ public class HomeOwnerTest
         // Assert
         Assert.AreEqual("pedroGonzalez@gmail.com", homeOwner.Email);
     }
+    
+    [TestMethod]
+    public void TestAddPasswordToHomeOwner()
+    {
+        // Arrange
+        HomeOwner homeOwner = new HomeOwner();
+        
+        // Act
+        homeOwner.Password = "password1";
+
+        // Assert
+        Assert.AreEqual("password1", homeOwner.Password);
+    }
 }
