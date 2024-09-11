@@ -30,5 +30,18 @@ public class AdministratorTest
         // Assert
         Assert.AreEqual("Perez", administrator.Surname);
     }
+    
+    [TestMethod]
+    public void TestAddEmailToAdministrator()
+    {
+        // Arrange
+        Administrator administrator = new Administrator();
+        
+        // Act
+        administrator.Email = "juanperez@gmail.com";
+
+        // Assert
+        Assert.AreEqual("juanperez@gmail.com", administrator.Email);
+    }
 
 }
