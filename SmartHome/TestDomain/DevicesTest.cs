@@ -8,11 +8,17 @@ namespace TestDomain;
 [TestClass]
 public class DevicesTest
 {
+    private SecurityCamera device;
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        device = new SecurityCamera();
+    }
+    
     [TestMethod]
     public void TestConnectSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
-        
         device.IsConnected = true;
         
         Assert.IsTrue(device.IsConnected);
@@ -21,8 +27,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddNameToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
-        
         device.Name = "Camera 1";
         
         Assert.AreEqual("Camera 1", device.Name);
@@ -31,8 +35,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddModelToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
-        
         device.Model = 1345354616346;
         
         Assert.AreEqual(1345354616346, device.Model);
@@ -41,7 +43,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddPhotosToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
         List<string> photos = new List<string> { "https://example.com/photo1.jpg", "https://example.com/photo2.jpg" };
         
         device.PhotoURLs = photos;
@@ -52,7 +53,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddCompanyDataToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
         Company company = new Company()
         {
             Name = "SecurityCameras & Co.",
@@ -71,7 +71,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddDescriptionToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
         string description = "This is a security camera";
         
         device.Description = description;
@@ -82,7 +81,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddIndoorLocationTypeToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
         LocationType locationType = LocationType.Indoor;
         
         device.LocationType = locationType;
@@ -93,7 +91,6 @@ public class DevicesTest
     [TestMethod]
     public void TestAddOutdoorLocationTypeToSecurityCamera()
     {
-        SecurityCamera device = new SecurityCamera();
         LocationType locationType = LocationType.Outdoor;
         
         device.LocationType = locationType;
