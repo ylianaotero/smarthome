@@ -12,7 +12,7 @@ public class DevicesTest
     public void TestConnectSecurityCamera()
     {
         // Arrange
-        var device = new SecurityCamera();
+        SecurityCamera device = new SecurityCamera();
 
         // Act
         device.IsConnected = true;
@@ -25,7 +25,7 @@ public class DevicesTest
     public void TestAddNameToSecurityCamera()
     {
         // Arrange
-        var device = new SecurityCamera();
+        SecurityCamera device = new SecurityCamera();
 
         // Act
         device.Name = "Camera 1";
@@ -38,7 +38,7 @@ public class DevicesTest
     public void TestAddModelToSecurityCamera()
     {
         // Arrange
-        var device = new SecurityCamera();
+        SecurityCamera device = new SecurityCamera();
 
         // Act
         device.Model = 1345354616346;
@@ -51,7 +51,7 @@ public class DevicesTest
     public void TestAddPhotosToSecurityCamera()
     {
         // Arrange
-        var device = new SecurityCamera();
+        SecurityCamera device = new SecurityCamera();
         List<string> photos = new List<string> { "https://example.com/photo1.jpg", "https://example.com/photo2.jpg" };
 
         // Act
