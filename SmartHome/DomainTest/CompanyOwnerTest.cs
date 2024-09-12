@@ -17,4 +17,17 @@ public class CompanyOwnerTest
         // Assert
         Assert.AreEqual("Francisco", companyOwner.Name);
     }
+    
+    [TestMethod]
+    public void TestAddSurnameToCompanyOwner()
+    {
+        // Arrange
+        CompanyOwner companyOwner = new CompanyOwner();
+        
+        // Act
+        companyOwner.Surname = "Gutierrez";
+
+        // Assert
+        Assert.AreEqual("Gutierrez", companyOwner.Surname);
+    }
 }
