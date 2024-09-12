@@ -79,4 +79,15 @@ public class DevicesTest
         Assert.AreEqual(description, device.Description);
     }
     
+    [TestMethod]
+    public void TestAddInteriorLocationTypeToSecurityCamera()
+    {
+        SecurityCamera device = new SecurityCamera();
+        string locationType = "Interior";
+        
+        device.LocationType = locationType;
+        
+        Assert.AreEqual(locationType, device.LocationType);
+    }
+
 }
