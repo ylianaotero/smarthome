@@ -60,4 +60,21 @@ public class DevicesTest
         // Assert
         Assert.AreEqual(photos, device.PhotoURLs);
     }
+
+    [TestMethod]
+    public void TestAddCompanyDataToSecurityCamera()
+    {
+        // Arrange
+        SecurityCamera device = new SecurityCamera();
+        
+        // Act
+        device.CompanyName = "SecurityCameras & Co.";
+        device.CompanyRUT = "123456789";
+        device.CompanyLogoURL = "https://example.com/logo.jpg";
+        
+        // Assert
+        Assert.AreEqual("SecurityCameras & Co.", device.CompanyName);
+        Assert.AreEqual("123456789", device.CompanyRUT);
+        Assert.AreEqual("https://example.com/logo.jpg", device.CompanyLogoURL);
+    }
 }
