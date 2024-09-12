@@ -90,4 +90,14 @@ public class DevicesTest
         Assert.AreEqual(locationType, device.LocationType);
     }
 
+    [TestMethod]
+    public void TestAddOutdoorLocationTypeToSecurityCamera()
+    {
+        SecurityCamera device = new SecurityCamera();
+        LocationType locationType = LocationType.Outdoor;
+        
+        device.LocationType = locationType;
+        
+        Assert.AreEqual(locationType, device.LocationType);
+    }
 }
