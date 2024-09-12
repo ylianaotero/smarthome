@@ -5,6 +5,7 @@ namespace Domain;
 public enum LocationType
 {
     Indoor,
+    Outdoor
 }
 
 public class SecurityCamera : IDevice
