@@ -1,6 +1,8 @@
+using IDomain;
+
 namespace Domain;
 
-public class CompanyOwner
+public class CompanyOwner : IRole
 {
     public string Name { get; set; }
     public string Surname { get; set; }
