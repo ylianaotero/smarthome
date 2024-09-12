@@ -82,4 +82,19 @@ public class DevicesTest
         Assert.AreEqual("123456789", device.Company.RUT);
         Assert.AreEqual("https://example.com/logo.jpg", device.Company.LogoURL);
     }
+    
+    [TestMethod]
+    public void TestAddDescriptionToSecurityCamera()
+    {
+        // Arrange
+        SecurityCamera device = new SecurityCamera();
+        string description = "This is a security camera";
+
+        // Act
+        device.Description = description;
+
+        // Assert
+        Assert.AreEqual(description, device.Description);
+    }
+    
 }
