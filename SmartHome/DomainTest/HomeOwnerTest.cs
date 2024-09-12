@@ -56,4 +56,17 @@ public class HomeOwnerTest
         // Assert
         Assert.AreEqual("password1", homeOwner.Password);
     }
+    
+    [TestMethod]
+    public void TestAddProfilePhotoToHomeOwner()
+    {
+        // Arrange
+        HomeOwner homeOwner = new HomeOwner();
+        
+        // Act
+        homeOwner.ProfilePhoto = "url";
+
+        // Assert
+        Assert.AreEqual("url", homeOwner.ProfilePhoto);
+    }
 }
