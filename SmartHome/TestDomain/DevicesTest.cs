@@ -46,4 +46,18 @@ public class DevicesTest
         // Assert
         Assert.AreEqual(1345354616346, device.Model);
     }
+    
+    [TestMethod]
+    public void TestAddPhotosToSecurityCamera()
+    {
+        // Arrange
+        var device = new SecurityCamera();
+        List<string> photos = new List<string> { "https://example.com/photo1.jpg", "https://example.com/photo2.jpg" };
+
+        // Act
+        device.PhotoURLs = photos;
+
+        // Assert
+        Assert.AreEqual(photos, device.PhotoURLs);
+    }
 }
