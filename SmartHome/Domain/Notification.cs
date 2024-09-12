@@ -2,6 +2,7 @@
 
 public class Notification
 {
+    public int Id { get; set; }
     public string Event { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool Read { get; private set; }
