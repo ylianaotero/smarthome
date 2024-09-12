@@ -9,5 +9,6 @@ public class SecurityCamera : IDevice
     public List<string> PhotoURLs { get; set; }
     public bool IsConnected { get; set; }
     public Company Company { get; set; }
+    public string Description { get; set; }
     
 }
