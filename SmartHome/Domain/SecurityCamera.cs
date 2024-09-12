@@ -10,5 +10,6 @@ public class SecurityCamera : IDevice
     public bool IsConnected { get; set; }
     public Company Company { get; set; }
     public string Description { get; set; }
+    public string LocationType { get; set; }
     
 }
