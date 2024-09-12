@@ -80,10 +80,10 @@ public class DevicesTest
     }
     
     [TestMethod]
-    public void TestAddInteriorLocationTypeToSecurityCamera()
+    public void TestAddIndoorLocationTypeToSecurityCamera()
     {
         SecurityCamera device = new SecurityCamera();
-        string locationType = "Interior";
+        LocationType locationType = LocationType.Indoor;
         
         device.LocationType = locationType;
         

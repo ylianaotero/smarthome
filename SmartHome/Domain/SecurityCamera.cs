@@ -2,6 +2,11 @@ using IDomain;
 
 namespace Domain;
 
+public enum LocationType
+{
+    Indoor,
+}
+
 public class SecurityCamera : IDevice
 {
     public string Name { get; set; }
@@ -10,6 +15,6 @@ public class SecurityCamera : IDevice
     public bool IsConnected { get; set; }
     public Company Company { get; set; }
     public string Description { get; set; }
-    public string LocationType { get; set; }
+    public LocationType LocationType { get; set; }
     
 }
