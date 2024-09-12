@@ -97,4 +97,15 @@ public class DevicesTest
         
         Assert.AreEqual(locationType, device.LocationType);
     }
+    
+    [TestMethod]
+    public void TestAddMovementDetectionFunctionalityToSecurityCamera()
+    {
+        bool hasMovementDetection = true;
+        
+        device.HasMovementDetection = hasMovementDetection;
+        
+        Assert.AreEqual(hasMovementDetection, device.HasMovementDetection);
+    }
+    
 }
