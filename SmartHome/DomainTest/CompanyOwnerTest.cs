@@ -31,6 +31,7 @@ public class CompanyOwnerTest
         Assert.AreEqual("Gutierrez", companyOwner.Surname);
     }
     
+    [TestMethod]
     public void TestAddEmailToCompanyOwner()
     {
         // Arrange
@@ -41,5 +42,18 @@ public class CompanyOwnerTest
 
         // Assert
         Assert.AreEqual("frangutierrez@gmail.com", companyOwner.Email);
+    }
+    
+    [TestMethod]
+    public void TestAddPasswordToCompanyOwner()
+    {
+        // Arrange
+        CompanyOwner companyOwner = new CompanyOwner();
+        
+        // Act
+        companyOwner.Password = "password1";
+
+        // Assert
+        Assert.AreEqual("password1", companyOwner.Password);
     }
 }
