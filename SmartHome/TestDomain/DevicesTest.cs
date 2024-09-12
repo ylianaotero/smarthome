@@ -66,15 +66,20 @@ public class DevicesTest
     {
         // Arrange
         SecurityCamera device = new SecurityCamera();
+        Company company = new Company()
+        {
+            Name = "SecurityCameras & Co.",
+            RUT = "123456789",
+            LogoURL = "https://example.com/logo.jpg"
+        };
         
         // Act
-        device.CompanyName = "SecurityCameras & Co.";
-        device.CompanyRUT = "123456789";
-        device.CompanyLogoURL = "https://example.com/logo.jpg";
+        device.Company = company;
         
         // Assert
-        Assert.AreEqual("SecurityCameras & Co.", device.CompanyName);
-        Assert.AreEqual("123456789", device.CompanyRUT);
-        Assert.AreEqual("https://example.com/logo.jpg", device.CompanyLogoURL);
+        Assert.AreEqual(company, device.Company);
+        Assert.AreEqual("SecurityCameras & Co.", device.Company.Name);
+        Assert.AreEqual("123456789", device.Company.RUT);
+        Assert.AreEqual("https://example.com/logo.jpg", device.Company.LogoURL);
     }
 }
