@@ -8,4 +8,8 @@ public class SecurityCamera : IDevice
     public long Model { get; set; }
     public List<string> PhotoURLs { get; set; }
     public bool IsConnected { get; set; }
+    public string CompanyName { get; set; }
+    public string CompanyRUT { get; set; }
+    public string CompanyLogoURL { get; set; }
+    
 }
