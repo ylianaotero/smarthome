@@ -4,9 +4,9 @@ namespace IDomain;
 
 public interface IUserValidator
 {
-    public bool validateName(String name);
-    public bool validateSurname(String surname);
-    public bool validateEmail(String email);
-    public bool validatePassword(String password);
+    public bool ValidateName(String name);
+    public bool ValidateSurname(String surname);
+    public bool ValidateEmail(String email);
+    public bool ValidatePassword(String password);
 
 }

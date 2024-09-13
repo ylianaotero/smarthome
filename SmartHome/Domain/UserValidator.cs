@@ -3,7 +3,7 @@ using IDomain;
 
 namespace Domain;
 
-public class UserValidator
+public class UserValidator : IUserValidator
 {
     public bool ValidateName(string name)
     {
