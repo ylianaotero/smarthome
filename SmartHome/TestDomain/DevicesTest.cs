@@ -146,12 +146,7 @@ public class DevicesTest
     [TestMethod]
     public void TestDifferentiationOfWindowSensorsViaHardwardId()
     {
-        Company company = new Company()
-        {
-            Name = "WindowSensors & Co.",
-            RUT = "123456789",
-            LogoURL = "https://example.com/logo.jpg"
-        };
+        Company company = new Company(){};
         
         List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
         
