@@ -15,6 +15,7 @@ public class DevicesTest
     public void TestInitialize()
     {
         securityCamera = new SecurityCamera();
+        windowSensor = new WindowSensor();
     }
     
     [TestMethod]
