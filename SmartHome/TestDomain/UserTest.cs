@@ -133,4 +133,23 @@ public class UserTest
         
         userValidatorMock.VerifyAll();
     }
+    
+    [TestMethod]
+    public void TestValidSurname()
+    {
+        var userValidatorMock = new Mock<IUserValidator>();
+        
+        userValidatorMock
+            .Setup(v => v.ValidateSurname("Perez")).Returns(true);
+        
+        var user = new User(userValidatorMock.Object);
+
+        user.Surname = "Perez"; 
+        
+        userValidatorMock.Verify(v => v.ValidateSurname("Perez"), Times.Once, "ValidateSurName should be called with 'Perez'");
+        
+        Assert.AreEqual("Perez", user.Surname);
+        
+        userValidatorMock.VerifyAll();
+    }
 }
