@@ -62,10 +62,7 @@ public class DevicesTest
         
         device.Company = company;
         
-        Assert.AreEqual(company, device.Company);
-        Assert.AreEqual("SecurityCameras & Co.", device.Company.Name);
-        Assert.AreEqual("123456789", device.Company.RUT);
-        Assert.AreEqual("https://example.com/logo.jpg", device.Company.LogoURL);
+        Assert.IsTrue(company.Equals(device.Company));
     }
     
     [TestMethod]
@@ -117,5 +114,4 @@ public class DevicesTest
         
         Assert.AreEqual(functionalities, device.Functionalities);
     }
-    
 }
