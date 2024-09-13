@@ -18,6 +18,7 @@ public class UserTest
         Assert.AreEqual("Juan", user.Name);
     }
     
+    [TestMethod]
     public void TestAddSurnameToUser()
     {
         // Arrange
@@ -28,5 +29,18 @@ public class UserTest
 
         // Assert
         Assert.AreEqual("Lopez", user.Surname);
+    }
+    
+    [TestMethod]
+    public void TestAddEmailToUser()
+    {
+        // Arrange
+        User user = new User();
+        
+        // Act
+        user.Email = "juanlopez@gmail.com";
+
+        // Assert
+        Assert.AreEqual("juanlopez@gmail.com", user.Email);
     }
 }
