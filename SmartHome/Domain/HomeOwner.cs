@@ -1,9 +1,8 @@
-using Domain.Exceptions;
-using IDomain;
+using Domain.Exceptions.HomeExceptions;
 
 namespace Domain;
 
-public class HomeOwner : IRole
+public class HomeOwner : Role
 {
     public List<Home> Homes { get; set; }
 

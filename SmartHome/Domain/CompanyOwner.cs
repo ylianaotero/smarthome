@@ -1,8 +1,6 @@
-using IDomain;
-
 namespace Domain;
 
-public class CompanyOwner : IRole
+public class CompanyOwner : Role
 {
     
 }

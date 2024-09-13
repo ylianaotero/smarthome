@@ -1,4 +1,4 @@
-namespace Domain.Exceptions.RoleException;
+namespace Domain.Exceptions.RoleExceptions;
 
 public class RoleNotFoundException : Exception
 {

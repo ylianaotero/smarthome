@@ -1,7 +1,7 @@
 using Domain;
-using Domain.Exceptions;
+using Domain.Exceptions.HomeExceptions;
 
-namespace TestDomain;
+namespace DomainTest;
 
 [TestClass]
 public class HomeOwnerTest

@@ -1,6 +1,6 @@
 using Domain;
 
-namespace TestDomain;
+namespace DomainTest;
 
 [TestClass]
 public class HomeTest

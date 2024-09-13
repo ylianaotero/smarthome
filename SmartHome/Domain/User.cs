@@ -1,5 +1,4 @@
-using Domain.Exceptions.RoleException;
-using IDomain;
+using Domain.Exceptions.RoleExceptions;
 
 namespace Domain;
 
@@ -9,19 +8,19 @@ public class User
     public string Surname { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
-    public List<IRole> Roles { get; set; }
+    public List<Role> Roles { get; set; }
 
     public User()
     {
-        Roles = new List<IRole>();
+        Roles = new List<Role>();
     }
 
-    public void AddRole(IRole role)
+    public void AddRole(Role role)
     {
         Roles.Add(role);
     }
 
-    public void DeleteRole(IRole role)
+    public void DeleteRole(Role role)
     {
         if (Roles.Contains(role))
         {
