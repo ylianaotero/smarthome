@@ -74,4 +74,14 @@ public class UserTest
         user.AddRole(role);
         Assert.AreEqual(1, user.Roles.Count());
     }
+    
+    [TestMethod]
+    public void TestDeleteRoleToUser()
+    {
+        User user = new User();
+        IRole role = new Administrator();
+        user.AddRole(role);
+        user.DeleteRole(role);
+        Assert.AreEqual(0, user.Roles.Count());
+    }
 }
