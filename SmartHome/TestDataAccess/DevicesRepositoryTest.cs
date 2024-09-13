@@ -119,7 +119,7 @@ public class DevicesRepositoryTest
         };
         LoadContext(devices);
         
-        _devicesRepository.DeleteDevice(_defaultCamera.Id);
+        _devicesRepository.DeleteDevice(_defaultCamera);
         
         List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
         
