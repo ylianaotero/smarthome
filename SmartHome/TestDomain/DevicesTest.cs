@@ -101,11 +101,11 @@ public class DevicesTest
     [TestMethod]
     public void TestAddMovementDetectionFunctionalityToSecurityCamera()
     {
-        bool hasMovementDetection = true;
+        List<string> functionalities = new List<string> { "Movement Detection" };
         
-        device.HasMovementDetection = hasMovementDetection;
+        device.Functionalities = functionalities;
         
-        Assert.AreEqual(hasMovementDetection, device.HasMovementDetection);
+        Assert.AreEqual(functionalities, device.Functionalities);
     }
     
 }
