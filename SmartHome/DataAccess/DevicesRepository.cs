@@ -33,4 +33,10 @@ public class DevicesRepository
         return _database.Devices
             .Where(predicate).ToList();
     }
+    
+    public void DeleteDevice(long deviceId)
+    {
+        _database.Devices.Remove(_database.Devices.Find(deviceId));
+        _database.SaveChanges();
+    }
 }
