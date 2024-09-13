@@ -108,4 +108,14 @@ public class DevicesTest
         Assert.AreEqual(functionalities, device.Functionalities);
     }
     
+    [TestMethod]
+    public void TestAddHumanDetectionFunctionalityToSecurityCamera()
+    {
+        List<Functionality> functionalities = new List<Functionality> {Functionality.HumanDetection};
+        
+        device.Functionalities = functionalities;
+        
+        Assert.AreEqual(functionalities, device.Functionalities);
+    }
+    
 }
