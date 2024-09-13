@@ -99,21 +99,17 @@ public class UserTest
     [TestMethod]
     public void TestValidName()
     {
-        // Arrange
         var userValidatorMock = new Mock<IUserValidator>();
-
-        // Configura el mock para que ValidateName no haga nada y no devuelva nada (se asume que es void en la implementación real)
+        
         userValidatorMock
             .Setup(v => v.ValidateName("Juan")).Returns(true);
-
-        // Crear una instancia de User con el mock
+        
         var user = new User(userValidatorMock.Object);
 
         user.Name = "Juan"; 
         
         userValidatorMock.Verify(v => v.ValidateName("Juan"), Times.Once, "ValidateName should be called with 'Juan'");
-
-        // Assert
+        
         Assert.AreEqual("Juan", user.Name);
         
         userValidatorMock.VerifyAll();
