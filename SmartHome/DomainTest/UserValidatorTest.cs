@@ -12,4 +12,12 @@ public class UserValidatorTest
         bool validated = validator.ValidateName("Juan");
         Assert.IsTrue(validated);
     }
+    
+    [TestMethod]
+    public void TestValidateSurname()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidateSurname("Lopez");
+        Assert.IsTrue(validated);
+    }
 }
