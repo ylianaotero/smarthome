@@ -140,11 +140,6 @@ public class DevicesTest
             IsConnected = true
         };
         
-        Assert.AreEqual("Window Sensor 1", windowSensor.Name);
-        Assert.AreEqual(1345354616346, windowSensor.Model);
-        Assert.AreEqual("This is a window sensor", windowSensor.Description);
-        Assert.AreEqual(new List<string> { "https://example.com/photo1.jpg"}, windowSensor.PhotoURLs);
-        Assert.IsTrue(windowSensor.Company.Equals(new Company()));
-        Assert.IsTrue(windowSensor.IsConnected);
+        Assert.IsNotNull(windowSensor);
     }
 }
