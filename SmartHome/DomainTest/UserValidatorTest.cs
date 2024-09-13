@@ -20,4 +20,12 @@ public class UserValidatorTest
         bool validated = validator.ValidateSurname("Lopez");
         Assert.IsTrue(validated);
     }
+    
+    [TestMethod]
+    public void TestValidateEmail()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidateEmail("juanLopez@gmail.com");
+        Assert.IsTrue(validated);
+    }
 }
