@@ -12,6 +12,12 @@ public class DevicesRepository
         _database = database;
     }
     
+    public void AddDevice(Device device)
+    {
+        _database.Devices.Add(device);
+        _database.SaveChanges();
+    }
+    
     public Device? GetDeviceById(long id)
     {
         return _database.Devices.Find(id);

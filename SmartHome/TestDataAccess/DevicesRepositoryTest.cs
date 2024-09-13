@@ -106,7 +106,7 @@ public class DevicesRepositoryTest
         
         List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
         
-        CollectionAssert.Contains(_defaultCamera);
+        CollectionAssert.Contains(retrievedDevices, _defaultCamera);
     }
     
     private void SetupRepository()
