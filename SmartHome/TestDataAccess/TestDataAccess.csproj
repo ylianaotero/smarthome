@@ -10,4 +10,8 @@
       <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\IDomain\IDomain.csproj" />
+    </ItemGroup>
+
 </Project>

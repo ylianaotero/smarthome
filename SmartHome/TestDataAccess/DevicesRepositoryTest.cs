@@ -1,4 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using IDomain;
 
 namespace TestDataAccess;
 
@@ -6,16 +8,16 @@ namespace TestDataAccess;
 public class DevicesRepositoryTest
 {
     [TestMethod]
-    public void TestGetDeviceByModel()
+    public void TestGetDevicesByModel()
     {
         // Arrange
         DevicesRepository devicesRepository = new DevicesRepository();
         long model = 1345354616346;
         
         // Act
-        Device device = devicesRepository.GetDeviceByModel(model);
+        List<IDevice> devices = devicesRepository.GetDevicesByModel(model);
         
         // Assert
-        Assert.AreEqual(device.Model, model);
+        Assert.IsTrue(devices.All(device => device.Model == model));
     }
 }
