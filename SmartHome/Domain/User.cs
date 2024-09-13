@@ -8,8 +8,8 @@ public class User
 {
     private string _name;
     private string _surname;
-    private string _email; 
-    public string Password { get; set; }
+    private string _email;
+    private string _password; 
     public List<IRole> Roles { get; set; }
 
     private IUserValidator _validator; 
@@ -39,6 +39,23 @@ public class User
             if (valid)
             {
                 _surname = value; 
+            }
+            else
+            {
+                throw new InputNotValid("Input no valido");
+            }
+            
+        } 
+    }
+    
+    public string Password { 
+        get => _password;
+        set
+        {
+            bool valid = _validator.ValidatePassword(value);
+            if (valid)
+            {
+                _password = value; 
             }
             else
             {
