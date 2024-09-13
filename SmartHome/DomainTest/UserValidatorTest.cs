@@ -28,4 +28,28 @@ public class UserValidatorTest
         bool validated = validator.ValidateEmail("juanLopez@gmail.com");
         Assert.IsTrue(validated);
     }
+    
+    [TestMethod]
+    public void TestCannotValidateEmailBecauseOfStructure()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidateEmail("juanLopezgmail.com");
+        Assert.IsFalse(validated);
+    }
+    
+    [TestMethod]
+    public void TestCannotValidateEmailBecauseItIsEmpty()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidateEmail("");
+        Assert.IsFalse(validated);
+    }
+    
+    [TestMethod]
+    public void TestValidatePassword()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidatePassword("");
+        Assert.IsTrue(validated);
+    }
 }
