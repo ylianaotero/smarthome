@@ -33,4 +33,27 @@ public class CompanyTests
 
         Assert.AreEqual("https://example.com/logo.jpg", company.LogoURL);
     }
+
+    [TestMethod]
+    public void TestDiferentiateCompaniesViaId()
+    {
+        Company company1 = new Company()
+        {
+            Id = 1,
+            Name = "Company 1",
+            RUT = "123456789",
+            LogoURL = "https://example.com/logo1.jpg"
+        };
+        
+        Company company2 = new Company()
+        {
+            Id = 2,
+            Name = "Company 1",
+            RUT = "123456789",
+            LogoURL = "https://example.com/logo1.jpg"
+        };
+        
+        Assert.AreNotEqual(company1, company2);
+        
+    }
 }
