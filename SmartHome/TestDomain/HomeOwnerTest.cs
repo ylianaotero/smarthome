@@ -1,5 +1,5 @@
 using Domain;
-using Domain.DomainExceptions;
+using Domain.Exceptions;
 
 namespace TestDomain;
 
