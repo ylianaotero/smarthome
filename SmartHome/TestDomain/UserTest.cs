@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Domain.Exceptions.RoleException;
 using IDomain;
 using Moq;
@@ -116,6 +117,7 @@ public class UserTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidName()
     {
         var userValidatorMock = new Mock<IUserValidator>();
@@ -128,8 +130,6 @@ public class UserTest
         user.Name = " "; 
         
         userValidatorMock.Verify(v => v.ValidateName(" "), Times.Once, "ValidateName should be called with ' '");
-        
-        Assert.IsNull(user.Name);
         
         userValidatorMock.VerifyAll();
     }
