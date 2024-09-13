@@ -56,4 +56,12 @@ public class UserTest
         // Assert
         Assert.AreEqual("juanlop1", user.Password);
     }
+    
+    [TestMethod]
+    public void TestAddNewRoleToUser()
+    {
+        User user = new User();
+        
+        Assert.AreEqual(0, user.Roles.Count());
+    }
 }

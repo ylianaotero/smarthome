@@ -2,7 +2,7 @@ using IDomain;
 
 namespace Domain;
 
-public class Administrator
+public class Administrator : IRole
 {
     
 }
