@@ -4,5 +4,10 @@ namespace Domain;
 
 public class HomeOwner
 {
-    public List<House> Houses { get; set; }
+    public List<Home> Homes { get; set; }
+
+    public HomeOwner()
+    {
+        Homes = new List<Home>();
+    }
 }

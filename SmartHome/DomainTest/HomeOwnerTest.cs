@@ -12,6 +12,6 @@ public class HomeOwnerTest
         HomeOwner homeOwner = new HomeOwner();
 
         // Assert
-        Assert.AreEqual(0, homeOwner.Houses().Count());
+        Assert.AreEqual(0, homeOwner.Homes.Count());
     }
 }
