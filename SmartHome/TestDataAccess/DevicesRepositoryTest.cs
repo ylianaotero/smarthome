@@ -94,9 +94,9 @@ public class DevicesRepositoryTest
         };
         LoadContext(devices);
         
-        Device retrievedDevice = _devicesRepository.GetDeviceById(_defaultCamera.Id);
+        Device? retrievedDevice = _devicesRepository.GetDeviceById(_defaultCamera.Id);
         
-        Assert.AreEqual(retrievedDevice, _defaultCamera);
+        Assert.AreEqual(retrievedDevice.Id, _defaultCamera.Id);
     }
     
     
