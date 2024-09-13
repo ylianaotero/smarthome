@@ -108,6 +108,24 @@ public class DevicesRepositoryTest
         
         CollectionAssert.Contains(retrievedDevices, _defaultCamera);
     }
+
+    [TestMethod]
+    public void TestDeleteDevice()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+        };
+        LoadContext(devices);
+        
+        _devicesRepository.DeleteDevice(_defaultCamera.Id);
+        
+        List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
+        
+        CollectionAssert.DoesNotContain(retrievedDevices, _defaultCamera);
+    }
+    
     
     private void SetupRepository()
     {
