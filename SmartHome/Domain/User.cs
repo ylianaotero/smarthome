@@ -14,4 +14,9 @@ public class User
     {
         Roles = new List<IRole>();
     }
+
+    public void AddRole(IRole role)
+    {
+        Roles.Add(role);
+    }
 }
