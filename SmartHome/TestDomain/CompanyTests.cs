@@ -40,7 +40,7 @@ public class CompanyTests
     }
 
     [TestMethod]
-    public void TestDiferentiateCompaniesViaId()
+    public void TestDifferentiationOfCompaniesViaId()
     {
         Company company1 = new Company()
         {
