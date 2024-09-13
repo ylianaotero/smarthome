@@ -1,4 +1,5 @@
 using DataAccess;
+using DataAccess.Exceptions;
 using Domain;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using IDomain;
@@ -127,7 +128,7 @@ public class DevicesRepositoryTest
     }
     
     [TestMethod]
-    [ExpectedException(ElementNotFoundException)]
+    [ExpectedException(typeof(ElementNotFoundException))]
     public void TestDeleteNonexistentDevice()
     {
         List<Device> devices = new List<Device>

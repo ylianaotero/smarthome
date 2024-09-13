@@ -1,3 +1,4 @@
+using DataAccess.Exceptions;
 using Domain;
 using IDomain;
 
@@ -36,6 +37,8 @@ public class DevicesRepository
     
     public void DeleteDevice(Device device)
     {
+        throw new ElementNotFoundException("Device not found");
+        
         _database.Devices.Remove(device);
         _database.SaveChanges();
     }
