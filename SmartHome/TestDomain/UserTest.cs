@@ -94,4 +94,17 @@ public class UserTest
         IRole role = new Administrator();
         user.DeleteRole(role);
     }
+    
+    [TestMethod]
+    public void TestValidName()
+    {
+        // Arrange
+        User user = new User();
+        
+        // Act
+        user.Name = "Juan";
+
+        // Assert
+        Assert.AreEqual("Juan", user.Name);
+    }
 }
