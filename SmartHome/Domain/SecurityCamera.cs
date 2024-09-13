@@ -10,7 +10,8 @@ public enum LocationType
  
 public enum Functionality
 {
-    MotionDetection
+    MotionDetection,
+    HumanDetection,
 }
 
 public class SecurityCamera : IDevice
