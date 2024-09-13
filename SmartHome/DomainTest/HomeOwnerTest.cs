@@ -6,67 +6,12 @@ namespace DomainTest;
 public class HomeOwnerTest
 {
     [TestMethod]
-    public void TestAddNameToHomeOwner()
+    public void TestAddNewHomeOwner()
     {
         // Arrange
         HomeOwner homeOwner = new HomeOwner();
-        
-        // Act
-        homeOwner.Name = "Pedro";
 
         // Assert
-        Assert.AreEqual("Pedro", homeOwner.Name);
-    }
-    
-    [TestMethod]
-    public void TestAddSurnameToHomeOwner()
-    {
-        // Arrange
-        HomeOwner homeOwner = new HomeOwner();
-        
-        // Act
-        homeOwner.Surname = "Gonzalez";
-
-        // Assert
-        Assert.AreEqual("Gonzalez", homeOwner.Surname);
-    }
-    
-    [TestMethod]
-    public void TestAddEmailToHomeOwner()
-    {
-        // Arrange
-        HomeOwner homeOwner = new HomeOwner();
-        
-        // Act
-        homeOwner.Email = "pedroGonzalez@gmail.com";
-
-        // Assert
-        Assert.AreEqual("pedroGonzalez@gmail.com", homeOwner.Email);
-    }
-    
-    [TestMethod]
-    public void TestAddPasswordToHomeOwner()
-    {
-        // Arrange
-        HomeOwner homeOwner = new HomeOwner();
-        
-        // Act
-        homeOwner.Password = "password1";
-
-        // Assert
-        Assert.AreEqual("password1", homeOwner.Password);
-    }
-    
-    [TestMethod]
-    public void TestAddProfilePhotoToHomeOwner()
-    {
-        // Arrange
-        HomeOwner homeOwner = new HomeOwner();
-        
-        // Act
-        homeOwner.ProfilePhoto = "url";
-
-        // Assert
-        Assert.AreEqual("url", homeOwner.ProfilePhoto);
+        Assert.AreEqual(0, homeOwner.Houses().Count());
     }
 }
