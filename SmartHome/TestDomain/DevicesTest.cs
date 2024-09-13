@@ -8,36 +8,37 @@ namespace TestDomain;
 [TestClass]
 public class DevicesTest
 {
-    private SecurityCamera device;
+    private SecurityCamera securityCamera;
+    private WindowSensor windowSensor;
     
     [TestInitialize]
     public void TestInitialize()
     {
-        device = new SecurityCamera();
+        securityCamera = new SecurityCamera();
     }
     
     [TestMethod]
     public void TestConnectSecurityCamera()
     {
-        device.IsConnected = true;
+        securityCamera.IsConnected = true;
         
-        Assert.IsTrue(device.IsConnected);
+        Assert.IsTrue(securityCamera.IsConnected);
     }
     
     [TestMethod]
     public void TestAddNameToSecurityCamera()
     {
-        device.Name = "Camera 1";
+        securityCamera.Name = "Camera 1";
         
-        Assert.AreEqual("Camera 1", device.Name);
+        Assert.AreEqual("Camera 1", securityCamera.Name);
     }
     
     [TestMethod]
     public void TestAddModelToSecurityCamera()
     {
-        device.Model = 1345354616346;
+        securityCamera.Model = 1345354616346;
         
-        Assert.AreEqual(1345354616346, device.Model);
+        Assert.AreEqual(1345354616346, securityCamera.Model);
     }
     
     [TestMethod]
@@ -45,9 +46,9 @@ public class DevicesTest
     {
         List<string> photos = new List<string> { "https://example.com/photo1.jpg", "https://example.com/photo2.jpg" };
         
-        device.PhotoURLs = photos;
+        securityCamera.PhotoURLs = photos;
         
-        Assert.AreEqual(photos, device.PhotoURLs);
+        Assert.AreEqual(photos, securityCamera.PhotoURLs);
     }
 
     [TestMethod]
@@ -60,9 +61,9 @@ public class DevicesTest
             LogoURL = "https://example.com/logo.jpg"
         };
         
-        device.Company = company;
+        securityCamera.Company = company;
         
-        Assert.IsTrue(company.Equals(device.Company));
+        Assert.IsTrue(company.Equals(securityCamera.Company));
     }
     
     [TestMethod]
@@ -70,9 +71,9 @@ public class DevicesTest
     {
         string description = "This is a security camera";
         
-        device.Description = description;
+        securityCamera.Description = description;
         
-        Assert.AreEqual(description, device.Description);
+        Assert.AreEqual(description, securityCamera.Description);
     }
     
     [TestMethod]
@@ -80,9 +81,9 @@ public class DevicesTest
     {
         LocationType locationType = LocationType.Indoor;
         
-        device.LocationType = locationType;
+        securityCamera.LocationType = locationType;
         
-        Assert.AreEqual(locationType, device.LocationType);
+        Assert.AreEqual(locationType, securityCamera.LocationType);
     }
 
     [TestMethod]
@@ -90,39 +91,38 @@ public class DevicesTest
     {
         LocationType locationType = LocationType.Outdoor;
         
-        device.LocationType = locationType;
+        securityCamera.LocationType = locationType;
         
-        Assert.AreEqual(locationType, device.LocationType);
+        Assert.AreEqual(locationType, securityCamera.LocationType);
     }
     
     [TestMethod]
     public void TestAddMovementDetectionFunctionalityToSecurityCamera()
     {
-        List<Functionality> functionalities = new List<Functionality> {Functionality.MotionDetection};
+        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
         
-        device.Functionalities = functionalities;
+        securityCamera.Functionalities = functionalities;
         
-        Assert.AreEqual(functionalities, device.Functionalities);
+        Assert.AreEqual(functionalities, securityCamera.Functionalities);
     }
     
     [TestMethod]
     public void TestAddHumanDetectionFunctionalityToSecurityCamera()
     {
-        List<Functionality> functionalities = new List<Functionality> {Functionality.HumanDetection};
+        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.HumanDetection};
         
-        device.Functionalities = functionalities;
+        securityCamera.Functionalities = functionalities;
         
-        Assert.AreEqual(functionalities, device.Functionalities);
+        Assert.AreEqual(functionalities, securityCamera.Functionalities);
     }
     
     [TestMethod]
     public void TestAddOpenClosedFunctionalityToWindowSensor()
     {
-        WindowSensor ws = new WindowSensor();
         List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
         
-        ws.Functionalities = functionalities;
+        windowSensor.Functionalities = functionalities;
         
-        Assert.AreEqual(ws.Functionalities, functionalities);
+        Assert.AreEqual(windowSensor.Functionalities, functionalities);
     }
 }

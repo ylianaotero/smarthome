@@ -8,7 +8,7 @@ public enum LocationType
     Outdoor
 }
  
-public enum Functionality
+public enum SecurityCameraFunctionality
 {
     MotionDetection,
     HumanDetection,
@@ -23,5 +23,5 @@ public class SecurityCamera : IDevice
     public ICompany Company { get; set; }
     public bool IsConnected { get; set; }
     public LocationType LocationType { get; set; }
-    public List<Functionality> Functionalities { get; set; }
+    public List<SecurityCameraFunctionality> Functionalities { get; set; }
 }
