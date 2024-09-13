@@ -171,4 +171,42 @@ public class UserTest
         
         userValidatorMock.VerifyAll();
     }
+    
+    [TestMethod]
+    public void TestValidEmail()
+    {
+        var userValidatorMock = new Mock<IUserValidator>();
+        
+        userValidatorMock
+            .Setup(v => v.ValidateEmail("juanperez@gmail.com")).Returns(true);
+        
+        var user = new User(userValidatorMock.Object);
+
+        user.Email = "juanperez@gmail.com"; 
+        
+        userValidatorMock.Verify(v => v.ValidateEmail("juanperez@gmail.com"), Times.Once, "ValidateEmail should be called with 'juanperez@gmail.com'");
+        
+        Assert.AreEqual("juanperez@gmail.com", user.Email);
+        
+        userValidatorMock.VerifyAll();
+    }
+    
+        
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestInvalidEmail()
+    {
+        var userValidatorMock = new Mock<IUserValidator>();
+        
+        userValidatorMock
+            .Setup(v => v.ValidateEmail("juanperez")).Returns(false);
+        
+        var user = new User(userValidatorMock.Object);
+
+        user.Email = "juanperez"; 
+        
+        userValidatorMock.Verify(v => v.ValidateEmail("juanperez"), Times.Once, "ValidateEmail should be called with 'juanperez'");
+        
+        userValidatorMock.VerifyAll();
+    }
 }
