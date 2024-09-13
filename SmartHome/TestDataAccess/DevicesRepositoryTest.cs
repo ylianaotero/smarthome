@@ -14,7 +14,7 @@ public class DevicesRepositoryTest
 {
     private SqliteConnection _connection;
     private SmartHomeContext _context;
-    private DevicesRepository _devicesRepository;
+    private SqlRepository<Device> _devicesRepository;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
@@ -65,7 +65,7 @@ public class DevicesRepositoryTest
 
         Func<Device,bool> filter = d => d.Model == DeviceModel;
 
-        List<Device> retrievedDevices = _devicesRepository.GetDevicesByFilter(filter);
+        List<Device> retrievedDevices = _devicesRepository.GetByFilter(filter);
         
         Assert.IsTrue(retrievedDevices.TrueForAll(retrievedDevice => retrievedDevice.Model == DeviceModel));
     }
@@ -80,7 +80,7 @@ public class DevicesRepositoryTest
         };
         LoadContext(devices);
         
-        List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
+        List<Device> retrievedDevices = _devicesRepository.GetAll();
         
         Assert.AreEqual(devices.Count(), retrievedDevices.Count());
     }
@@ -95,7 +95,7 @@ public class DevicesRepositoryTest
         };
         LoadContext(devices);
         
-        Device? retrievedDevice = _devicesRepository.GetDeviceById(_defaultCamera.Id);
+        Device? retrievedDevice = _devicesRepository.GetById(_defaultCamera.Id);
         
         Assert.AreEqual(retrievedDevice.Id, _defaultCamera.Id);
     }
@@ -103,9 +103,9 @@ public class DevicesRepositoryTest
     [TestMethod]
     public void TestAddDevice()
     {
-        _devicesRepository.AddDevice(_defaultCamera);
+        _devicesRepository.Add(_defaultCamera);
         
-        List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
+        List<Device> retrievedDevices = _devicesRepository.GetAll();
         
         CollectionAssert.Contains(retrievedDevices, _defaultCamera);
     }
@@ -120,9 +120,9 @@ public class DevicesRepositoryTest
         };
         LoadContext(devices);
         
-        _devicesRepository.DeleteDevice(_defaultCamera);
+        _devicesRepository.Delete(_defaultCamera);
         
-        List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
+        List<Device> retrievedDevices = _devicesRepository.GetAll();
         
         CollectionAssert.DoesNotContain(retrievedDevices, _defaultCamera);
     }
@@ -137,7 +137,7 @@ public class DevicesRepositoryTest
         };
         LoadContext(devices);
         
-        _devicesRepository.DeleteDevice(_defaultWindowSensor);
+        _devicesRepository.Delete(_defaultWindowSensor);
     }
     
     private void SetupRepository()
@@ -152,7 +152,7 @@ public class DevicesRepositoryTest
         _context = new SmartHomeContext(contextOptions);
         _context.Database.EnsureCreated();
 
-        _devicesRepository = new DevicesRepository(_context);
+        _devicesRepository = new SqlRepository<Device>(_context);
     }
 
     private void SetupDefaultObjects()
