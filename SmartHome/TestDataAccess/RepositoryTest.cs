@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace TestDataAccess;
 
 [TestClass]
-public class DevicesRepositoryTest
+public class RepositoryTest
 {
     private SqliteConnection _connection;
     private SmartHomeContext _context;
