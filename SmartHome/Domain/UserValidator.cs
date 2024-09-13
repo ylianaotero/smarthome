@@ -25,6 +25,19 @@ public class UserValidator
         return true;
     }
 
+    public bool ValidatePassword(string password)
+    {
+        if (IsNull(password))
+        {
+            return false;
+        }
+        if (!Regex.IsMatch(password, @"^(?=.*[#@$.,%])(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"))
+        {
+            return false;
+        }
+        return true;
+    }
+
     private bool IsNull(string text)
     {
         return string.IsNullOrEmpty(text);

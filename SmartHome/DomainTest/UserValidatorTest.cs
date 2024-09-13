@@ -49,7 +49,23 @@ public class UserValidatorTest
     public void TestValidatePassword()
     {
         UserValidator validator = new UserValidator();
-        bool validated = validator.ValidatePassword("");
+        bool validated = validator.ValidatePassword("Password1@.");
         Assert.IsTrue(validated);
+    }
+    
+    [TestMethod]
+    public void TestCannotValidatePasswordBecauseItIsEmpty()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidatePassword("");
+        Assert.IsFalse(validated);
+    }
+    
+    [TestMethod]
+    public void TestCannotValidatePasswordBecauseItHasCharactersThatCannotBeUsed()
+    {
+        UserValidator validator = new UserValidator();
+        bool validated = validator.ValidatePassword("password1");
+        Assert.IsFalse(validated);
     }
 }
