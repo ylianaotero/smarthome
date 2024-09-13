@@ -68,6 +68,21 @@ public class DevicesRepositoryTest
         
         Assert.IsTrue(retrievedDevices.TrueForAll(retrievedDevice => retrievedDevice.Model == DeviceModel));
     }
+
+    [TestMethod]
+    public void TestGetAllDevices()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+        };
+        LoadContext(devices);
+        
+        List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
+        
+        Assert.AreEqual(devices, retrievedDevices);
+    }
     
     private void SetupRepository()
     {
