@@ -9,6 +9,10 @@ public class CompanyTests
 {
     private Company company;
     
+    private const string CompanyName = "SecurityCameras & Co.";
+    private const string CompanyRUT = "123456789";
+    private const string CompanyLogoURL = "https://example.com/logo.jpg";
+    
     [TestInitialize]
     public void TestInitialize()
     {
@@ -18,25 +22,25 @@ public class CompanyTests
     [TestMethod]
     public void TestAddNameToCompany()
     {
-        company.Name = "SecurityCameras & Co.";
+        company.Name = CompanyName;
 
-        Assert.AreEqual("SecurityCameras & Co.", company.Name);
+        Assert.AreEqual(CompanyName, company.Name);
     }
     
     [TestMethod]
     public void TestAddRUTToCompany()
     {
-        company.RUT = "123456789";
+        company.RUT = CompanyRUT;
 
-        Assert.AreEqual("123456789", company.RUT);
+        Assert.AreEqual(CompanyRUT, company.RUT);
     }
     
     [TestMethod]
     public void TestAddLogoURLToCompany()
     {
-        company.LogoURL = "https://example.com/logo.jpg";
+        company.LogoURL = CompanyLogoURL;
 
-        Assert.AreEqual("https://example.com/logo.jpg", company.LogoURL);
+        Assert.AreEqual(CompanyLogoURL, company.LogoURL);
     }
 
     [TestMethod]
@@ -45,17 +49,17 @@ public class CompanyTests
         Company company1 = new Company()
         {
             Id = 1,
-            Name = "Company 1",
-            RUT = "123456789",
-            LogoURL = "https://example.com/logo1.jpg"
+            Name = CompanyName,
+            RUT = CompanyRUT,
+            LogoURL = CompanyLogoURL
         };
         
         Company company2 = new Company()
         {
             Id = 2,
-            Name = "Company 1",
-            RUT = "123456789",
-            LogoURL = "https://example.com/logo1.jpg"
+            Name = CompanyName,
+            RUT = CompanyRUT,
+            LogoURL = CompanyLogoURL
         };
         
         Assert.AreNotEqual(company1, company2);

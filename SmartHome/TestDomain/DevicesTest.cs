@@ -11,6 +11,14 @@ public class DevicesTest
     private SecurityCamera securityCamera;
     private WindowSensor windowSensor;
     
+    private const string CameraName = "My Security Camera";
+    private const string WindowSensorName = "My Window Sensor";
+    private const string DeviceDescription = "This is a device";
+    private const string DevicePhotoUrl = "https://example.com/photo.jpg";
+    private const long DeviceModel = 1345354616346;
+    private const bool DeviceIsConnected = true;
+    
+    
     [TestInitialize]
     public void TestInitialize()
     {
@@ -21,7 +29,7 @@ public class DevicesTest
     [TestMethod]
     public void TestConnectSecurityCamera()
     {
-        securityCamera.IsConnected = true;
+        securityCamera.IsConnected = DeviceIsConnected;
         
         Assert.IsTrue(securityCamera.IsConnected);
     }
@@ -29,23 +37,23 @@ public class DevicesTest
     [TestMethod]
     public void TestAddNameToSecurityCamera()
     {
-        securityCamera.Name = "Camera 1";
+        securityCamera.Name = CameraName;
         
-        Assert.AreEqual("Camera 1", securityCamera.Name);
+        Assert.AreEqual(CameraName, securityCamera.Name);
     }
     
     [TestMethod]
     public void TestAddModelToSecurityCamera()
     {
-        securityCamera.Model = 1345354616346;
+        securityCamera.Model = DeviceModel;
         
-        Assert.AreEqual(1345354616346, securityCamera.Model);
+        Assert.AreEqual(DeviceModel, securityCamera.Model);
     }
     
     [TestMethod]
     public void TestAddPhotosToSecurityCamera()
     {
-        List<string> photos = new List<string> { "https://example.com/photo1.jpg", "https://example.com/photo2.jpg" };
+        List<string> photos = new List<string> { DevicePhotoUrl, DevicePhotoUrl };
         
         securityCamera.PhotoURLs = photos;
         
@@ -65,11 +73,9 @@ public class DevicesTest
     [TestMethod]
     public void TestAddDescriptionToSecurityCamera()
     {
-        string description = "This is a security camera";
+        securityCamera.Description = DeviceDescription;
         
-        securityCamera.Description = description;
-        
-        Assert.AreEqual(description, securityCamera.Description);
+        Assert.AreEqual(DeviceDescription, securityCamera.Description);
     }
     
     [TestMethod]
@@ -125,14 +131,9 @@ public class DevicesTest
     [TestMethod]
     public void TestAddDeviceCharacteristicsToWindowSensor()
     {
-        windowSensor = new WindowSensor()
+        windowSensor = new WindowSensor() 
         {
-            Name = "Window Sensor 1",
-            Model = 1345354616346,
-            Description = "This is a window sensor",
-            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
-            Company = new Company() {},
-            IsConnected = true
+            Name = WindowSensorName,
         };
         
         Assert.IsNotNull(windowSensor);
@@ -148,32 +149,32 @@ public class DevicesTest
         WindowSensor windowSensor1 = new WindowSensor()
         {
             Id = 1,
-            Name = "Window Sensor",
-            Model = 1345354616346,
-            Description = "This is a window sensor",
-            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
             Company = company,
-            IsConnected = true
+            IsConnected = DeviceIsConnected
         };
         
         WindowSensor windowSensor2 = new WindowSensor()
         {
             Id = 2,
-            Name = "Window Sensor",
-            Model = 1345354616346,
-            Description = "This is a window sensor",
-            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
             Company = company,
-            IsConnected = true
+            IsConnected = DeviceIsConnected
         };
         
         Assert.IsFalse(windowSensor1.Equals(windowSensor2));
     }
     
     [TestMethod]
-    public void TestDifferentiationOfSecuriryCamerasViaHardwardId()
+    public void TestDifferentiationOfSecurityCamerasViaHardwardId()
     {
         Company company = new Company(){};
         
@@ -182,25 +183,25 @@ public class DevicesTest
         SecurityCamera securityCamera1 = new SecurityCamera()
         {
             Id = 1,
-            Name = "Security Camera",
-            Model = 1345354616346,
-            Description = "This is a security camera",
-            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Name = CameraName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
             Company = company,
-            IsConnected = true
+            IsConnected = DeviceIsConnected
         };
         
         SecurityCamera securityCamera2 = new SecurityCamera()
         {
             Id = 2,
-            Name = "Security Camera",
-            Model = 1345354616346,
-            Description = "This is a security camera",
-            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Name = CameraName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
             Company = company,
-            IsConnected = true
+            IsConnected = DeviceIsConnected
         };
         
         Assert.IsFalse(securityCamera1.Equals(securityCamera2));
