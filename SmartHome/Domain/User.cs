@@ -21,11 +21,15 @@ public class User
             _name = value; 
         } 
     }
+    
+    public User() : this(new UserValidator())
+    {
+    }
 
-    public User()
+    public User(IUserValidator userValidator)
     {
         Roles = new List<IRole>();
-        _validator = new UserValidator(); 
+        _validator = userValidator; 
     }
 
     public void AddRole(IRole role)
