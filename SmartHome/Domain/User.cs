@@ -1,3 +1,4 @@
+using Domain.Exceptions.GeneralExceptions;
 using Domain.Exceptions.RoleException;
 using IDomain;
 
@@ -17,8 +18,16 @@ public class User
         get => _name;
         set
         {
-            _validator.ValidateName(value);
-            _name = value; 
+            bool valid = _validator.ValidateName(value);
+            if (valid)
+            {
+                _name = value; 
+            }
+            else
+            {
+                throw new InputNotValid("Input no valido");
+            }
+            
         } 
     }
     
