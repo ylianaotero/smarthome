@@ -146,6 +146,15 @@ public class DevicesTest
     [TestMethod]
     public void TestDifferentiationOfWindowSensorsViaHardwardId()
     {
+        Company company = new Company()
+        {
+            Name = "WindowSensors & Co.",
+            RUT = "123456789",
+            LogoURL = "https://example.com/logo.jpg"
+        };
+        
+        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
+        
         WindowSensor windowSensor1 = new WindowSensor()
         {
             Id = 1,
@@ -153,7 +162,8 @@ public class DevicesTest
             Model = 1345354616346,
             Description = "This is a window sensor",
             PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
-            Company = new Company() {},
+            Functionalities = functionalities,
+            Company = company,
             IsConnected = true
         };
         
@@ -164,7 +174,8 @@ public class DevicesTest
             Model = 1345354616346,
             Description = "This is a window sensor",
             PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
-            Company = new Company() {},
+            Functionalities = functionalities,
+            Company = company,
             IsConnected = true
         };
         
