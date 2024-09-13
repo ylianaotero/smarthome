@@ -37,7 +37,11 @@ public class DevicesRepository
     
     public void DeleteDevice(Device device)
     {
-        throw new ElementNotFoundException("Device not found");
+        bool elementExists = _database.Devices.Any(d => d.Id == device.Id);
+        if (!elementExists)
+        {
+            throw new ElementNotFoundException("Device not found");
+        }
         
         _database.Devices.Remove(device);
         _database.SaveChanges();
