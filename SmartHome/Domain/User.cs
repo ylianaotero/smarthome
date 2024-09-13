@@ -1,3 +1,4 @@
+using Domain.DomainExceptions.RoleException;
 using IDomain;
 
 namespace Domain;
@@ -18,5 +19,18 @@ public class User
     public void AddRole(IRole role)
     {
         Roles.Add(role);
+    }
+
+    public void DeleteRole(IRole role)
+    {
+        if (Roles.Contains(role))
+        {
+            Roles.Remove(role);
+        }
+        else
+        {
+            throw new RoleNotFoundException("The role does not exist");
+
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Domain;
+using Domain.DomainExceptions.RoleException;
 using IDomain;
 
 namespace DomainTest;
@@ -83,5 +84,14 @@ public class UserTest
         user.AddRole(role);
         user.DeleteRole(role);
         Assert.AreEqual(0, user.Roles.Count());
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(RoleNotFoundException))]
+    public void TestCannotDeleteRoleToUser()
+    {
+        User user = new User();
+        IRole role = new Administrator();
+        user.DeleteRole(role);
     }
 }
