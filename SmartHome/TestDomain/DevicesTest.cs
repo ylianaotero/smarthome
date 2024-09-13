@@ -99,7 +99,7 @@ public class DevicesTest
     [TestMethod]
     public void TestAddMovementDetectionFunctionalityToSecurityCamera()
     {
-        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> 
+        List<SecurityCameraFunctionality>? functionalities = new List<SecurityCameraFunctionality> 
             {SecurityCameraFunctionality.MotionDetection};
         
         securityCamera.Functionalities = functionalities;
@@ -110,7 +110,7 @@ public class DevicesTest
     [TestMethod]
     public void TestAddHumanDetectionFunctionalityToSecurityCamera()
     {
-        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> 
+        List<SecurityCameraFunctionality>? functionalities = new List<SecurityCameraFunctionality> 
             {SecurityCameraFunctionality.HumanDetection};
         
         securityCamera.Functionalities = functionalities;
@@ -121,7 +121,7 @@ public class DevicesTest
     [TestMethod]
     public void TestAddOpenClosedFunctionalityToWindowSensor()
     {
-        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> 
+        List<WindowSensorFunctionality>? functionalities = new List<WindowSensorFunctionality> 
             {WindowSensorFunctionality.OpenClosed};
         
         windowSensor.Functionalities = functionalities;

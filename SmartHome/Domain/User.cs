@@ -1,4 +1,4 @@
-using Domain.DomainExceptions.RoleException;
+using Domain.Exceptions.RoleException;
 using IDomain;
 
 namespace Domain;
