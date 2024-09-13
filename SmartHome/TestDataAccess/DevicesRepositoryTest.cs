@@ -43,9 +43,8 @@ public class DevicesRepositoryTest
     }
     
     [TestMethod]
-    public void TestGetDevicesByModel()
+    public void TestGetDevicesByFilter()
     {
-        // Arrange
         long otherModel = 1345354616347;
         List<Device> devices = new List<Device>
         {
@@ -62,11 +61,11 @@ public class DevicesRepositoryTest
             },
         };
         LoadContext(devices);
+
+        Func<Device,bool> filter = d => d.Model == DeviceModel;
+
+        List<Device> retrievedDevices = _devicesRepository.GetDevicesByFilter(filter);
         
-        // Act
-        List<Device> retrievedDevices = _devicesRepository.GetDevicesByModel(DeviceModel);
-        
-        // Assert
         Assert.IsTrue(retrievedDevices.TrueForAll(retrievedDevice => retrievedDevice.Model == DeviceModel));
     }
     

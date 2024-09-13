@@ -11,9 +11,9 @@ public class DevicesRepository
         _database = database;
     }
     
-    public List<Device> GetDevicesByModel(long model)
+    public List<Device> GetDevicesByFilter(Func<Device, bool> predicate)
     {
         return _database.Devices
-            .Where(device => device.Model == model).ToList();
+            .Where(predicate).ToList();
     }
 }
