@@ -114,4 +114,23 @@ public class UserTest
         
         userValidatorMock.VerifyAll();
     }
+    
+    [TestMethod]
+    public void TestInvalidName()
+    {
+        var userValidatorMock = new Mock<IUserValidator>();
+        
+        userValidatorMock
+            .Setup(v => v.ValidateName(" ")).Returns(false);
+        
+        var user = new User(userValidatorMock.Object);
+
+        user.Name = " "; 
+        
+        userValidatorMock.Verify(v => v.ValidateName(" "), Times.Once, "ValidateName should be called with ' '");
+        
+        Assert.IsNull(user.Name);
+        
+        userValidatorMock.VerifyAll();
+    }
 }
