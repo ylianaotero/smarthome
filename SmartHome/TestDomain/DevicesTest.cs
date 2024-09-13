@@ -125,4 +125,25 @@ public class DevicesTest
         
         Assert.AreEqual(windowSensor.Functionalities, functionalities);
     }
+    
+    [TestMethod]
+    public void TestAddDeviceCharacteristicsToWindowSensor()
+    {
+        windowSensor = new WindowSensor()
+        {
+            Name = "Window Sensor 1",
+            Model = 1345354616346,
+            Description = "This is a window sensor",
+            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Company = new Company() {},
+            IsConnected = true
+        };
+        
+        Assert.AreEqual("Window Sensor 1", windowSensor.Name);
+        Assert.AreEqual(1345354616346, windowSensor.Model);
+        Assert.AreEqual("This is a window sensor", windowSensor.Description);
+        Assert.AreEqual(new List<string> { "https://example.com/photo1.jpg"}, windowSensor.PhotoURLs);
+        Assert.IsTrue(windowSensor.Company.Equals(new Company()));
+        Assert.IsTrue(windowSensor.IsConnected);
+    }
 }
