@@ -1,6 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DataAccess;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using IDomain;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestDataAccess;
 
@@ -18,6 +19,6 @@ public class DevicesRepositoryTest
         List<IDevice> devices = devicesRepository.GetDevicesByModel(model);
         
         // Assert
-        Assert.IsTrue(devices.All(device => device.Model == model));
+        Assert.IsTrue(devices.TrueForAll(device => device.Model == model));
     }
 }

@@ -7,10 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+      <PackageReference Include="MSTest.TestAdapter" Version="3.6.0" />
+      <PackageReference Include="MSTest.TestFramework" Version="3.6.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\IDomain\IDomain.csproj" />
     </ItemGroup>
 
