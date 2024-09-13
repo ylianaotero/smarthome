@@ -1,9 +1,10 @@
 using DataAccess.Exceptions;
+using IDataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
-public class SqlRepository<T> where T : class
+public class SqlRepository<T> : IRepository<T> where T : class
 {
     private SmartHomeContext _database;
     private DbSet<T> _entities;
