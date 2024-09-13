@@ -2,7 +2,7 @@ using Domain;
 using Domain.DomainExceptions.RoleException;
 using IDomain;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class UserTest

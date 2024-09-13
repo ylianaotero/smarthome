@@ -1,6 +1,6 @@
 using Domain;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class AdministratorTest
