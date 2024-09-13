@@ -55,15 +55,11 @@ public class DevicesTest
     [TestMethod]
     public void TestAddCompanyDataToSecurityCamera()
     {
-        Company company = new Company() {
-            Name = "SecurityCameras & Co.",
-            RUT = "123456789",
-            LogoURL = "https://example.com/logo.jpg"
-        };
+        Company company = new Company(){};
         
         securityCamera.Company = company;
         
-        Assert.IsTrue(company.Equals(securityCamera.Company));
+        Assert.AreEqual(company, securityCamera.Company);
     }
     
     [TestMethod]
