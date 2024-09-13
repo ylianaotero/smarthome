@@ -83,6 +83,22 @@ public class DevicesRepositoryTest
         
         Assert.AreEqual(devices.Count(), retrievedDevices.Count());
     }
+
+    [TestMethod]
+    public void TestGetDeviceById()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+        };
+        LoadContext(devices);
+        
+        Device retrievedDevice = _devicesRepository.GetDeviceById(_defaultCamera.Id);
+        
+        Assert.AreEqual(retrievedDevice, _defaultCamera);
+    }
+    
     
     private void SetupRepository()
     {
