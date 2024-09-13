@@ -6,8 +6,8 @@ namespace Domain;
 
 public class User
 {
-    private string _name; 
-    public string Surname { get; set; }
+    private string _name;
+    private string _surname; 
     public string Email { get; set; }
     public string Password { get; set; }
     public List<IRole> Roles { get; set; }
@@ -30,6 +30,24 @@ public class User
             
         } 
     }
+    
+    public string Surname { 
+        get => _surname;
+        set
+        {
+            bool valid = _validator.ValidateSurname(value);
+            if (valid)
+            {
+                _surname = value; 
+            }
+            else
+            {
+                throw new InputNotValid("Input no valido");
+            }
+            
+        } 
+    }
+
     
     public User() : this(new UserValidator())
     {

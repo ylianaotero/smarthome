@@ -152,4 +152,23 @@ public class UserTest
         
         userValidatorMock.VerifyAll();
     }
+    
+        
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestInvalidSurName()
+    {
+        var userValidatorMock = new Mock<IUserValidator>();
+        
+        userValidatorMock
+            .Setup(v => v.ValidateSurname(" ")).Returns(false);
+        
+        var user = new User(userValidatorMock.Object);
+
+        user.Surname = " "; 
+        
+        userValidatorMock.Verify(v => v.ValidateSurname(" "), Times.Once, "ValidateSurname should be called with ' '");
+        
+        userValidatorMock.VerifyAll();
+    }
 }
