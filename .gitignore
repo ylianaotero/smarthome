@@ -91,3 +91,5 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,rider
 .DS_Store
+
+SmartHome/SmartHome.sln.DotSettings.user
