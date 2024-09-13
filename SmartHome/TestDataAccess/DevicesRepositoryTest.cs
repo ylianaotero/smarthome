@@ -99,6 +99,15 @@ public class DevicesRepositoryTest
         Assert.AreEqual(retrievedDevice.Id, _defaultCamera.Id);
     }
     
+    [TestMethod]
+    public void TestAddDevice()
+    {
+        _devicesRepository.AddDevice(_defaultCamera);
+        
+        List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
+        
+        CollectionAssert.Contains(_defaultCamera);
+    }
     
     private void SetupRepository()
     {
