@@ -18,7 +18,6 @@ public class DevicesTest
     private const long DeviceModel = 1345354616346;
     private const bool DeviceIsConnected = true;
     
-    
     [TestInitialize]
     public void TestInitialize()
     {
@@ -101,7 +100,8 @@ public class DevicesTest
     [TestMethod]
     public void TestAddMovementDetectionFunctionalityToSecurityCamera()
     {
-        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
+        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> 
+            {SecurityCameraFunctionality.MotionDetection};
         
         securityCamera.Functionalities = functionalities;
         
@@ -111,7 +111,8 @@ public class DevicesTest
     [TestMethod]
     public void TestAddHumanDetectionFunctionalityToSecurityCamera()
     {
-        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.HumanDetection};
+        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> 
+            {SecurityCameraFunctionality.HumanDetection};
         
         securityCamera.Functionalities = functionalities;
         
@@ -121,7 +122,8 @@ public class DevicesTest
     [TestMethod]
     public void TestAddOpenClosedFunctionalityToWindowSensor()
     {
-        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
+        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> 
+            {WindowSensorFunctionality.OpenClosed};
         
         windowSensor.Functionalities = functionalities;
         
