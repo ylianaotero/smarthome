@@ -55,8 +55,7 @@ public class DevicesTest
     [TestMethod]
     public void TestAddCompanyDataToSecurityCamera()
     {
-        Company company = new Company()
-        {
+        Company company = new Company() {
             Name = "SecurityCameras & Co.",
             RUT = "123456789",
             LogoURL = "https://example.com/logo.jpg"
@@ -175,5 +174,39 @@ public class DevicesTest
         };
         
         Assert.IsFalse(windowSensor1.Equals(windowSensor2));
+    }
+    
+    [TestMethod]
+    public void TestDifferentiationOfSecuriryCamerasViaHardwardId()
+    {
+        Company company = new Company(){};
+        
+        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
+        
+        SecurityCamera securityCamera1 = new SecurityCamera()
+        {
+            Id = 1,
+            Name = "Security Camera",
+            Model = 1345354616346,
+            Description = "This is a security camera",
+            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Functionalities = functionalities,
+            Company = company,
+            IsConnected = true
+        };
+        
+        SecurityCamera securityCamera2 = new SecurityCamera()
+        {
+            Id = 2,
+            Name = "Security Camera",
+            Model = 1345354616346,
+            Description = "This is a security camera",
+            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Functionalities = functionalities,
+            Company = company,
+            IsConnected = true
+        };
+        
+        Assert.IsFalse(securityCamera1.Equals(securityCamera2));
     }
 }
