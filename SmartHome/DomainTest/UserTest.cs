@@ -1,4 +1,5 @@
 using Domain;
+using IDomain;
 
 namespace DomainTest;
 
@@ -63,5 +64,14 @@ public class UserTest
         User user = new User();
         
         Assert.AreEqual(0, user.Roles.Count());
+    }
+    
+    [TestMethod]
+    public void TestAddRoleToUser()
+    {
+        User user = new User();
+        IRole role = new Administrator();
+        user.AddRole(role);
+        Assert.AreEqual(1, user.Roles.Count());
     }
 }
