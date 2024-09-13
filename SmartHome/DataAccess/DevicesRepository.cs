@@ -1,3 +1,4 @@
+using Domain;
 using IDomain;
 
 namespace DataAccess;
@@ -9,6 +10,14 @@ public class DevicesRepository
     public DevicesRepository(SmartHomeContext database)
     {
         _database = database;
+    }
+    
+    public Device? GetDeviceById(long id)
+    {
+        return new SecurityCamera()
+        {
+            Id = id
+        };
     }
 
     public List<Device> GetAllDevices()
