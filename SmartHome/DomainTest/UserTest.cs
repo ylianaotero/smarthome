@@ -17,4 +17,16 @@ public class UserTest
         // Assert
         Assert.AreEqual("Juan", user.Name);
     }
+    
+    public void TestAddSurnameToUser()
+    {
+        // Arrange
+        User user = new User();
+        
+        // Act
+        user.Surname = "Lopez";
+
+        // Assert
+        Assert.AreEqual("Lopez", user.Surname);
+    }
 }
