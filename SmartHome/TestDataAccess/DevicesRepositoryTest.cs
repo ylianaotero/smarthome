@@ -126,6 +126,18 @@ public class DevicesRepositoryTest
         CollectionAssert.DoesNotContain(retrievedDevices, _defaultCamera);
     }
     
+    [TestMethod]
+    [ExpectedException(ElementNotFoundException)]
+    public void TestDeleteNonexistentDevice()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera
+        };
+        LoadContext(devices);
+        
+        _devicesRepository.DeleteDevice(_defaultWindowSensor);
+    }
     
     private void SetupRepository()
     {
