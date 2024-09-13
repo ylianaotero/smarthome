@@ -114,4 +114,15 @@ public class DevicesTest
         
         Assert.AreEqual(functionalities, device.Functionalities);
     }
+    
+    [TestMethod]
+    public void TestAddOpenClosedFunctionalityToWindowSensor()
+    {
+        WindowSensor ws = new WindowSensor();
+        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
+        
+        ws.Functionalities = functionalities;
+        
+        Assert.AreEqual(ws.Functionalities, functionalities);
+    }
 }
