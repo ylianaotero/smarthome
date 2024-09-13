@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDomain", "IDomain\IDomain.csproj", "{577CE4B0-B579-41FD-A96E-3224DE401EB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainTest", "DomainTest\DomainTest.csproj", "{F1CAA4DD-44E5-47EB-BB01-83938E9B380D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDomain", "TestDomain\TestDomain.csproj", "{F1CAA4DD-44E5-47EB-BB01-83938E9B380D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{2ED851AF-F7C6-4605-8D9E-6BAF9178A52C}"
 EndProject
