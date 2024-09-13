@@ -7,6 +7,11 @@ public enum LocationType
     Indoor,
     Outdoor
 }
+ 
+public enum Functionality
+{
+    MotionDetection
+}
 
 public class SecurityCamera : IDevice
 {
@@ -17,6 +22,6 @@ public class SecurityCamera : IDevice
     public Company Company { get; set; }
     public string Description { get; set; }
     public LocationType LocationType { get; set; }
-    public List<string> Functionalities { get; set; }
+    public List<Functionality> Functionalities { get; set; }
     
 }

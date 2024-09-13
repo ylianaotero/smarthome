@@ -101,7 +101,7 @@ public class DevicesTest
     [TestMethod]
     public void TestAddMovementDetectionFunctionalityToSecurityCamera()
     {
-        List<string> functionalities = new List<string> { "Movement Detection" };
+        List<Functionality> functionalities = new List<Functionality> {Functionality.MotionDetection};
         
         device.Functionalities = functionalities;
         
