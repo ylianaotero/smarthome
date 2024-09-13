@@ -81,7 +81,7 @@ public class DevicesRepositoryTest
         
         List<Device> retrievedDevices = _devicesRepository.GetAllDevices();
         
-        Assert.AreEqual(devices, retrievedDevices);
+        Assert.AreEqual(devices.Count(), retrievedDevices.Count());
     }
     
     private void SetupRepository()

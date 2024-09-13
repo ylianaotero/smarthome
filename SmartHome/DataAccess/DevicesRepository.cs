@@ -10,6 +10,11 @@ public class DevicesRepository
     {
         _database = database;
     }
+
+    public List<Device> GetAllDevices()
+    {
+        return _database.Devices.ToList();
+    }
     
     public List<Device> GetDevicesByFilter(Func<Device, bool> predicate)
     {
