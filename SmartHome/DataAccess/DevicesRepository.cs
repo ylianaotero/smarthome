@@ -14,10 +14,7 @@ public class DevicesRepository
     
     public Device? GetDeviceById(long id)
     {
-        return new SecurityCamera()
-        {
-            Id = id
-        };
+        return _database.Devices.Find(id);
     }
 
     public List<Device> GetAllDevices()
