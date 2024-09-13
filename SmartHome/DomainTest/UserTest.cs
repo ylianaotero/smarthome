@@ -43,4 +43,17 @@ public class UserTest
         // Assert
         Assert.AreEqual("juanlopez@gmail.com", user.Email);
     }
+    
+    [TestMethod]
+    public void TestAddPasswordToUser()
+    {
+        // Arrange
+        User user = new User();
+        
+        // Act
+        user.Password = "juanlop1";
+
+        // Assert
+        Assert.AreEqual("juanlop1", user.Password);
+    }
 }
