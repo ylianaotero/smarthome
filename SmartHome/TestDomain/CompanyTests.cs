@@ -7,10 +7,17 @@ namespace TestDomain;
 [TestClass]
 public class CompanyTests
 {
+    private Company company;
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        company = new Company();
+    }
+    
     [TestMethod]
     public void TestAddNameToCompany()
     {
-        Company company = new Company();
         company.Name = "SecurityCameras & Co.";
 
         Assert.AreEqual("SecurityCameras & Co.", company.Name);
@@ -19,7 +26,6 @@ public class CompanyTests
     [TestMethod]
     public void TestAddRUTToCompany()
     {
-        Company company = new Company();
         company.RUT = "123456789";
 
         Assert.AreEqual("123456789", company.RUT);
@@ -28,7 +34,6 @@ public class CompanyTests
     [TestMethod]
     public void TestAddLogoURLToCompany()
     {
-        Company company = new Company();
         company.LogoURL = "https://example.com/logo.jpg";
 
         Assert.AreEqual("https://example.com/logo.jpg", company.LogoURL);
@@ -54,6 +59,5 @@ public class CompanyTests
         };
         
         Assert.AreNotEqual(company1, company2);
-        
     }
 }
