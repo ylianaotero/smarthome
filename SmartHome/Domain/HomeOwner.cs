@@ -2,7 +2,7 @@ using IDomain;
 
 namespace Domain;
 
-public class HomeOwner : IRole
+public class HomeOwner
 {
     public string Name { get; set; }
     public string Surname { get; set; }
