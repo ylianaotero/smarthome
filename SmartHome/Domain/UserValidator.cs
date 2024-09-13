@@ -8,6 +8,11 @@ public class UserValidator
     {
         return !IsNull(name);
     }
+    
+    public bool ValidateSurname(string surname)
+    {
+        return !IsNull(surname);
+    }
 
     private bool IsNull(string text)
     {
