@@ -142,4 +142,32 @@ public class DevicesTest
         
         Assert.IsNotNull(windowSensor);
     }
+
+    [TestMethod]
+    public void TestDifferentiationOfWindowSensorsViaHardwardId()
+    {
+        WindowSensor windowSensor1 = new WindowSensor()
+        {
+            Id = 1,
+            Name = "Window Sensor",
+            Model = 1345354616346,
+            Description = "This is a window sensor",
+            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Company = new Company() {},
+            IsConnected = true
+        };
+        
+        WindowSensor windowSensor2 = new WindowSensor()
+        {
+            Id = 2,
+            Name = "Window Sensor",
+            Model = 1345354616346,
+            Description = "This is a window sensor",
+            PhotoURLs = new List<string> { "https://example.com/photo1.jpg"},
+            Company = new Company() {},
+            IsConnected = true
+        };
+        
+        Assert.IsFalse(windowSensor1.Equals(windowSensor2));
+    }
 }
