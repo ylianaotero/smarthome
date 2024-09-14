@@ -13,7 +13,7 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
-    private const long id = 1; 
+    private const long id = 11;
 
     private (User, bool) _member; 
     
@@ -151,12 +151,35 @@ public class HomeTest
     }
     
     [TestMethod]
+    public void TestAddDevice()
+    {
+        _home.AddDevice(_device); 
+        
+        Assert.AreEqual(1, _home.Devices.Count());
+        
+        Device device = _home.Devices.FirstOrDefault(d => d.Id == id);
+        Assert.IsNotNull(device);
+    }
+    
+        
+    [TestMethod]
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddExistingDevice()
     {
         _home.AddDevice(_device); 
         
         _home.AddDevice(_device); 
+    }
+    
+        
+    [TestMethod]
+    public void TestFindDevice()
+    {
+        _home.AddDevice(_device);
+
+        Device result = _home.FindDevice(_device.Id); 
+        
+        Assert.AreEqual(id, result.Id);
     }
     
  
