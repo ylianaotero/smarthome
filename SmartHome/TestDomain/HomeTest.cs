@@ -32,10 +32,8 @@ public class HomeTest
     [TestMethod]
     public void CreateNewHome()
     {
-        // Arrange
         Home newHome = new Home(Street,DoorNumber,Latitude,Longitude);
-
-        // Assert
+        
         Assert.AreEqual(Street, newHome.Street);
         Assert.AreEqual(DoorNumber, newHome.DoorNumber);
         Assert.AreEqual(Latitude, newHome.Latitude);
@@ -45,12 +43,28 @@ public class HomeTest
     }
     
     [TestMethod]
-    public void TestAddUserAndBoolToMembers()
+    public void TestAddMember()
     {
         User user = new User();
-        (User, bool) input = (user, true);
-        _home.AddMember(input); 
+        (User, bool) member = (user, true);
+        _home.AddMember(member); 
         Assert.AreEqual(1, _home.Members.Count());
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestTryToAddMemberThatAlreadyExists()
+    {
+        User user = new User();
+        user.Email = Email2; 
+        (User, bool) member2 = (user, true);
+        
+        _home.AddMember(_member); 
+        _home.AddMember(member2); 
+        
+        (User, bool) existingMember = (user, false);
+        
+        _home.AddMember(existingMember); 
     }
     
     [TestMethod]
@@ -118,6 +132,16 @@ public class HomeTest
         
         var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Item1.Email == Email1);
         Assert.IsNull( memberWithEmail1.Item1);
+
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestDeleteMemberThatDoesNotExist()
+    {
+        _home.AddMember(_member); 
+        
+        _home.DeleteMember(Email2); 
 
     }
     
