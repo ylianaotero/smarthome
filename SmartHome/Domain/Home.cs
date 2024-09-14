@@ -92,6 +92,10 @@ public class Home
 
     public Device FindDevice(long id)
     {
+        if (!DeviceExist(id))
+        {
+            throw new CannotFindItemInList("No se encontro el dispositivo"); 
+        }
         return Devices.FirstOrDefault(d => d.Id == id); 
     }
 }
