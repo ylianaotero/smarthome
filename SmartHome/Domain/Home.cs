@@ -27,17 +27,34 @@ public class Home
 
     public void AddMember((User, bool) member)
     {
-        Members.Add(member);
+        if (MemberExist(member.Item1.Email))
+        {
+            throw new CannotAddItem("El miembro ya existe"); 
+        }
+        else
+        {
+            Members.Add(member);
+        }
+        
     }
-    
-    public (User,bool) FindMember(string email)
+
+    private bool MemberExist(string email)
     {
         (User,bool) member = Members.FirstOrDefault(m => m.Item1.Email == email);
         if (member.Item1 == null)
         {
+            return false; 
+        }
+        return true; 
+    }
+    
+    public (User,bool) FindMember(string email)
+    {
+        if (!MemberExist(email))
+        {
             throw new CannotFindItemInList("No se encontro el miembro"); 
         }
-        return member; 
+        return Members.FirstOrDefault(m => m.Item1.Email == email); 
     }
 
     public bool MemberCanReceiveNotifications(string email)

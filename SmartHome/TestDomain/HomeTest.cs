@@ -1,5 +1,6 @@
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
+using IDomain;
 
 namespace TestDomain;
 
@@ -12,10 +13,13 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
+    private const int id = 1; 
 
     private (User, bool) _member; 
     
-    private User _user; 
+    private User _user;
+
+    private Device _device; 
 
     private Home _home; 
     
@@ -25,8 +29,9 @@ public class HomeTest
         _home = new Home(Street,DoorNumber,Latitude,Longitude);
         _user = new User();
         _user.Email = Email1;
-        _member = (_user, false); 
-
+        _member = (_user, false);
+        _device = new SecurityCamera();
+        _device.Id = id; 
     }
     
     [TestMethod]
@@ -143,6 +148,17 @@ public class HomeTest
         
         _home.DeleteMember(Email2); 
 
+    }
+    
+    [TestMethod]
+    public void TestAddDevice()
+    {
+        _home.AddDevice(_device); 
+        
+        Assert.AreEqual(1, _home.Devices.Count());
+        
+        Device device = _home.Devices.FirstOrDefault(d => d.Id == id);
+        Assert.IsNull(device);
     }
     
  
