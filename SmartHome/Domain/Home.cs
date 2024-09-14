@@ -24,4 +24,9 @@ public class Home
         Devices = new List<Device>(); 
     }
 
+    public void AddMember((User, bool) member)
+    {
+        Members.Add(member);
+    }
+
 }
