@@ -151,14 +151,12 @@ public class HomeTest
     }
     
     [TestMethod]
-    public void TestAddDevice()
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestTryToAddExistingDevice()
     {
         _home.AddDevice(_device); 
         
-        Assert.AreEqual(1, _home.Devices.Count());
-        
-        Device device = _home.Devices.FirstOrDefault(d => d.Id == id);
-        Assert.IsNotNull(device);
+        _home.AddDevice(_device); 
     }
     
  
