@@ -29,6 +29,10 @@ public class HomeTest
         Assert.AreEqual(_doorNumber, newHome.DoorNumber);
         Assert.AreEqual(_latitude, newHome.Latitude);
         Assert.AreEqual(_longitude, newHome.Longitude);
+        Assert.AreEqual(0, newHome.Members);
+        Assert.AreEqual(0, newHome.Devices);
     }
+    
+
     
 }
