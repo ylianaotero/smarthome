@@ -92,6 +92,16 @@ public class HomeTest
         Assert.IsTrue(result);
     }
     
+        
+    [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestCheckIfMemberThatDoesNotExistCanReceiveNotifications()
+    {
+        _home.AddMember(_member); 
+        
+        _home.MemberCanReceiveNotifications(Email2); 
+    }
+    
  
 
     
