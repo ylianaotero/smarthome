@@ -188,6 +188,13 @@ public class HomeTest
     {
         _home.FindDevice(_device.Id); 
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestTryToDeleteDevice()
+    {
+        _home.DeleteDevice(_device.Id); 
+    }
 
  
 
