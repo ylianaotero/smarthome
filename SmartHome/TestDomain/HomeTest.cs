@@ -105,11 +105,20 @@ public class HomeTest
     [TestMethod]
     public void TestDeleteMember()
     {
+        User user = new User();
+        user.Email = Email2; 
+        (User, bool) member2 = (user, true);
+        
         _home.AddMember(_member); 
+        _home.AddMember(member2); 
         
         _home.DeleteMember(Email1); 
         
-        Assert.AreEqual(0, _home.Members.Count);
+        Assert.AreEqual(1, _home.Members.Count);
+        
+        var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Item1.Email == Email1);
+        Assert.IsNull( memberWithEmail1.Item1);
+
     }
     
  

@@ -44,4 +44,9 @@ public class Home
     {
         return FindMember(email).Item2; 
     }
+
+    public void DeleteMember(string email)
+    {
+        Members.Remove(FindMember(email));
+    }
 }
