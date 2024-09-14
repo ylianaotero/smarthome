@@ -66,4 +66,9 @@ public class Home
     {
         Members.Remove(FindMember(email));
     }
+
+    public void AddDevice(Device device)
+    {
+        Devices.Add(device);
+    }
 }

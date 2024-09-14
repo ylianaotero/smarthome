@@ -158,7 +158,7 @@ public class HomeTest
         Assert.AreEqual(1, _home.Devices.Count());
         
         Device device = _home.Devices.FirstOrDefault(d => d.Id == id);
-        Assert.IsNull(device);
+        Assert.IsNotNull(device);
     }
     
  
