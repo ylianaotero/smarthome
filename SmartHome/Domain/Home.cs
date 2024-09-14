@@ -34,4 +34,8 @@ public class Home
         return Members.FirstOrDefault(m => m.Item1.Email == email);
     }
 
+    public bool MemberCanReceiveNotifications(string email)
+    {
+        return FindMember(email).Item2; 
+    }
 }
