@@ -24,7 +24,7 @@ public class HomeTest
         _home = new Home(Street,DoorNumber,Latitude,Longitude);
         _user = new User();
         _user.Email = Email1;
-        _member = (_user, true); 
+        _member = (_user, false); 
 
     }
     
@@ -65,6 +65,21 @@ public class HomeTest
         (User, bool) result = _home.FindMember(Email2); 
         
         Assert.AreEqual(member2, result);
+    }
+    
+    [TestMethod]
+    public void TestCheckIfMemberCanReceiveNotifications()
+    {
+        User user = new User();
+        user.Email = Email2; 
+        (User, bool) member2 = (user, true);
+        
+        _home.AddMember(_member); 
+        _home.AddMember(member2); 
+        
+        bool result = _home.MemberCanReceiveNotifications(Email2); 
+        
+        Assert.IsTrue(result);
     }
     
  
