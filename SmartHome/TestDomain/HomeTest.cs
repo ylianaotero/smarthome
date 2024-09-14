@@ -38,11 +38,13 @@ public class HomeTest
     public void CreateNewHome()
     {
         Home newHome = new Home(Street,DoorNumber,Latitude,Longitude);
+        newHome.Id = 1; 
         
         Assert.AreEqual(Street, newHome.Street);
         Assert.AreEqual(DoorNumber, newHome.DoorNumber);
         Assert.AreEqual(Latitude, newHome.Latitude);
         Assert.AreEqual(Longitude, newHome.Longitude);
+        Assert.AreEqual(1, newHome.Id);
         Assert.AreEqual(0, newHome.Members.Count);
         Assert.AreEqual(0, newHome.Devices.Count);
     }
