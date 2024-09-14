@@ -102,6 +102,16 @@ public class HomeTest
         _home.MemberCanReceiveNotifications(Email2); 
     }
     
+    [TestMethod]
+    public void TestDeleteMember()
+    {
+        _home.AddMember(_member); 
+        
+        _home.DeleteMember(Email1); 
+        
+        Assert.AreEqual(0, _home.Members.Count);
+    }
+    
  
 
     
