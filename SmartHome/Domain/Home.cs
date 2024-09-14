@@ -28,5 +28,10 @@ public class Home
     {
         Members.Add(member);
     }
+    
+    public (User,bool) FindMember(string email)
+    {
+        return Members.FirstOrDefault(m => m.Item1.Email == email);
+    }
 
 }
