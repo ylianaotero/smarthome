@@ -1,3 +1,4 @@
+using Domain.Exceptions.GeneralExceptions;
 using IDomain;
 
 namespace Domain;
@@ -31,7 +32,12 @@ public class Home
     
     public (User,bool) FindMember(string email)
     {
-        return Members.FirstOrDefault(m => m.Item1.Email == email);
+        (User,bool) member = Members.FirstOrDefault(m => m.Item1.Email == email);
+        if (member.Item1 == null)
+        {
+            throw new CannotFindItemInList("No se encontro el miembro"); 
+        }
+        return member; 
     }
 
     public bool MemberCanReceiveNotifications(string email)
