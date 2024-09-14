@@ -1,3 +1,5 @@
+using IDomain;
+
 namespace Domain;
 
 public class Home
@@ -8,12 +10,18 @@ public class Home
     public int Latitude { get; set; }
     public int Longitude { get; set; }
     
+    public List<(User,bool)> Members { get; set; }
+    
+    public List<Device> Devices { get; set; }
+    
     public Home(string street, int doorNumber,int latitude,int longitude)
     {
         Street = street;
         DoorNumber = doorNumber;
         Latitude = latitude;
-        Longitude = longitude; 
+        Longitude = longitude;
+        Members = new List<(User, bool)>();
+        Devices = new List<Device>(); 
     }
 
 }
