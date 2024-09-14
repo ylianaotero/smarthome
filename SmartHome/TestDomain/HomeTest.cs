@@ -182,6 +182,13 @@ public class HomeTest
         Assert.AreEqual(id, result.Id);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestCannotFindDevice()
+    {
+        _home.FindDevice(_device.Id); 
+    }
+
  
 
     

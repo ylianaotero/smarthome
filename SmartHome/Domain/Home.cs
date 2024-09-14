@@ -89,4 +89,9 @@ public class Home
         }
         return true; 
     }
+
+    public Device FindDevice(long id)
+    {
+        return Devices.FirstOrDefault(d => d.Id == id); 
+    }
 }
