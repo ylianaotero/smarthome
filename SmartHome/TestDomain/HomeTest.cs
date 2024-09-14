@@ -195,6 +195,17 @@ public class HomeTest
     {
         _home.DeleteDevice(_device.Id); 
     }
+    
+    [TestMethod]
+    public void TestDeleteDevice()
+    {
+        _home.AddDevice(_device);
+        
+        _home.DeleteDevice(11); 
+        
+        Assert.AreEqual(0, _home.Devices.Count());
+        
+    }
 
  
 

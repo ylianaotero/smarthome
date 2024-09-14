@@ -22,7 +22,9 @@ public class SecurityCamera : Device
     
     public override bool Equals(object? obj)
     {
-        return obj is SecurityCamera camera &&
+        return obj is SecurityCamera camera && 
+               Id == camera.Id;
+        /*return obj is SecurityCamera camera && //no me pasaba la prueba si busco con el first de la lista VER
                Name == camera.Name &&
                Model == camera.Model &&
                Description == camera.Description &&
@@ -32,6 +34,6 @@ public class SecurityCamera : Device
                Functionalities != null &&
                camera.Functionalities != null &&
                Functionalities.SequenceEqual(camera.Functionalities) &&
-               Id == camera.Id;
+               Id == camera.Id;*/
     }
 }
