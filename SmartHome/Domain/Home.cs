@@ -69,6 +69,24 @@ public class Home
 
     public void AddDevice(Device device)
     {
-        Devices.Add(device);
+        if (!DeviceExist(device.Id))
+        {
+            Devices.Add(device);
+        }
+        else
+        {
+            throw new CannotAddItem("El dispositivo ya existe"); 
+        }
+        
+    }
+    
+    private bool DeviceExist(long id)
+    {
+        Device device = Devices.FirstOrDefault(d => d.Id == id);
+        if (device == null)
+        {
+            return false; 
+        }
+        return true; 
     }
 }

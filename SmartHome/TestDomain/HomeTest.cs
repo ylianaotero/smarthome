@@ -13,7 +13,7 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
-    private const int id = 1; 
+    private const long id = 1; 
 
     private (User, bool) _member; 
     
