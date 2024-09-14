@@ -8,8 +8,8 @@ public class CompanyOwnerTest
     [TestMethod]
     public void TestAddCompanyToCompanyOwner()
     {
-        CompanyOwner companyOwner = new CompanyOwner();
         Company company = new Company();
+        CompanyOwner companyOwner = new CompanyOwner(company);
         Assert.AreEqual(company,companyOwner.Company);
     }
 }
