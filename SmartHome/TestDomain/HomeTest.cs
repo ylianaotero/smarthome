@@ -68,6 +68,15 @@ public class HomeTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestCannotFindMember()
+    {
+        _home.AddMember(_member); 
+        
+        _home.FindMember(Email2); 
+    }
+    
+    [TestMethod]
     public void TestCheckIfMemberCanReceiveNotifications()
     {
         User user = new User();
