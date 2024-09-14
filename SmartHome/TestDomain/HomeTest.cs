@@ -33,7 +33,14 @@ public class HomeTest
         Assert.AreEqual(0, newHome.Devices.Count);
     }
     
-
+    [TestMethod]
+    public void TestAddUserAndBoolToMembers()
+    {
+        User user = new User();
+        (User, bool) input = (user, true);
+        _home.AddMember(input); 
+        Assert.AreEqual(1, _home.Members.Count());
+    }
     
  
 
