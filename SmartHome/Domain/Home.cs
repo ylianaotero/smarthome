@@ -8,6 +8,8 @@ public class Home
     public int Latitude { get; set; }
     public int Longitude { get; set; }
     
+    public List<User> Members { get; set; }
+    
     public Home(string street, int doorNumber,int latitude,int longitude)
     {
         Street = street;
