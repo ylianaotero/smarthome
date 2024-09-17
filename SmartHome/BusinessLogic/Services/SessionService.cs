@@ -35,8 +35,11 @@ public class SessionService : ISessionService
         return newSession; 
     }
 
-    public void Logout(Guid token)
+    public void LogOut(Guid token)
     {
+        Session session = _sessionRepository.GetByFilter(s => s.Id == token).FirstOrDefault();
+
+        _sessionRepository.Delete(session);
 
     }
 }

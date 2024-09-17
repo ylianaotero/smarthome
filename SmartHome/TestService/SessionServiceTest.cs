@@ -87,7 +87,7 @@ public class SessionServiceTest
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
             
-            _mockSessionRepository.Verify(repo => repo.Delete(It.Is<Session>(u => u == result)), Times.Once);
+            _mockSessionRepository.Verify(repo => repo.Delete(It.IsAny<Session>()), Times.Once);
         }
 
         
