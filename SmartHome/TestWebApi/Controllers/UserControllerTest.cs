@@ -89,7 +89,7 @@ public class UserControllerTest
     }
     
     [TestMethod]
-    public void CreateUserServiceThrowsUnexpectedException_ReturnsInternalServerError()
+    public void CreateUserServiceThrowsUnexpectedException()
     {
         var createUserRequest = new CreateUserRequest
         {
@@ -107,6 +107,27 @@ public class UserControllerTest
         
         Assert.IsNotNull(result);
         Assert.AreEqual(500, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void CreateUserServiceThrowsUserAlreadyExists()
+    {
+        var createUserRequest = new CreateUserRequest
+        {
+            Name = "John Doe",
+            Email = "john.doe@example.com",
+            Password = "Securepassword1@",
+            Surname = "Doe"
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new ElementAlreadyExist("Element already exists, try again"));
+
+        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+        
+        Assert.IsNotNull(result);
+        Assert.AreEqual(409, result.StatusCode);
     }
 
     
