@@ -1,6 +1,7 @@
 using BusinessLogic.IServices;
 using BusinessLogic.Services;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using IDataAccess;
 using Moq;
 
@@ -9,6 +10,11 @@ namespace TestService;
 [TestClass]
 public class UserServiceTest
 {
+    private const string NewName = "Juan Pérez";
+    private const string NewEmail = "juan.perez@example.com";
+    private const string NewPassword = "contraseñaSegura1@";
+    private const string NewSurname = "Pérez";
+    
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;
     
@@ -16,7 +22,6 @@ public class UserServiceTest
     public void Setup()
     {
         _mockUserRepository = new Mock<IRepository<User>>();
-        _userService = new UserService(_mockUserRepository.Object);
     }
     
     [TestMethod]
@@ -24,11 +29,14 @@ public class UserServiceTest
     {
         var user = new User
         {
-            Name = "Juan Pérez",
-            Email = "juan.perez@example.com",
-            Password = "contraseñaSegura1@",
-            Surname = "Pérez"
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
         };
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
         _userService.CreateUser(user);
         
         _mockUserRepository.Verify(repo => repo.Add(It.Is<User>(u => u == user)), Times.Once);
@@ -40,11 +48,20 @@ public class UserServiceTest
     {
         var user = new User
         {
-            Name = "Juan Pérez",
-            Email = "juan.perez@example.com",
-            Password = "contraseñaSegura1@",
-            Surname = "Pérez"
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
         };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(user);
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(u => u.Email == NewEmail)).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+
         _userService.CreateUser(user);
         
         _userService.CreateUser(user);
