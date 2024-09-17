@@ -1,4 +1,5 @@
 
+using System.ComponentModel.DataAnnotations;
 using Domain.Exceptions.RoleExceptions;
 using Domain.Exceptions.GeneralExceptions;
 using IDomain;
@@ -7,9 +8,9 @@ namespace Domain;
 
 public class User
 {
+    private string _email { get; set; }
     private string _name { get; set; }
     private string _surname { get; set; }
-    private string _email { get; set; }
     private string _password { get; set; }
     public List<Role> Roles { get; set; }
 
@@ -66,6 +67,7 @@ public class User
         } 
     }
     
+    [Key]
     public string Email { 
         get => _email;
         set

@@ -1,5 +1,10 @@
+using BusinessLogic.IServices;
+using BusinessLogic.Services;
 using DataAccess;
+using Domain;
+using IDataAccess;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +14,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configura el DbContext
+// Configura el DbContext y especifica el ensamblado de migraciones
 builder.Services.AddDbContext<SmartHomeContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("DataAccess")));  // Cambia "DataAccess" al nombre de tu proyecto de migraciones
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseRouting();
+app.UseAuthorization();
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
