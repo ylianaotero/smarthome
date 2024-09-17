@@ -89,6 +89,23 @@ public class SessionServiceTest
             
             _mockSessionRepository.Verify(repo => repo.Delete(It.IsAny<Session>()), Times.Once);
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(CannotFindItemInList))]
+        public void InvalidLogOut()
+        {
+            Session session = new Session();
+            session.User = _user; 
+
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session>());
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            sessionService.LogOut(session.Id);
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+        }
 
         
         
