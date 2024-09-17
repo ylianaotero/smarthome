@@ -66,7 +66,7 @@ public class UserTest
     {
         User user = new User();
         
-        Assert.AreEqual(DateTime.Now.Date, user.CreatedAt);
+        Assert.AreEqual(DateTime.Now.Date, user.CreatedAt.Date);
     }
     
     [TestMethod]
