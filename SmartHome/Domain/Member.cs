@@ -1,6 +1,6 @@
 namespace Domain;
 
-public class Member
+public class Member : User
 {
-    
+    public bool Permission { get; set; }
 }
