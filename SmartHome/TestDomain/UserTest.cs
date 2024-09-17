@@ -62,6 +62,14 @@ public class UserTest
     }
     
     [TestMethod]
+    public void TestCreatedAtUser()
+    {
+        User user = new User();
+        
+        Assert.AreEqual(DateTime.Now.Date, user.CreatedAt);
+    }
+    
+    [TestMethod]
     public void TestAddNewRoleToUser()
     {
         User user = new User();
