@@ -31,6 +31,10 @@ public class UserController : ControllerBase
         {
             return BadRequest(new { message = inputNotValid.Message });
         }
+        catch (ElementAlreadyExist elementAlreadyExist)
+        {
+            return Conflict(new { message = elementAlreadyExist.Message });
+        }
         catch (Exception exception)
         {
             return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
