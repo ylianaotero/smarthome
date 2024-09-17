@@ -7,8 +7,11 @@ namespace DataAccess;
 public class SmartHomeContext : DbContext
 {
     public DbSet<Device> Devices { get; set; }
-    
-    public SmartHomeContext(DbContextOptions<SmartHomeContext> options) : base(options) {}
+
+    public SmartHomeContext(DbContextOptions<SmartHomeContext> options) : base(options)
+    {
+        this.Database.Migrate();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
