@@ -20,7 +20,7 @@ public class UserServiceTest
     }
     
     [TestMethod]
-    public void CreateUser_ShouldCallAddOnRepository()
+    public void CreateUser()
     {
         var user = new User
         {
@@ -32,6 +32,22 @@ public class UserServiceTest
         _userService.CreateUser(user);
         
         _mockUserRepository.Verify(repo => repo.Add(It.Is<User>(u => u == user)), Times.Once);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void CreateUserThatAlreadyExists()
+    {
+        var user = new User
+        {
+            Name = "Juan Pérez",
+            Email = "juan.perez@example.com",
+            Password = "contraseñaSegura1@",
+            Surname = "Pérez"
+        };
+        _userService.CreateUser(user);
+        
+        _userService.CreateUser(user);
     }
 
 }
