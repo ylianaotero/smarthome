@@ -10,23 +10,23 @@ using WebApi.Out;
 namespace TestWebApi;
 
 [TestClass]
-public class UserControllerTest
+public class HomeOwnerControllerTest
 {
     private Mock<IUserService> _userServiceMock;
-    private UserController _userController;
+    private HomeOwnerController _homeOwnerController;
     
     [TestInitialize]
     public void SetUp()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
 
-        _userController = new UserController(_userServiceMock.Object);
+        _homeOwnerController = new HomeOwnerController(_userServiceMock.Object);
     }
 
     [TestMethod]
     public void CreateUserValidRequest()
     {
-        var createUserRequest = new CreateUserRequest
+        var createUserRequest = new CreateHomeOwnerRequest
         {
             Name = "John Doe",
             Email = "john.doe@example.com",
@@ -50,8 +50,8 @@ public class UserControllerTest
             u.Surname == user.Surname
         )));
 
-        var result = _userController.CreateUser(createUserRequest) as OkObjectResult;
-        var userResponse = result?.Value as UserResponse;
+        var result = _homeOwnerController.CreateUser(createUserRequest) as OkObjectResult;
+        var userResponse = result?.Value as HomeOwnerResponse;
 
         _userServiceMock.Verify(service => service.CreateUser(It.Is<User>(u =>
             u.Name == user.Name &&
@@ -70,7 +70,7 @@ public class UserControllerTest
     [TestMethod]
     public void CreateUserInvalidRequest()
     {
-        var createUserRequest = new CreateUserRequest
+        var createUserRequest = new CreateHomeOwnerRequest
         {
             Name = "John Doe",
             Email = "invalid email",
@@ -82,7 +82,7 @@ public class UserControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid("Input not valid, try again"));
         
-        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateUser(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
         Assert.AreEqual(400, result.StatusCode);
@@ -91,7 +91,7 @@ public class UserControllerTest
     [TestMethod]
     public void CreateUserServiceThrowsUnexpectedException()
     {
-        var createUserRequest = new CreateUserRequest
+        var createUserRequest = new CreateHomeOwnerRequest
         {
             Name = "John Doe",
             Email = "john.doe@example.com",
@@ -103,7 +103,7 @@ public class UserControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception("Unexpected error"));
 
-        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateUser(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
         Assert.AreEqual(500, result.StatusCode);
@@ -112,7 +112,7 @@ public class UserControllerTest
     [TestMethod]
     public void CreateUserServiceThrowsUserAlreadyExists()
     {
-        var createUserRequest = new CreateUserRequest
+        var createUserRequest = new CreateHomeOwnerRequest
         {
             Name = "John Doe",
             Email = "john.doe@example.com",
@@ -124,7 +124,7 @@ public class UserControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new ElementAlreadyExist("Element already exists, try again"));
 
-        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateUser(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
         Assert.AreEqual(409, result.StatusCode);

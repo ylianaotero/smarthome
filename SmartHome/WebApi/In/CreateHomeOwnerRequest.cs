@@ -2,7 +2,7 @@ using Domain;
 
 namespace WebApi.In;
 
-public class CreateUserRequest
+public class CreateHomeOwnerRequest
 {
     public string Name { get; set; }
     public string Email { get; set; }

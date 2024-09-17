@@ -8,23 +8,23 @@ namespace WebApi.Controllers;
 
 [Route("api/users")]
 [ApiController]
-public class UserController : ControllerBase
+public class HomeOwnerController : ControllerBase
 {
     private readonly IUserService _userService;
 
-    public UserController(IUserService userService)
+    public HomeOwnerController(IUserService userService)
     {
         _userService = userService;
     }
     
     [HttpPost]
-    public IActionResult CreateUser([FromBody] CreateUserRequest createUserRequest)
+    public IActionResult CreateUser([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
     {
         try
         {
-            var user = createUserRequest.ToEntity();
+            var user = createHomeOwnerRequest.ToEntity();
             _userService.CreateUser(user);
-            var userResponse = new UserResponse(user);
+            var userResponse = new HomeOwnerResponse(user);
             return Ok(userResponse);
         }
         catch (InputNotValid inputNotValid)

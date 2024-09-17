@@ -10,12 +10,12 @@ public class CreateUserTest
     private readonly string surnameSample = "surnameSample";
     private readonly string emailSample = "email@sample.com";
     private readonly string passwordSample = "passwordSample1@";
-    private CreateUserRequest request;
+    private CreateHomeOwnerRequest request;
     
     [TestInitialize]
     public void Init()
     {
-        request = new CreateUserRequest()
+        request = new CreateHomeOwnerRequest()
         {
             Name = nameSample,
             Surname = surnameSample,
