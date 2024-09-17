@@ -1,4 +1,4 @@
-using Domain.Exceptions.GeneralExceptions;
+/*using Domain.Exceptions.GeneralExceptions;
 using IDomain;
 
 namespace Domain;
@@ -109,4 +109,4 @@ public class Home
     {
         Devices.Remove(FindDevice(id));
     }
-}
+}*/

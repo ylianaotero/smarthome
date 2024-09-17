@@ -7,10 +7,10 @@ namespace Domain;
 
 public class User
 {
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    private string _name { get; set; }
+    private string _surname { get; set; }
+    private string _email { get; set; }
+    private string _password { get; set; }
     public List<Role> Roles { get; set; }
 
     private IUserValidator _validator; 
