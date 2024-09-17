@@ -16,6 +16,11 @@ public class CompanyOwner : Role
             _company = value;
         }
     }
+    public CompanyOwner()
+    {
+        HasACompleteCompany = false;
+    }
+
 
     public CompanyOwner(Company company)
     {

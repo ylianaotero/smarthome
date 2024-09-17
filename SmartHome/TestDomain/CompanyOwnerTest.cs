@@ -27,7 +27,7 @@ public class CompanyOwnerTest
     [TestMethod]
     public void TestAddIncompleteCompany()
     {
-        Company company = new Company();
-        Assert.AreEqual(company,company.HasACompleteCompany);
+        CompanyOwner companyOwner = new CompanyOwner();
+        Assert.IsFalse(companyOwner.HasACompleteCompany);
     }
 }
