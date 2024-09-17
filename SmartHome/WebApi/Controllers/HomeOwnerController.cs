@@ -6,7 +6,7 @@ using WebApi.Out;
 
 namespace WebApi.Controllers;
 
-[Route("api/users")]
+[Route("api/v1/home-owners")]
 [ApiController]
 public class HomeOwnerController : ControllerBase
 {

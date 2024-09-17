@@ -3,7 +3,9 @@ using Domain;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WebApi.Controllers;
 using WebApi.Out;
+using LoginRequest = WebApi.In.LoginRequest;
 
 namespace TestWebApi;
 
@@ -40,7 +42,7 @@ public class SessionControllerTest
     [TestMethod]
     public void LoginValidRequest()
     {
-        var createLoginRequest = new LoginRequest()
+        LoginRequest createLoginRequest = new LoginRequest()
         {
             Email = Email,
             Password = Password
@@ -71,8 +73,8 @@ public class SessionControllerTest
         var response = result?.Value as LoginResponse;
         
         Assert.IsNotNull(result);
-        Assert.Equals(200, result.StatusCode);
+        Assert.AreEqual(200, result.StatusCode);
         Assert.IsNotNull(response);
-        Assert.Equals(session.Id, response.Token);
+        Assert.AreEqual(session.Id, response.Token);
     }
 }
