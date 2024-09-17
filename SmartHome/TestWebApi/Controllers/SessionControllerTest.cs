@@ -1,5 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -76,5 +77,44 @@ public class SessionControllerTest
         Assert.AreEqual(200, result.StatusCode);
         Assert.IsNotNull(response);
         Assert.AreEqual(session.Id, response.Token);
+    }
+    
+    
+    [TestMethod]
+    public void LoginInvalidRequest()
+    {
+        var createLoginRequest = new LoginRequest
+        {
+            Email = Email,
+            Password = Password
+        };
+
+        _sessionServiceMock
+            .Setup(s => s.LogIn(Email, Password))
+            .Throws(new CannotFindItemInList("Input not valid, try again"));
+        
+        var result = _sessionController.LogIn(createLoginRequest) as ObjectResult;
+
+        Assert.IsNotNull(result, "The result should not be null.");
+        Assert.AreEqual(404, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void LoginError()
+    {
+        var createLoginRequest = new LoginRequest
+        {
+            Email = Email,
+            Password = Password
+        };
+
+        _sessionServiceMock
+            .Setup(s => s.LogIn(Email, Password))
+            .Throws(new Exception("Error"));
+        
+        var result = _sessionController.LogIn(createLoginRequest) as ObjectResult;
+
+        Assert.IsNotNull(result, "The result should not be null.");
+        Assert.AreEqual(500, result.StatusCode);
     }
 }
