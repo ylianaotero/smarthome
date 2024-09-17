@@ -2,6 +2,7 @@ using BusinessLogic.IServices;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WebApi.Controllers;
 using WebApi.Out;
 
 namespace TestWebApi;
@@ -60,9 +61,11 @@ public class UserControllerTest
 
         List<User> listOfUsers = new List<User> { user1, user2 };
         _userServiceMock.Setup(service => service.GetAllUsers()).Returns(listOfUsers); 
+        
+        var token = "testToken";
 
-        var result = _userController.GetUsers as OkObjectResult;
-        var userResponse = result?.Value as UserResponse;
+        var result = _userController.GetUsers(token) as OkObjectResult;
+        List<UserResponse> userResponse = result.Value as List<UserResponse>;
 
         _userServiceMock.Verify(service => service.GetAllUsers(), Times.Once);
         Assert.IsNotNull(result);
@@ -73,8 +76,8 @@ public class UserControllerTest
             Assert.AreEqual(Name, user.Name);
             Assert.AreEqual(Surname, user.Surname);
             Assert.AreEqual( fullName, user.FullName);
-            Assert.AreEqual(DateTime.Today.Date, user.CreatedAt);
-            Assert.AreEqual(0, user.Roles);
+            Assert.AreEqual(DateTime.Today.Date, user.CreatedAt.Date);
+            Assert.AreEqual(0, user.Roles.Count);
         }
     }
     
