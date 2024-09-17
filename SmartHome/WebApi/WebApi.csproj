@@ -14,11 +14,8 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
         <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controllers\" />
     </ItemGroup>
 
 </Project>
