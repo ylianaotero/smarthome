@@ -23,12 +23,14 @@ public class NotificationTest
     {
         // Arrange
         Notification notification = new Notification(_event);
+        notification.Id = 1; 
 
         // Assert
         Assert.AreEqual(_event, notification.Event);
         Assert.AreEqual(_read, notification.Read);
         Assert.AreEqual(_todayDate, notification.CreatedAt.Date);
         Assert.AreEqual(_minValueDate, notification.ReadAt);
+        Assert.AreEqual(1, notification.Id);
     }
     
     [TestMethod]
