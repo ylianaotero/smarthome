@@ -154,6 +154,8 @@ public class RepositoryTest
 
         _devicesRepository = new SqlRepository<Device>(_context);
     }
+    
+
 
     private void SetupDefaultObjects()
     {

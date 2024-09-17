@@ -1,6 +1,7 @@
 using Domain;
 using IDomain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DataAccess;
 
@@ -19,14 +20,13 @@ public class SmartHomeContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer(
-                "Your_Connection_String_Here",
-                b => b.MigrationsAssembly("DataAccess")); // Cambia "DataAccess" al nombre de tu proyecto de migraciones
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)); 
         }
+        
     }
-    
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
