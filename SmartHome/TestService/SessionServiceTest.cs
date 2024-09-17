@@ -1,4 +1,5 @@
 using BusinessLogic.IServices;
+using BusinessLogic.Services;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -36,14 +37,17 @@ public class SessionServiceTest
             session.User = _user; 
 
             _mockUserRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(new List<User> { _user });
-            _mockSessionRepository.Setup(logic => logic.CreateSession(It.IsAny<Session>())).Returns(session);
 
+            _mockSessionRepository.Setup(repo => repo.Add(It.IsAny<Session>())).Verifiable();
+            
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
             var result = sessionService.LogIn(ValidEmail, ValidPassword);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
+            
+            _mockSessionRepository.Verify(repo => repo.Add(It.Is<Session>(u => u == result)), Times.Once);
 
             Assert.AreEqual(result.User, _user);
         }
