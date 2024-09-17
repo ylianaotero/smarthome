@@ -110,5 +110,35 @@ public class UserServiceTest
             Assert.IsTrue(responseList.Contains(user), $"Expected user list to contain {user}");
         }
     }
+    
+    
+    [TestMethod]
+    public void UserIsAdmin()
+    {
+        Administrator admin = new Administrator(); 
+        var newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{admin}
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+
+        string token = "example";
+        
+        bool response = _userService.IsAdmin(token);
+        
+        Assert.IsTrue(response);
+        
+    }
 
 }

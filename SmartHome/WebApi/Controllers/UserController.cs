@@ -19,6 +19,7 @@ public class UserController : ControllerBase
     public IActionResult GetUsers([FromHeader] string Authorization)
     {
         return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
+
     }
     
 }
