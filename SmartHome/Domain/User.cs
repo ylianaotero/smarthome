@@ -13,6 +13,8 @@ public class User
     private string _surname { get; set; }
     private string _password { get; set; }
     public List<Role> Roles { get; set; }
+    
+    public string Photo { get; set; }
 
     private IUserValidator _validator; 
     

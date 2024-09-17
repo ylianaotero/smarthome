@@ -32,7 +32,7 @@ public class UserTest
     }
     
     [TestMethod]
-    public void TestAddNameToUser()
+    public void TestAddPhotoToUser()
     {
         User user = new User();
         
