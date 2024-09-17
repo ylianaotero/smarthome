@@ -39,7 +39,13 @@ public class SessionService : ISessionService
     {
         Session session = _sessionRepository.GetByFilter(s => s.Id == token).FirstOrDefault();
 
+        if (session == null)
+        {
+            throw new CannotFindItemInList(SessionDoesNotExistExceptionMessage); 
+        }
+
         _sessionRepository.Delete(session);
+
 
     }
 }
