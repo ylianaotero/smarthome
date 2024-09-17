@@ -5,14 +5,15 @@ namespace Domain;
 
 public class Home
 {
-    private List<User> _members;
+    private List<Member> _members;
+    
     public int Id { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public int Latitude { get; set; }
     public int Longitude { get; set; }
     
-    public List<User> Members
+    public List<Member> Members
     {
         get => _members;
         private init => _members = value;
@@ -30,9 +31,9 @@ public class Home
         Devices = new List<Device>(); 
     }
 
-    public void AddMember((User, bool) member)
+    public void AddMember(Member member)
     {
-        if (MemberExist(member.Item1.Email))
+        if (MemberExist(member.Email))
         {
             throw new CannotAddItem("El miembro ya existe"); 
         }
@@ -45,26 +46,26 @@ public class Home
 
     private bool MemberExist(string email)
     {
-        (User,bool) member = Members.FirstOrDefault(m => m.Item1.Email == email);
-        if (member.Item1 == null)
+        Member member = Members.FirstOrDefault(m => m.Email == email);
+        if (member == null)
         {
             return false; 
         }
         return true; 
     }
     
-    public (User,bool) FindMember(string email)
+    public Member FindMember(string email)
     {
         if (!MemberExist(email))
         {
             throw new CannotFindItemInList("No se encontro el miembro"); 
         }
-        return Members.FirstOrDefault(m => m.Item1.Email == email); 
+        return Members.FirstOrDefault(m => m.Email == email); 
     }
 
     public bool MemberCanReceiveNotifications(string email)
     {
-        return FindMember(email).Item2; 
+        return FindMember(email).Permission; 
     }
 
     public void DeleteMember(string email)
