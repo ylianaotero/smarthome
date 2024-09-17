@@ -9,6 +9,8 @@ public class CreateHomeOwnerRequest
     public string Password { get; set; }
     
     public string Surname { get; set; }
+    
+    public string Photo { get; set; }
 
     public User ToEntity()
     {
@@ -18,6 +20,8 @@ public class CreateHomeOwnerRequest
             Email = Email,
             Password = Password,
             Surname = Surname,
+            Photo = Photo
+            
         };
     }
 }

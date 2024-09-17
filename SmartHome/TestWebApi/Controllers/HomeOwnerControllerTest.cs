@@ -12,6 +12,16 @@ namespace TestWebApi;
 [TestClass]
 public class HomeOwnerControllerTest
 {
+    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    private const string Name =  "John";
+    private const string Email = "john.doe@example.com";
+    private const string InvalidEmail = "invalid email";
+    private const string Password = "Securepassword1@";
+    private const string Surname = "Doe";
+
+    private List<Role> _listOfRoles;
+    private HomeOwner _homeOwner; 
+    
     private Mock<IUserService> _userServiceMock;
     private HomeOwnerController _homeOwnerController;
     
@@ -21,6 +31,12 @@ public class HomeOwnerControllerTest
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
 
         _homeOwnerController = new HomeOwnerController(_userServiceMock.Object);
+
+        _listOfRoles = new List<Role>();
+
+        _homeOwner = new HomeOwner();
+
+        _listOfRoles.Add(_homeOwner); 
     }
 
     [TestMethod]
@@ -28,10 +44,11 @@ public class HomeOwnerControllerTest
     {
         var createUserRequest = new CreateHomeOwnerRequest
         {
-            Name = "John Doe",
-            Email = "john.doe@example.com",
-            Password = "Securepassword1@",
-            Surname = "Doe"
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
         };
 
         var user = new User
@@ -40,14 +57,16 @@ public class HomeOwnerControllerTest
             Email = createUserRequest.Email,
             Password = createUserRequest.Password,
             Surname = createUserRequest.Surname,
-            Roles = new List<Role>()
+            Photo = createUserRequest.Photo,
+            Roles = _listOfRoles
         };
 
         _userServiceMock.Setup(service => service.CreateUser(It.Is<User>(u =>
             u.Name == user.Name &&
             u.Email == user.Email &&
             u.Password == user.Password &&
-            u.Surname == user.Surname
+            u.Surname == user.Surname &&
+            u.Photo == user.Photo
         )));
 
         var result = _homeOwnerController.CreateUser(createUserRequest) as OkObjectResult;
@@ -57,7 +76,8 @@ public class HomeOwnerControllerTest
             u.Name == user.Name &&
             u.Email == user.Email &&
             u.Password == user.Password &&
-            u.Surname == user.Surname
+            u.Surname == user.Surname &&
+            u.Photo == user.Photo
         )), Times.Once);
         Assert.IsNotNull(result);
         Assert.AreEqual(200, result.StatusCode);
@@ -65,6 +85,8 @@ public class HomeOwnerControllerTest
         Assert.AreEqual(createUserRequest.Name, userResponse.Name);
         Assert.AreEqual(createUserRequest.Email, userResponse.Email);
         Assert.AreEqual(createUserRequest.Surname, userResponse.Surname);
+        Assert.AreEqual(createUserRequest.Photo, userResponse.Photo);
+        Assert.AreEqual(1, userResponse.Roles.Count);
     }
     
     [TestMethod]
@@ -72,10 +94,11 @@ public class HomeOwnerControllerTest
     {
         var createUserRequest = new CreateHomeOwnerRequest
         {
-            Name = "John Doe",
-            Email = "invalid email",
-            Password = "Securepassword1@",
-            Surname = "Doe"
+            Name = Name,
+            Email = InvalidEmail,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
         };
         
         _userServiceMock
@@ -93,10 +116,11 @@ public class HomeOwnerControllerTest
     {
         var createUserRequest = new CreateHomeOwnerRequest
         {
-            Name = "John Doe",
-            Email = "john.doe@example.com",
-            Password = "Securepassword1@",
-            Surname = "Doe"
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
         };
         
         _userServiceMock
@@ -114,10 +138,11 @@ public class HomeOwnerControllerTest
     {
         var createUserRequest = new CreateHomeOwnerRequest
         {
-            Name = "John Doe",
-            Email = "john.doe@example.com",
-            Password = "Securepassword1@",
-            Surname = "Doe"
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
         };
         
         _userServiceMock

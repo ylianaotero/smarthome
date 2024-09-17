@@ -10,6 +10,7 @@ public class CreateUserTest
     private readonly string surnameSample = "surnameSample";
     private readonly string emailSample = "email@sample.com";
     private readonly string passwordSample = "passwordSample1@";
+    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private CreateHomeOwnerRequest request;
     
     [TestInitialize]
@@ -21,6 +22,7 @@ public class CreateUserTest
             Surname = surnameSample,
             Email = emailSample,
             Password = passwordSample,
+            Photo = ProfilePictureUrl
         };
     }
     
@@ -31,6 +33,7 @@ public class CreateUserTest
         Assert.AreEqual(request.Surname, surnameSample);
         Assert.AreEqual(request.Email, emailSample);
         Assert.AreEqual(request.Password, passwordSample);
+        Assert.AreEqual(request.Photo, ProfilePictureUrl );
     }
     
     [TestMethod]
@@ -42,5 +45,6 @@ public class CreateUserTest
         Assert.AreEqual(entity.Surname, surnameSample);
         Assert.AreEqual(entity.Email, emailSample);
         Assert.AreEqual(entity.Password, passwordSample);
+        Assert.AreEqual(entity.Photo, ProfilePictureUrl );
     }
 }
