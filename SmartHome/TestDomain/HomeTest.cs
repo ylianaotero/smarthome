@@ -2,7 +2,7 @@ using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using IDomain;
 
-namespace TestDomain;
+namespace DomainTest;
 
 [TestClass]
 public class HomeTest

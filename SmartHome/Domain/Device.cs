@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Domain;
 
-namespace IDomain;
+namespace Domain;
 
 public abstract class Device
 {

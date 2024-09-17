@@ -1,10 +1,10 @@
 using Domain;
+using Domain.Exceptions.RoleExceptions;
 using Domain.Exceptions.GeneralExceptions;
-using Domain.Exceptions.RoleException;
 using IDomain;
 using Moq;
 
-namespace TestDomain;
+namespace DomainTest;
 
 [TestClass]
 public class UserTest
@@ -73,7 +73,7 @@ public class UserTest
     public void TestAddRoleToUser()
     {
         User user = new User();
-        IRole role = new Administrator();
+        Role role = new Administrator();
         user.AddRole(role);
         Assert.AreEqual(1, user.Roles.Count());
     }
@@ -82,7 +82,7 @@ public class UserTest
     public void TestDeleteRoleToUser()
     {
         User user = new User();
-        IRole role = new Administrator();
+        Role role = new Administrator();
         user.AddRole(role);
         user.DeleteRole(role);
         Assert.AreEqual(0, user.Roles.Count());
@@ -93,7 +93,7 @@ public class UserTest
     public void TestCannotDeleteRoleToUser()
     {
         User user = new User();
-        IRole role = new Administrator();
+        Role role = new Administrator();
         user.DeleteRole(role);
     }
     

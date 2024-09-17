@@ -1,4 +1,4 @@
-namespace Domain.Exceptions;
+namespace Domain.Exceptions.HomeExceptions;
 
 public class HomeNotFoundException : Exception
 {

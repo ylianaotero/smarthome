@@ -5,13 +5,18 @@ namespace Domain;
 
 public class Home
 {
+    private List<User> _members;
     public int Id { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public int Latitude { get; set; }
     public int Longitude { get; set; }
     
-    public List<(User,bool)> Members { get; set; }
+    public List<User> Members
+    {
+        get => _members;
+        private init => _members = value;
+    }
     
     public List<Device> Devices { get; set; }
     
@@ -21,7 +26,7 @@ public class Home
         DoorNumber = doorNumber;
         Latitude = latitude;
         Longitude = longitude;
-        Members = new List<(User, bool)>();
+        Members = new();
         Devices = new List<Device>(); 
     }
 

@@ -1,8 +1,6 @@
-using IDomain;
-
 namespace Domain;
 
-public class Administrator : IRole
+public class Administrator : Role
 {
     
 }
