@@ -31,5 +31,10 @@ public class UserService : IUserService
         return _userRepository.GetByFilter(predicate).FirstOrDefault();
     }
 
+    public List<User> GetAllUsers()
+    {
+        return _userRepository.GetAll(); 
+    }
+
     
 }
