@@ -88,5 +88,29 @@ public class UserControllerTest
         Assert.AreEqual(400, result.StatusCode);
     }
     
+    [TestMethod]
+    public void CreateUserServiceThrowsUnexpectedException_ReturnsInternalServerError()
+    {
+        var createUserRequest = new CreateUserRequest
+        {
+            Name = "John Doe",
+            Email = "john.doe@example.com",
+            Password = "Securepassword1@",
+            Surname = "Doe"
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new Exception("Unexpected error"));
+
+        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+        
+        Assert.IsNotNull(result);
+        Assert.AreEqual(500, result.StatusCode);
+    }
+
+    
+    
+    
     
 }
