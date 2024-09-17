@@ -9,55 +9,55 @@ namespace DomainTest;
 [TestClass]
 public class UserTest
 {
+    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    
     [TestMethod]
     public void TestAddNameToUser()
     {
-        // Arrange
         User user = new User();
         
-        // Act
         user.Name = "Juan";
-
-        // Assert
+        
         Assert.AreEqual("Juan", user.Name);
     }
     
     [TestMethod]
     public void TestAddSurnameToUser()
     {
-        // Arrange
         User user = new User();
         
-        // Act
         user.Surname = "Lopez";
-
-        // Assert
+        
         Assert.AreEqual("Lopez", user.Surname);
+    }
+    
+    [TestMethod]
+    public void TestAddNameToUser()
+    {
+        User user = new User();
+        
+        user.Photo = ProfilePictureUrl;
+        
+        Assert.AreEqual(ProfilePictureUrl, user.Photo);
     }
     
     [TestMethod]
     public void TestAddEmailToUser()
     {
-        // Arrange
         User user = new User();
         
-        // Act
         user.Email = "juanlopez@gmail.com";
 
-        // Assert
         Assert.AreEqual("juanlopez@gmail.com", user.Email);
     }
     
     [TestMethod]
     public void TestAddPasswordToUser()
     {
-        // Arrange
         User user = new User();
         
-        // Act
         user.Password = "juanLop1@";
-
-        // Assert
+        
         Assert.AreEqual("juanLop1@", user.Password);
     }
     
