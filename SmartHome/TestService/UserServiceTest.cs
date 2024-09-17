@@ -35,6 +35,11 @@ public class UserServiceTest
             Surname = NewSurname
         };
         
+        List<User> listOfUsers = new List<User>();
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
         _userService = new UserService(_mockUserRepository.Object);
         
         _userService.CreateUser(user);
@@ -58,7 +63,7 @@ public class UserServiceTest
         listOfUsers.Add(user);
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(u => u.Email == NewEmail)).Returns(listOfUsers);
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
 
