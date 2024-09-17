@@ -8,6 +8,7 @@ namespace BusinessLogic.Services;
 public class SessionService : ISessionService
 {
     private const string UserDoesNotExistExceptionMessage = "User not found";
+    private const string SessionDoesNotExistExceptionMessage = "User not found";
     
     private readonly IRepository<User> _userRepository;
     private readonly IRepository<Session> _sessionRepository;
@@ -34,8 +35,8 @@ public class SessionService : ISessionService
         return newSession; 
     }
 
-    public void Logout()
+    public void Logout(Guid token)
     {
-        throw new NotImplementedException();
+
     }
 }

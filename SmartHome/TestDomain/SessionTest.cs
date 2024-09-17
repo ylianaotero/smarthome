@@ -6,6 +6,7 @@ namespace DomainTest;
 public class SessionTest
 {
     private const string ValidEmail = "juanlopez@gmail.com";
+    private static readonly Guid Guid = new Guid();
 
     private User _user; 
     
@@ -22,8 +23,10 @@ public class SessionTest
         Session session = new Session();
         
         session.User = _user;
+        session.Id = Guid;
         
         Assert.AreEqual(ValidEmail, session.User.Email);
+        Assert.AreEqual(Guid, session.Id);
     }
     
 }

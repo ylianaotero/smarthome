@@ -68,7 +68,28 @@ public class SessionServiceTest
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
-            
-            
         }
+        
+        [TestMethod]
+        public void LogOut()
+        {
+            Session session = new Session();
+            session.User = _user; 
+
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { session });
+
+            _mockSessionRepository.Setup(repo => repo.Delete(It.IsAny<Session>())).Verifiable();
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            sessionService.LogOut(session.Id);
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+            
+            _mockSessionRepository.Verify(repo => repo.Delete(It.Is<Session>(u => u == result)), Times.Once);
+        }
+
+        
+        
 }
