@@ -1,4 +1,4 @@
-/*using Domain;
+using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using IDomain;
 
@@ -15,9 +15,8 @@ public class HomeTest
     private const string Email2 = "laurasanchez@gmail.com";
     private const long id = 11;
 
-    private (User, bool) _member; 
+    private Member _member; 
     
-    private User _user;
 
     private Device _device; 
 
@@ -27,9 +26,9 @@ public class HomeTest
     public void TestInitialize()
     {
         _home = new Home(Street,DoorNumber,Latitude,Longitude);
-        _user = new User();
-        _user.Email = Email1;
-        _member = (_user, false);
+        _member = new Member();
+        _member.Email = Email1;
+        _member.Permission = false; 
         _device = new SecurityCamera();
         _device.Id = id; 
     }
@@ -52,8 +51,7 @@ public class HomeTest
     [TestMethod]
     public void TestAddMember()
     {
-        User user = new User();
-        (User, bool) member = (user, true);
+        Member member = new Member();
         _home.AddMember(member); 
         Assert.AreEqual(1, _home.Members.Count());
     }
@@ -62,29 +60,27 @@ public class HomeTest
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddMemberThatAlreadyExists()
     {
-        User user = new User();
-        user.Email = Email2; 
-        (User, bool) member2 = (user, true);
+        Member member2 = new Member(); 
+        member2.Email = Email2;
+        member2.Permission = true; 
         
         _home.AddMember(_member); 
         _home.AddMember(member2); 
         
-        (User, bool) existingMember = (user, false);
-        
-        _home.AddMember(existingMember); 
+        _home.AddMember(_member); 
     }
     
     [TestMethod]
     public void TestFindMember()
     {
-        User user = new User();
-        user.Email = Email2; 
-        (User, bool) member2 = (user, true);
+        Member member2 = new Member(); 
+        member2.Email = Email2;
+        member2.Permission = true; 
         
         _home.AddMember(_member); 
         _home.AddMember(member2); 
         
-        (User, bool) result = _home.FindMember(Email2); 
+        Member result = _home.FindMember(Email2); 
         
         Assert.AreEqual(member2, result);
     }
@@ -101,9 +97,9 @@ public class HomeTest
     [TestMethod]
     public void TestCheckIfMemberCanReceiveNotifications()
     {
-        User user = new User();
-        user.Email = Email2; 
-        (User, bool) member2 = (user, true);
+        Member member2 = new Member(); 
+        member2.Email = Email2;
+        member2.Permission = true; 
         
         _home.AddMember(_member); 
         _home.AddMember(member2); 
@@ -126,9 +122,9 @@ public class HomeTest
     [TestMethod]
     public void TestDeleteMember()
     {
-        User user = new User();
-        user.Email = Email2; 
-        (User, bool) member2 = (user, true);
+        Member member2 = new Member(); 
+        member2.Email = Email2;
+        member2.Permission = true; 
         
         _home.AddMember(_member); 
         _home.AddMember(member2); 
@@ -137,8 +133,8 @@ public class HomeTest
         
         Assert.AreEqual(1, _home.Members.Count);
         
-        var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Item1.Email == Email1);
-        Assert.IsNull( memberWithEmail1.Item1);
+        var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Email == Email1);
+        Assert.IsNull( memberWithEmail1);
 
     }
     
@@ -212,4 +208,4 @@ public class HomeTest
  
 
     
-}*/
+}

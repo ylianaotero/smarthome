@@ -1,6 +1,6 @@
 using Domain.Exceptions.HomeExceptions;
 
-/*namespace Domain;
+namespace Domain;
 
 public class HomeOwner : Role
 {
@@ -30,4 +30,4 @@ public class HomeOwner : Role
         }
         throw new HomeNotFoundException("The owner does not own home");
     }
-}*/
+}

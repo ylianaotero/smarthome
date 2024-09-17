@@ -4,8 +4,8 @@ namespace Domain;
 
 public class CompanyOwner : Role
 {
-    private bool _hasACompleteCompany;
-    private Company _company;
+    public bool HasACompleteCompany { get; set; }
+    private Company _company ;
 
     public Company Company
     {
@@ -21,17 +21,12 @@ public class CompanyOwner : Role
     {
         ValidateExistingCompany();
         Company = company;
-        _hasACompleteCompany = true;
-    }
-
-    public CompanyOwner()
-    {
-        _hasACompleteCompany = false;
+        HasACompleteCompany = true;
     }
     
     private void ValidateExistingCompany()
     {
-        if (_hasACompleteCompany)
+        if (HasACompleteCompany)
         {
             throw new ACompanyHasAlreadyBeenRegistredException("The owner has an existing company.");
         }
