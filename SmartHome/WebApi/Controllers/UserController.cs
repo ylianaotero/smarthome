@@ -20,6 +20,7 @@ public class UserController : ControllerBase
     public IActionResult CreateUser([FromBody] CreateUserRequest createUserRequest)
     {
         var user = createUserRequest.ToEntity();
+        
         _userService.CreateUser(user);
 
         var userResponse = new UserResponse(user);

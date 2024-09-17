@@ -1,5 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
@@ -67,5 +68,32 @@ public class UserControllerTest
         Assert.AreEqual(createUserRequest.Name, userResponse.Name);
         Assert.AreEqual(createUserRequest.Email, userResponse.Email);
         Assert.AreEqual(createUserRequest.Surname, userResponse.Surname);
+    }
+    
+    [TestMethod]
+    public void CreateUserInvalidRequest()
+    {
+        // Arrange
+        var createUserRequest = new CreateUserRequest
+        {
+            Name = "John Doe",
+            Email = "invalid email",
+            Password = "Securepassword1@",
+            Surname = "Doe"
+        };
+        
+        // Setup the mock to throw an exception when CreateUser is called
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new InputNotValid("Input not valid, try again"));
+
+        // Act
+        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(400, result.StatusCode); // Assuming your controller maps exceptions to 400 Bad Request
+        Assert.AreEqual("Input not valid, try again", result.Value.ToString());
+        
     }
 }
