@@ -23,6 +23,11 @@ public class SessionService : ISessionService
     {
         User user = _userRepository.GetByFilter(u => u.Email == email && u.Password == password).FirstOrDefault();
         
+        if (user == null)
+        {
+            throw new CannotFindItemInList(UserDoesNotExistExceptionMessage); 
+        }
+
         Session newSession = new Session();
         newSession.User = user; 
         _sessionRepository.Add(newSession);
