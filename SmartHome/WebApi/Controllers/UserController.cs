@@ -1,4 +1,5 @@
 using BusinessLogic.IServices;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.In;
 using WebApi.Out;
@@ -19,12 +20,18 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult CreateUser([FromBody] CreateUserRequest createUserRequest)
     {
-        var user = createUserRequest.ToEntity();
+        try
+        {
+            var user = createUserRequest.ToEntity();
+            _userService.CreateUser(user);
+            var userResponse = new UserResponse(user);
+            return Ok(userResponse);
+        }
+        catch (InputNotValid inputNotValid)
+        {
+            return BadRequest(new { message = inputNotValid.Message });
+        }
         
-        _userService.CreateUser(user);
-
-        var userResponse = new UserResponse(user);
-        return Ok(userResponse);
     }
     
 }

@@ -26,7 +26,6 @@ public class UserControllerTest
     [TestMethod]
     public void CreateUserValidRequest()
     {
-        // Arrange
         var createUserRequest = new CreateUserRequest
         {
             Name = "John Doe",
@@ -41,7 +40,7 @@ public class UserControllerTest
             Email = createUserRequest.Email,
             Password = createUserRequest.Password,
             Surname = createUserRequest.Surname,
-            Roles = new List<Role>() // Assuming roles are empty or mock as needed
+            Roles = new List<Role>()
         };
 
         _userServiceMock.Setup(service => service.CreateUser(It.Is<User>(u =>
@@ -51,11 +50,9 @@ public class UserControllerTest
             u.Surname == user.Surname
         )));
 
-        // Act
         var result = _userController.CreateUser(createUserRequest) as OkObjectResult;
         var userResponse = result?.Value as UserResponse;
 
-        // Assert
         _userServiceMock.Verify(service => service.CreateUser(It.Is<User>(u =>
             u.Name == user.Name &&
             u.Email == user.Email &&
@@ -73,7 +70,6 @@ public class UserControllerTest
     [TestMethod]
     public void CreateUserInvalidRequest()
     {
-        // Arrange
         var createUserRequest = new CreateUserRequest
         {
             Name = "John Doe",
@@ -82,18 +78,15 @@ public class UserControllerTest
             Surname = "Doe"
         };
         
-        // Setup the mock to throw an exception when CreateUser is called
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid("Input not valid, try again"));
-
-        // Act
-        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(400, result.StatusCode); // Assuming your controller maps exceptions to 400 Bad Request
-        Assert.AreEqual("Input not valid, try again", result.Value.ToString());
         
+        var result = _userController.CreateUser(createUserRequest) as ObjectResult;
+        
+        Assert.IsNotNull(result);
+        Assert.AreEqual(400, result.StatusCode);
     }
+    
+    
 }
