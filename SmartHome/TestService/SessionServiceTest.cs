@@ -1,6 +1,7 @@
 using BusinessLogic.IServices;
 using BusinessLogic.Services;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using IDataAccess;
 using Moq;
 
@@ -50,5 +51,24 @@ public class SessionServiceTest
             _mockSessionRepository.Verify(repo => repo.Add(It.Is<Session>(u => u == result)), Times.Once);
 
             Assert.AreEqual(result.User, _user);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(CannotFindItemInList))]
+        public void TryToLogInWithUserThatDoesNotExist()
+        {
+            Session session = new Session();
+            session.User = _user; 
+
+            _mockUserRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(new List<User>());
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            var result = sessionService.LogIn(ValidEmail, ValidPassword);
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+            
+            
         }
 }
