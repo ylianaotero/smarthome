@@ -13,6 +13,11 @@ public class DeviceService : IDeviceService
         _deviceRepository = deviceRepository;
     }
     
+    public void CreateWindowSensor(WindowSensor windowSensor)
+    {
+        _deviceRepository.Add(windowSensor);
+    }
+    
     public List<Device> GetAllDevices()
     {
         return _deviceRepository.GetAll();
