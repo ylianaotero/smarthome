@@ -30,7 +30,7 @@ public class UserControllerTest
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
         _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
 
-        _userController = new UserController(_userServiceMock.Object,_sessionServiceMock);
+        _userController = new UserController(_userServiceMock.Object,_sessionServiceMock.Object);
 
         _listOfRoles = new List<Role>();
 
