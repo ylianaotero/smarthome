@@ -115,7 +115,7 @@ public class DevicesControllerTest
         ObjectResult result = _deviceController.GetDeviceTypes() as OkObjectResult;
         DeviceTypesResponse response = result.Value as DeviceTypesResponse;
         
-        CollectionAssert.AreEqual(expectedResponse, response);
+        Assert.AreEqual(expectedResponse, response);
     }
     
     private void SetupDefaultObjects()

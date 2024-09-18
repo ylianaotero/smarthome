@@ -48,6 +48,12 @@ public class DeviceController : ControllerBase
     [HttpGet]
     public IActionResult GetDeviceTypes()
     {
-        return Ok("");
+        List<string> deviceTypes = _deviceService.GetDeviceTypes();
+        DeviceTypesResponse deviceTypesResponse = new DeviceTypesResponse()
+        {
+            DeviceTypes = deviceTypes
+        };
+        
+        return Ok(deviceTypesResponse);
     }
 }
