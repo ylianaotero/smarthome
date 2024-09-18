@@ -1,5 +1,7 @@
+using BusinessLogic.IServices;
 using BusinessLogic.Services;
 using Domain;
+using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
@@ -13,7 +15,7 @@ public class DevicesControllerTest
     public void TestGetAllDevicesOkStatusCode()
     {
         //Arrange
-        Mock<DeviceService> deviceServiceMock = new Mock<DeviceService>();
+        Mock<IDeviceService> deviceServiceMock = new Mock<IDeviceService>();
         DeviceController deviceController = new DeviceController(deviceServiceMock.Object);
         List<Device> devices = new List<Device>();
         List<string> photos = new List<string>()

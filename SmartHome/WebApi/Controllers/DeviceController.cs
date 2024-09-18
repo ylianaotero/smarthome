@@ -17,6 +17,6 @@ public class DeviceController : ControllerBase
     [HttpGet]
     public IActionResult GetDevices()
     {
-        return Ok();
+        return Ok("");
     }
 }

@@ -1,24 +1,22 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=812914ec_002D9287_002D4647_002D94d7_002Db43ae57f27cf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestDataAccess&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;
+    &lt;Project Location="/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.SessionServiceTest&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.DeviceServiceTest.TestGetAllDevices&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.DeviceServiceTest&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.DevicesControllerTest.TestGetAllDevicesOkStatusCode&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+  &lt;/Or&gt;
+&lt;/SessionState&gt;</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c7a40da9_002D5ab9_002D4e35_002D8d16_002D75d1f1d74239/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestDomain&amp;gt; #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\Nuevo\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d77770fd_002D5a11_002D46a9_002D9cba_002Dd351ffa034af/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestAddDevice" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;MSTest::529C2EB9-AE2A-420D-8925-418E9A7591EF::net8.0::TestDataAccess.DevicesRepositoryTest&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e0ba4500_002Dadc3_002D4048_002Daec2_002D244d3baae254/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Solution /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd3bc9c9_002Dd96b_002D4717_002D81f1_002D9d4a59059448/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestDomain&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\Nuevo\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;&#xD;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\Nuevo\301178_231810_280070\SmartHome\TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;&#xD;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\Nuevo\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;&#xD;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\Nuevo\301178_231810_280070\SmartHome\TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;&#xD;
-  &lt;/Or&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
 	
 	
 	
