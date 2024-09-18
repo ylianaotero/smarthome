@@ -14,6 +14,7 @@ public class User
     private string _password { get; set; }
     public List<Role> Roles { get; set; }
     
+    public DateTime CreatedAt { get; private set; }
     public string Photo { get; set; }
 
     private IUserValidator _validator; 
@@ -96,6 +97,7 @@ public class User
     {
         Roles = new List<Role>();
         _validator = userValidator; 
+        CreatedAt = DateTime.Now;
     }
 
     public void AddRole(Role role)

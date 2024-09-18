@@ -10,8 +10,9 @@ public class UserService : IUserService
     private const string UserDoesNotExistExceptionMessage = "User not found";
     private const string UserAlreadyExistExceptionMessage = "User already exists";
     
-    private IRepository<User> _userRepository; 
-    
+    private IRepository<User> _userRepository;
+    private IUserService _userServiceImplementation;
+
     public UserService(IRepository<User> userRepository)
     {
         _userRepository = userRepository; 
@@ -31,5 +32,10 @@ public class UserService : IUserService
         return _userRepository.GetByFilter(predicate).FirstOrDefault();
     }
 
-    
+    public List<User> GetAllUsers()
+    {
+        return _userRepository.GetAll(); 
+    }
+
+
 }
