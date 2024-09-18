@@ -75,20 +75,11 @@ public class DeviceServiceTest
     [TestMethod]
     public void TestCreateWindowSensor()
     {
-        WindowSensor windowSensor = new WindowSensor
-        {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoURLs = new List<string> { DevicePhotoUrl },
-            Company = _defaultCompany,
-            Type = "WindowSensor"
-        };
-
-        _mockDeviceRepository.Setup(x => x.Add(windowSensor));
+        _mockDeviceRepository.Setup(x => x.Add(_defaultWindowSensor));
         DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
-        deviceService.CreateWindowSensor(windowSensor);
-        _mockDeviceRepository.Verify(x => x.Add(windowSensor), Times.Once);
+        deviceService.CreateWindowSensor(_defaultWindowSensor);
+        _mockDeviceRepository.Verify(x => x.Add(_defaultWindowSensor), Times.Once);
     }
     
     private void SetupDefaultObjects()
