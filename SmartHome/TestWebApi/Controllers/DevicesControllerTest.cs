@@ -1,7 +1,5 @@
 using BusinessLogic.IServices;
-using BusinessLogic.Services;
 using Domain;
-using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
@@ -11,32 +9,57 @@ namespace TestWebApi;
 [TestClass]
 public class DevicesControllerTest
 {
+    private DeviceController _deviceController;
+    private Mock<IDeviceService> _mockIDeviceService;
+    private SecurityCamera _defaultCamera;
+    private WindowSensor _defaultWindowSensor;
+    private Company _defaultCompany;
+    
+    private const string CameraName = "My Security Camera";
+    private const string WindowSensorName = "My Window Sensor";
+    private const string DevicePhotoUrl = "https://example.com/photo.jpg";
+    private const long DeviceModel = 1345354616346;
+    
+    private const string CompanyName = "IoT Devices & Co.";
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        SetupDeviceController();
+        SetupDefaultObjects();
+    }
+    
     [TestMethod]
     public void TestGetAllDevicesOkStatusCode()
     {
-        //Arrange
-        Mock<IDeviceService> deviceServiceMock = new Mock<IDeviceService>();
-        DeviceController deviceController = new DeviceController(deviceServiceMock.Object);
         List<Device> devices = new List<Device>();
+        devices.Add(_defaultCamera);
+        devices.Add(_defaultWindowSensor);
+        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        
+        ObjectResult result = _deviceController.GetDevices() as OkObjectResult;
+        
+        Assert.AreEqual(200, result.StatusCode);
+    }
+    
+    private void SetupDefaultObjects()
+    {
         List<string> photos = new List<string>()
         {
-            "https://example.com/photo.jpg",
+            DevicePhotoUrl,
         };
-        Company company = new Company { Name = "My Company" };
+        
+        _defaultCompany = new Company { Name = CompanyName };
 
-        SecurityCamera device1 = new SecurityCamera()
-            { Name = "My Security Camera", Model = 1345354616346, PhotoURLs = photos, Company = company };
-        WindowSensor device2 = new WindowSensor()
-            { Name = "My Window Sensor", Model = 1345354616346, PhotoURLs = photos, Company = company };
-        devices.Add(device1);
-        devices.Add(device2);
+        _defaultCamera = new SecurityCamera()
+            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Type = "SecurityCamera" };
+        _defaultWindowSensor = new WindowSensor()
+            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Type = "WindowSensor" };
+    }
 
-        deviceServiceMock.Setup(service => service.GetAllDevices()).Returns(devices);
-
-        //Act
-        var result = deviceController.GetDevices() as OkObjectResult;
-
-        //Assert
-        Assert.AreEqual(200, result.StatusCode);
+    private void SetupDeviceController()
+    {
+        _mockIDeviceService = new Mock<IDeviceService>();
+        _deviceController = new DeviceController(_mockIDeviceService.Object);
     }
 }
