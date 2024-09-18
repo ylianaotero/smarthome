@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\IDataAccess\IDataAccess.csproj" />
+      <ProjectReference Include="..\IBusinessLogic\IBusinessLogic.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,15 +1,36 @@
 using Domain;
 using IDomain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace DataAccess;
 
 public class SmartHomeContext : DbContext
 {
     public DbSet<Device> Devices { get; set; }
-    
-    public SmartHomeContext(DbContextOptions<SmartHomeContext> options) : base(options) {}
+    public DbSet<HomeOwner> HomeOwners { get; set; }
+    public DbSet<Administrator> Administrators { get; set; }
+    public DbSet<CompanyOwner> CompanyOwners { get; set; }
+    public DbSet<User> Users { get; set; }
 
+    public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
+    {
+        if (!useInMemoryDatabase)
+        {
+            this.Database.Migrate();
+        }
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)); 
+        }
+        
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Device>().Property(d => d.Id).ValueGeneratedOnAdd();
