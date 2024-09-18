@@ -44,4 +44,10 @@ public class DeviceController : ControllerBase
         
         return Ok(devicesResponse);
     }
+    
+    [HttpGet]
+    public IActionResult GetDeviceTypes()
+    {
+        return Ok("");
+    }
 }
