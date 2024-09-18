@@ -22,4 +22,9 @@ public class DeviceService
         return _deviceRepository.GetByFilter(filter);
     }
     
+    public List<string> GetDeviceTypes()
+    {
+        return new List<string> {"SecurityCamera", "WindowSensor"};
+    }
+    
 }
