@@ -81,6 +81,22 @@ public class DevicesControllerTest
         Assert.AreEqual(expectedResponse, response);
     }
     
+    [TestMethod]
+    public void TestGetDeviceTypesOkStatusCode()
+    {
+        List<string> deviceTypes = new List<string>()
+        {
+            "SecurityCamera",
+            "WindowSensor"
+        };
+
+        _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(deviceTypes);
+        
+        ObjectResult result = _deviceController.GetDeviceTypes() as OkObjectResult;
+        
+        Assert.AreEqual(200, result.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
