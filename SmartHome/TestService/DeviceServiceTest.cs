@@ -8,34 +8,56 @@ namespace TestService;
 [TestClass]
 public class DeviceServiceTest
 {
+    private Mock<IRepository<Device>> _mockDeviceRepository;
+    private SecurityCamera _defaultCamera;
+    private WindowSensor _defaultWindowSensor;
+    private Company _defaultCompany;
+    
+    private const string CameraName = "My Security Camera";
+    private const string WindowSensorName = "My Window Sensor";
+    private const string DevicePhotoUrl = "https://example.com/photo.jpg";
+    private const long DeviceModel = 1345354616346;
+    
+    private const string CompanyName = "IoT Devices & Co.";
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        CreateMockDeviceRepository();
+        SetupDefaultObjects();
+    }
+
     [TestMethod]
     public void TestGetAllDevices()
     {
-        // Arrange
         List<Device> devices = new List<Device>();
-        List<string> photos = new List<string>()
-        {
-            "https://example.com/photo.jpg",
-        };
-        Company company = new Company { Name = "My Company" };
-
-        SecurityCamera device1 = new SecurityCamera()
-            { Name = "My Security Camera", Model = 1345354616346, PhotoURLs = photos, Company = company };
-        WindowSensor device2 = new WindowSensor()
-            { Name = "My Window Sensor", Model = 1345354616346, PhotoURLs = photos, Company = company };
-        devices.Add(device1);
-        devices.Add(device2);
+        devices.Add(_defaultCamera);
+        devices.Add(_defaultWindowSensor);
+        _mockDeviceRepository.Setup(x => x.GetAll()).Returns(devices);
+        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
-        var mockDeviceRepository = new Mock<IRepository<Device>>();
-        
-        mockDeviceRepository.Setup(x => x.GetAll()).Returns(devices);
-        var deviceService = new DeviceService(mockDeviceRepository.Object);
-        
-        //Act
         List<Device> retrievedDevices =  deviceService.GetAllDevices();
         
-        // Assert
         Assert.AreEqual(devices, retrievedDevices);
+    }
+    
+    private void SetupDefaultObjects()
+    {
+        List<string> photos = new List<string>()
+        {
+            DevicePhotoUrl,
+        };
+        
+        _defaultCompany = new Company { Name = CompanyName };
 
+        _defaultCamera = new SecurityCamera()
+            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany };
+        _defaultWindowSensor = new WindowSensor()
+            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany };
+    }
+
+    private void CreateMockDeviceRepository()
+    {
+        _mockDeviceRepository = new Mock<IRepository<Device>>();
     }
 }
