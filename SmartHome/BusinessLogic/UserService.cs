@@ -37,5 +37,22 @@ public class UserService : IUserService
         return _userRepository.GetAll(); 
     }
 
-
+    public bool IsAdmin(string email)
+    {
+        try
+        {
+            User existingUser = GetBy(u => u.Email == email);
+            if (existingUser == null)
+            {
+                throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+            }
+            
+            bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
+            return hasAdministrator; 
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 }

@@ -132,10 +132,9 @@ public class UserServiceTest
             .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
-
-        string token = "example";
         
-        bool response = _userService.IsAdmin(token);
+        
+        bool response = _userService.IsAdmin(NewEmail);
         
         Assert.IsTrue(response);
         
