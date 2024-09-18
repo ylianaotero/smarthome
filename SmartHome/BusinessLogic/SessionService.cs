@@ -48,4 +48,16 @@ public class SessionService : ISessionService
 
 
     }
+
+    public User GetUser(Guid token)
+    {
+        Session session = _sessionRepository.GetByFilter(s => s.Id == token).FirstOrDefault();
+
+        if (session == null)
+        {
+            throw new CannotFindItemInList(SessionDoesNotExistExceptionMessage); 
+        }
+
+        return session.User; 
+    }
 }

@@ -125,6 +125,20 @@ public class SessionServiceTest
             
             Assert.AreEqual(response,_user);
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(CannotFindItemInList))]
+        public void GetUserOfANotExistingSession()
+        {
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session>());
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            sessionService.GetUser(new Guid());
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+        }
 
         
         
