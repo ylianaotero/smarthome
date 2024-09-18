@@ -167,5 +167,20 @@ public class UserServiceTest
         Assert.IsFalse(response);
         
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void UserIsAdminUserNotFound()
+    {
+        List<User> listOfUsers = new List<User>();
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.IsAdmin(NewEmail);
+        
+    }
 
 }
