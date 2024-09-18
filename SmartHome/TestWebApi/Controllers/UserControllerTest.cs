@@ -30,7 +30,7 @@ public class UserControllerTest
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
         _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
 
-       // _userController = new UserController(_userServiceMock.Object,_sessionServiceMock);
+        _userController = new UserController(_userServiceMock.Object,_sessionServiceMock);
 
         _listOfRoles = new List<Role>();
 
@@ -68,13 +68,12 @@ public class UserControllerTest
         string fullName = Name + " " + Surname; 
 
         List<User> listOfUsers = new List<User> { user1, user2 };
-       // _sessionServiceMock.Setup(service => service.GetUserSession(_session.Id)).Return(user1); 
+        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(user1); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         _userServiceMock.Setup(service => service.GetAllUsers()).Returns(listOfUsers); 
         
-        var token = "testToken";
 
-        var result = _userController.GetUsers(token) as OkObjectResult;
+        var result = _userController.GetUsers(_session.Id) as OkObjectResult;
         List<UserResponse> userResponse = result.Value as List<UserResponse>;
 
         _userServiceMock.Verify(service => service.GetAllUsers(), Times.Once);
