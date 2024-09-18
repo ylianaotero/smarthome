@@ -70,7 +70,6 @@ public class User
         } 
     }
     
-    [Key]
     public string Email { 
         get => _email;
         set

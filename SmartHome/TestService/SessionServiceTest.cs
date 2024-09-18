@@ -106,6 +106,25 @@ public class SessionServiceTest
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
         }
+        
+        [TestMethod]
+        public void GetUserOfTheSession()
+        {
+            Session session = new Session();
+            session.User = _user;
+            session.Id = new Guid(); 
+
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { session });
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            User response = sessionService.GetUser(session.Id);
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+            
+            Assert.AreEqual(response,_user);
+        }
 
         
         

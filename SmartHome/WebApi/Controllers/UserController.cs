@@ -9,10 +9,12 @@ namespace WebApi.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+   // private readonly ISessionService _sessionService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService/*, ISessionService sessionService*/)
     {
         _userService = userService;
+        //_sessionService = sessionService; 
     }
     
     [HttpGet]

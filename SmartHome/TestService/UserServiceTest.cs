@@ -28,18 +28,14 @@ public class UserServiceTest
     [TestMethod]
     public void CreateUser()
     {
-        var user = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
+        var user = new User();
+        user.Email = NewEmail; 
         
-        List<User> listOfUsers = new List<User>();
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(repo => repo.GetByFilter(It.IsAny<Func<User, bool>>()))
+            .Returns(new List<User>());
+        
         
         _userService = new UserService(_mockUserRepository.Object);
         
@@ -59,6 +55,7 @@ public class UserServiceTest
             Password = NewPassword,
             Surname = NewSurname
         };
+        
         
         List<User> listOfUsers = new List<User>();
         listOfUsers.Add(user);
@@ -115,6 +112,7 @@ public class UserServiceTest
     [TestMethod]
     public void UserIsAdmin()
     {
+        HomeOwner homeOwner = new HomeOwner(); 
         Administrator admin = new Administrator(); 
         var newUser = new User
         {
@@ -122,7 +120,7 @@ public class UserServiceTest
             Email = NewEmail,
             Password = NewPassword,
             Surname = NewSurname,
-            Roles = new List<Role>{admin}
+            Roles = new List<Role>{admin,homeOwner}
         };
         
         List<User> listOfUsers = new List<User>();
@@ -182,5 +180,33 @@ public class UserServiceTest
         _userService.IsAdmin(NewEmail);
         
     }
+    
+    [TestMethod]
+    public void UserWithoutRolesIsNotAdmin()
+    {
+        var newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>()
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        
+        bool response = _userService.IsAdmin(NewEmail);
+        
+        Assert.IsFalse(response);
+        
+    }
+
 
 }

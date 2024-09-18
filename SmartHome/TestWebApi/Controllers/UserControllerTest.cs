@@ -18,19 +18,24 @@ public class UserControllerTest
     private const string Surname = "Doe";
 
     private List<Role> _listOfRoles;
+    private Session _session; 
     
     private Mock<IUserService> _userServiceMock;
+    private Mock<ISessionService> _sessionServiceMock;
     private UserController _userController;
     
     [TestInitialize]
     public void SetUp()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
+        _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
 
-        _userController = new UserController(_userServiceMock.Object);
+       // _userController = new UserController(_userServiceMock.Object,_sessionServiceMock);
 
         _listOfRoles = new List<Role>();
-        
+
+        _session = new Session(); 
+
     }
 
     [TestMethod]
@@ -57,9 +62,14 @@ public class UserControllerTest
             Roles = _listOfRoles
         };
 
+        _session.User = user1;
+        _session.Id = new Guid(); 
+
         string fullName = Name + " " + Surname; 
 
         List<User> listOfUsers = new List<User> { user1, user2 };
+       // _sessionServiceMock.Setup(service => service.GetUserSession(_session.Id)).Return(user1); 
+        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         _userServiceMock.Setup(service => service.GetAllUsers()).Returns(listOfUsers); 
         
         var token = "testToken";
