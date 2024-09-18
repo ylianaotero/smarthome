@@ -19,7 +19,7 @@ public class SecurityCamera : Device
 {
     public LocationType? LocationType { get; set; }
     public List<SecurityCameraFunctionality>? Functionalities { get; set; }
-    public sealed override string Kind { get; set; } = "SecurityCamera";
+    public sealed override string Type { get; set; } = "SecurityCamera";
     
     public override bool Equals(object? obj)
     {

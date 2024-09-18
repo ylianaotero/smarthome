@@ -46,7 +46,7 @@ public class DeviceServiceTest
     {
         List<Device> devices = new List<Device>();
         devices.Add(_defaultCamera);
-        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == "SecurityCamera" &&
+        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Type == "SecurityCamera" &&
                                          d.PhotoURLs.First() == DevicePhotoUrl && d.Company.Name == CompanyName;
         
         _mockDeviceRepository.Setup(x => x.GetByFilter(filter)).Returns(devices);
@@ -82,9 +82,9 @@ public class DeviceServiceTest
         _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
-            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "SecurityCamera" };
+            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Type = "SecurityCamera" };
         _defaultWindowSensor = new WindowSensor()
-            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "WindowSensor" };
+            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Type = "WindowSensor" };
     }
 
     private void CreateMockDeviceRepository()

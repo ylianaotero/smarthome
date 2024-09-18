@@ -1,9 +1,10 @@
+using BusinessLogic.IServices;
 using Domain;
 using IDataAccess;
 
 namespace BusinessLogic.Services;
 
-public class DeviceService
+public class DeviceService : IDeviceService
 {
     private readonly IRepository<Device> _deviceRepository;
     
@@ -24,7 +25,12 @@ public class DeviceService
     
     public List<string> GetDeviceTypes()
     {
-        return new List<string> {"SecurityCamera", "WindowSensor"};
+        var deviceTypes = typeof(Device).Assembly.GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(Device)) && !t.IsAbstract)
+            .Select(t => t.Name)
+            .ToList();
+
+        return deviceTypes;
     }
     
 }
