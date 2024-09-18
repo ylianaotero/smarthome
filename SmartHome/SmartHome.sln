@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebApi", "TestWebApi\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDomain", "TestDomain\TestDomain.csproj", "{C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IBusinessLogic", "IBusinessLogic\IBusinessLogic.csproj", "{57324A10-FB91-4E72-9EE2-24C4EB936419}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57324A10-FB91-4E72-9EE2-24C4EB936419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57324A10-FB91-4E72-9EE2-24C4EB936419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57324A10-FB91-4E72-9EE2-24C4EB936419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57324A10-FB91-4E72-9EE2-24C4EB936419}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
