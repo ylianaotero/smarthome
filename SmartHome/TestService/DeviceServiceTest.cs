@@ -49,7 +49,7 @@ public class DeviceServiceTest
         Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == "SecurityCamera" &&
                                          d.PhotoURLs.First() == DevicePhotoUrl && d.Company.Name == CompanyName;
         
-        _mockDeviceRepository.Setup(x => x.GetBy(filter)).Returns(devices);
+        _mockDeviceRepository.Setup(x => x.GetByFilter(filter)).Returns(devices);
         DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
         List<Device> retrievedDevices =  deviceService.GetDevicesByFilter(filter);

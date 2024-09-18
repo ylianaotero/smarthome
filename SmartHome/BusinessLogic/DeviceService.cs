@@ -17,4 +17,9 @@ public class DeviceService
         return _deviceRepository.GetAll();
     }
     
+    public List<Device> GetDevicesByFilter(Func<Device, bool> filter)
+    {
+        return _deviceRepository.GetByFilter(filter);
+    }
+    
 }
