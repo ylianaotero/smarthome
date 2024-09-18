@@ -4,28 +4,21 @@ using IDataAccess;
 
 namespace BusinessLogic.Services;
 
-public class DeviceService : IDeviceService
+public class DeviceService(IRepository<Device> deviceRepository) : IDeviceService
 {
-    private readonly IRepository<Device> _deviceRepository;
-    
-    public DeviceService(IRepository<Device> deviceRepository)
-    {
-        _deviceRepository = deviceRepository;
-    }
-    
     public void CreateDevice(Device device)
     {
-        _deviceRepository.Add(device);
+        deviceRepository.Add(device);
     }
     
     public List<Device> GetAllDevices()
     {
-        return _deviceRepository.GetAll();
+        return deviceRepository.GetAll();
     }
     
     public List<Device> GetDevicesByFilter(Func<Device, bool> filter)
     {
-        return _deviceRepository.GetByFilter(filter);
+        return deviceRepository.GetByFilter(filter);
     }
     
     public List<string> GetDeviceTypes()
