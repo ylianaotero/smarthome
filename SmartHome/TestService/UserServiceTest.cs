@@ -112,7 +112,7 @@ public class UserServiceTest
     }
     
     
-    /*[TestMethod]
+    [TestMethod]
     public void UserIsAdmin()
     {
         Administrator admin = new Administrator(); 
@@ -139,6 +139,6 @@ public class UserServiceTest
         
         Assert.IsTrue(response);
         
-    }*/
+    }
 
 }
