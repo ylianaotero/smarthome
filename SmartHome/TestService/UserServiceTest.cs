@@ -139,5 +139,33 @@ public class UserServiceTest
         Assert.IsTrue(response);
         
     }
+    
+    [TestMethod]
+    public void UserIsNotAdmin()
+    {
+        HomeOwner homeOwner = new HomeOwner(); 
+        var newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{homeOwner}
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        
+        bool response = _userService.IsAdmin(NewEmail);
+        
+        Assert.IsFalse(response);
+        
+    }
 
 }
