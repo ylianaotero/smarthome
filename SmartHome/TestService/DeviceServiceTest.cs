@@ -69,9 +69,7 @@ public class DeviceServiceTest
         
         List<string> retrievedDeviceTypes = deviceService.GetDeviceTypes();
         
-        Assert.AreEqual(2, deviceTypes.Count);
-        Assert.IsTrue(deviceTypes.Contains("SecurityCamera"));
-        Assert.IsTrue(deviceTypes.Contains("WindowSensor"));
+        CollectionAssert.AreEqual(deviceTypes, retrievedDeviceTypes);
     }
     
     private void SetupDefaultObjects()
