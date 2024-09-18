@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using IDomain;
 
 namespace Domain;
@@ -19,7 +20,7 @@ public class SecurityCamera : Device
 {
     public LocationType? LocationType { get; set; }
     public List<SecurityCameraFunctionality>? Functionalities { get; set; }
-    public sealed override string Type { get; set; } = "SecurityCamera";
+    public sealed override string Type { get; set; }
     
     public override bool Equals(object? obj)
     {
@@ -36,5 +37,10 @@ public class SecurityCamera : Device
                camera.Functionalities != null &&
                Functionalities.SequenceEqual(camera.Functionalities) &&
                Id == camera.Id;*/
+    }
+
+    public SecurityCamera()
+    {
+        Type = GetType().Name;
     }
 }

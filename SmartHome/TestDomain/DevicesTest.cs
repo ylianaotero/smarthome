@@ -17,6 +17,9 @@ public class DevicesTest
     private const long DeviceModel = 1345354616346;
     private const bool DeviceIsConnected = true;
     
+    private const string WindowSensorType = "WindowSensor";
+    private const string SecurityCameraType = "SecurityCamera";
+    
     [TestInitialize]
     public void TestInitialize()
     {
@@ -138,6 +141,22 @@ public class DevicesTest
         };
         
         Assert.IsNotNull(windowSensor);
+    }
+    
+    [TestMethod]
+    public void TestWindowSensorTypeIsCorrect()
+    {
+        windowSensor = new WindowSensor(){};
+        
+        Assert.AreEqual(WindowSensorType, windowSensor.Type);
+    }
+    
+    [TestMethod]
+    public void TestSecurityCameraTypeIsCorrect()
+    {
+        securityCamera = new SecurityCamera(){};
+        
+        Assert.AreEqual(SecurityCameraType, securityCamera.Type);
     }
 
     [TestMethod]
