@@ -12,6 +12,7 @@ public class UserServiceTest
 {
     private const string NewName = "Juan Pérez";
     private const string NewEmail = "juan.perez@example.com";
+    private const string NewEmail2 = "juan.lopez@example.com";
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
     
@@ -71,5 +72,73 @@ public class UserServiceTest
         
         _userService.CreateUser(user);
     }
+    
+    [TestMethod]
+    public void GetAllUsers()
+    {
+        var user1 = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+        
+        var user2 = new User
+        {
+            Name = NewName,
+            Email = NewEmail2,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(user1);
+        listOfUsers.Add(user2);
+        
+        _mockUserRepository
+            .Setup(v => v.GetAll()).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        List<User> responseList = _userService.GetAllUsers();
+        
+        Assert.AreEqual(listOfUsers.Count, responseList.Count );
+        
+        foreach (var user in listOfUsers)
+        {
+            Assert.IsTrue(responseList.Contains(user), $"Expected user list to contain {user}");
+        }
+    }
+    
+    
+    /*[TestMethod]
+    public void UserIsAdmin()
+    {
+        Administrator admin = new Administrator(); 
+        var newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{admin}
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+
+        string token = "example";
+        
+        bool response = _userService.IsAdmin(token);
+        
+        Assert.IsTrue(response);
+        
+    }*/
 
 }
