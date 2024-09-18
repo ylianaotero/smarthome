@@ -1,5 +1,8 @@
+using System.Net;
 using BusinessLogic.IServices;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Out;
 
 namespace WebApi.Controllers;
 
@@ -17,6 +20,28 @@ public class DeviceController : ControllerBase
     [HttpGet]
     public IActionResult GetDevices()
     {
-        return Ok("");
+        List<Device> devices = _deviceService.GetAllDevices();
+
+        List<DeviceResponse> deviceResponses = new List<DeviceResponse>();
+        
+        foreach (Device device in devices)
+        {
+            DeviceResponse deviceResponse = new DeviceResponse()
+            {
+                Name = device.Name,
+                Model = device.Model,
+                PhotoUrl = device.PhotoURLs.First(),
+                CompanyName = device.Company.Name
+            };
+            
+            deviceResponses.Add(deviceResponse);
+        }
+        
+        DevicesResponse devicesResponse = new DevicesResponse()
+        {
+            Devices = deviceResponses
+        };
+        
+        return Ok(devicesResponse);
     }
 }

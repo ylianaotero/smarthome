@@ -3,6 +3,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
+using WebApi.Out;
 
 namespace TestWebApi;
 
@@ -67,7 +68,7 @@ public class DevicesControllerTest
 
         DevicesResponse expectedResponse = new DevicesResponse()
         {
-            Devices = new List<DevicesResponse>()
+            Devices = new List<DeviceResponse>()
             {
                 device1Response,
                 device2Response,
@@ -77,7 +78,7 @@ public class DevicesControllerTest
         ObjectResult result = _deviceController.GetDevices() as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
-        Assert.AreEqual(response, expectedResponse);
+        Assert.AreEqual(expectedResponse, response);
     }
     
     private void SetupDefaultObjects()
