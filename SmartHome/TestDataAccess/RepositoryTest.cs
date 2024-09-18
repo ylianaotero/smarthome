@@ -2,7 +2,6 @@ using DataAccess;
 using DataAccess.Exceptions;
 using Domain;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using IDomain;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -140,6 +139,60 @@ public class RepositoryTest
         _devicesRepository.Delete(_defaultWindowSensor);
     }
     
+    [TestMethod]
+    public void TestGetAllHomeOwners()
+    {
+        List<HomeOwner> homeOwners = new List<HomeOwner>
+        {
+            new HomeOwner()
+        };
+        
+        _context.HomeOwners.AddRange(homeOwners);
+        _context.SaveChanges();
+        
+        SqlRepository<HomeOwner> _homeOwnersRepository = new SqlRepository<HomeOwner>(_context);
+        
+        List<HomeOwner> retrievedHomeOwners = _homeOwnersRepository.GetAll();
+        
+        Assert.AreEqual(homeOwners.Count(), retrievedHomeOwners.Count());
+    }
+    
+    [TestMethod]
+    public void TestGetAllAdministrators()
+    {
+        List<Administrator> administrators = new List<Administrator>
+        {
+            new Administrator()
+        };
+        
+        _context.Administrators.AddRange(administrators);
+        _context.SaveChanges();
+        
+        SqlRepository<Administrator> _administratorsRepository = new SqlRepository<Administrator>(_context);
+        
+        List<Administrator> retrievedAdministrators = _administratorsRepository.GetAll();
+        
+        Assert.AreEqual(administrators.Count(), retrievedAdministrators.Count());
+    }
+    
+    [TestMethod]
+    public void TestGetAllCompanyOwners()
+    {
+        List<CompanyOwner> companyOwners = new List<CompanyOwner>
+        {
+            new CompanyOwner(_defaultCompany)
+        };
+        
+        _context.CompanyOwners.AddRange(companyOwners);
+        _context.SaveChanges();
+        
+        SqlRepository<CompanyOwner> _companyOwnersRepository = new SqlRepository<CompanyOwner>(_context);
+        
+        List<CompanyOwner> retrievedHomeOwners = _companyOwnersRepository.GetAll();
+        
+        Assert.AreEqual(companyOwners.Count(), retrievedHomeOwners.Count());
+    }
+
     private void SetupRepository()
     {
         _connection = new SqliteConnection("Filename=:memory:");
@@ -149,7 +202,7 @@ public class RepositoryTest
             .UseSqlite(_connection)
             .Options;
 
-        _context = new SmartHomeContext(contextOptions);
+        _context = new SmartHomeContext(contextOptions, true);
         _context.Database.EnsureCreated();
 
         _devicesRepository = new SqlRepository<Device>(_context);
