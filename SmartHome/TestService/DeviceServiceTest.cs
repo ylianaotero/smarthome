@@ -41,6 +41,22 @@ public class DeviceServiceTest
         Assert.AreEqual(devices, retrievedDevices);
     }
     
+    [TestMethod]
+    public void TestGetDevicesWithFilter()
+    {
+        List<Device> devices = new List<Device>();
+        devices.Add(_defaultCamera);
+        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == "SecurityCamera" &&
+                                         d.PhotoURLs.First() == DevicePhotoUrl && d.Company.Name == CompanyName;
+        
+        _mockDeviceRepository.Setup(x => x.GetBy(filter)).Returns(devices);
+        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
+        
+        List<Device> retrievedDevices =  deviceService.GetDevicesByFilter(filter);
+        
+        Assert.AreEqual(devices, retrievedDevices);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
@@ -51,9 +67,9 @@ public class DeviceServiceTest
         _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
-            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany };
+            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "SecurityCamera" };
         _defaultWindowSensor = new WindowSensor()
-            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany };
+            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "WindowSensor" };
     }
 
     private void CreateMockDeviceRepository()
