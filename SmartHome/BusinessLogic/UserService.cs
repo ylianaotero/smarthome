@@ -39,20 +39,12 @@ public class UserService : IUserService
 
     public bool IsAdmin(string email)
     {
-        try
+        User existingUser = GetBy(u => u.Email == email);
+        if (existingUser == null)
         {
-            User existingUser = GetBy(u => u.Email == email);
-            if (existingUser == null)
-            {
-                throw new ElementNotFound(UserDoesNotExistExceptionMessage);
-            }
-            
-            bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
-            return hasAdministrator; 
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
-        catch (Exception)
-        {
-            return false;
-        }
+        bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
+        return hasAdministrator; 
     }
 }
