@@ -57,6 +57,23 @@ public class DeviceServiceTest
         Assert.AreEqual(devices, retrievedDevices);
     }
     
+    [TestMethod]
+    public void TestGetDeviceTypes()
+    {
+        List<string> deviceTypes = new List<string>()
+        {
+            "SecurityCamera",
+            "WindowSensor"
+        };
+        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
+        
+        List<string> retrievedDeviceTypes = deviceService.GetDeviceTypes();
+        
+        Assert.AreEqual(2, deviceTypes.Count);
+        Assert.IsTrue(deviceTypes.Contains("SecurityCamera"));
+        Assert.IsTrue(deviceTypes.Contains("WindowSensor"));
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
