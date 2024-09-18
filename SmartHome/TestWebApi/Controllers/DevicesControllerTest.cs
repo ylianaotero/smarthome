@@ -41,6 +41,44 @@ public class DevicesControllerTest
         
         Assert.AreEqual(200, result.StatusCode);
     }
+
+    [TestMethod]
+    public void TestGetAllDevicesOkResponse()
+    {
+        List<Device> devices = new List<Device>();
+        devices.Add(_defaultCamera);
+        devices.Add(_defaultWindowSensor);
+        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        DeviceResponse device1Response = new DeviceResponse()
+        {
+            Name = CameraName,
+            Model = DeviceModel,
+            PhotoUrl = DevicePhotoUrl,
+            CompanyName = CompanyName,
+        };
+
+        DeviceResponse device2Response = new DeviceResponse()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoUrl = DevicePhotoUrl,
+            CompanyName = CompanyName,
+        };
+
+        DevicesResponse expectedResponse = new DevicesResponse()
+        {
+            Devices = new List<DevicesResponse>()
+            {
+                device1Response,
+                device2Response,
+            },
+        };
+        
+        ObjectResult result = _deviceController.GetDevices() as OkObjectResult;
+        DevicesResponse response = result.Value as DevicesResponse;
+        
+        Assert.AreEqual(response, expectedResponse);
+    }
     
     private void SetupDefaultObjects()
     {
