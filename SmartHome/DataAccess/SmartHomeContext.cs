@@ -2,6 +2,7 @@ using Domain;
 using IDomain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace DataAccess;
 
@@ -13,14 +14,16 @@ public class SmartHomeContext : DbContext
     public DbSet<CompanyOwner> CompanyOwners { get; set; }
     public DbSet<User> Users { get; set; }
 
-    public SmartHomeContext(DbContextOptions<SmartHomeContext> options) : base(options)
+    public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
     {
-        this.Database.Migrate();
+        if (!useInMemoryDatabase)
+        {
+            this.Database.Migrate();
+        }
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)); 
