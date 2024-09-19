@@ -1,7 +1,9 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WebApi.Controllers;
 using WebApi.In;
 using WebApi.Out;
 
@@ -78,5 +80,26 @@ public class AdministratorControllerTest
         Assert.AreEqual(createAdminRequest.Name, userResponse.Name);
         Assert.AreEqual(createAdminRequest.Email, userResponse.Email);
         Assert.AreEqual(createAdminRequest.Surname, userResponse.Surname);
+    }
+    
+    [TestMethod]
+    public void CreateUserInvalidRequest()
+    {
+        var createUserRequest = new CreateAdminRequest
+        {
+            Name = Name,
+            Email = InvalidEmail,
+            Password = Password,
+            Surname = Surname
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new InputNotValid("Input not valid, try again"));
+        
+        var result = _administratorController.CreateUser(createUserRequest) as ObjectResult;
+        
+        Assert.IsNotNull(result);
+        Assert.AreEqual(400, result.StatusCode);
     }
 }
