@@ -131,6 +131,35 @@ public class DevicesControllerTest
         Assert.AreEqual(200, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestGetDevicesFilteredByOkStatusResponse()
+    {
+        List<Device> devices = new List<Device>();
+        devices.Add(_defaultCamera);
+
+        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        DeviceResponse device1Response = new DeviceResponse()
+        {
+            Name = CameraName,
+            Model = DeviceModel,
+            PhotoUrl = DevicePhotoUrl,
+            CompanyName = CompanyName,
+        };
+        
+        DevicesResponse expectedResponse = new DevicesResponse()
+        {
+            Devices = new List<DeviceResponse>()
+            {
+                device1Response,
+            },
+        };
+        
+        ObjectResult result = _deviceController.GetDevices(CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
+        DevicesResponse response = result.Value as DevicesResponse;
+        
+        Assert.AreEqual(expectedResponse, response);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
