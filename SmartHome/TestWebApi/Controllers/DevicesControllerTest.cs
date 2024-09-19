@@ -38,7 +38,7 @@ public class DevicesControllerTest
         devices.Add(_defaultWindowSensor);
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices("", "", "", "") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null) as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -75,7 +75,7 @@ public class DevicesControllerTest
             },
         };
         
-        ObjectResult result = _deviceController.GetDevices("", "", "", "") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null) as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);

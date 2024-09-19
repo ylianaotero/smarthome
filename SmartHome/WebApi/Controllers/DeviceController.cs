@@ -21,6 +21,23 @@ public class DeviceController : ControllerBase
     {
         List<Device> devices = _deviceService.GetAllDevices();
 
+        if (name != null)
+        {
+            devices = devices.FindAll(device => device.Name == name);
+        }
+        if (model != null)
+        {
+            devices = devices.FindAll(device => device.Model.ToString() == model);
+        }
+        if (company != null)
+        {
+            devices = devices.FindAll(device => device.Company.Name == company);
+        }
+        if (type != null)
+        {
+            devices = devices.FindAll(device => device.Type == type);
+        }
+
         DevicesResponse devicesResponse = GetDevicesResponse(devices);
         
         return Ok(devicesResponse);
