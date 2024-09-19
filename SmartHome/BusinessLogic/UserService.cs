@@ -19,17 +19,30 @@ public class UserService : IUserService
     }
     public void CreateUser(User user)
     {
-        User existingUser = GetBy(u => u.Email == user.Email);
-        if (existingUser != null)
+        try
         {
+            GetBy(u => u.Email == user.Email);
+            
             throw new ElementAlreadyExist(UserAlreadyExistExceptionMessage);
         }
-        _userRepository.Add(user);
+        catch (ElementNotFound)
+        {
+            _userRepository.Add(user);
+        }
+        
     }
 
-    private User? GetBy(Func<User, bool> predicate)
+    private User GetBy(Func<User, bool> predicate)
     {
-        return _userRepository.GetByFilter(predicate).FirstOrDefault();
+        List<User> listOfuser = _userRepository.GetByFilter(predicate); 
+        User user = listOfuser.FirstOrDefault();
+        
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
     }
 
     public List<User> GetAllUsers()
@@ -37,5 +50,10 @@ public class UserService : IUserService
         return _userRepository.GetAll(); 
     }
 
-
+    public bool IsAdmin(string email)
+    {
+        User existingUser =  GetBy(u => u.Email == email);
+        bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
+        return hasAdministrator; 
+    }
 }

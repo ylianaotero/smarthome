@@ -12,6 +12,8 @@ public class SmartHomeContext : DbContext
     public DbSet<HomeOwner> HomeOwners { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
     public DbSet<CompanyOwner> CompanyOwners { get; set; }
+    
+    public DbSet<Session> Sessions { get; set; }
     public DbSet<User> Users { get; set; }
 
     public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
@@ -20,6 +22,12 @@ public class SmartHomeContext : DbContext
         {
             this.Database.Migrate();
         }
+    }
+    
+    public SmartHomeContext(DbContextOptions<SmartHomeContext> options) : base(options)
+    {
+
+        this.Database.Migrate();
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

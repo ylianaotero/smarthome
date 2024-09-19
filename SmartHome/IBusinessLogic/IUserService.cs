@@ -8,5 +8,5 @@ public interface IUserService
     
     List<User> GetAllUsers();
     
-   // bool IsAdmin(string token);
+    bool IsAdmin(string email);
 }

@@ -8,6 +8,8 @@ namespace Domain;
 
 public class User
 {
+    [Key]
+    public long Id { get; set; }
     private string _email { get; set; }
     private string _name { get; set; }
     private string _surname { get; set; }
@@ -70,7 +72,6 @@ public class User
         } 
     }
     
-    [Key]
     public string Email { 
         get => _email;
         set
