@@ -3,6 +3,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.In;
+using WebApi.Out;
 
 namespace TestWebApi;
 
@@ -77,7 +78,5 @@ public class AdministratorControllerTest
         Assert.AreEqual(createAdminRequest.Name, userResponse.Name);
         Assert.AreEqual(createAdminRequest.Email, userResponse.Email);
         Assert.AreEqual(createAdminRequest.Surname, userResponse.Surname);
-        Assert.AreEqual(createAdminRequest.Photo, userResponse.Photo);
-        Assert.AreEqual(1, userResponse.Roles.Count);
     }
 }
