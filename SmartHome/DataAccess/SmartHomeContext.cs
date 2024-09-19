@@ -22,6 +22,12 @@ public class SmartHomeContext : DbContext
         }
     }
     
+    public SmartHomeContext(DbContextOptions<SmartHomeContext> options) : base(options)
+    {
+
+        this.Database.Migrate();
+    }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)

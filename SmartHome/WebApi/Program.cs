@@ -21,9 +21,12 @@ builder.Services.AddDbContext<SmartHomeContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         b => b.MigrationsAssembly("DataAccess")));  // Cambia "DataAccess" al nombre de tu proyecto de migraciones
 
+
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
