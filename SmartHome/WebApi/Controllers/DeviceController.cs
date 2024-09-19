@@ -17,7 +17,7 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetDevices()
+    public IActionResult GetDevices([FromQuery] string? name, [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
     {
         List<Device> devices = _deviceService.GetAllDevices();
 

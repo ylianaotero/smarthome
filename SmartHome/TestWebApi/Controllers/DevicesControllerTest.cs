@@ -38,7 +38,7 @@ public class DevicesControllerTest
         devices.Add(_defaultWindowSensor);
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices() as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices("", "", "", "") as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -75,7 +75,7 @@ public class DevicesControllerTest
             },
         };
         
-        ObjectResult result = _deviceController.GetDevices() as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices("", "", "", "") as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);
@@ -126,12 +126,10 @@ public class DevicesControllerTest
 
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(CameraName, DeviceModel, CompanyName, "SecurityCamera") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
-
-    
     
     private void SetupDefaultObjects()
     {
