@@ -24,12 +24,6 @@ public class UserResponse
 
     private List<Role> LoadRolesList(List<Role> listOfRoles)
     {
-        List<Role> newList = new List<Role>();
-        foreach (var role in listOfRoles)
-        {
-            listOfRoles.Add(role);
-        }
-
-        return newList; 
+        return listOfRoles?.ToList() ?? new List<Role>();
     }
 }

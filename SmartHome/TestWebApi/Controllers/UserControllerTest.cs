@@ -92,7 +92,7 @@ public class UserControllerTest
     
     
     [TestMethod]
-    public void CreateUserInvalidRequest()
+    public void CreateUserUnauthorized()
     {
 
         var user1 = new User

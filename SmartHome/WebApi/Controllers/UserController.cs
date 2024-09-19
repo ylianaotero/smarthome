@@ -27,7 +27,7 @@ public class UserController : ControllerBase
             return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
         }
 
-        return null; 
+        return StatusCode(403, "Unauthorized");
 
 
     }
