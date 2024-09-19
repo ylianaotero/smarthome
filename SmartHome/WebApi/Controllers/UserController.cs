@@ -28,8 +28,6 @@ public class UserController : ControllerBase
         }
 
         return StatusCode(403, "Unauthorized");
-
-
     }
     
 }
