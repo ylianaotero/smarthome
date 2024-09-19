@@ -42,6 +42,19 @@ public class DevicesControllerTest
         
         Assert.AreEqual(200, result.StatusCode);
     }
+    
+    [TestMethod]
+    public void TestGetAllDevicesUnauthorizedStatusCode()
+    {
+        List<Device> devices = new List<Device>();
+        devices.Add(_defaultCamera);
+        devices.Add(_defaultWindowSensor);
+        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as OkObjectResult;
+        
+        Assert.AreEqual(401, result.StatusCode);
+    }
 
     [TestMethod]
     public void TestGetAllDevicesOkResponse()
