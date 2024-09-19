@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SmartHomeContext))]
-    partial class SmartHomeContextModelSnapshot : ModelSnapshot
+    [Migration("20240919004741_MigracionUser5")]
+    partial class MigracionUser5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,22 +156,6 @@ namespace DataAccess.Migrations
                     b.HasDiscriminator().HasValue("Role");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Domain.Session", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -318,17 +305,6 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.User", null)
                         .WithMany("Roles")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Domain.Session", b =>
-                {
-                    b.HasOne("Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.CompanyOwner", b =>

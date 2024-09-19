@@ -16,7 +16,8 @@ public class UsersResponseTest
     public void AssignValues()
     {
         Administrator administrator = new Administrator(); 
-        HomeOwner homeOwner = new HomeOwner(); 
+        HomeOwner homeOwner = new HomeOwner();
+        CompanyOwner companyOwner = new CompanyOwner(); 
         User user = new User()
         {
             Name = nameSample,
@@ -24,7 +25,7 @@ public class UsersResponseTest
             Email = emailSample,
             Password = passwordSample,
             Photo = ProfilePictureUrl,
-            Roles = new List<Role>{administrator,homeOwner}
+            Roles = new List<Role>{administrator,homeOwner,companyOwner}
         };
 
         string fullName = nameSample + " " + surnameSample; 
@@ -40,5 +41,26 @@ public class UsersResponseTest
         
         Assert.IsTrue(response.Roles.Contains(administrator));
         Assert.IsTrue(response.Roles.Contains(homeOwner));
+        Assert.IsTrue(response.Roles.Contains(companyOwner));
+    }
+    
+    
+    [TestMethod]
+    public void AssignValuesWithoutRoles()
+    {
+        User user = new User()
+        {
+            Name = nameSample,
+            Surname = surnameSample,
+            Email = emailSample,
+            Password = passwordSample,
+            Photo = ProfilePictureUrl,
+            Roles = null
+        };
+        
+
+        UserResponse response = new UserResponse(user);
+        
+        Assert.AreEqual(user.Roles.Count, response.Roles.Count);
     }
 }

@@ -62,6 +62,16 @@ public class UserTest
     }
     
     [TestMethod]
+    public void TestAddIdToUser()
+    {
+        User user = new User();
+        
+        user.Id = 1234;
+        
+        Assert.AreEqual(1234, user.Id);
+    }
+    
+    [TestMethod]
     public void TestCreatedAtUser()
     {
         User user = new User();
