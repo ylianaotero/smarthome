@@ -33,6 +33,7 @@ public class AdminResponseTest
         Assert.AreEqual(user.Name, response.Name);
         Assert.AreEqual(user.Surname, response.Surname);
         Assert.AreEqual(user.Email, response.Email);
+        
 
     }
     
