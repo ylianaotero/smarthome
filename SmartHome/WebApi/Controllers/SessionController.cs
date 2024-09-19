@@ -17,7 +17,7 @@ public class SessionController : ControllerBase
         _sessionService = sessionService;
     }
     
-    [HttpPost("login")]
+    [HttpPost]
     public IActionResult LogIn([FromBody] LoginRequest request)
     {
         try
