@@ -38,7 +38,7 @@ public class DevicesControllerTest
         devices.Add(_defaultWindowSensor);
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(null, null, null, null) as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -51,7 +51,7 @@ public class DevicesControllerTest
         devices.Add(_defaultWindowSensor);
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as UnauthorizedObjectResult;
         
         Assert.AreEqual(401, result.StatusCode);
     }
@@ -88,7 +88,7 @@ public class DevicesControllerTest
             },
         };
         
-        ObjectResult result = _deviceController.GetDevices(null, null, null, null) as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);
@@ -139,7 +139,7 @@ public class DevicesControllerTest
 
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -167,7 +167,7 @@ public class DevicesControllerTest
             },
         };
         
-        ObjectResult result = _deviceController.GetDevices(CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);

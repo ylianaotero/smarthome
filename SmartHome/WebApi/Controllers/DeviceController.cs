@@ -17,8 +17,13 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetDevices([FromQuery] string? name, [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
+    public IActionResult GetDevices([FromHeader] Guid? authorization, [FromQuery] string? name, [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
     {
+        if (authorization == null)
+        {
+            return Unauthorized("");
+        }
+        
         List<Device> devices = _deviceService.GetAllDevices();
 
         if (name != null)
