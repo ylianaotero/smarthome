@@ -42,8 +42,7 @@ public class AdministratorControllerTest
             Name = Name,
             Email = Email,
             Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl
+            Surname = Surname
         };
 
         var user = new User
