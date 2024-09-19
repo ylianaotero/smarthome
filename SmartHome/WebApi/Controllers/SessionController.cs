@@ -35,10 +35,10 @@ public class SessionController : ControllerBase
         {
             return StatusCode(404, "Not found");
         }
-        catch (Exception ex)
+        /*catch (Exception ex)
         {
             return StatusCode(500, "Internal server error.");
-        }
+        }*/
     }
 
 }
