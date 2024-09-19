@@ -2,12 +2,12 @@ using BusinessLogic.IServices;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WebApi.In;
 
 namespace TestWebApi;
 
 public class AdministratorControllerTest
 {
-    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
     private const string InvalidEmail = "invalid email";
@@ -51,7 +51,6 @@ public class AdministratorControllerTest
             Email = createAdminRequest.Email,
             Password = createAdminRequest.Password,
             Surname = createAdminRequest.Surname,
-            Photo = createAdminRequest.Photo,
             Roles = _listOfRoles
         };
 
@@ -59,8 +58,7 @@ public class AdministratorControllerTest
             u.Name == user.Name &&
             u.Email == user.Email &&
             u.Password == user.Password &&
-            u.Surname == user.Surname &&
-            u.Photo == user.Photo
+            u.Surname == user.Surname 
         )));
 
         var result = _administratorController.CreateUser(createAdminRequest) as OkObjectResult;

@@ -1,3 +1,6 @@
+using Domain;
+using WebApi.In;
+
 namespace TestWebApi.In;
 
 public class CreateAdminTest
@@ -38,5 +41,6 @@ public class CreateAdminTest
         Assert.AreEqual(entity.Surname, surnameSample);
         Assert.AreEqual(entity.Email, emailSample);
         Assert.AreEqual(entity.Password, passwordSample);
+        Assert.IsTrue(entity.Roles.Any(role => role is Administrator));
     }
 }
