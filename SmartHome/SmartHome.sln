@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDomain", "IDomain\IDomain.csproj", "{577CE4B0-B579-41FD-A96E-3224DE401EB2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{2ED851AF-F7C6-4605-8D9E-6BAF9178A52C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDataAccess", "TestDataAccess\TestDataAccess.csproj", "{529C2EB9-AE2A-420D-8925-418E9A7591EF}"
@@ -30,10 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{577CE4B0-B579-41FD-A96E-3224DE401EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{577CE4B0-B579-41FD-A96E-3224DE401EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{577CE4B0-B579-41FD-A96E-3224DE401EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{577CE4B0-B579-41FD-A96E-3224DE401EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2ED851AF-F7C6-4605-8D9E-6BAF9178A52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2ED851AF-F7C6-4605-8D9E-6BAF9178A52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ED851AF-F7C6-4605-8D9E-6BAF9178A52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
