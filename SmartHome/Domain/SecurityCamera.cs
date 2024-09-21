@@ -42,5 +42,6 @@ public class SecurityCamera : Device
     public SecurityCamera()
     {
         Kind = GetType().Name;
+        IsConnected = false;
     }
 }

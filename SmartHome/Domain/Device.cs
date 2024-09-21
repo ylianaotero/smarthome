@@ -10,7 +10,7 @@ public abstract class Device
     public long Model { get; set; }
     public string Description { get; set; }
     public List<string> PhotoURLs { get; set; }
-    public Company Company { get; set; }
+    public Company? Company { get; set; }
     public bool IsConnected { get; set; }
     public abstract string Kind { get; set; }
 }

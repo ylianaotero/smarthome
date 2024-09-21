@@ -247,6 +247,8 @@ public class DevicesControllerTest
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description
         )), Times.Once);
+        
+        
         Assert.AreEqual(201, result.StatusCode);
     }
     
