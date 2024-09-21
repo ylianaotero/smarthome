@@ -219,6 +219,35 @@ public class DevicesControllerTest
         Assert.AreEqual(expectedResponse, response);
     }
     
+    [TestMethod]
+    public void TestPostWindowSensorsOkStatusCode()
+    {
+        WindowSensorRequest request = new WindowSensorRequest()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoURLs = new List<string>() { DevicePhotoUrl },
+            Description = "Window Sensor Description",
+        };
+        
+        _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoURLs &&
+            device.Description == request.Description
+        )));
+        
+        ObjectResult result = _deviceController.PostWindowSensors(request) as OkObjectResult;
+        
+        _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoURLs &&
+            device.Description == request.Description
+        )), Times.Once);
+        Assert.AreEqual(200, result.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
