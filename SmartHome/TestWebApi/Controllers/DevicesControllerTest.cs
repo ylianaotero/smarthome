@@ -252,6 +252,44 @@ public class DevicesControllerTest
         Assert.AreEqual(201, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostSecurityCamerasOkStatusCode()
+    {
+        SecurityCameraRequest request = new SecurityCameraRequest()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoUrls = new List<string>() { DevicePhotoUrl },
+            Description = DeviceDescription,
+            Company = _defaultCompany,
+            LocationType = LocationType.Indoor,
+            Functionalities = new List<string>() { "MotionDetection" },
+        };
+        
+        _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description
+        )));
+        
+        ObjectResult result = _deviceController.PostSecurityCameras(request) as CreatedResult;
+        
+        _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company == request.Company &&
+            (device as SecurityCamera).LocationType == request.LocationType &&
+            (device as SecurityCamera).Functionalities != null &&
+            (device as SecurityCamera).Functionalities.SequenceEqual(request.Functionalities)
+        )), Times.Once);
+        
+        
+        Assert.AreEqual(201, result.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
