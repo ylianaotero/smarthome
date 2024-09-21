@@ -1,5 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
@@ -21,8 +22,8 @@ public class DevicesControllerTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
-    
     private const string CompanyName = "IoT Devices & Co.";
+    private const string SessionDoesNotExistExceptionMessage = "User not found";
     
     [TestInitialize]
     public void TestInitialize()
@@ -41,7 +42,8 @@ public class DevicesControllerTest
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) 
+            as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -55,7 +57,8 @@ public class DevicesControllerTest
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) 
+            as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -68,7 +71,8 @@ public class DevicesControllerTest
         devices.Add(_defaultWindowSensor);
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as UnauthorizedObjectResult;
+        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null)
+            as UnauthorizedObjectResult;
         
         Assert.AreEqual(401, result.StatusCode);
     }
@@ -76,15 +80,20 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetAllDevicesUnauthorizedWithTokenStatusCode()
     {
+        Guid token = Guid.NewGuid();
         List<Device> devices = new List<Device>();
         devices.Add(_defaultCamera);
         devices.Add(_defaultWindowSensor);
+        _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>()))
+            .Throws(new CannotFindItemInList(SessionDoesNotExistExceptionMessage));
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult result = _deviceController.GetDevices(null, null, null, null, null) as UnauthorizedObjectResult;
+        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) 
+            as UnauthorizedObjectResult;
         
         Assert.AreEqual(401, result.StatusCode);
     }
+    
 
     [TestMethod]
     public void TestGetAllDevicesOkResponse()
@@ -120,7 +129,8 @@ public class DevicesControllerTest
             },
         };
         
-        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) 
+            as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);
@@ -172,7 +182,8 @@ public class DevicesControllerTest
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         
-        ObjectResult result = _deviceController.GetDevices(token, CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(token, CameraName, DeviceModel.ToString(), 
+            CompanyName, "SecurityCamera") as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -201,7 +212,8 @@ public class DevicesControllerTest
             },
         };
         
-        ObjectResult result = _deviceController.GetDevices(token, CameraName, DeviceModel.ToString(), CompanyName, "SecurityCamera") as OkObjectResult;
+        ObjectResult result = _deviceController.GetDevices(token, CameraName, DeviceModel.ToString(), 
+            CompanyName, "SecurityCamera") as OkObjectResult;
         DevicesResponse response = result.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);
