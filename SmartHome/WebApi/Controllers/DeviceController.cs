@@ -10,16 +10,19 @@ namespace WebApi.Controllers;
 public class DeviceController : ControllerBase
 {
     private readonly IDeviceService _deviceService;
-    
-    public DeviceController(IDeviceService deviceService)
+    private ISessionService _sessionService;
+
+    public DeviceController(IDeviceService deviceService, ISessionService sessionService)
     {
         _deviceService = deviceService;
+        _sessionService = sessionService;
     }
     
     [HttpGet]
-    public IActionResult GetDevices([FromHeader] Guid? authorization, [FromQuery] string? name, [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
+    public IActionResult GetDevices([FromHeader] Guid? authorization, [FromQuery] string? name, 
+        [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
     {
-        if (authorization == null)
+        if (AuthorizationIsInvalid(authorization))
         {
             return Unauthorized("");
         }
@@ -40,7 +43,7 @@ public class DeviceController : ControllerBase
         }
         if (type != null)
         {
-            devices = devices.FindAll(device => device.Type == type);
+            devices = devices.FindAll(device => device.Kind == type);
         }
 
         DevicesResponse devicesResponse = GetDevicesResponse(devices);
@@ -49,6 +52,7 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
+    [Route("types")]
     public IActionResult GetDeviceTypes()
     {
         List<string> deviceTypes = _deviceService.GetDeviceTypes();
@@ -77,14 +81,19 @@ public class DeviceController : ControllerBase
     
     private DeviceResponse GetDeviceResponse(Device device)
     {
+        if (device == null)
+        {
+            throw new ArgumentNullException(nameof(device));
+        }
+
         DeviceResponse deviceResponse = new DeviceResponse()
         {
             Name = device.Name,
             Model = device.Model,
-            PhotoUrl = device.PhotoURLs.First(),
-            CompanyName = device.Company.Name
+            PhotoUrl = device.PhotoURLs?.FirstOrDefault(),
+            CompanyName = device.Company?.Name
         };
-        
+
         return deviceResponse;
     }
     
@@ -96,5 +105,23 @@ public class DeviceController : ControllerBase
         };
         
         return deviceTypesResponse;
+    }
+    
+    private bool AuthorizationIsInvalid(Guid? authorization)
+    {
+        return authorization == null || !UserIsAuthenticated(authorization.Value);
+    } 
+    
+    private bool UserIsAuthenticated(Guid authorization)
+    {
+        try 
+        {
+            _sessionService.GetUser(authorization);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }
