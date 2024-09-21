@@ -23,6 +23,7 @@ public class DevicesControllerTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
+    private const string DeviceDescription = "This is a device";
     private const string CompanyName = "IoT Devices & Co.";
     private const string SessionDoesNotExistExceptionMessage = "User not found";
     
@@ -228,7 +229,7 @@ public class DevicesControllerTest
             Name = WindowSensorName,
             Model = DeviceModel,
             PhotoUrls = new List<string>() { DevicePhotoUrl },
-            Description = "Window Sensor Description",
+            Description = DeviceDescription,
         };
         
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 

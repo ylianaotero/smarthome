@@ -69,6 +69,15 @@ public class DeviceController : ControllerBase
     [Route("window-sensors")]
     public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
     {
+        WindowSensor windowSensor = ParseWindowSensorRequest(request);
+        
+        _deviceService.CreateDevice(windowSensor);
+        
+        return Ok("");
+    }
+    
+    private WindowSensor ParseWindowSensorRequest(WindowSensorRequest request)
+    {
         WindowSensor windowSensor = new WindowSensor()
         {
             Name = request.Name,
@@ -77,9 +86,7 @@ public class DeviceController : ControllerBase
             Description = request.Description
         };
         
-        _deviceService.CreateDevice(windowSensor);
-        
-        return Ok("");
+        return windowSensor;
     }
     
     private DevicesResponse GetDevicesResponse(List<Device> devices)
