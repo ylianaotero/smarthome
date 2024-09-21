@@ -1,5 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Out;
 
@@ -10,15 +11,23 @@ namespace WebApi.Controllers;
 public class DeviceController : ControllerBase
 {
     private readonly IDeviceService _deviceService;
-    
-    public DeviceController(IDeviceService deviceService)
+    private ISessionService _sessionService;
+
+    public DeviceController(IDeviceService deviceService, ISessionService sessionService)
     {
         _deviceService = deviceService;
+        _sessionService = sessionService;
     }
     
     [HttpGet]
-    public IActionResult GetDevices([FromQuery] string? name, [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
+    public IActionResult GetDevices([FromHeader] Guid? authorization, [FromQuery] string? name, 
+        [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
     {
+        if (AuthorizationIsInvalid(authorization))
+        {
+            return Unauthorized("");
+        }
+        
         List<Device> devices = _deviceService.GetAllDevices();
 
         if (name != null)
@@ -35,15 +44,17 @@ public class DeviceController : ControllerBase
         }
         if (type != null)
         {
-            devices = devices.FindAll(device => device.Type == type);
+            devices = devices.FindAll(device => device.Kind == type);
         }
 
         DevicesResponse devicesResponse = GetDevicesResponse(devices);
+        
         
         return Ok(devicesResponse);
     }
     
     [HttpGet]
+    [Route("types")]
     public IActionResult GetDeviceTypes()
     {
         List<string> deviceTypes = _deviceService.GetDeviceTypes();
@@ -56,12 +67,16 @@ public class DeviceController : ControllerBase
     private DevicesResponse GetDevicesResponse(List<Device> devices)
     {
         List<DeviceResponse> deviceResponses = new List<DeviceResponse>();
-        
+
         foreach (Device device in devices)
         {
-            deviceResponses.Add(GetDeviceResponse(device));
+            DeviceResponse response = GetDeviceResponse(device);
+            if (response != null)
+            {
+                deviceResponses.Add(response);
+            }
         }
-        
+
         DevicesResponse devicesResponse = new DevicesResponse()
         {
             Devices = deviceResponses
@@ -76,10 +91,10 @@ public class DeviceController : ControllerBase
         {
             Name = device.Name,
             Model = device.Model,
-            PhotoUrl = device.PhotoURLs.First(),
-            CompanyName = device.Company.Name
+            PhotoUrl = device.PhotoURLs?.FirstOrDefault(),
+            CompanyName = device.Company?.Name
         };
-        
+
         return deviceResponse;
     }
     
@@ -91,5 +106,23 @@ public class DeviceController : ControllerBase
         };
         
         return deviceTypesResponse;
+    }
+    
+    private bool AuthorizationIsInvalid(Guid? authorization)
+    {
+        return authorization == null || !UserIsAuthenticated(authorization.Value);
+    } 
+    
+    private bool UserIsAuthenticated(Guid authorization)
+    {
+        try 
+        {
+            _sessionService.GetUser(authorization);
+            return true;
+        }
+        catch (CannotFindItemInList)
+        {
+            return false;
+        }
     }
 }

@@ -148,7 +148,7 @@ public class DevicesTest
     {
         windowSensor = new WindowSensor(){};
         
-        Assert.AreEqual(WindowSensorType, windowSensor.Type);
+        Assert.AreEqual(WindowSensorType, windowSensor.Kind);
     }
     
     [TestMethod]
@@ -156,7 +156,7 @@ public class DevicesTest
     {
         securityCamera = new SecurityCamera(){};
         
-        Assert.AreEqual(SecurityCameraType, securityCamera.Type);
+        Assert.AreEqual(SecurityCameraType, securityCamera.Kind);
     }
 
     [TestMethod]

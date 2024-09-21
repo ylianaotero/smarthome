@@ -4,6 +4,7 @@ using DataAccess;
 using Domain;
 using IDataAccess;
 using Microsoft.EntityFrameworkCore;
+using ServiceFactory;
 using WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddServices();
 
 // Configura el DbContext
 // Configura el DbContext y especifica el ensamblado de migraciones
@@ -24,7 +27,7 @@ builder.Services.AddDbContext<SmartHomeContext>(options =>
 
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
-
+builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddControllers();

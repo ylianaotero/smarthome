@@ -20,7 +20,7 @@ public class SecurityCamera : Device
 {
     public LocationType? LocationType { get; set; }
     public List<SecurityCameraFunctionality>? Functionalities { get; set; }
-    public sealed override string Type { get; set; }
+    public sealed override string Kind { get; set; }
     
     public override bool Equals(object? obj)
     {
@@ -41,6 +41,6 @@ public class SecurityCamera : Device
 
     public SecurityCamera()
     {
-        Type = GetType().Name;
+        Kind = GetType().Name;
     }
 }
