@@ -67,8 +67,13 @@ public class DeviceController : ControllerBase
     
     [HttpPost]
     [Route("window-sensors")]
-    public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
+    public IActionResult PostWindowSensors([FromHeader] Guid? authorization, [FromBody] WindowSensorRequest request)
     {
+        if (AuthorizationIsInvalid(authorization))
+        {
+            return Unauthorized("");
+        }
+        
         WindowSensor windowSensor = ParseWindowSensorRequest(request);
         
         _deviceService.CreateDevice(windowSensor);

@@ -224,6 +224,7 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostWindowSensorsCreatedStatusCode()
     {
+        Guid token = Guid.NewGuid();
         WindowSensorRequest request = new WindowSensorRequest()
         {
             Name = WindowSensorName,
@@ -231,7 +232,7 @@ public class DevicesControllerTest
             PhotoUrls = new List<string>() { DevicePhotoUrl },
             Description = DeviceDescription,
         };
-        
+        _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -239,7 +240,7 @@ public class DevicesControllerTest
             device.Description == request.Description
         )));
         
-        ObjectResult result = _deviceController.PostWindowSensors(request) as CreatedResult;
+        ObjectResult result = _deviceController.PostWindowSensors(token, request) as CreatedResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
