@@ -47,6 +47,20 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestGetAllDevicesWhenThereAreNoDevicesOkStatusCode()
+    {
+        Guid token = Guid.NewGuid();
+        List<Device> devices = new List<Device>();
+        
+        _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        
+        ObjectResult result = _deviceController.GetDevices(token, null, null, null, null) as OkObjectResult;
+        
+        Assert.AreEqual(200, result.StatusCode);
+    }
+    
+    [TestMethod]
     public void TestGetAllDevicesUnauthorizedStatusCode()
     {
         List<Device> devices = new List<Device>();

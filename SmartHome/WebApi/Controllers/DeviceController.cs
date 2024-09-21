@@ -1,5 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Out;
 
@@ -48,6 +49,7 @@ public class DeviceController : ControllerBase
 
         DevicesResponse devicesResponse = GetDevicesResponse(devices);
         
+        
         return Ok(devicesResponse);
     }
     
@@ -65,12 +67,16 @@ public class DeviceController : ControllerBase
     private DevicesResponse GetDevicesResponse(List<Device> devices)
     {
         List<DeviceResponse> deviceResponses = new List<DeviceResponse>();
-        
+
         foreach (Device device in devices)
         {
-            deviceResponses.Add(GetDeviceResponse(device));
+            DeviceResponse response = GetDeviceResponse(device);
+            if (response != null)
+            {
+                deviceResponses.Add(response);
+            }
         }
-        
+
         DevicesResponse devicesResponse = new DevicesResponse()
         {
             Devices = deviceResponses
@@ -81,11 +87,6 @@ public class DeviceController : ControllerBase
     
     private DeviceResponse GetDeviceResponse(Device device)
     {
-        if (device == null)
-        {
-            throw new ArgumentNullException(nameof(device));
-        }
-
         DeviceResponse deviceResponse = new DeviceResponse()
         {
             Name = device.Name,
@@ -119,7 +120,7 @@ public class DeviceController : ControllerBase
             _sessionService.GetUser(authorization);
             return true;
         }
-        catch (Exception)
+        catch (CannotFindItemInList)
         {
             return false;
         }
