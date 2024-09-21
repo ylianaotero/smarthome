@@ -2,6 +2,7 @@ using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.In;
 using WebApi.Out;
 
 namespace WebApi.Controllers;
@@ -62,6 +63,23 @@ public class DeviceController : ControllerBase
         DeviceTypesResponse deviceTypesResponse = GetDeviceTypesResponse(deviceTypes);
         
         return Ok(deviceTypesResponse);
+    }
+    
+    [HttpPost]
+    [Route("window-sensors")]
+    public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
+    {
+        WindowSensor windowSensor = new WindowSensor()
+        {
+            Name = request.Name,
+            Model = request.Model,
+            PhotoURLs = request.PhotoUrls,
+            Description = request.Description
+        };
+        
+        _deviceService.CreateDevice(windowSensor);
+        
+        return Ok("");
     }
     
     private DevicesResponse GetDevicesResponse(List<Device> devices)

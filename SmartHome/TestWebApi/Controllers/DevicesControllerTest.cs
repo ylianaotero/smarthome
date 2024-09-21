@@ -4,6 +4,7 @@ using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
+using WebApi.In;
 using WebApi.Out;
 
 namespace TestWebApi;
@@ -226,14 +227,14 @@ public class DevicesControllerTest
         {
             Name = WindowSensorName,
             Model = DeviceModel,
-            PhotoURLs = new List<string>() { DevicePhotoUrl },
+            PhotoUrls = new List<string>() { DevicePhotoUrl },
             Description = "Window Sensor Description",
         };
         
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
-            device.PhotoURLs == request.PhotoURLs &&
+            device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description
         )));
         
@@ -242,7 +243,7 @@ public class DevicesControllerTest
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
-            device.PhotoURLs == request.PhotoURLs &&
+            device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description
         )), Times.Once);
         Assert.AreEqual(200, result.StatusCode);
