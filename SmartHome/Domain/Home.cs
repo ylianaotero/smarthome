@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Domain.Exceptions.GeneralExceptions;
 using IDomain;
 
@@ -7,6 +8,7 @@ public class Home
 {
     private List<Member> _members;
     
+    [Key]
     public int Id { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
