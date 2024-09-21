@@ -253,6 +253,23 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestPostWindowSensorsUnauthorizedStatusCode()
+    {
+        WindowSensorRequest request = new WindowSensorRequest()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoUrls = new List<string>() { DevicePhotoUrl },
+            Description = DeviceDescription,
+        };
+
+        UnauthorizedResult result = _deviceController.PostWindowSensors(null, request) as UnauthorizedResult;
+        
+        Assert.AreEqual(401, result.StatusCode);
+    }
+    
+    
+    [TestMethod]
     public void TestPostSecurityCamerasCreatedStatusCode()
     {
         SecurityCameraRequest request = new SecurityCameraRequest()
