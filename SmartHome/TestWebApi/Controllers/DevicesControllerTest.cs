@@ -222,7 +222,7 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
-    public void TestPostWindowSensorsOkStatusCode()
+    public void TestPostWindowSensorsCreatedStatusCode()
     {
         WindowSensorRequest request = new WindowSensorRequest()
         {
@@ -253,7 +253,7 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
-    public void TestPostSecurityCamerasOkStatusCode()
+    public void TestPostSecurityCamerasCreatedStatusCode()
     {
         SecurityCameraRequest request = new SecurityCameraRequest()
         {

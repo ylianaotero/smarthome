@@ -80,6 +80,15 @@ public class DeviceController : ControllerBase
     [Route("security-cameras")]
     public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
     {
+        SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
+        
+        _deviceService.CreateDevice(securityCamera);
+
+        return Created("", "");
+    }
+
+    private SecurityCamera ParseSecurityCameraRequest(SecurityCameraRequest request)
+    {
         SecurityCamera securityCamera = new SecurityCamera()
         {
             Name = request.Name,
@@ -91,9 +100,7 @@ public class DeviceController : ControllerBase
             Company = request.Company
         };
         
-        _deviceService.CreateDevice(securityCamera);
-
-        return Created("", "");
+        return securityCamera;
     }
     
     private WindowSensor ParseWindowSensorRequest(WindowSensorRequest request)
