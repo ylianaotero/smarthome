@@ -38,4 +38,14 @@ public class HomeServiceTest
         List<Home> retrievedHomes = homeService.GetAllHomes();
         Assert.AreEqual(homes, retrievedHomes); 
     }
+    
+    [TestMethod]
+    public void TestCreateHome()
+    {
+        Home newHome = new Home(Street, DoorNumber, Latitude, Longitude);
+        _mockHomeRepository.Setup(m => m.Add(newHome));
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        homeService.CreateHome(newHome);
+        _mockHomeRepository.Verify(m => m.Add(newHome), Times.Once);
+    }
 }

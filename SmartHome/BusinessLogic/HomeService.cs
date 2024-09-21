@@ -10,4 +10,9 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
     {
         homeRepository.Add(home);
     }
+    
+    public List<Home> GetAllHomes()
+    {
+        return homeRepository.GetAll();
+    }
 }

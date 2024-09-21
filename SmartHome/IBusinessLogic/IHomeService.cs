@@ -5,4 +5,5 @@ namespace BusinessLogic.IServices;
 public interface IHomeService
 {
     void CreateHome(Home home);
+    List<Home> GetAllHomes();
 }
