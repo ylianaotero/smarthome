@@ -239,7 +239,7 @@ public class DevicesControllerTest
             device.Description == request.Description
         )));
         
-        ObjectResult result = _deviceController.PostWindowSensors(request) as OkObjectResult;
+        ObjectResult result = _deviceController.PostWindowSensors(request) as CreatedResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
@@ -247,7 +247,7 @@ public class DevicesControllerTest
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description
         )), Times.Once);
-        Assert.AreEqual(200, result.StatusCode);
+        Assert.AreEqual(201, result.StatusCode);
     }
     
     private void SetupDefaultObjects()

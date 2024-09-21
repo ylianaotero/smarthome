@@ -72,8 +72,8 @@ public class DeviceController : ControllerBase
         WindowSensor windowSensor = ParseWindowSensorRequest(request);
         
         _deviceService.CreateDevice(windowSensor);
-        
-        return Ok("");
+
+        return Created("", "");
     }
     
     private WindowSensor ParseWindowSensorRequest(WindowSensorRequest request)
