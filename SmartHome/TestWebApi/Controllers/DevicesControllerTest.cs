@@ -263,7 +263,7 @@ public class DevicesControllerTest
             Description = DeviceDescription,
             Company = _defaultCompany,
             LocationType = LocationType.Indoor,
-            Functionalities = new List<string>() { "MotionDetection" },
+            Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection },
         };
         
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 

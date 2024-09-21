@@ -76,6 +76,26 @@ public class DeviceController : ControllerBase
         return Created("", "");
     }
     
+    [HttpPost]
+    [Route("security-cameras")]
+    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
+    {
+        SecurityCamera securityCamera = new SecurityCamera()
+        {
+            Name = request.Name,
+            Model = request.Model,
+            PhotoURLs = request.PhotoUrls,
+            Description = request.Description,
+            LocationType = request.LocationType,
+            Functionalities = request.Functionalities,
+            Company = request.Company
+        };
+        
+        _deviceService.CreateDevice(securityCamera);
+
+        return Created("", "");
+    }
+    
     private WindowSensor ParseWindowSensorRequest(WindowSensorRequest request)
     {
         WindowSensor windowSensor = new WindowSensor()
