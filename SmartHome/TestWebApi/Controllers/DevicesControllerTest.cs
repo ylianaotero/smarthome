@@ -1,4 +1,4 @@
-using BusinessLogic.IServices;
+using IBusinessLogic;
 using DataAccess.Exceptions;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
@@ -276,7 +276,7 @@ public class DevicesControllerTest
     {
         Guid token = Guid.NewGuid();
         WindowSensorRequest request = DefaultWindowSensorRequest();
-        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(DefaultHomeOwner());
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(DefaultCompanyOwner());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -326,7 +326,7 @@ public class DevicesControllerTest
     {
         Guid token = Guid.NewGuid();
         SecurityCameraRequest request = DefaultSecurityCameraRequest();
-        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(DefaultHomeOwner());
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(DefaultCompanyOwner());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -458,11 +458,16 @@ public class DevicesControllerTest
         };
     }
 
-    private static User DefaultHomeOwner()
+    private User DefaultCompanyOwner()
     {
         return new User()
         {
-            Roles = [new CompanyOwner()]
+            Roles = [
+                new CompanyOwner()
+                {
+                    Company = _defaultCompany
+                }
+            ]
         };
     }
 }

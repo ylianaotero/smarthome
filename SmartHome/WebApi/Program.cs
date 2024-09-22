@@ -1,7 +1,8 @@
-using BusinessLogic.IServices;
+using BusinessLogic;
 using BusinessLogic.Services;
 using DataAccess;
 using Domain;
+using IBusinessLogic;
 using IDataAccess;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;

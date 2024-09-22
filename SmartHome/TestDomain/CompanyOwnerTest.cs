@@ -1,7 +1,7 @@
 using Domain;
 using Domain.Exceptions.CompanyOwner;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class CompanyOwnerTest

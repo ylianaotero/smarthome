@@ -1,18 +1,10 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/ylianaotero/Library/Caches/JetBrains/Rider2024.1/resharper-host/temp/Rider/vAny/CoverageData/_SmartHome.-1582563043/Snapshot/snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1a219428_002D5a50_002D4b90_002Dac7d_002D7ae8bf97761f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestGetDevicesFilteredByOkStatusResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f5522583_002Df860_002D434a_002Da97a_002D815e5c0f5be9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DevicesControllerTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.DevicesControllerTest&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.DeviceServiceTest.TestGetDeviceById&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.DeviceServiceTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1f983e87_002D3e4b_002D4a45_002D92ad_002D2ba6fc55c74e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Solution /&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9cf911eb_002D019b_002D478c_002Da33d_002D8ec68a8ea6f2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="BasicAuthenticationHandlerTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::BasicAuthenticationHandlerTests&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.DevicesControllerTest&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	
+	
+	</wpf:ResourceDictionary>
