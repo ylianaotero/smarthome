@@ -76,10 +76,14 @@ public class DeviceController : ControllerBase
     [Route("window-sensors")]
     public IActionResult PostWindowSensors([FromHeader] Guid? authorization, [FromBody] WindowSensorRequest request)
     {
-        return Forbid("Basic");
         if (AuthorizationIsInvalid(authorization))
         {
             return Unauthorized("");
+        }
+
+        if (!UserHasPermissions(authorization))
+        {
+            return Forbid("Basic");
         }
         
         WindowSensor windowSensor = ParseWindowSensorRequest(request);
