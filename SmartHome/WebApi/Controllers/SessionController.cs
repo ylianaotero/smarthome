@@ -1,5 +1,5 @@
-using BusinessLogic.IServices;
 using Domain.Exceptions.GeneralExceptions;
+using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.In;
 using WebApi.Out;
@@ -10,6 +10,9 @@ namespace WebApi.Controllers;
 [Route("/api/v1/login")]
 public class SessionController : ControllerBase
 {
+    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    private const string ErrorMessageBadRequest =  "Email and password are required.";
+    
     private readonly ISessionService _sessionService;
 
     public SessionController(ISessionService sessionService)
@@ -20,6 +23,10 @@ public class SessionController : ControllerBase
     [HttpPost]
     public IActionResult LogIn([FromBody] LoginRequest request)
     {
+        if (request == null || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+        {
+            return BadRequest(ErrorMessageBadRequest);
+        }
         try
         {
             var session = _sessionService.LogIn(request.Email, request.Password);
@@ -33,12 +40,12 @@ public class SessionController : ControllerBase
         }
         catch (CannotFindItemInList ex) 
         {
-            return StatusCode(404, "Not found");
+            return StatusCode(404, ex.Message);
         }
-        /*catch (Exception ex)
+        catch (Exception ex)
         {
-            return StatusCode(500, "Internal server error.");
-        }*/
+            return StatusCode(500, ErrorMessageUnexpectedException);
+        }
     }
 
 }

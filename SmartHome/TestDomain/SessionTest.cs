@@ -1,6 +1,6 @@
 using Domain;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class SessionTest
@@ -25,8 +25,11 @@ public class SessionTest
         session.User = _user;
         session.Id = Guid;
         
-        Assert.AreEqual(ValidEmail, session.User.Email);
-        Assert.AreEqual(Guid, session.Id);
+        Assert.IsTrue(
+            ValidEmail == session.User.Email &&
+            Guid == session.Id
+        );
+
     }
     
 }

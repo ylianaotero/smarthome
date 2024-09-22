@@ -1,9 +1,9 @@
-using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
+using IBusinessLogic;
 using IDataAccess;
 
-namespace BusinessLogic.Services;
+namespace BusinessLogic;
 
 public class SessionService : ISessionService
 {

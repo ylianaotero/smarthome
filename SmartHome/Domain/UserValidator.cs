@@ -5,6 +5,9 @@ namespace Domain;
 
 public class UserValidator : IUserValidator
 {
+    private const string EmailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+    private const string PasswordPattern = @"^(?=.*[#@$.,%])(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
+
     public bool ValidateName(string name)
     {
         return !IsNull(name);
@@ -17,8 +20,7 @@ public class UserValidator : IUserValidator
     
     public bool ValidateEmail(string email)
     {
-        string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-        if (IsNull(email) || !Regex.IsMatch(email, pattern))
+        if (IsNull(email) || !Regex.IsMatch(email, EmailPattern))
         {
             return false;
         }
@@ -31,7 +33,7 @@ public class UserValidator : IUserValidator
         {
             return false;
         }
-        if (!Regex.IsMatch(password, @"^(?=.*[#@$.,%])(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"))
+        if (!Regex.IsMatch(password, PasswordPattern))
         {
             return false;
         }

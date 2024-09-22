@@ -1,4 +1,4 @@
-namespace Domain.Exceptions.GeneralExceptions;
+namespace BusinessLogic.Exceptions;
 
 public class ElementAlreadyExist : Exception
 {

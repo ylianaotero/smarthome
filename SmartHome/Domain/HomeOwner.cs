@@ -5,6 +5,7 @@ namespace Domain;
 
 public class HomeOwner : Role
 {
+    private const string MessageHomeNotFound = "Home not found"; 
     public List<Home> Homes { get; set; }
 
     public HomeOwner()
@@ -29,6 +30,6 @@ public class HomeOwner : Role
         {
             return home;
         }
-        throw new HomeNotFoundException("The owner does not own home");
+        throw new HomeNotFoundException(MessageHomeNotFound);
     }
 }

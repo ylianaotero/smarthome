@@ -1,46 +1,49 @@
 using Domain;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class NotificationTest
 {
-    private string _event = "Door Opened";
-    private DateTime _todayDate = DateTime.Today.Date;
-    private bool _read = false;
-    private DateTime _minValueDate = DateTime.MinValue;
+    private const string Event = "Door Opened";
+    private const int Id = 1;
+    private readonly DateTime _todayDate = DateTime.Today.Date;
+    private const bool Read = false;
+    private readonly DateTime _minValueDate = DateTime.MinValue;
 
     private Notification _notification; 
     
     [TestInitialize]
     public void TestInitialize()
     {
-        _notification = new Notification(_event);
+        _notification = new Notification(Event);
     }
     
     [TestMethod]
     public void CreateNewNotification()
     {
-        // Arrange
-        Notification notification = new Notification(_event);
-        notification.Id = 1; 
+        Notification notification = new Notification(Event);
+        notification.Id = Id; 
+        
+        Assert.IsTrue(
+            Event == notification.Event &&
+            Read == notification.Read &&
+            _todayDate == notification.CreatedAt.Date &&
+            _minValueDate == notification.ReadAt &&
+            Id == notification.Id
+        );
 
-        // Assert
-        Assert.AreEqual(_event, notification.Event);
-        Assert.AreEqual(_read, notification.Read);
-        Assert.AreEqual(_todayDate, notification.CreatedAt.Date);
-        Assert.AreEqual(_minValueDate, notification.ReadAt);
-        Assert.AreEqual(1, notification.Id);
     }
     
     [TestMethod]
     public void ReadNotification()
     {
-        // Act
         _notification.MarkAsRead(); 
+        
+        Assert.IsTrue(
+            _notification.Read  &&
+            _todayDate == _notification.ReadAt.Date
+        );
 
-        // Assert
-        Assert.AreEqual(true, _notification.Read);
-        Assert.AreEqual(_todayDate, _notification.ReadAt.Date);
     }
 }
