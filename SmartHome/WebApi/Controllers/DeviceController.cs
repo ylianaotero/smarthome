@@ -1,7 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.In;
 using WebApi.Out;
@@ -14,11 +13,13 @@ public class DeviceController : ControllerBase
 {
     private readonly IDeviceService _deviceService;
     private ISessionService _sessionService;
+    private const string RoleWithPermissions = "CompanyOwner";
 
     public DeviceController(IDeviceService deviceService, ISessionService sessionService)
     {
         _deviceService = deviceService;
         _sessionService = sessionService;
+        
     }
     
     [HttpGet]
@@ -182,17 +183,17 @@ public class DeviceController : ControllerBase
         
         return deviceTypesResponse;
     }
-
-    private bool RoleIsCompanyOwner(Role role)
-    {
-        return role.GetType().Name == "CompanyOwner";
-    }
     
     private bool UserHasPermissions(Guid? authorization)
     {
         User user = _sessionService.GetUser(authorization.Value);
         return authorization != null && user != null && user.Roles != null &&
-               _sessionService.GetUser(authorization.Value).Roles.Exists(r => RoleIsCompanyOwner(r));
+               _sessionService.GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r));
+    }
+    
+    private bool RoleIsAdequate(Role role)
+    {
+        return role.GetType().Name == RoleWithPermissions;
     }
     
     private bool AuthorizationIsInvalid(Guid? authorization)
