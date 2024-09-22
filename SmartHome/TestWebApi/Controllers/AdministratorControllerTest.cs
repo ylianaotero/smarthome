@@ -23,12 +23,15 @@ public class AdministratorControllerTest
     private Administrator _administrator; 
     
     private Mock<IUserService> _userServiceMock;
+    private Mock<ISessionService> _sessionServiceMock; 
     private AdministratorController _administratorController;
     
     [TestInitialize]
     public void SetUp()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
+
+        _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict); 
 
         _listOfRoles = new List<Role>();
 
@@ -63,10 +66,16 @@ public class AdministratorControllerTest
             u.Password == user.Password &&
             u.Surname == user.Surname 
         )));
-        
-        _administratorController = new AdministratorController(_userServiceMock.Object);
 
-        var result = _administratorController.CreateUser(createAdminRequest) as ObjectResult;
+        Guid token = new Guid();
+
+        _sessionServiceMock.Setup(service => service.GetUser(token)).Returns(user); 
+        
+        _userServiceMock.Setup(service => service.IsAdmin(user.Email)).Returns(true); 
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object, _sessionServiceMock.Object);
+
+        var result = _administratorController.CreateUser(createAdminRequest, token) as ObjectResult;
         var userResponse = result?.Value as AdminResponse;
 
         _userServiceMock.Verify();
