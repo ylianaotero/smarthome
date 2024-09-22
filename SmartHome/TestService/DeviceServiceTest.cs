@@ -18,7 +18,8 @@ public class DeviceServiceTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
-    
+    private const string SecurityCameraType = "SecurityCamera";
+    private const string WindowSensorType = "WindowSensor";
     private const string CompanyName = "IoT Devices & Co.";
     
     [TestInitialize]
@@ -46,7 +47,7 @@ public class DeviceServiceTest
     {
         List<Device> devices = new List<Device>();
         devices.Add(_defaultCamera);
-        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == "SecurityCamera" &&
+        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == SecurityCameraType &&
                                          d.PhotoURLs.First() == DevicePhotoUrl && d.Company.Name == CompanyName;
         
         _mockDeviceRepository.Setup(x => x.GetByFilter(filter)).Returns(devices);
@@ -61,8 +62,8 @@ public class DeviceServiceTest
     {
         List<string> deviceTypes = new List<string>()
         {
-            "SecurityCamera",
-            "WindowSensor"
+            SecurityCameraType,
+            WindowSensorType
         };
         
         List<string> retrievedDeviceTypes = _deviceService.GetDeviceTypes();
@@ -98,9 +99,9 @@ public class DeviceServiceTest
         _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
-            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "SecurityCamera" };
+            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = SecurityCameraType };
         _defaultWindowSensor = new WindowSensor()
-            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "WindowSensor" };
+            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = WindowSensorType };
     }
 
     private void CreateMockAndService()
