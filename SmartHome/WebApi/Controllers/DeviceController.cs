@@ -85,7 +85,7 @@ public class DeviceController : ControllerBase
     [Route("security-cameras")]
     public IActionResult PostSecurityCameras([FromHeader] Guid? authorization, [FromBody] SecurityCameraRequest request)
     {
-        if (authorization == null)
+        if (AuthorizationIsInvalid(authorization))
         {
             return Unauthorized("");
         }

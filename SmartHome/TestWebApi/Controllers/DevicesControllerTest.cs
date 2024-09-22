@@ -225,7 +225,7 @@ public class DevicesControllerTest
     public void TestPostWindowSensorsCreatedStatusCode()
     {
         Guid token = Guid.NewGuid();
-        WindowSensorRequest request = CreateWindowSensorRequest();
+        WindowSensorRequest request = DefaultWindowSensorRequest();
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
@@ -250,7 +250,7 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostWindowSensorsUnauthorizedStatusCode()
     {
-        WindowSensorRequest request = CreateWindowSensorRequest();
+        WindowSensorRequest request = DefaultWindowSensorRequest();
 
         ObjectResult result = _deviceController.PostWindowSensors(null, request) as UnauthorizedObjectResult;
         
@@ -261,22 +261,17 @@ public class DevicesControllerTest
     public void TestPostSecurityCamerasCreatedStatusCode()
     {
         Guid token = Guid.NewGuid();
-        SecurityCameraRequest request = new SecurityCameraRequest()
-        {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = new List<string>() { DevicePhotoUrl },
-            Description = DeviceDescription,
-            Company = _defaultCompany,
-            LocationType = LocationType.Indoor,
-            Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection },
-        };
+        SecurityCameraRequest request = DefaultSecurityCameraRequest();
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
-            device.Description == request.Description
+            device.Description == request.Description &&
+            device.Company == request.Company &&
+            (device as SecurityCamera).LocationType == request.LocationType &&
+            (device as SecurityCamera).Functionalities != null &&
+            (device as SecurityCamera).Functionalities.SequenceEqual(request.Functionalities)
         )));
         
         ObjectResult result = _deviceController.PostSecurityCameras(token, request) as CreatedResult;
@@ -291,15 +286,33 @@ public class DevicesControllerTest
             (device as SecurityCamera).Functionalities != null &&
             (device as SecurityCamera).Functionalities.SequenceEqual(request.Functionalities)
         )), Times.Once);
-        
-        
         Assert.AreEqual(201, result.StatusCode);
     }
     
     [TestMethod]
     public void TestPostSecurityCamerasUnauthorizedStatusCode()
     {
-        SecurityCameraRequest request = new SecurityCameraRequest()
+        SecurityCameraRequest request = DefaultSecurityCameraRequest();
+
+        ObjectResult result = _deviceController.PostSecurityCameras(null, request) as UnauthorizedObjectResult;
+        
+        Assert.AreEqual(401, result.StatusCode);
+    }
+    
+    private WindowSensorRequest DefaultWindowSensorRequest()
+    {
+        return new WindowSensorRequest()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoUrls = new List<string>() { DevicePhotoUrl },
+            Description = DeviceDescription,
+        };
+    }
+
+    private SecurityCameraRequest DefaultSecurityCameraRequest()
+    {
+        return new SecurityCameraRequest()
         {
             Name = WindowSensorName,
             Model = DeviceModel,
@@ -308,21 +321,6 @@ public class DevicesControllerTest
             Company = _defaultCompany,
             LocationType = LocationType.Indoor,
             Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection },
-        };
-
-        ObjectResult result = _deviceController.PostSecurityCameras(null, request) as UnauthorizedObjectResult;
-        
-        Assert.AreEqual(401, result.StatusCode);
-    }
-    
-    private WindowSensorRequest CreateWindowSensorRequest()
-    {
-        return new WindowSensorRequest()
-        {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = new List<string>() { DevicePhotoUrl },
-            Description = DeviceDescription,
         };
     }
     
