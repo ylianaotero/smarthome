@@ -7,6 +7,7 @@ namespace BusinessLogic.Services;
 
 public class DeviceService(IRepository<Device> deviceRepository) : IDeviceService
 {
+    private const string DeviceNotFoundMessage = "Device not found";
     public void CreateDevice(Device device)
     {
         deviceRepository.Add(device);
@@ -18,7 +19,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         
         if (device == null)
         {
-            throw new ElementNotFoundException("Device not found");
+            throw new ElementNotFoundException(DeviceNotFoundMessage);
         }
         
         return device;

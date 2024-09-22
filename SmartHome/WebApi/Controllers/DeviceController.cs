@@ -12,8 +12,12 @@ namespace WebApi.Controllers;
 public class DeviceController : ControllerBase
 {
     private readonly IDeviceService _deviceService;
-    private ISessionService _sessionService;
+    private readonly ISessionService _sessionService;
+    
     private const string RoleWithPermissions = "CompanyOwner";
+    private const string UnauthorizedMessage = "Unauthorized access. Please provide valid credentials.";
+    private const string BasicAuthSchema = "Basic";
+    private const string NotFoundMessage = "The requested resource was not found.";
 
     public DeviceController(IDeviceService deviceService, ISessionService sessionService)
     {
@@ -28,30 +32,14 @@ public class DeviceController : ControllerBase
     {
         if (AuthorizationIsInvalid(authorization))
         {
-            return Unauthorized("");
+            return Unauthorized(UnauthorizedMessage);
         }
         
         List<Device> devices = _deviceService.GetAllDevices();
 
-        if (name != null)
-        {
-            devices = devices.FindAll(device => device.Name == name);
-        }
-        if (model != null)
-        {
-            devices = devices.FindAll(device => device.Model.ToString() == model);
-        }
-        if (company != null)
-        {
-            devices = devices.FindAll(device => device.Company.Name == company);
-        }
-        if (type != null)
-        {
-            devices = devices.FindAll(device => device.Kind == type);
-        }
+        devices = FilterDevices(devices, name, model, company, type);
 
         DevicesResponse devicesResponse = GetDevicesResponse(devices);
-        
         
         return Ok(devicesResponse);
     }
@@ -62,7 +50,7 @@ public class DeviceController : ControllerBase
     {
         if (AuthorizationIsInvalid(authorization))
         {
-            return Unauthorized("");
+            return Unauthorized(UnauthorizedMessage);
         }
 
         Device device;
@@ -73,7 +61,7 @@ public class DeviceController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return NotFound("");
+            return NotFound(NotFoundMessage);
         }
         
         DeviceResponse deviceResponse = GetDeviceResponse(device);
@@ -87,7 +75,7 @@ public class DeviceController : ControllerBase
     {
         if (AuthorizationIsInvalid(authorization))
         {
-            return Unauthorized("");
+            return Unauthorized(UnauthorizedMessage);
         }
         
         List<string> deviceTypes = _deviceService.GetDeviceTypes();
@@ -103,12 +91,12 @@ public class DeviceController : ControllerBase
     {
         if (AuthorizationIsInvalid(authorization))
         {
-            return Unauthorized("");
+            return Unauthorized(UnauthorizedMessage);
         }
 
         if (!UserHasPermissions(authorization))
         {
-            return Forbid("Basic");
+            return Forbid(BasicAuthSchema);
         }
         
         WindowSensor windowSensor = ParseWindowSensorRequest(request);
@@ -124,12 +112,12 @@ public class DeviceController : ControllerBase
     {
         if (AuthorizationIsInvalid(authorization))
         {
-            return Unauthorized("");
+            return Unauthorized(UnauthorizedMessage);
         }
         
         if (!UserHasPermissions(authorization))
         {
-            return Forbid("Basic");
+            return Forbid(BasicAuthSchema);
         }
         
         SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
@@ -242,5 +230,27 @@ public class DeviceController : ControllerBase
         {
             return false;
         }
+    }
+    
+    private List<Device> FilterDevices(List<Device> devices, string? name, string? model, string? company, string? type)
+    {
+        if (name != null)
+        {
+            devices = devices.FindAll(device => device.Name == name);
+        }
+        if (model != null)
+        {
+            devices = devices.FindAll(device => device.Model.ToString() == model);
+        }
+        if (company != null)
+        {
+            devices = devices.FindAll(device => device.Company.Name == company);
+        }
+        if (type != null)
+        {
+            devices = devices.FindAll(device => device.Kind == type);
+        }
+
+        return devices;
     }
 }
