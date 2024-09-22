@@ -1,8 +1,8 @@
-using BusinessLogic.IServices;
 using Domain;
+using IBusinessLogic;
 using IDataAccess;
 
-namespace BusinessLogic.Services;
+namespace BusinessLogic;
 
 public class HomeService (IRepository<Home> homeRepository) : IHomeService
 {

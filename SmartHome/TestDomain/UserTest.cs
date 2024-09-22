@@ -1,7 +1,6 @@
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Domain.Exceptions.RoleExceptions;
-using IDomain;
 using Moq;
 
 namespace TestDomain;

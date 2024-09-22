@@ -1,11 +1,10 @@
 using BusinessLogic;
 using DataAccess;
-using Domain;
 using IBusinessLogic;
 using IDataAccess;
 using Microsoft.EntityFrameworkCore;
 using ServiceFactory;
-using WebApi.Controllers;
+using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +29,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -69,7 +69,10 @@ app.MapGet("/weatherforecast", () =>
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+namespace WebApi
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+    {
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
 }

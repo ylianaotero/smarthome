@@ -1,11 +1,11 @@
-using BusinessLogic.IServices;
 using Domain;
+using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
-using WebApi.Out;
+using WebApi.Models.Out;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 

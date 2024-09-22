@@ -1,4 +1,4 @@
-namespace WebApi.In;
+namespace WebApi.Models.In;
 
 public class LoginRequest
 {

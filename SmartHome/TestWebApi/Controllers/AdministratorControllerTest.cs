@@ -5,8 +5,8 @@ using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
-using WebApi.In;
-using WebApi.Out;
+using WebApi.Models.In;
+using WebApi.Models.Out;
 using Exception = System.Exception;
 
 namespace TestWebApi.Controllers;

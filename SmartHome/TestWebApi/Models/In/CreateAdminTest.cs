@@ -1,5 +1,5 @@
 using Domain;
-using WebApi.In;
+using WebApi.Models.In;
 
 namespace TestWebApi.Models.In;
 

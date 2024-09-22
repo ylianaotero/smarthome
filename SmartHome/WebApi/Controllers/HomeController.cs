@@ -1,7 +1,7 @@
-using BusinessLogic.IServices;
 using Domain;
+using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Out;
+using WebApi.Models.Out;
 
 namespace WebApi.Controllers;
 

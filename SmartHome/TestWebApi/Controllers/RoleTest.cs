@@ -1,6 +1,6 @@
 using Domain;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 public class RoleTest : Role
 {

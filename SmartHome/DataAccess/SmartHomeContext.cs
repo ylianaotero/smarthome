@@ -1,5 +1,4 @@
 using Domain;
-using IDomain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
@@ -15,7 +14,7 @@ public class SmartHomeContext : DbContext
     
     public DbSet<Session> Sessions { get; set; }
     public DbSet<User> Users { get; set; }
-
+    
     public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
     {
         if (!useInMemoryDatabase)
@@ -29,7 +28,6 @@ public class SmartHomeContext : DbContext
 
         this.Database.Migrate();
     }
-    
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

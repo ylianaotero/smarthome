@@ -1,6 +1,6 @@
 using Domain;
 
-namespace BusinessLogic.IServices;
+namespace IBusinessLogic;
 
 public interface IHomeService
 {

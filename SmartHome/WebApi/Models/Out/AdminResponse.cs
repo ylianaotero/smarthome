@@ -1,6 +1,6 @@
 using Domain;
 
-namespace WebApi.Out;
+namespace WebApi.Models.Out;
 
 public class AdminResponse
 {

@@ -1,6 +1,4 @@
-using WebApi.Controllers;
-
-namespace WebApi.Out;
+namespace WebApi.Models.Out;
 
 public class HomesResponse
 { 

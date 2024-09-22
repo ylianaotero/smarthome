@@ -1,6 +1,4 @@
-using System.Text.RegularExpressions;
-
-namespace IDomain;
+namespace Domain;
 
 public interface IUserValidator
 {
