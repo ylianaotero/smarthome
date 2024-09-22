@@ -18,6 +18,7 @@ public class DeviceController : ControllerBase
     private const string UnauthorizedMessage = "Unauthorized access. Please provide valid credentials.";
     private const string BasicAuthSchema = "Basic";
     private const string NotFoundMessage = "The requested resource was not found.";
+    private const string CreatedMessage = "The resource was created successfully.";
 
     public DeviceController(IDeviceService deviceService, ISessionService sessionService)
     {
@@ -102,8 +103,10 @@ public class DeviceController : ControllerBase
         WindowSensor windowSensor = ParseWindowSensorRequest(request);
         
         _deviceService.CreateDevice(windowSensor);
+        
+        long windowSensorId = windowSensor.Id;
 
-        return Created("", "");
+        return Created(CreatedMessage, "/devices/" + windowSensorId);
     }
     
     [HttpPost]
@@ -123,8 +126,10 @@ public class DeviceController : ControllerBase
         SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
         
         _deviceService.CreateDevice(securityCamera);
+        
+        long securityCameraId = securityCamera.Id;
 
-        return Created("", "");
+        return Created(CreatedMessage, "/devices/" + securityCameraId);
     }
 
     private SecurityCamera ParseSecurityCameraRequest(SecurityCameraRequest request)
