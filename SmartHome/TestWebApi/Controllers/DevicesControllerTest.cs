@@ -128,6 +128,19 @@ public class DevicesControllerTest
     }
    
     [TestMethod]
+    public void TestGetDeviceByIdOkStatusCode()
+    {
+        Guid token = Guid.NewGuid();
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+        _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
+        
+        ObjectResult? result = _deviceController.GetDeviceById(token, null, null, null, null) 
+            as OkObjectResult;
+        
+        Assert.AreEqual(OkStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
     public void TestGetDeviceTypesOkStatusCode()
     {
         Guid token = Guid.NewGuid();
