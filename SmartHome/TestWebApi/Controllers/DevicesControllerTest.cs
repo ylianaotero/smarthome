@@ -141,6 +141,21 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestGetDeviceByIdOkResponse()
+    {
+        Guid token = Guid.NewGuid();
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+        _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
+        DeviceResponse expectedResponse = DefaultSecurityCameraResponse();
+        
+        ObjectResult? result = _deviceController.GetDeviceById(token, 1) 
+            as OkObjectResult;
+        DeviceResponse response = (result!.Value as DeviceResponse)!;
+        
+        Assert.AreEqual(expectedResponse, response);
+    }
+    
+    [TestMethod]
     public void TestGetDeviceByIdUnauthorizedStatusCode()
     {
         _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
