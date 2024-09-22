@@ -1,5 +1,5 @@
-﻿using BusinessLogic.IServices;
-using BusinessLogic.Services;
+﻿using BusinessLogic;
+using IBusinessLogic;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceFactory;
@@ -11,7 +11,5 @@ public static class ServiceFactory
         serviceCollection.AddScoped<ISessionService, SessionService>();
         serviceCollection.AddScoped<IUserService, UserService>();
         serviceCollection.AddScoped<IDeviceService, DeviceService>();
-        
-        
     }
 }

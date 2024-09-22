@@ -1,4 +1,4 @@
-using BusinessLogic.Services;
+using BusinessLogic;
 using Domain;
 using IDataAccess;
 using Moq;

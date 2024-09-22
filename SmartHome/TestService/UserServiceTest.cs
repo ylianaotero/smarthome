@@ -1,7 +1,8 @@
-using BusinessLogic.IServices;
-using BusinessLogic.Services;
+using BusinessLogic;
+using BusinessLogic.Exceptions;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
+using IBusinessLogic;
 using IDataAccess;
 using Moq;
 
