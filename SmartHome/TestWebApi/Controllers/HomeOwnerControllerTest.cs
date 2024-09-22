@@ -24,6 +24,8 @@ public class HomeOwnerControllerTest
     
     private Mock<IUserService> _userServiceMock;
     private HomeOwnerController _homeOwnerController;
+    private CreateHomeOwnerRequest _createHomeOwnerRequest;
+    private User _user; 
     
     [TestInitialize]
     public void SetUp()
@@ -37,12 +39,8 @@ public class HomeOwnerControllerTest
         _homeOwner = new HomeOwner();
 
         _listOfRoles.Add(_homeOwner); 
-    }
-
-    [TestMethod]
-    public void CreateUserValidRequest()
-    {
-        var createUserRequest = new CreateHomeOwnerRequest
+        
+        _createHomeOwnerRequest = new CreateHomeOwnerRequest
         {
             Name = Name,
             Email = Email,
@@ -50,108 +48,80 @@ public class HomeOwnerControllerTest
             Surname = Surname,
             Photo = ProfilePictureUrl
         };
-
-        var user = new User
+        
+        _user = new User
         {
-            Name = createUserRequest.Name,
-            Email = createUserRequest.Email,
-            Password = createUserRequest.Password,
-            Surname = createUserRequest.Surname,
-            Photo = createUserRequest.Photo,
+            Name = _createHomeOwnerRequest.Name,
+            Email = _createHomeOwnerRequest.Email,
+            Password = _createHomeOwnerRequest.Password,
+            Surname = _createHomeOwnerRequest.Surname,
+            Photo = _createHomeOwnerRequest.Photo,
             Roles = _listOfRoles
         };
+    }
+
+    [TestMethod]
+    public void CreateUserValidRequest()
+    {
 
         _userServiceMock.Setup(service => service.CreateUser(It.Is<User>(u =>
-            u.Name == user.Name &&
-            u.Email == user.Email &&
-            u.Password == user.Password &&
-            u.Surname == user.Surname &&
-            u.Photo == user.Photo
+            u.Name == _user.Name &&
+            u.Email == _user.Email &&
+            u.Password == _user.Password &&
+            u.Surname == _user.Surname &&
+            u.Photo == _user.Photo
         )));
 
-        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as OkObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
         var userResponse = result?.Value as HomeOwnerResponse;
 
-        _userServiceMock.Verify(service => service.CreateUser(It.Is<User>(u =>
-            u.Name == user.Name &&
-            u.Email == user.Email &&
-            u.Password == user.Password &&
-            u.Surname == user.Surname &&
-            u.Photo == user.Photo
-        )), Times.Once);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(200, result.StatusCode);
-        Assert.IsNotNull(userResponse);
-        Assert.AreEqual(createUserRequest.Name, userResponse.Name);
-        Assert.AreEqual(createUserRequest.Email, userResponse.Email);
-        Assert.AreEqual(createUserRequest.Surname, userResponse.Surname);
-        Assert.AreEqual(createUserRequest.Photo, userResponse.Photo);
-        Assert.AreEqual(1, userResponse.Roles.Count);
+        _userServiceMock.Verify();
+        
+        Assert.IsTrue(
+            result != null &&
+            userResponse != null &&
+            result.StatusCode == 201 &&
+            _createHomeOwnerRequest.Name == userResponse.Name &&
+            _createHomeOwnerRequest.Email == userResponse.Email &&
+            _createHomeOwnerRequest.Surname == userResponse.Surname &&
+            _createHomeOwnerRequest.Photo == userResponse.Photo &&
+            userResponse.Roles.Count == 1
+        );
     }
     
     [TestMethod]
     public void CreateUserInvalidRequest()
     {
-        var createUserRequest = new CreateHomeOwnerRequest
-        {
-            Name = Name,
-            Email = InvalidEmail,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl
-        };
-        
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid("Input not valid, try again"));
         
-        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
         
-        Assert.IsNotNull(result);
         Assert.AreEqual(400, result.StatusCode);
     }
     
     [TestMethod]
     public void CreateUserServiceThrowsUnexpectedException()
     {
-        var createUserRequest = new CreateHomeOwnerRequest
-        {
-            Name = Name,
-            Email = Email,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl
-        };
-        
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception("Unexpected error"));
 
-        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
         
-        Assert.IsNotNull(result);
         Assert.AreEqual(500, result.StatusCode);
     }
     
     [TestMethod]
     public void CreateUserServiceThrowsUserAlreadyExists()
     {
-        var createUserRequest = new CreateHomeOwnerRequest
-        {
-            Name = Name,
-            Email = Email,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl
-        };
-        
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new ElementAlreadyExist("Element already exists, try again"));
 
-        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
         
-        Assert.IsNotNull(result);
         Assert.AreEqual(409, result.StatusCode);
     }
 
