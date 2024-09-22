@@ -35,7 +35,7 @@ public class HomeOwnerController : ControllerBase
         {
             return Conflict(new { message = elementAlreadyExist.Message });
         }
-        catch (Exception exception)
+        catch (Exception)
         {
             return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
         }
