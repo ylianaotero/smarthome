@@ -1,4 +1,5 @@
 using BusinessLogic.IServices;
+using DataAccess.Exceptions;
 using Domain;
 using IDataAccess;
 
@@ -14,6 +15,11 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
     public Device GetDeviceById(long id)
     {
         Device device = deviceRepository.GetById(id);
+        
+        if (device == null)
+        {
+            throw new ElementNotFoundException("Device not found");
+        }
         
         return device;
     }

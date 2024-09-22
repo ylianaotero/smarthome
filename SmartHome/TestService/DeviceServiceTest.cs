@@ -95,6 +95,7 @@ public class DeviceServiceTest
     public void TestGetDeviceByIdThrowsException()
     {
         _mockDeviceRepository.Setup(x => x.GetById(1)).Returns((Device?)null);
+        Device retrievedDevice = _deviceService.GetDeviceById(1);
     }
     
     private void SetupDefaultObjects()
