@@ -239,6 +239,18 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestPostWindowSensorsForbiddenStatusCode()
+    {
+        Guid token = Guid.NewGuid();
+        WindowSensorRequest request = DefaultWindowSensorRequest();
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+
+        IActionResult result = _deviceController.PostWindowSensors(token, request);
+
+        Assert.IsInstanceOfType(result, typeof(ForbidResult));
+    }
+    
+    [TestMethod]
     public void TestPostSecurityCamerasCreatedStatusCode()
     {
         Guid token = Guid.NewGuid();
