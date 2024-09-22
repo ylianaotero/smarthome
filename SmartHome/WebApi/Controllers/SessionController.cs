@@ -20,7 +20,7 @@ public class SessionController : ControllerBase
     [HttpPost]
     public IActionResult LogIn([FromBody] LoginRequest request)
     {
-        if (request == null || string.IsNullOrWhiteSpace(request.Email))
+        if (request == null || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest("Email and password are required.");
         }
