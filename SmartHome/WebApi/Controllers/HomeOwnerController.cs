@@ -18,14 +18,14 @@ public class HomeOwnerController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult CreateUser([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
+    public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
     {
         try
         {
             var user = createHomeOwnerRequest.ToEntity();
             _userService.CreateUser(user);
             var userResponse = new HomeOwnerResponse(user);
-            return Ok(userResponse);
+            return CreatedAtAction(nameof(CreateHomeOwner), userResponse);
         }
         catch (InputNotValid inputNotValid)
         {

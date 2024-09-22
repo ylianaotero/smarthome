@@ -69,7 +69,7 @@ public class HomeOwnerControllerTest
             u.Photo == user.Photo
         )));
 
-        var result = _homeOwnerController.CreateUser(createUserRequest) as OkObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as OkObjectResult;
         var userResponse = result?.Value as HomeOwnerResponse;
 
         _userServiceMock.Verify(service => service.CreateUser(It.Is<User>(u =>
@@ -105,7 +105,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid("Input not valid, try again"));
         
-        var result = _homeOwnerController.CreateUser(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
         Assert.AreEqual(400, result.StatusCode);
@@ -127,7 +127,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception("Unexpected error"));
 
-        var result = _homeOwnerController.CreateUser(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
         Assert.AreEqual(500, result.StatusCode);
@@ -149,7 +149,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new ElementAlreadyExist("Element already exists, try again"));
 
-        var result = _homeOwnerController.CreateUser(createUserRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
         Assert.AreEqual(409, result.StatusCode);
