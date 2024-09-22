@@ -24,6 +24,7 @@ public class AdministratorController : ControllerBase
             var user = createAdminRequest.ToEntity();
             _userService.CreateUser(user);
             var userResponse = new AdminResponse(user);
+            Console.Write("holaaa");
             return CreatedAtAction(nameof(CreateUser), userResponse);
         }
         /*catch ()

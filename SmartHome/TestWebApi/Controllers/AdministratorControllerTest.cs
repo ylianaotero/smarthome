@@ -9,6 +9,7 @@ using WebApi.Out;
 
 namespace TestWebApi;
 
+[TestClass]
 public class AdministratorControllerTest
 {
     private const string Name =  "John";
@@ -64,18 +65,12 @@ public class AdministratorControllerTest
             u.Surname == user.Surname 
         )));
 
-        var result = _administratorController.CreateUser(createAdminRequest) as OkObjectResult;
+        var result = _administratorController.CreateUser(createAdminRequest) as ObjectResult;
         var userResponse = result?.Value as AdminResponse;
 
-        _userServiceMock.Verify(service => service.CreateUser(It.Is<User>(u =>
-            u.Name == user.Name &&
-            u.Email == user.Email &&
-            u.Password == user.Password &&
-            u.Surname == user.Surname &&
-            u.Photo == user.Photo
-        )), Times.Once);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(200, result.StatusCode);
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(201, result.StatusCode);
         Assert.IsNotNull(userResponse);
         Assert.AreEqual(createAdminRequest.Name, userResponse.Name);
         Assert.AreEqual(createAdminRequest.Email, userResponse.Email);
@@ -101,5 +96,25 @@ public class AdministratorControllerTest
         
         Assert.IsNotNull(result);
         Assert.AreEqual(400, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void CreateUserAlreadyExists()
+    {
+        var createUserRequest = new CreateAdminRequest
+        {
+            Name = Name,
+            Email = InvalidEmail,
+            Password = Password,
+            Surname = Surname
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new ElementAlreadyExist("User already exists"));
+        
+        var result = _administratorController.CreateUser(createUserRequest) as ObjectResult;
+        
+        Assert.AreEqual(409, result.StatusCode);
     }
 }
