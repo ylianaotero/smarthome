@@ -48,4 +48,13 @@ public class SqlRepository<T> : IRepository<T> where T : class
         _entities.Remove(element);
         _database.SaveChanges();
     }
+
+    public void Update(T element)
+    {
+        _entities.Attach(element);
+        
+        _database.Entry(element).State = EntityState.Modified;
+        
+        _database.SaveChanges();
+    }
 }

@@ -11,4 +11,6 @@ public interface IRepository<T>
     List<T> GetAll();
     
     void Delete(T element);
+    
+    void Update(T element);
 }
