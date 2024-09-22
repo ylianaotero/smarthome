@@ -6,6 +6,7 @@ using Moq;
 using WebApi.Controllers;
 using WebApi.In;
 using WebApi.Out;
+using Exception = System.Exception;
 
 namespace TestWebApi;
 
@@ -120,5 +121,27 @@ public class AdministratorControllerTest
         var result = _administratorController.CreateUser(createUserRequest) as ObjectResult;
         
         Assert.AreEqual(409, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void CreateUser_OtherException()
+    {
+        var createUserRequest = new CreateAdminRequest
+        {
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new Exception());
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object);
+        
+        var result = _administratorController.CreateUser(createUserRequest) as ObjectResult;
+        
+        Assert.AreEqual(500, result.StatusCode);
     }
 }
