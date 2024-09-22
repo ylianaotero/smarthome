@@ -243,7 +243,13 @@ public class DevicesControllerTest
     {
         Guid token = Guid.NewGuid();
         SecurityCameraRequest request = DefaultSecurityCameraRequest();
-        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User()
+        {
+            Roles = new List<Role>()
+            {
+                new CompanyOwner()
+            }
+        });
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -286,10 +292,10 @@ public class DevicesControllerTest
         Guid token = Guid.NewGuid();
         SecurityCameraRequest request = DefaultSecurityCameraRequest();
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
-        
-        ObjectResult result = (ObjectResult)_deviceController.PostSecurityCameras(token, request);
-        
-        Assert.AreEqual(403, result.StatusCode);
+
+        IActionResult result = _deviceController.PostSecurityCameras(token, request);
+
+        Assert.IsInstanceOfType(result, typeof(ForbidResult));
     }
     
     private void SetupDefaultObjects()

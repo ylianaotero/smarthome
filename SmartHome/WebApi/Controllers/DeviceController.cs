@@ -1,6 +1,7 @@
 using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.In;
 using WebApi.Out;
@@ -95,6 +96,11 @@ public class DeviceController : ControllerBase
             return Unauthorized("");
         }
         
+        if (!UserHasPermissions(authorization))
+        {
+            return Forbid("Basic");
+        }
+        
         SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
         
         _deviceService.CreateDevice(securityCamera);
@@ -175,6 +181,18 @@ public class DeviceController : ControllerBase
         };
         
         return deviceTypesResponse;
+    }
+
+    private bool RoleIsCompanyOwner(Role role)
+    {
+        return role.GetType().Name == "CompanyOwner";
+    }
+    
+    private bool UserHasPermissions(Guid? authorization)
+    {
+        User user = _sessionService.GetUser(authorization.Value);
+        return authorization != null && user != null && user.Roles != null &&
+               _sessionService.GetUser(authorization.Value).Roles.Exists(r => RoleIsCompanyOwner(r));
     }
     
     private bool AuthorizationIsInvalid(Guid? authorization)
