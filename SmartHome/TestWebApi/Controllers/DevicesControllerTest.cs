@@ -167,6 +167,17 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestGetDeviceByIdNotFoundStatusCode()
+    {
+        _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Throws(new ElementNotFound("Device not found"));
+        
+        ObjectResult? result = _deviceController.GetDeviceById(null, 1) 
+            as UnauthorizedObjectResult;
+        
+        Assert.AreEqual(404, result!.StatusCode);
+    }
+    
+    [TestMethod]
     public void TestGetDeviceTypesOkStatusCode()
     {
         Guid token = Guid.NewGuid();
