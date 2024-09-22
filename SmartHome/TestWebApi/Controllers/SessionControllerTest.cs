@@ -12,10 +12,12 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class SessionControllerTest
 {
+    private const string ErrorMessageWhenCannotFindElement = "Input not valid, try again";
+    
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
-    private const string InvalidEmail = "invalid email";
     private const string Password = "Securepassword1@";
     private const string Surname = "Doe";
     
@@ -24,6 +26,10 @@ public class SessionControllerTest
     
     private Mock<ISessionService> _sessionServiceMock;
     private SessionController _sessionController;
+
+    private LoginRequest _createLoginRequest;
+    private User _user;
+    private Session _session; 
     
     [TestInitialize]
     public void SetUp()
@@ -37,18 +43,14 @@ public class SessionControllerTest
         _homeOwner = new HomeOwner();
 
         _listOfRoles.Add(_homeOwner); 
-    }
-    
-    [TestMethod]
-    public void LoginValidRequest()
-    {
-        LoginRequest createLoginRequest = new LoginRequest()
+        
+        _createLoginRequest = new LoginRequest()
         {
             Email = Email,
             Password = Password
         };
 
-        var user = new User
+        _user = new User
         {
             Name = Name,
             Email = Email,
@@ -58,62 +60,59 @@ public class SessionControllerTest
             Roles = _listOfRoles
         };
         
-        var session = new Session
+        _session = new Session
         {
             Id = Guid.NewGuid(), 
             User = new User { Email = Email }
         };
-        
-
+    }
+    
+    [TestMethod]
+    public void LoginValidRequest()
+    {
         _sessionServiceMock
             .Setup(s => s.LogIn(Email, Password))
-            .Returns(session);
+            .Returns(_session);
 
-        var result = _sessionController.LogIn(createLoginRequest) as OkObjectResult;
+        var result = _sessionController.LogIn(_createLoginRequest) as OkObjectResult;
         var response = result?.Value as LoginResponse;
         
-        Assert.IsNotNull(result);
-        Assert.AreEqual(200, result.StatusCode);
-        Assert.IsNotNull(response);
-        Assert.AreEqual(session.Id, response.Token);
+        _sessionServiceMock.Verify();
+        
+        Assert.IsTrue(
+            result != null &&
+            result.StatusCode == 200 &&
+            response != null &&
+            response.Token == _session.Id
+        );
     }
     
     
     [TestMethod]
     public void LoginInvalidRequest()
     {
-        var createLoginRequest = new LoginRequest
-        {
-            Email = Email,
-            Password = Password
-        };
-
         _sessionServiceMock
             .Setup(s => s.LogIn(Email, Password))
-            .Throws(new CannotFindItemInList("Input not valid, try again"));
+            .Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindElement));
         
-        var result = _sessionController.LogIn(createLoginRequest) as ObjectResult;
-
-        Assert.IsNotNull(result, "The result should not be null.");
+        var result = _sessionController.LogIn(_createLoginRequest) as ObjectResult;
+        
+        _sessionServiceMock.Verify();
+        
         Assert.AreEqual(404, result.StatusCode);
     }
     
     [TestMethod]
     public void LoginError()
     {
-        var createLoginRequest = new LoginRequest
-        {
-            Email = Email,
-            Password = Password
-        };
-
         _sessionServiceMock
             .Setup(s => s.LogIn(Email, Password))
             .Throws(new Exception("Error"));
         
-        var result = _sessionController.LogIn(createLoginRequest) as ObjectResult;
-
-        Assert.IsNotNull(result, "The result should not be null.");
+        var result = _sessionController.LogIn(_createLoginRequest) as ObjectResult;
+        
+        _sessionServiceMock.Verify();
+        
         Assert.AreEqual(500, result.StatusCode);
     }
 }
