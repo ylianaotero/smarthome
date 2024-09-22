@@ -141,4 +141,20 @@ public class SessionControllerTest
         
         Assert.AreEqual(400, result.StatusCode);
     }
+    
+    [TestMethod]
+    public void LoginNullPassword()
+    {
+        LoginRequest _newLoginRequest = new LoginRequest()
+        {
+            Email = Email,
+            Password = ""
+        };
+        
+        var result = _sessionController.LogIn(_newLoginRequest) as ObjectResult;
+        
+        _sessionServiceMock.Verify();
+        
+        Assert.AreEqual(400, result.StatusCode);
+    }
 }
