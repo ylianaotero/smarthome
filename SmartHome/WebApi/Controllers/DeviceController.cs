@@ -64,8 +64,17 @@ public class DeviceController : ControllerBase
         {
             return Unauthorized("");
         }
+
+        Device device;
         
-        Device device = _deviceService.GetDeviceById(id);
+        try
+        {
+            device = _deviceService.GetDeviceById(id);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound("");
+        }
         
         DeviceResponse deviceResponse = GetDeviceResponse(device);
         
