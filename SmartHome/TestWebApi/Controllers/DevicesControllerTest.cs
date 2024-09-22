@@ -152,7 +152,13 @@ public class DevicesControllerTest
         Assert.AreEqual(expectedResponse, response);
     }
     
-    
+    [TestMethod]
+    public void TestGetDeviceTypesUnauthorizedtatusCode()
+    {
+        ObjectResult result = _deviceController.GetDeviceTypes(null) as UnauthorizedObjectResult;
+        
+        Assert.AreEqual(401, result.StatusCode);
+    }
     
     [TestMethod]
     public void TestGetDevicesFilteredByOkStatusCode()
