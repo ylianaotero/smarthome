@@ -1,4 +1,5 @@
 using BusinessLogic.IServices;
+using DataAccess.Exceptions;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +61,7 @@ public class DeviceController : ControllerBase
         {
             device = _deviceService.GetDeviceById(id);
         }
-        catch (ElementNotFound)
+        catch (ElementNotFoundException)
         {
             return NotFound(NotFoundMessage);
         }
@@ -101,6 +102,7 @@ public class DeviceController : ControllerBase
         }
         
         WindowSensor windowSensor = ParseWindowSensorRequest(request);
+        windowSensor.Company = GetUserCompany(authorization);
         
         _deviceService.CreateDevice(windowSensor);
         
@@ -108,7 +110,7 @@ public class DeviceController : ControllerBase
 
         return Created(CreatedMessage, "/devices/" + windowSensorId);
     }
-    
+
     [HttpPost]
     [Route("security-cameras")]
     public IActionResult PostSecurityCameras([FromHeader] Guid? authorization, [FromBody] SecurityCameraRequest request)
@@ -124,6 +126,7 @@ public class DeviceController : ControllerBase
         }
         
         SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
+        securityCamera.Company = GetUserCompany(authorization);
         
         _deviceService.CreateDevice(securityCamera);
         
@@ -207,11 +210,18 @@ public class DeviceController : ControllerBase
         return deviceTypesResponse;
     }
     
+    private Company? GetUserCompany(Guid? authorization)
+    {
+        User user = _sessionService.GetUser(authorization!.Value);
+        CompanyOwner role = (CompanyOwner) user.Roles.Find(RoleIsAdequate)!;
+        
+        return role!.Company;
+    }
+    
     private bool UserHasPermissions(Guid? authorization)
     {
-        User user = _sessionService.GetUser(authorization.Value);
-        return authorization != null && user != null && user.Roles != null &&
-               _sessionService.GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r));
+        User user = _sessionService.GetUser(authorization!.Value);
+        return _sessionService.GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r));
     }
     
     private bool RoleIsAdequate(Role role)
