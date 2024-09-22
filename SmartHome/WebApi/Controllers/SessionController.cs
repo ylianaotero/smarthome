@@ -20,6 +20,10 @@ public class SessionController : ControllerBase
     [HttpPost]
     public IActionResult LogIn([FromBody] LoginRequest request)
     {
+        if (request == null)
+        {
+            return BadRequest("Email and password are required.");
+        }
         try
         {
             var session = _sessionService.LogIn(request.Email, request.Password);
