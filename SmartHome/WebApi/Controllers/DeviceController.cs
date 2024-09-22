@@ -58,7 +58,7 @@ public class DeviceController : ControllerBase
     [Route("types")]
     public IActionResult GetDeviceTypes([FromHeader] Guid? authorization)
     {
-        if (authorization == null)
+        if (AuthorizationIsInvalid(authorization))
         {
             return Unauthorized("");
         }
