@@ -81,6 +81,16 @@ public class DeviceServiceTest
         deviceService.CreateDevice(_defaultWindowSensor);
         _mockDeviceRepository.Verify(x => x.Add(_defaultWindowSensor), Times.Once);
     }
+
+    [TestMethod]
+    public void TestGetDeviceById()
+    {
+        _mockDeviceRepository.Setup(x => x.GetById(1)).Returns(_defaultCamera);
+        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
+        
+        Device retrievedDevice = deviceService.GetDeviceById(1);
+        Assert.AreEqual(_defaultCamera, retrievedDevice);
+    }
     
     private void SetupDefaultObjects()
     {

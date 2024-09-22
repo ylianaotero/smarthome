@@ -126,7 +126,7 @@ public class DevicesControllerTest
         
         Assert.AreEqual(expectedResponse, response);
     }
-    
+   
     [TestMethod]
     public void TestGetDeviceTypesOkStatusCode()
     {
