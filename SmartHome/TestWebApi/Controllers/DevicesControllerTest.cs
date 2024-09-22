@@ -141,6 +141,17 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestGetDeviceByIdUnauthorizedStatusCode()
+    {
+        _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
+        
+        ObjectResult? result = _deviceController.GetDeviceById(null, 1) 
+            as UnauthorizedObjectResult;
+        
+        Assert.AreEqual(UnauthorizedStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
     public void TestGetDeviceTypesOkStatusCode()
     {
         Guid token = Guid.NewGuid();
