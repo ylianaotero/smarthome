@@ -6,7 +6,7 @@ using WebApi.Out;
 
 namespace WebApi.Controllers;
 
-[Route("api/v1/hadministrators")]
+[Route("api/v1/administrators")]
 public class AdministratorController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -24,20 +24,17 @@ public class AdministratorController : ControllerBase
             var user = createAdminRequest.ToEntity();
             _userService.CreateUser(user);
             var userResponse = new AdminResponse(user);
-            return Ok(userResponse);
+            return CreatedAtAction(nameof(CreateUser), userResponse);
         }
+        /*catch ()
+        {
+            
+        }*/
         catch (InputNotValid inputNotValid)
         {
             return BadRequest(new { message = inputNotValid.Message });
         }
-        catch (ElementAlreadyExist elementAlreadyExist)
-        {
-            return Conflict(new { message = elementAlreadyExist.Message });
-        }
-        catch (Exception exception)
-        {
-            return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
-        }
+       
         
     }
 }
