@@ -1,16 +1,17 @@
 using Domain;
 using WebApi.Out;
 
-namespace TestWebApi.Out;
+namespace TestWebApi.Models.Out;
 
 
 public class UsersResponseTest
 {
-    private readonly string nameSample = "nameSample";
-    private readonly string surnameSample = "surnameSample";
-    private readonly string emailSample = "email@sample.com";
-    private readonly string passwordSample = "passwordSample1@";
+    private const string NameSample = "nameSample";
+    private const string SurnameSample = "surnameSample";
+    private const string EmailSample = "email@sample.com";
+    private const string PasswordSample = "passwordSample1@";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    
     
     [TestMethod]
     public void AssignValues()
@@ -18,30 +19,32 @@ public class UsersResponseTest
         Administrator administrator = new Administrator(); 
         HomeOwner homeOwner = new HomeOwner();
         CompanyOwner companyOwner = new CompanyOwner(); 
+        
         User user = new User()
         {
-            Name = nameSample,
-            Surname = surnameSample,
-            Email = emailSample,
-            Password = passwordSample,
+            Name = NameSample,
+            Surname = SurnameSample,
+            Email = EmailSample,
+            Password = PasswordSample,
             Photo = ProfilePictureUrl,
             Roles = new List<Role>{administrator,homeOwner,companyOwner}
         };
 
-        string fullName = nameSample + " " + surnameSample; 
+        string fullName = NameSample + " " + SurnameSample; 
 
         UserResponse response = new UserResponse(user);
 
-        Assert.AreEqual(user.Name, response.Name);
-        Assert.AreEqual(user.Surname, response.Surname);
-        Assert.AreEqual(fullName, response.FullName);
-        Assert.AreEqual(user.CreatedAt.Date, response.CreatedAt.Date);
-        Assert.AreEqual(user.Roles.Count, response.Roles.Count);
-        
-        
-        Assert.IsTrue(response.Roles.Contains(administrator));
-        Assert.IsTrue(response.Roles.Contains(homeOwner));
-        Assert.IsTrue(response.Roles.Contains(companyOwner));
+        Assert.IsTrue(
+            user.Name == response.Name &&
+            user.Surname == response.Surname &&
+            fullName == response.FullName &&
+            user.CreatedAt.Date == response.CreatedAt.Date &&
+            user.Roles.Count == response.Roles.Count &&
+            response.Roles.Contains(administrator) &&
+            response.Roles.Contains(homeOwner) &&
+            response.Roles.Contains(companyOwner)
+        );
+
     }
     
     
@@ -50,10 +53,10 @@ public class UsersResponseTest
     {
         User user = new User()
         {
-            Name = nameSample,
-            Surname = surnameSample,
-            Email = emailSample,
-            Password = passwordSample,
+            Name = NameSample,
+            Surname = SurnameSample,
+            Email = EmailSample,
+            Password = PasswordSample,
             Photo = ProfilePictureUrl,
             Roles = null
         };

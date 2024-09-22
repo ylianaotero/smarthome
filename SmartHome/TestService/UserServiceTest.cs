@@ -18,20 +18,31 @@ public class UserServiceTest
     
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;
+
+    private User _user;
+    private List<User> _listOfUsers; 
+    
     
     [TestInitialize]
     public void Setup()
     {
         _mockUserRepository = new Mock<IRepository<User>>();
+        
+        _user = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+        
+        _listOfUsers = new List<User>();
+        _listOfUsers.Add(_user);
     }
     
     [TestMethod]
     public void CreateUser()
     {
-        var user = new User();
-        user.Email = NewEmail; 
-        
-        
         _mockUserRepository
             .Setup(repo => repo.GetByFilter(It.IsAny<Func<User, bool>>()))
             .Returns(new List<User>());
@@ -39,48 +50,31 @@ public class UserServiceTest
         
         _userService = new UserService(_mockUserRepository.Object);
         
-        _userService.CreateUser(user);
+        _userService.CreateUser(_user);
         
-        _mockUserRepository.Verify(repo => repo.Add(It.Is<User>(u => u == user)), Times.Once);
+        _mockUserRepository.Verify(repo => repo.Add(It.Is<User>(u => u == _user)), Times.Once);
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementAlreadyExist))]
     public void CreateUserThatAlreadyExists()
     {
-        var user = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
-        
-        
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(user);
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
 
-        _userService.CreateUser(user);
+        _userService.CreateUser(_user);
         
-        _userService.CreateUser(user);
+        _userService.CreateUser(_user);
+        
+        _mockUserRepository.Verify();
     }
     
     [TestMethod]
     public void GetAllUsers()
     {
-        var user1 = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
-        
         var user2 = new User
         {
             Name = NewName,
@@ -89,23 +83,22 @@ public class UserServiceTest
             Surname = NewSurname
         };
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(user1);
-        listOfUsers.Add(user2);
+        _listOfUsers.Add(user2);
         
         _mockUserRepository
-            .Setup(v => v.GetAll()).Returns(listOfUsers);
+            .Setup(v => v.GetAll()).Returns(_listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
         List<User> responseList = _userService.GetAllUsers();
         
-        Assert.AreEqual(listOfUsers.Count, responseList.Count );
+        _mockUserRepository.Verify();
         
-        foreach (var user in listOfUsers)
-        {
-            Assert.IsTrue(responseList.Contains(user), $"Expected user list to contain {user}");
-        }
+        Assert.IsTrue(
+            _listOfUsers.Count == responseList.Count && 
+            _listOfUsers.All(user => responseList.Contains(user))
+        );
+
     }
     
     
@@ -133,6 +126,8 @@ public class UserServiceTest
         
         
         bool response = _userService.IsAdmin(NewEmail);
+        
+        _mockUserRepository.Verify();
         
         Assert.IsTrue(response);
         
@@ -162,6 +157,8 @@ public class UserServiceTest
         
         bool response = _userService.IsAdmin(NewEmail);
         
+        _mockUserRepository.Verify();
+        
         Assert.IsFalse(response);
         
     }
@@ -178,6 +175,8 @@ public class UserServiceTest
         _userService = new UserService(_mockUserRepository.Object);
         
         _userService.IsAdmin(NewEmail);
+        
+        _mockUserRepository.Verify();
         
     }
     
@@ -203,6 +202,8 @@ public class UserServiceTest
         
         
         bool response = _userService.IsAdmin(NewEmail);
+        
+        _mockUserRepository.Verify();
         
         Assert.IsFalse(response);
         

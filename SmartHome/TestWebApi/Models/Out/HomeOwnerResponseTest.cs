@@ -1,15 +1,15 @@
 using Domain;
 using WebApi.Out;
 
-namespace TestWebApi.Out;
+namespace TestWebApi.Models.Out;
 
 [TestClass]
 public class HomeOwnerResponseTest
 {
-    private readonly string nameSample = "nameSample";
-    private readonly string surnameSample = "surnameSample";
-    private readonly string emailSample = "email@sample.com";
-    private readonly string passwordSample = "passwordSample1@";
+    private const string NameSample = "nameSample";
+    private const string SurnameSample = "surnameSample";
+    private const string EmailSample = "email@sample.com";
+    private const string PasswordSample = "passwordSample1@";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     
     [TestMethod]
@@ -17,19 +17,22 @@ public class HomeOwnerResponseTest
     {
         User user = new User()
         {
-            Name = nameSample,
-            Surname = surnameSample,
-            Email = emailSample,
-            Password = passwordSample,
+            Name = NameSample,
+            Surname = SurnameSample,
+            Email = EmailSample,
+            Password = PasswordSample,
             Photo = ProfilePictureUrl
         };
 
         HomeOwnerResponse response = new HomeOwnerResponse(user);
 
-        Assert.AreEqual(user.Name, response.Name);
-        Assert.AreEqual(user.Surname, response.Surname);
-        Assert.AreEqual(1, response.Roles.Count());
-        Assert.AreEqual(user.Email, response.Email);
-        Assert.AreEqual(user.Photo, response.Photo);
+        Assert.IsTrue(
+            user.Name == response.Name &&
+            user.Surname == response.Surname &&
+            response.Roles.Count() == 1 &&
+            user.Email == response.Email &&
+            user.Photo == response.Photo
+        );
+
     }
 }

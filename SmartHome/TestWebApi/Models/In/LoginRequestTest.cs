@@ -1,29 +1,31 @@
-using Domain;
 using Microsoft.AspNetCore.Identity.Data;
 
-namespace TestWebApi.In;
+namespace TestWebApi.Models.In;
 
 public class LoginRequestTest
 {
-    private readonly string emailSample = "email@sample.com";
-    private readonly string passwordSample = "passwordSample1@";
-    private LoginRequest request;
+    private const string EmailSample = "email@sample.com";
+    private const string PasswordSample = "passwordSample1@";
+    private LoginRequest _request;
     
     [TestInitialize]
     public void Init()
     {
-        request = new LoginRequest()
+        _request = new LoginRequest()
         {
-            Email = emailSample,
-            Password = passwordSample
+            Email = EmailSample,
+            Password = PasswordSample
         };
     }
     
     [TestMethod]
     public void AssignsProperties()
     {
-        Assert.AreEqual(request.Email, emailSample);
-        Assert.AreEqual(request.Password, passwordSample);
+        Assert.IsTrue(
+            _request.Email == EmailSample &&
+            _request.Password == PasswordSample
+        );
+
     }
     
 }

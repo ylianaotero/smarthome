@@ -1,46 +1,50 @@
 using Domain;
 using WebApi.In;
 
-namespace TestWebApi.In;
+namespace TestWebApi.Models.In;
 
 public class CreateAdminTest
 {
-        private readonly string nameSample = "nameSample";
-    private readonly string surnameSample = "surnameSample";
-    private readonly string emailSample = "email@sample.com";
-    private readonly string passwordSample = "passwordSample1@";
-    private CreateAdminRequest request;
+    private const string NameSample = "nameSample";
+    private const string SurnameSample = "surnameSample";
+    private const string EmailSample = "email@sample.com";
+    private const string PasswordSample = "passwordSample1@";
+    private CreateAdminRequest _request;
     
     [TestInitialize]
     public void Init()
     {
-        request = new CreateAdminRequest()
+        _request = new CreateAdminRequest()
         {
-            Name = nameSample,
-            Surname = surnameSample,
-            Email = emailSample,
-            Password = passwordSample
+            Name = NameSample,
+            Surname = SurnameSample,
+            Email = EmailSample,
+            Password = PasswordSample
         };
     }
     
     [TestMethod]
     public void AssignsProperties()
     {
-        Assert.AreEqual(request.Name, nameSample);
-        Assert.AreEqual(request.Surname, surnameSample);
-        Assert.AreEqual(request.Email, emailSample);
-        Assert.AreEqual(request.Password, passwordSample);
+        Assert.IsTrue(
+            _request.Name == NameSample &&
+            _request.Surname == SurnameSample &&
+            _request.Email == EmailSample &&
+            _request.Password == PasswordSample
+        );
     }
     
     [TestMethod]
     public void AdminRequestToUserEntity()
     {
-        User entity = request.ToEntity();
+        User entity = _request.ToEntity();
 
-        Assert.AreEqual(entity.Name, nameSample);
-        Assert.AreEqual(entity.Surname, surnameSample);
-        Assert.AreEqual(entity.Email, emailSample);
-        Assert.AreEqual(entity.Password, passwordSample);
-        Assert.IsTrue(entity.Roles.Any(role => role is Administrator));
+        Assert.IsTrue(
+            entity.Name == NameSample &&
+            entity.Surname == SurnameSample &&
+            entity.Email == EmailSample &&
+            entity.Password == PasswordSample &&
+            entity.Roles.Any(role => role is Administrator)
+        );
     }
 }

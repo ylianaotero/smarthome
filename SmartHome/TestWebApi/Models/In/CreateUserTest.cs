@@ -1,27 +1,27 @@
 using Domain;
 using WebApi.In;
 
-namespace TestWebApi.In;
+namespace TestWebApi.Models.In;
 
 [TestClass]
 public class CreateUserTest
 {
-    private readonly string nameSample = "nameSample";
-    private readonly string surnameSample = "surnameSample";
-    private readonly string emailSample = "email@sample.com";
-    private readonly string passwordSample = "passwordSample1@";
+    private const string NameSample = "nameSample";
+    private const string SurnameSample = "surnameSample";
+    private const string EmailSample = "email@sample.com";
+    private const string PasswordSample = "passwordSample1@";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
-    private CreateHomeOwnerRequest request;
+    private CreateHomeOwnerRequest _request;
     
     [TestInitialize]
     public void Init()
     {
-        request = new CreateHomeOwnerRequest()
+        _request = new CreateHomeOwnerRequest()
         {
-            Name = nameSample,
-            Surname = surnameSample,
-            Email = emailSample,
-            Password = passwordSample,
+            Name = NameSample,
+            Surname = SurnameSample,
+            Email = EmailSample,
+            Password = PasswordSample,
             Photo = ProfilePictureUrl
         };
     }
@@ -29,22 +29,27 @@ public class CreateUserTest
     [TestMethod]
     public void AssignsProperties()
     {
-        Assert.AreEqual(request.Name, nameSample);
-        Assert.AreEqual(request.Surname, surnameSample);
-        Assert.AreEqual(request.Email, emailSample);
-        Assert.AreEqual(request.Password, passwordSample);
-        Assert.AreEqual(request.Photo, ProfilePictureUrl );
+        Assert.IsTrue(
+            _request is { Name: NameSample, Surname: SurnameSample } &&
+            _request.Email == EmailSample &&
+            _request.Password == PasswordSample &&
+            _request.Photo == ProfilePictureUrl
+        );
+
     }
     
     [TestMethod]
     public void UserRequestToUserEntity()
     {
-        User entity = request.ToEntity();
+        User entity = _request.ToEntity();
 
-        Assert.AreEqual(entity.Name, nameSample);
-        Assert.AreEqual(entity.Surname, surnameSample);
-        Assert.AreEqual(entity.Email, emailSample);
-        Assert.AreEqual(entity.Password, passwordSample);
-        Assert.AreEqual(entity.Photo, ProfilePictureUrl );
+        Assert.IsTrue(
+            entity.Name == NameSample &&
+            entity.Surname == SurnameSample &&
+            entity.Email == EmailSample &&
+            entity.Password == PasswordSample &&
+            entity.Photo == ProfilePictureUrl
+        );
+
     }
 }

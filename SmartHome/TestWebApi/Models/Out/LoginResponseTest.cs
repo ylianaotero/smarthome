@@ -1,25 +1,25 @@
 using WebApi.Out;
 
-namespace TestWebApi.Out;
+namespace TestWebApi.Models.Out;
 
 [TestClass]
 public class LoginResponseTest
 {
-    private readonly Guid Guid = new Guid();
-    private LoginResponse response;
+    private readonly Guid _guid = new Guid();
+    private LoginResponse _response;
     
     [TestInitialize]
     public void Init()
     {
-        response = new LoginResponse()
+        _response = new LoginResponse()
         {
-            Token = Guid
+            Token = _guid
         };
     }
     
     [TestMethod]
     public void AssignsProperties()
     {
-        Assert.AreEqual(response.Token, Guid);
+        Assert.AreEqual(_response.Token, _guid);
     }
 }
