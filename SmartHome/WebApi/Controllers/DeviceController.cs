@@ -67,13 +67,8 @@ public class DeviceController : ControllerBase
         
         Device device = _deviceService.GetDeviceById(id);
         
-        DeviceResponse deviceResponse = new DeviceResponse()
-        {
-            Name = "My Security Camera",
-            Model = 1345354616346,
-            PhotoUrl = "https://example.com/photo.jpg",
-            CompanyName = "IoT Devices & Co.",
-        };
+        DeviceResponse deviceResponse = GetDeviceResponse(device);
+        
         return Ok(deviceResponse);
     }
     
