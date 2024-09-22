@@ -1,14 +1,13 @@
 using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
 using WebApi.Out;
 using LoginRequest = WebApi.In.LoginRequest;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 public class SessionControllerTest

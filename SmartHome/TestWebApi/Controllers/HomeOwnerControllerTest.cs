@@ -7,11 +7,14 @@ using WebApi.Controllers;
 using WebApi.In;
 using WebApi.Out;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 public class HomeOwnerControllerTest
 {
+    private const string ErrorMessageWhenInputIsInvalid = "Input not valid, try again";
+    private const string ErrorMessageWhenElementAlreadyExists =  "Element already exists, try again";
+    
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
@@ -94,9 +97,11 @@ public class HomeOwnerControllerTest
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new InputNotValid("Input not valid, try again"));
+            .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
         
         var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
+        
+        _userServiceMock.Verify();
         
         Assert.AreEqual(400, result.StatusCode);
     }
@@ -106,9 +111,11 @@ public class HomeOwnerControllerTest
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new Exception("Unexpected error"));
+            .Throws(new Exception());
 
         var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
+        
+        _userServiceMock.Verify();
         
         Assert.AreEqual(500, result.StatusCode);
     }
@@ -118,15 +125,14 @@ public class HomeOwnerControllerTest
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new ElementAlreadyExist("Element already exists, try again"));
+            .Throws(new ElementAlreadyExist(ErrorMessageWhenElementAlreadyExists));
 
         var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
         
+        _userServiceMock.Verify();
+        
         Assert.AreEqual(409, result.StatusCode);
     }
-
-    
-    
     
     
 }

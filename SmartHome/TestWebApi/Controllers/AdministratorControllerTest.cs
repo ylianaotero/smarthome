@@ -8,11 +8,15 @@ using WebApi.In;
 using WebApi.Out;
 using Exception = System.Exception;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 public class AdministratorControllerTest
 {
+    private const string ErrorMessageWhenInputIsInvalid = "Input not valid, try again";
+    private const string ErrorMessageWhenUserAlreadyExists = "User already exists";
+    private const string ErrorMessageWhenCannotFindUser =  "Cannot find user";
+    
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
     private const string Password = "Securepassword1@";
@@ -110,7 +114,7 @@ public class AdministratorControllerTest
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new InputNotValid("Input not valid, try again"));
+            .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
 
         _sessionServiceMock.Setup(service => service.GetUser(Token)).Returns(_user); 
         
@@ -131,7 +135,7 @@ public class AdministratorControllerTest
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new ElementAlreadyExist("User already exists"));
+            .Throws(new ElementAlreadyExist(ErrorMessageWhenUserAlreadyExists));
 
         _sessionServiceMock.Setup(service => service.GetUser(Token)).Returns(_user); 
         
@@ -196,7 +200,7 @@ public class AdministratorControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception());
 
-        _sessionServiceMock.Setup(service => service.GetUser(Token)).Throws(new CannotFindItemInList("Cannot find user")); 
+        _sessionServiceMock.Setup(service => service.GetUser(Token)).Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindUser )); 
         
         _userServiceMock.Setup(service => service.IsAdmin(_user.Email)).Returns(true); 
         

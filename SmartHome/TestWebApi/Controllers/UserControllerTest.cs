@@ -6,11 +6,13 @@ using Moq;
 using WebApi.Controllers;
 using WebApi.Out;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 public class UserControllerTest
 {
+    private const string ErrorMessageWhenCannotFindUser =  "Cannot find user";
+    
    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string Name =  "John";
     private const string Email1 = "john.doe@example.com";
@@ -130,7 +132,7 @@ public class UserControllerTest
     [TestMethod]
     public void GetUsersInvalidToken()
     {
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new CannotFindItemInList("Cannot find user")); 
+        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindUser )); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         
         var result = _userController.GetUsers(_session.Id) as ObjectResult;

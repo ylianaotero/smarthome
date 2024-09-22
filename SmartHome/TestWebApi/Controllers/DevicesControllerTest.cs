@@ -6,7 +6,7 @@ using Moq;
 using WebApi.Controllers;
 using WebApi.Out;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 public class DevicesControllerTest
