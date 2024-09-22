@@ -8,6 +8,8 @@ namespace Domain;
 
 public class User
 {
+    private const string MessageInvalidInput = "Input no valido"; 
+    private const string MessageRoleNotFound = "The role does not exist"; 
     [Key]
     public long Id { get; set; }
     private string _email { get; set; }
@@ -32,7 +34,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid("Input no valido");
+                throw new InputNotValid(MessageInvalidInput );
             }
             
         } 
@@ -49,7 +51,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid("Input no valido");
+                throw new InputNotValid(MessageInvalidInput );
             }
             
         } 
@@ -66,7 +68,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid("Input no valido");
+                throw new InputNotValid(MessageInvalidInput );
             }
             
         } 
@@ -83,7 +85,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid("Input no valido");
+                throw new InputNotValid(MessageInvalidInput );
             }
             
         } 
@@ -114,7 +116,7 @@ public class User
         }
         else
         {
-            throw new RoleNotFoundException("The role does not exist");
+            throw new RoleNotFoundException(MessageRoleNotFound);
 
         }
     }
