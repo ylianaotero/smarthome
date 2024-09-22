@@ -115,4 +115,14 @@ public class SessionControllerTest
         
         Assert.AreEqual(500, result.StatusCode);
     }
+    
+    [TestMethod]
+    public void LoginNullRequest()
+    {
+        var result = _sessionController.LogIn(null) as ObjectResult;
+        
+        _sessionServiceMock.Verify();
+        
+        Assert.AreEqual(400, result.StatusCode);
+    }
 }
