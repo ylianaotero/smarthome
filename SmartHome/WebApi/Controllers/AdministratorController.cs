@@ -1,4 +1,5 @@
 using BusinessLogic.IServices;
+using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.In;
@@ -10,21 +11,33 @@ namespace WebApi.Controllers;
 public class AdministratorController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ISessionService _sessionService;
 
-    public AdministratorController(IUserService userService)
+    public AdministratorController(IUserService userService, ISessionService sessionService)
     {
         _userService = userService;
+        _sessionService = sessionService; 
     }
     
     [HttpPost]
-    public IActionResult CreateUser([FromBody] CreateAdminRequest createAdminRequest)
+    public IActionResult CreateUser([FromBody] CreateAdminRequest createAdminRequest, [FromHeader] Guid token)
     {
         try
         {
-            var user = createAdminRequest.ToEntity();
-            _userService.CreateUser(user);
-            var userResponse = new AdminResponse(user);
-            return CreatedAtAction(nameof(CreateUser), userResponse);
+            User userInSession = _sessionService.GetUser(token);
+            if (_userService.IsAdmin(userInSession.Email))
+            {
+                var user = createAdminRequest.ToEntity();
+                _userService.CreateUser(user);
+                var userResponse = new AdminResponse(user);
+                return CreatedAtAction(nameof(CreateUser), userResponse);
+            }
+            
+            return StatusCode(403, new { message = "You do not have permission to access this resource." });
+        }
+        catch (CannotFindItemInList cannotFindItemInList)
+        {
+            return Unauthorized(new { message = "Item cannot be found. Unauthorized access." });
         }
         catch (InputNotValid inputNotValid)
         {
