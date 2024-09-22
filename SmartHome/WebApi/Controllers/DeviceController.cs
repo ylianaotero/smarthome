@@ -60,10 +60,11 @@ public class DeviceController : ControllerBase
     [Route("{id}")]
     public IActionResult GetDeviceById([FromHeader] Guid? authorization, [FromRoute] long id)
     {
-        if (authorization == null)
+        if (AuthorizationIsInvalid(authorization))
         {
             return Unauthorized("");
         }
+        
         Device device = _deviceService.GetDeviceById(id);
         
         return Ok("");
