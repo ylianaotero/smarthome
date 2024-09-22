@@ -81,6 +81,7 @@ public class AdministratorControllerTest
         var userResponse = result?.Value as AdminResponse;
 
         _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
         
         var expectedResponse = new
         {
@@ -119,6 +120,9 @@ public class AdministratorControllerTest
         
         var result = _administratorController.CreateUser(_createAdminRequest, Token) as ObjectResult;
         
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
+        
         Assert.AreEqual(400, result.StatusCode);
     }
     
@@ -136,6 +140,9 @@ public class AdministratorControllerTest
         _administratorController = new AdministratorController(_userServiceMock.Object, _sessionServiceMock.Object);
         
         var result = _administratorController.CreateUser(_createAdminRequest, Token) as ObjectResult;
+        
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
         
         Assert.AreEqual(409, result.StatusCode);
     }
@@ -155,6 +162,9 @@ public class AdministratorControllerTest
         
         var result = _administratorController.CreateUser(_createAdminRequest, Token) as ObjectResult;
         
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
+        
         Assert.AreEqual(500, result.StatusCode);
     }
     
@@ -173,6 +183,9 @@ public class AdministratorControllerTest
         
         var result = _administratorController.CreateUser(_createAdminRequest, Token) as ObjectResult;
         
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
+        
         Assert.AreEqual(403, result.StatusCode);
     }
     
@@ -190,6 +203,9 @@ public class AdministratorControllerTest
         _administratorController = new AdministratorController(_userServiceMock.Object, _sessionServiceMock.Object);
         
         var result = _administratorController.CreateUser(_createAdminRequest, Token) as ObjectResult;
+        
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
         
         Assert.AreEqual(401, result.StatusCode);
     }

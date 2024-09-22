@@ -1,5 +1,6 @@
 using BusinessLogic.IServices;
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Out;
 
@@ -31,10 +32,15 @@ public class UserController : ControllerBase
 
             return StatusCode(403, "Unauthorized");
         }
+        catch (CannotFindItemInList cannotFindItemInList)
+        {
+            return Unauthorized(new { message = cannotFindItemInList.Message });
+        }
         catch (Exception)
         {
             return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
         }
+        
 
     }
     

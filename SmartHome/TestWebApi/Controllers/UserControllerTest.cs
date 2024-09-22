@@ -24,6 +24,11 @@ public class UserControllerTest
     private Mock<IUserService> _userServiceMock;
     private Mock<ISessionService> _sessionServiceMock;
     private UserController _userController;
+    private User _user_1_example; 
+    private User _user_2_example;
+    private List<User> _listOfUsers;
+
+    private string _fullName; 
     
     [TestInitialize]
     public void SetUp()
@@ -36,14 +41,8 @@ public class UserControllerTest
         _listOfRoles = new List<Role>();
 
         _session = new Session(); 
-
-    }
-
-    [TestMethod]
-    public void GetUsersValidRequest()
-    {
-
-        var user1 = new User
+        
+        _user_1_example = new User
         {
             Name = Name,
             Email = Email1,
@@ -53,7 +52,7 @@ public class UserControllerTest
             Roles = _listOfRoles
         };
         
-        var user2 = new User
+        _user_2_example = new User
         {
             Name = Name,
             Email = Email2,
@@ -62,59 +61,48 @@ public class UserControllerTest
             Photo = ProfilePictureUrl,
             Roles = _listOfRoles
         };
-
-        _session.User = user1;
+        
+        _session.User = _user_1_example;
         _session.Id = new Guid(); 
+        
+        _listOfUsers = new List<User> { _user_1_example, _user_2_example};
+        
+        _fullName = Name + " " + Surname; 
 
-        string fullName = Name + " " + Surname; 
+    }
 
-        List<User> listOfUsers = new List<User> { user1, user2 };
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(user1); 
+    [TestMethod]
+    public void GetUsersValidRequest()
+    {
+        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
-        _userServiceMock.Setup(service => service.GetAllUsers()).Returns(listOfUsers); 
+        _userServiceMock.Setup(service => service.GetAllUsers()).Returns(_listOfUsers); 
         
 
         var result = _userController.GetUsers(_session.Id) as OkObjectResult;
         List<UserResponse> userResponse = result.Value as List<UserResponse>;
 
-        _userServiceMock.Verify(service => service.GetAllUsers(), Times.Once);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(200, result.StatusCode);
-        Assert.IsNotNull(userResponse);
-        foreach (var user in userResponse)
-        {
-            Assert.AreEqual(Name, user.Name);
-            Assert.AreEqual(Surname, user.Surname);
-            Assert.AreEqual( fullName, user.FullName);
-            Assert.AreEqual(DateTime.Today.Date, user.CreatedAt.Date);
-            Assert.AreEqual(0, user.Roles.Count);
-        }
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
+
+        Assert.IsTrue(
+            result != null &&
+            result.StatusCode == 200 &&
+            userResponse != null &&
+            userResponse.All(user =>
+                user.Name == Name &&
+                user.Surname == Surname &&
+                user.FullName == _fullName &&
+                user.CreatedAt.Date == DateTime.Today.Date &&
+                user.Roles.Count == 0
+            ));
     }
     
     
     [TestMethod]
     public void GetUsersUnauthorized()
     {
-
-        var user1 = new User
-        {
-            Name = Name,
-            Email = Email1,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl,
-            Roles = _listOfRoles
-        };
-
-        var user2 = new User(); 
-
-        _session.User = user1;
-        _session.Id = new Guid(); 
-
-        string fullName = Name + " " + Surname; 
-
-        List<User> listOfUsers = new List<User> { user1, user2 };
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(user1); 
+        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
         
         var result = _userController.GetUsers(_session.Id) as ObjectResult;
@@ -128,23 +116,6 @@ public class UserControllerTest
     [TestMethod]
     public void GetUsersOtherException()
     {
-
-        var user1 = new User
-        {
-            Name = Name,
-            Email = Email1,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl,
-            Roles = _listOfRoles
-        };
-
-        var user2 = new User(); 
-
-        _session.User = user1;
-        _session.Id = new Guid(); 
-
-        List<User> listOfUsers = new List<User> { user1, user2 };
         _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new Exception()); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
         
@@ -159,23 +130,6 @@ public class UserControllerTest
     [TestMethod]
     public void GetUsersInvalidToken()
     {
-
-        var user1 = new User
-        {
-            Name = Name,
-            Email = Email1,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl,
-            Roles = _listOfRoles
-        };
-
-        var user2 = new User(); 
-
-        _session.User = user1;
-        _session.Id = new Guid(); 
-
-        List<User> listOfUsers = new List<User> { user1, user2 };
         _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new CannotFindItemInList("Cannot find user")); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         

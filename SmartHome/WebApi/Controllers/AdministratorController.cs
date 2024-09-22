@@ -35,9 +35,9 @@ public class AdministratorController : ControllerBase
             
             return StatusCode(403, new { message = "You do not have permission to access this resource." });
         }
-        catch (CannotFindItemInList)
+        catch (CannotFindItemInList cannotFindItemInList)
         {
-            return Unauthorized(new { message = "Item cannot be found. Unauthorized access." });
+            return Unauthorized(new { message = cannotFindItemInList.Message });
         }
         catch (InputNotValid inputNotValid)
         {
