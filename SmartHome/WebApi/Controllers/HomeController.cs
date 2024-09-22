@@ -50,7 +50,7 @@ public class HomeController : ControllerBase
         {
             List<Member> members = _homeService.GetMembersByHomeId(id);
         
-            var memberResponses = members.Select(m => new UserResponse(m)).ToList();
+            List<UserResponse> memberResponses = members.Select(m => new UserResponse(m)).ToList();
 
             return Ok(new { Members = memberResponses });
         }
