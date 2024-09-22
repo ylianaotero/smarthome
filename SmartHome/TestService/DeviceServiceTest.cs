@@ -1,4 +1,5 @@
 using BusinessLogic.Services;
+using DataAccess.Exceptions;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -87,6 +88,13 @@ public class DeviceServiceTest
         
         Device retrievedDevice = _deviceService.GetDeviceById(1);
         Assert.AreEqual(_defaultCamera, retrievedDevice);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFoundException))]
+    public void TestGetDeviceByIdThrowsException()
+    {
+        _mockDeviceRepository.Setup(x => x.GetById(1)).Returns((Device?)null);
     }
     
     private void SetupDefaultObjects()
