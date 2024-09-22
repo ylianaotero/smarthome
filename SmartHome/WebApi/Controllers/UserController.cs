@@ -21,13 +21,21 @@ public class UserController : ControllerBase
     [HttpGet]
     public IActionResult GetUsers([FromHeader] Guid Authorization)
     {
-        User userInSession = _sessionService.GetUser(Authorization);
-        if (_userService.IsAdmin(userInSession.Email))
+        try
         {
-            return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
+            User userInSession = _sessionService.GetUser(Authorization);
+            if (_userService.IsAdmin(userInSession.Email))
+            {
+                return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
+            }
+
+            return StatusCode(403, "Unauthorized");
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
         }
 
-        return StatusCode(403, "Unauthorized");
     }
     
 }

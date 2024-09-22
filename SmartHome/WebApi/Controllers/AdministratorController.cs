@@ -35,7 +35,7 @@ public class AdministratorController : ControllerBase
             
             return StatusCode(403, new { message = "You do not have permission to access this resource." });
         }
-        catch (CannotFindItemInList cannotFindItemInList)
+        catch (CannotFindItemInList)
         {
             return Unauthorized(new { message = "Item cannot be found. Unauthorized access." });
         }
@@ -47,7 +47,7 @@ public class AdministratorController : ControllerBase
         {
             return Conflict(new { message = elementAlreadyExist.Message });
         }
-        catch (Exception exception)
+        catch (Exception)
         {
             return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
         }
