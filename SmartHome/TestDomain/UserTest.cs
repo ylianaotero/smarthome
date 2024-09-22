@@ -1,24 +1,32 @@
 using Domain;
-using Domain.Exceptions.RoleExceptions;
 using Domain.Exceptions.GeneralExceptions;
+using Domain.Exceptions.RoleExceptions;
 using IDomain;
 using Moq;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class UserTest
 {
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
-    
+    private const string ValidName = "Juan";
+    private const string ValidSurname = "Lopez";
+    private const string ValidEmail = "juanlopez@gmail.com";
+    private const string ValidPassword = "juanLop1@";
+    private const int ValidId = 1234;
+    private const string InvalidName = " ";
+    private const string InvalidEmail = "juanperez";
+    private const string InvalidPassword = "juanPerez";
+
     [TestMethod]
     public void TestAddNameToUser()
     {
         User user = new User();
         
-        user.Name = "Juan";
+        user.Name = ValidName;
         
-        Assert.AreEqual("Juan", user.Name);
+        Assert.AreEqual(ValidName, user.Name);
     }
     
     [TestMethod]
@@ -26,9 +34,9 @@ public class UserTest
     {
         User user = new User();
         
-        user.Surname = "Lopez";
+        user.Surname = ValidSurname;
         
-        Assert.AreEqual("Lopez", user.Surname);
+        Assert.AreEqual(ValidSurname, user.Surname);
     }
     
     [TestMethod]
@@ -46,9 +54,9 @@ public class UserTest
     {
         User user = new User();
         
-        user.Email = "juanlopez@gmail.com";
+        user.Email = ValidEmail;
 
-        Assert.AreEqual("juanlopez@gmail.com", user.Email);
+        Assert.AreEqual(ValidEmail, user.Email);
     }
     
     [TestMethod]
@@ -56,9 +64,9 @@ public class UserTest
     {
         User user = new User();
         
-        user.Password = "juanLop1@";
+        user.Password = ValidPassword;
         
-        Assert.AreEqual("juanLop1@", user.Password);
+        Assert.AreEqual(ValidPassword, user.Password);
     }
     
     [TestMethod]
@@ -66,9 +74,9 @@ public class UserTest
     {
         User user = new User();
         
-        user.Id = 1234;
+        user.Id = ValidId;
         
-        Assert.AreEqual(1234, user.Id);
+        Assert.AreEqual(ValidId, user.Id);
     }
     
     [TestMethod]
@@ -121,17 +129,15 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidateName("Juan")).Returns(true);
+            .Setup(v => v.ValidateName(ValidName)).Returns(true);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Name = "Juan"; 
-        
-        userValidatorMock.Verify(v => v.ValidateName("Juan"), Times.Once, "ValidateName should be called with 'Juan'");
-        
-        Assert.AreEqual("Juan", user.Name);
+        user.Name = ValidName; 
         
         userValidatorMock.VerifyAll();
+        
+        Assert.AreEqual(ValidName, user.Name);
     }
     
     [TestMethod]
@@ -141,13 +147,11 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidateName(" ")).Returns(false);
+            .Setup(v => v.ValidateName(InvalidName)).Returns(false);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Name = " "; 
-        
-        userValidatorMock.Verify(v => v.ValidateName(" "), Times.Once, "ValidateName should be called with ' '");
+        user.Name = InvalidName; 
         
         userValidatorMock.VerifyAll();
     }
@@ -158,20 +162,18 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidateSurname("Perez")).Returns(true);
+            .Setup(v => v.ValidateSurname(ValidSurname)).Returns(true);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Surname = "Perez"; 
-        
-        userValidatorMock.Verify(v => v.ValidateSurname("Perez"), Times.Once, "ValidateSurName should be called with 'Perez'");
-        
-        Assert.AreEqual("Perez", user.Surname);
+        user.Surname = ValidSurname; 
         
         userValidatorMock.VerifyAll();
+        
+        Assert.AreEqual(ValidSurname, user.Surname);
+        
     }
     
-        
     [TestMethod]
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidSurName()
@@ -179,13 +181,11 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidateSurname(" ")).Returns(false);
+            .Setup(v => v.ValidateSurname(InvalidName)).Returns(false);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Surname = " "; 
-        
-        userValidatorMock.Verify(v => v.ValidateSurname(" "), Times.Once, "ValidateSurname should be called with ' '");
+        user.Surname = InvalidName; 
         
         userValidatorMock.VerifyAll();
     }
@@ -196,20 +196,17 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidateEmail("juanperez@gmail.com")).Returns(true);
+            .Setup(v => v.ValidateEmail(ValidEmail)).Returns(true);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Email = "juanperez@gmail.com"; 
-        
-        userValidatorMock.Verify(v => v.ValidateEmail("juanperez@gmail.com"), Times.Once, "ValidateEmail should be called with 'juanperez@gmail.com'");
-        
-        Assert.AreEqual("juanperez@gmail.com", user.Email);
+        user.Email = ValidEmail; 
         
         userValidatorMock.VerifyAll();
+        
+        Assert.AreEqual(ValidEmail, user.Email);
     }
     
-        
     [TestMethod]
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidEmail()
@@ -217,13 +214,11 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidateEmail("juanperez")).Returns(false);
+            .Setup(v => v.ValidateEmail(InvalidEmail)).Returns(false);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Email = "juanperez"; 
-        
-        userValidatorMock.Verify(v => v.ValidateEmail("juanperez"), Times.Once, "ValidateEmail should be called with 'juanperez'");
+        user.Email = InvalidEmail; 
         
         userValidatorMock.VerifyAll();
     }
@@ -234,20 +229,17 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidatePassword("juanPerez@.")).Returns(true);
+            .Setup(v => v.ValidatePassword(ValidPassword)).Returns(true);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Password = "juanPerez@."; 
-        
-        userValidatorMock.Verify(v => v.ValidatePassword("juanPerez@."), Times.Once, "ValidatePassword should be called with 'juanPerez@.'");
-        
-        Assert.AreEqual("juanPerez@.", user.Password);
+        user.Password = ValidPassword; 
         
         userValidatorMock.VerifyAll();
+        
+        Assert.AreEqual(ValidPassword, user.Password);
     }
     
-        
     [TestMethod]
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidPassword()
@@ -255,16 +247,14 @@ public class UserTest
         var userValidatorMock = new Mock<IUserValidator>();
         
         userValidatorMock
-            .Setup(v => v.ValidatePassword("juanPerez")).Returns(false);
+            .Setup(v => v.ValidatePassword(InvalidPassword)).Returns(false);
         
         var user = new User(userValidatorMock.Object);
 
-        user.Password = "juanPerez"; 
-        
-        userValidatorMock.Verify(v => v.ValidatePassword("juanPerez"), Times.Once, "ValidatePassword should be called with 'juanPerez'");
-        
-        Assert.AreEqual("juanPerez", user.Password);
+        user.Password = InvalidPassword; 
         
         userValidatorMock.VerifyAll();
+        
+        Assert.AreEqual(InvalidPassword, user.Password);
     }
 }

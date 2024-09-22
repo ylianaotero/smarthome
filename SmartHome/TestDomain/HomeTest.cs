@@ -1,8 +1,7 @@
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
-using IDomain;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class HomeTest
@@ -13,10 +12,9 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
-    private const long id = 11;
+    private const int Id = 11;
 
     private Member _member; 
-    
 
     private Device _device; 
 
@@ -30,22 +28,25 @@ public class HomeTest
         _member.Email = Email1;
         _member.Permission = false; 
         _device = new SecurityCamera();
-        _device.Id = id; 
+        _device.Id = Id; 
     }
     
     [TestMethod]
     public void CreateNewHome()
     {
         Home newHome = new Home(Street,DoorNumber,Latitude,Longitude);
-        newHome.Id = 1; 
+        newHome.Id = Id; 
         
-        Assert.AreEqual(Street, newHome.Street);
-        Assert.AreEqual(DoorNumber, newHome.DoorNumber);
-        Assert.AreEqual(Latitude, newHome.Latitude);
-        Assert.AreEqual(Longitude, newHome.Longitude);
-        Assert.AreEqual(1, newHome.Id);
-        Assert.AreEqual(0, newHome.Members.Count);
-        Assert.AreEqual(0, newHome.Devices.Count);
+        Assert.IsTrue(
+            Street == newHome.Street &&
+            DoorNumber == newHome.DoorNumber &&
+            Latitude == newHome.Latitude &&
+            Longitude == newHome.Longitude &&
+            Id == newHome.Id &&
+            newHome.Members.Count == 0 &&
+            newHome.Devices.Count == 0
+        );
+
     }
     
     [TestMethod]
@@ -134,6 +135,7 @@ public class HomeTest
         Assert.AreEqual(1, _home.Members.Count);
         
         var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Email == Email1);
+        
         Assert.IsNull( memberWithEmail1);
 
     }
@@ -155,7 +157,8 @@ public class HomeTest
         
         Assert.AreEqual(1, _home.Devices.Count());
         
-        Device device = _home.Devices.FirstOrDefault(d => d.Id == id);
+        Device device = _home.Devices.FirstOrDefault(d => d.Id == Id);
+        
         Assert.IsNotNull(device);
     }
     
@@ -177,7 +180,7 @@ public class HomeTest
 
         Device result = _home.FindDevice(_device.Id); 
         
-        Assert.AreEqual(id, result.Id);
+        Assert.AreEqual(Id, result.Id);
     }
     
     [TestMethod]
@@ -204,8 +207,5 @@ public class HomeTest
         Assert.AreEqual(0, _home.Devices.Count());
         
     }
-
- 
-
     
 }

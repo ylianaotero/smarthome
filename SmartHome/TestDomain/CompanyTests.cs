@@ -1,45 +1,45 @@
 using Domain;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class CompanyTests
 {
-    private Company company;
+    private Company _company;
     
     private const string CompanyName = "SecurityCameras & Co.";
-    private const string CompanyRUT = "123456789";
-    private const string CompanyLogoURL = "https://example.com/logo.jpg";
+    private const string CompanyRut = "123456789";
+    private const string CompanyLogoUrl = "https://example.com/logo.jpg";
     
     [TestInitialize]
     public void TestInitialize()
     {
-        company = new Company();
+        _company = new Company();
     }
     
     [TestMethod]
     public void TestAddNameToCompany()
     {
-        company.Name = CompanyName;
+        _company.Name = CompanyName;
 
-        Assert.AreEqual(CompanyName, company.Name);
+        Assert.AreEqual(CompanyName, _company.Name);
     }
     
     [TestMethod]
-    public void TestAddRUTToCompany()
+    public void TestAddRutToCompany()
     {
-        company.RUT = CompanyRUT;
+        _company.RUT = CompanyRut;
 
-        Assert.AreEqual(CompanyRUT, company.RUT);
+        Assert.AreEqual(CompanyRut, _company.RUT);
     }
     
     [TestMethod]
-    public void TestAddLogoURLToCompany()
+    public void TestAddLogoUrlToCompany()
     {
-        company.LogoURL = CompanyLogoURL;
+        _company.LogoURL = CompanyLogoUrl;
 
-        Assert.AreEqual(CompanyLogoURL, company.LogoURL);
+        Assert.AreEqual(CompanyLogoUrl, _company.LogoURL);
     }
 
     [TestMethod]
@@ -49,16 +49,16 @@ public class CompanyTests
         {
             Id = 1,
             Name = CompanyName,
-            RUT = CompanyRUT,
-            LogoURL = CompanyLogoURL
+            RUT = CompanyRut,
+            LogoURL = CompanyLogoUrl
         };
         
         Company company2 = new Company()
         {
             Id = 2,
             Name = CompanyName,
-            RUT = CompanyRUT,
-            LogoURL = CompanyLogoURL
+            RUT = CompanyRut,
+            LogoURL = CompanyLogoUrl
         };
         
         Assert.AreNotEqual(company1, company2);
