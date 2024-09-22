@@ -198,4 +198,78 @@ public class AdministratorControllerTest
         
         Assert.AreEqual(500, result.StatusCode);
     }
+    
+    [TestMethod]
+    public void CreateUser_IsNotAdmin()
+    {
+        var createUserRequest = new CreateAdminRequest
+        {
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname
+        };
+        
+        var user = new User
+        {
+            Name = createUserRequest.Name,
+            Email = createUserRequest.Email,
+            Password = createUserRequest.Password,
+            Surname = createUserRequest.Surname,
+            Roles = _listOfRoles
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new Exception());
+        
+        Guid token = new Guid();
+
+        _sessionServiceMock.Setup(service => service.GetUser(token)).Returns(user); 
+        
+        _userServiceMock.Setup(service => service.IsAdmin(user.Email)).Returns(false); 
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object, _sessionServiceMock.Object);
+        
+        var result = _administratorController.CreateUser(createUserRequest, token) as ObjectResult;
+        
+        Assert.AreEqual(403, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void CreateUser_TokenIsInvalid()
+    {
+        var createUserRequest = new CreateAdminRequest
+        {
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname
+        };
+        
+        var user = new User
+        {
+            Name = createUserRequest.Name,
+            Email = createUserRequest.Email,
+            Password = createUserRequest.Password,
+            Surname = createUserRequest.Surname,
+            Roles = _listOfRoles
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new Exception());
+        
+        Guid token = new Guid();
+
+        _sessionServiceMock.Setup(service => service.GetUser(token)).Throws(new CannotFindItemInList("Cannot find user")); 
+        
+        _userServiceMock.Setup(service => service.IsAdmin(user.Email)).Returns(true); 
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object, _sessionServiceMock.Object);
+        
+        var result = _administratorController.CreateUser(createUserRequest, token) as ObjectResult;
+        
+        Assert.AreEqual(401, result.StatusCode);
+    }
 }
