@@ -231,7 +231,10 @@ public class DevicesControllerTest
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
-            device.Description == request.Description
+            device.Description == request.Description &&
+            device.Company == request.Company &&
+            (device as WindowSensor).Functionalities != null &&
+            (device as WindowSensor).Functionalities.SequenceEqual(request.Functionalities)
         )));
         
         ObjectResult result = _deviceController.PostWindowSensors(token, request) as CreatedResult;
@@ -240,10 +243,11 @@ public class DevicesControllerTest
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
-            device.Description == request.Description
+            device.Description == request.Description &&
+            device.Company == request.Company &&
+            (device as WindowSensor).Functionalities != null &&
+            (device as WindowSensor).Functionalities.SequenceEqual(request.Functionalities)
         )), Times.Once);
-        
-        
         Assert.AreEqual(201, result.StatusCode);
     }
     
@@ -307,6 +311,8 @@ public class DevicesControllerTest
             Model = DeviceModel,
             PhotoUrls = new List<string>() { DevicePhotoUrl },
             Description = DeviceDescription,
+            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed },
+            Company = _defaultCompany,
         };
     }
 
