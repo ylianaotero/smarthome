@@ -6,6 +6,7 @@ using WebApi.Out;
 
 namespace WebApi.Controllers;
 
+[Route("api/v1/hadministrators")]
 public class AdministratorController : ControllerBase
 {
     private readonly IUserService _userService;
