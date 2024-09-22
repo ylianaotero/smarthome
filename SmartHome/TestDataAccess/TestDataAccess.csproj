@@ -23,7 +23,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-      <ProjectReference Include="..\IDomain\IDomain.csproj" />
     </ItemGroup>
 
 </Project>

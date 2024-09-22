@@ -12,4 +12,5 @@ public abstract class Device
     public List<string> PhotoURLs { get; set; }
     public Company Company { get; set; }
     public bool IsConnected { get; set; }
+    public abstract string Kind { get; set; }
 }

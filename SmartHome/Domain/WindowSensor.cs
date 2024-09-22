@@ -11,6 +11,7 @@ public enum WindowSensorFunctionality
 public class WindowSensor : Device
 {
     public List<WindowSensorFunctionality>? Functionalities { get; set; }
+    public sealed override string Kind { get; set; }
 
     public override bool Equals(object? obj)
     {
@@ -23,5 +24,10 @@ public class WindowSensor : Device
                IsConnected == sensor.IsConnected &&
                Functionalities.SequenceEqual(sensor.Functionalities) &&
                Id == sensor.Id;
+    }
+    
+    public WindowSensor()
+    {
+        Kind = GetType().Name;
     }
 }
