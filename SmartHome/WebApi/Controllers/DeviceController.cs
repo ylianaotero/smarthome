@@ -120,7 +120,9 @@ public class DeviceController : ControllerBase
             Name = request.Name,
             Model = request.Model,
             PhotoURLs = request.PhotoUrls,
-            Description = request.Description
+            Description = request.Description,
+            Functionalities = request.Functionalities,
+            Company = request.Company
         };
         
         return windowSensor;
