@@ -28,6 +28,7 @@ public class DevicesControllerTest
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string SessionDoesNotExistExceptionMessage = "User not found";
+    private const string DeviceNotFoundExceptionMessage = "Device not found";
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
     private const int UnauthorizedStatusCode = 401;
@@ -170,7 +171,8 @@ public class DevicesControllerTest
     public void TestGetDeviceByIdNotFoundStatusCode()
     {
         Guid token = Guid.NewGuid();
-        _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Throws(new ElementNotFound("Device not found"));
+        _mockIDeviceService.Setup(service => service.GetDeviceById(1))
+            .Throws(new ElementNotFound(DeviceNotFoundExceptionMessage));
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
      
         IActionResult result = _deviceController.GetDeviceById(token, 1);
