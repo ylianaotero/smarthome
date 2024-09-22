@@ -83,8 +83,13 @@ public class DeviceController : ControllerBase
     
     [HttpPost]
     [Route("security-cameras")]
-    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
+    public IActionResult PostSecurityCameras([FromHeader] Guid? authorization, [FromBody] SecurityCameraRequest request)
     {
+        if (authorization == null)
+        {
+            return Unauthorized("");
+        }
+        
         SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
         
         _deviceService.CreateDevice(securityCamera);

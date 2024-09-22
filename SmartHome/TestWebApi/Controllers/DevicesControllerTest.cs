@@ -260,6 +260,7 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostSecurityCamerasCreatedStatusCode()
     {
+        Guid token = Guid.NewGuid();
         SecurityCameraRequest request = new SecurityCameraRequest()
         {
             Name = WindowSensorName,
@@ -270,7 +271,7 @@ public class DevicesControllerTest
             LocationType = LocationType.Indoor,
             Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection },
         };
-        
+        _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -278,7 +279,7 @@ public class DevicesControllerTest
             device.Description == request.Description
         )));
         
-        ObjectResult result = _deviceController.PostSecurityCameras(request) as CreatedResult;
+        ObjectResult result = _deviceController.PostSecurityCameras(token, request) as CreatedResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
