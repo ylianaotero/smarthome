@@ -1,7 +1,7 @@
-using BusinessLogic.IServices;
-using BusinessLogic.Services;
+using BusinessLogic;
 using DataAccess;
 using Domain;
+using IBusinessLogic;
 using IDataAccess;
 using Microsoft.EntityFrameworkCore;
 using ServiceFactory;

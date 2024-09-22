@@ -5,6 +5,7 @@ namespace Domain;
 
 public class CompanyOwner : Role
 {
+    private const string MessageError = "The owner has an existing company."; 
     public bool HasACompleteCompany { get; set; }
     private Company _company ;
 
@@ -34,7 +35,7 @@ public class CompanyOwner : Role
     {
         if (HasACompleteCompany)
         {
-            throw new ACompanyHasAlreadyBeenRegistredException("The owner has an existing company.");
+            throw new ACompanyHasAlreadyBeenRegistredException(MessageError);
         }
     }
 }

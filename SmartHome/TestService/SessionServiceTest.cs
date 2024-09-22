@@ -1,7 +1,7 @@
-using BusinessLogic.IServices;
-using BusinessLogic.Services;
+using BusinessLogic;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
+using IBusinessLogic;
 using IDataAccess;
 using Moq;
 
@@ -20,6 +20,8 @@ public class SessionServiceTest
         private IUserService _userService;
         private ISessionService _sessionService;
 
+        private Session _session; 
+
         [TestInitialize]
         public void Init()
         {
@@ -29,14 +31,14 @@ public class SessionServiceTest
             
             _mockUserRepository = new Mock<IRepository<User>>(MockBehavior.Strict);
             _mockSessionRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            
+            _session = new Session();
+            _session.User = _user;
         }
 
         [TestMethod]
         public void LogIn()
         {
-            Session session = new Session();
-            session.User = _user; 
-
             _mockUserRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(new List<User> { _user });
 
             _mockSessionRepository.Setup(repo => repo.Add(It.IsAny<Session>())).Verifiable();
@@ -57,9 +59,6 @@ public class SessionServiceTest
         [ExpectedException(typeof(CannotFindItemInList))]
         public void TryToLogInWithUserThatDoesNotExist()
         {
-            Session session = new Session();
-            session.User = _user; 
-
             _mockUserRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(new List<User>());
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
@@ -73,16 +72,13 @@ public class SessionServiceTest
         [TestMethod]
         public void LogOut()
         {
-            Session session = new Session();
-            session.User = _user; 
-
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { session });
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
 
             _mockSessionRepository.Setup(repo => repo.Delete(It.IsAny<Session>())).Verifiable();
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
-            sessionService.LogOut(session.Id);
+            sessionService.LogOut(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -94,14 +90,12 @@ public class SessionServiceTest
         [ExpectedException(typeof(CannotFindItemInList))]
         public void InvalidLogOut()
         {
-            Session session = new Session();
-            session.User = _user; 
 
             _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session>());
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
-            sessionService.LogOut(session.Id);
+            sessionService.LogOut(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -110,15 +104,13 @@ public class SessionServiceTest
         [TestMethod]
         public void GetUserOfTheSession()
         {
-            Session session = new Session();
-            session.User = _user;
-            session.Id = new Guid(); 
+            _session.Id = new Guid(); 
 
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { session });
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
-            User response = sessionService.GetUser(session.Id);
+            User response = sessionService.GetUser(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -139,7 +131,5 @@ public class SessionServiceTest
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
         }
-
-        
-        
+    
 }

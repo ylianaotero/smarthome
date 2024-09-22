@@ -1,12 +1,12 @@
-using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
+using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
 using WebApi.Out;
 
-namespace TestWebApi;
+namespace TestWebApi.Controllers;
 
 [TestClass]
 public class DevicesControllerTest

@@ -1,26 +1,29 @@
 using Domain;
 using Domain.Exceptions.HomeExceptions;
 
-namespace DomainTest;
+namespace TestDomain;
 
 [TestClass]
 public class HomeOwnerTest
 {
+    private const int DoorNumber = 1223;
+    private const string Street = "malibu";
+    private const int Latitude = 1333;
+    private const int Longitude = 1333;
+    
     [TestMethod]
     public void TestAddNewHomeOwner()
     {
-        // Arrange
         HomeOwner homeOwner = new HomeOwner();
-
-        // Assert
-        Assert.AreEqual(0, homeOwner.Homes.Count());
+        
+        Assert.AreEqual(0 , homeOwner.Homes.Count());
     }
 
     [TestMethod]
     public void TestAddNewHomeToHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home("malibu", 1223, 1333, 1333);
+        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
         homeOwner.AddHome(home);
         Assert.AreEqual(1, homeOwner.Homes.Count());
     }
@@ -29,7 +32,7 @@ public class HomeOwnerTest
     public void TestDeleteHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home("malibu", 1223, 1333, 1333);
+        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
         homeOwner.AddHome(home);
         homeOwner.RemoveHome(home);
         Assert.AreEqual(0, homeOwner.Homes.Count());
@@ -39,7 +42,7 @@ public class HomeOwnerTest
     public void TestSearchHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home("malibu", 1223, 1333, 1333);
+        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
         homeOwner.AddHome(home);
         Assert.AreEqual(home,homeOwner.SearchHome(home.Id));
     }
@@ -49,7 +52,7 @@ public class HomeOwnerTest
     public void TestCannotFindHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home("malibu", 1223, 1333, 1333);
+        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
         homeOwner.SearchHome(home.Id);
     }
 }

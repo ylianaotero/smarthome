@@ -1,9 +1,9 @@
-using BusinessLogic.IServices;
+using BusinessLogic.Exceptions;
 using Domain;
-using Domain.Exceptions.GeneralExceptions;
+using IBusinessLogic;
 using IDataAccess;
 
-namespace BusinessLogic.Services;
+namespace BusinessLogic;
 
 public class UserService : IUserService
 {

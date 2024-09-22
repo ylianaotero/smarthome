@@ -1,10 +1,15 @@
 using Domain.Exceptions.GeneralExceptions;
-using IDomain;
 
 namespace Domain;
 
 public class Home
 {
+    private const string MessageMemberAlreadyExists = "Member already exists"; 
+    private const string MessageMemberNotFound = "Member not found"; 
+    private const string MessageDeviceAlreadyExists = "Device already exists"; 
+    private const string MessageDeviceNotFound = "Device not found"; 
+        
+    
     private List<Member> _members;
     
     public int Id { get; set; }
@@ -35,7 +40,7 @@ public class Home
     {
         if (MemberExist(member.Email))
         {
-            throw new CannotAddItem("El miembro ya existe"); 
+            throw new CannotAddItem(MessageMemberAlreadyExists); 
         }
         else
         {
@@ -58,7 +63,7 @@ public class Home
     {
         if (!MemberExist(email))
         {
-            throw new CannotFindItemInList("No se encontro el miembro"); 
+            throw new CannotFindItemInList(MessageMemberNotFound ); 
         }
         return Members.FirstOrDefault(m => m.Email == email); 
     }
@@ -81,7 +86,7 @@ public class Home
         }
         else
         {
-            throw new CannotAddItem("El dispositivo ya existe"); 
+            throw new CannotAddItem(MessageDeviceAlreadyExists); 
         }
         
     }
@@ -102,7 +107,7 @@ public class Home
         {
             return Devices.FirstOrDefault(d => d.Id == id); 
         }
-        throw new CannotFindItemInList("No se encontro el dispositivo"); 
+        throw new CannotFindItemInList(MessageDeviceNotFound ); 
         
     }
 
