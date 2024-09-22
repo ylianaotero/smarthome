@@ -134,7 +134,7 @@ public class DevicesControllerTest
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
         
-        ObjectResult? result = _deviceController.GetDeviceById(token, null, null, null, null) 
+        ObjectResult? result = _deviceController.GetDeviceById(token, 1) 
             as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);

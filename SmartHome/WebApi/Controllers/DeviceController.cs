@@ -57,6 +57,15 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
+    [Route("{id}")]
+    public IActionResult GetDeviceById([FromHeader] Guid? authorization, [FromRoute] long id)
+    {
+        Device device = _deviceService.GetDeviceById(id);
+        
+        return Ok("");
+    }
+    
+    [HttpGet]
     [Route("types")]
     public IActionResult GetDeviceTypes([FromHeader] Guid? authorization)
     {
