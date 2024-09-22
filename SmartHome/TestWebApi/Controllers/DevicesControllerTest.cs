@@ -257,7 +257,6 @@ public class DevicesControllerTest
         Assert.AreEqual(401, result.StatusCode);
     }
     
-    
     [TestMethod]
     public void TestPostSecurityCamerasCreatedStatusCode()
     {
@@ -294,6 +293,25 @@ public class DevicesControllerTest
         
         
         Assert.AreEqual(201, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostSecurityCamerasUnauthorizedStatusCode()
+    {
+        SecurityCameraRequest request = new SecurityCameraRequest()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoUrls = new List<string>() { DevicePhotoUrl },
+            Description = DeviceDescription,
+            Company = _defaultCompany,
+            LocationType = LocationType.Indoor,
+            Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection },
+        };
+
+        ObjectResult result = _deviceController.PostSecurityCameras(null, request) as UnauthorizedObjectResult;
+        
+        Assert.AreEqual(401, result.StatusCode);
     }
     
     private WindowSensorRequest CreateWindowSensorRequest()
