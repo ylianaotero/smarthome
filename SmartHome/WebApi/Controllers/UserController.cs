@@ -10,6 +10,9 @@ namespace WebApi.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
+    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    private const string ErrorMessageUnauthorizedAccess =  "You do not have permission to access this resource.";
+    
     private readonly IUserService _userService;
     private readonly ISessionService _sessionService;
 
@@ -30,7 +33,7 @@ public class UserController : ControllerBase
                 return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
             }
 
-            return StatusCode(403, "Unauthorized");
+            return StatusCode(403, ErrorMessageUnauthorizedAccess);
         }
         catch (CannotFindItemInList cannotFindItemInList)
         {
@@ -38,7 +41,7 @@ public class UserController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
+            return StatusCode(500, new { message = ErrorMessageUnexpectedException});
         }
         
 

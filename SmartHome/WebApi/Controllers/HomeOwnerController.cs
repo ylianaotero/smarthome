@@ -10,6 +10,8 @@ namespace WebApi.Controllers;
 [ApiController]
 public class HomeOwnerController : ControllerBase
 {
+    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    
     private readonly IUserService _userService;
 
     public HomeOwnerController(IUserService userService)
@@ -37,7 +39,7 @@ public class HomeOwnerController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
+            return StatusCode(500, new { message = ErrorMessageUnexpectedException });
         }
         
     }

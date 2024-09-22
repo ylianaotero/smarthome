@@ -10,6 +10,9 @@ namespace WebApi.Controllers;
 [Route("api/v1/administrators")]
 public class AdministratorController : ControllerBase
 {
+    private const string ErrorMessageUnauthorizedAccess =  "You do not have permission to access this resource.";
+    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    
     private readonly IUserService _userService;
     private readonly ISessionService _sessionService;
 
@@ -33,7 +36,7 @@ public class AdministratorController : ControllerBase
                 return CreatedAtAction(nameof(CreateUser), userResponse);
             }
             
-            return StatusCode(403, new { message = "You do not have permission to access this resource." });
+            return StatusCode(403, new { message =  ErrorMessageUnauthorizedAccess});
         }
         catch (CannotFindItemInList cannotFindItemInList)
         {
@@ -49,9 +52,7 @@ public class AdministratorController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
+            return StatusCode(500, new { message =  ErrorMessageUnexpectedException});
         }
-       
-        
     }
 }

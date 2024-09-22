@@ -10,6 +10,9 @@ namespace WebApi.Controllers;
 [Route("/api/v1/login")]
 public class SessionController : ControllerBase
 {
+    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    private const string ErrorMessageBadRequest =  "Email and password are required.";
+    
     private readonly ISessionService _sessionService;
 
     public SessionController(ISessionService sessionService)
@@ -22,7 +25,7 @@ public class SessionController : ControllerBase
     {
         if (request == null || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
-            return BadRequest("Email and password are required.");
+            return BadRequest(ErrorMessageBadRequest);
         }
         try
         {
@@ -37,11 +40,11 @@ public class SessionController : ControllerBase
         }
         catch (CannotFindItemInList ex) 
         {
-            return StatusCode(404, "Not found");
+            return StatusCode(404, ex.Message);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Internal server error.");
+            return StatusCode(500, ErrorMessageUnexpectedException);
         }
     }
 
