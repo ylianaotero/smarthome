@@ -280,6 +280,18 @@ public class DevicesControllerTest
         Assert.AreEqual(401, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostSecurityCamerasForbiddenStatusCode()
+    {
+        Guid token = Guid.NewGuid();
+        SecurityCameraRequest request = DefaultSecurityCameraRequest();
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+        
+        ObjectResult result = (ObjectResult)_deviceController.PostSecurityCameras(token, request);
+        
+        Assert.AreEqual(403, result.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos = new List<string>()
