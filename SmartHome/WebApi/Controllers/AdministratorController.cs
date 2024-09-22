@@ -24,17 +24,17 @@ public class AdministratorController : ControllerBase
             var user = createAdminRequest.ToEntity();
             _userService.CreateUser(user);
             var userResponse = new AdminResponse(user);
-            Console.Write("holaaa");
             return CreatedAtAction(nameof(CreateUser), userResponse);
         }
-        /*catch ()
-        {
-            
-        }*/
         catch (InputNotValid inputNotValid)
         {
             return BadRequest(new { message = inputNotValid.Message });
         }
+        catch (ElementAlreadyExist elementAlreadyExist)
+        {
+            return Conflict(new { message = elementAlreadyExist.Message });
+        }
+
        
         
     }

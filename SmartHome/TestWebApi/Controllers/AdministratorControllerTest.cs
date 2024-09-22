@@ -29,8 +29,6 @@ public class AdministratorControllerTest
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
 
-        _administratorController = new AdministratorController(_userServiceMock.Object);
-
         _listOfRoles = new List<Role>();
 
         _administrator = new Administrator();
@@ -64,6 +62,8 @@ public class AdministratorControllerTest
             u.Password == user.Password &&
             u.Surname == user.Surname 
         )));
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object);
 
         var result = _administratorController.CreateUser(createAdminRequest) as ObjectResult;
         var userResponse = result?.Value as AdminResponse;
@@ -92,6 +92,8 @@ public class AdministratorControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid("Input not valid, try again"));
         
+        _administratorController = new AdministratorController(_userServiceMock.Object);
+        
         var result = _administratorController.CreateUser(createUserRequest) as ObjectResult;
         
         Assert.IsNotNull(result);
@@ -104,7 +106,7 @@ public class AdministratorControllerTest
         var createUserRequest = new CreateAdminRequest
         {
             Name = Name,
-            Email = InvalidEmail,
+            Email = Email,
             Password = Password,
             Surname = Surname
         };
@@ -112,6 +114,8 @@ public class AdministratorControllerTest
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new ElementAlreadyExist("User already exists"));
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object);
         
         var result = _administratorController.CreateUser(createUserRequest) as ObjectResult;
         
