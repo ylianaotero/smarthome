@@ -225,13 +225,7 @@ public class DevicesControllerTest
     public void TestPostWindowSensorsCreatedStatusCode()
     {
         Guid token = Guid.NewGuid();
-        WindowSensorRequest request = new WindowSensorRequest()
-        {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = new List<string>() { DevicePhotoUrl },
-            Description = DeviceDescription,
-        };
+        WindowSensorRequest request = CreateWindowSensorRequest();
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
@@ -256,15 +250,9 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostWindowSensorsUnauthorizedStatusCode()
     {
-        WindowSensorRequest request = new WindowSensorRequest()
-        {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = new List<string>() { DevicePhotoUrl },
-            Description = DeviceDescription,
-        };
+        WindowSensorRequest request = CreateWindowSensorRequest();
 
-        UnauthorizedResult result = _deviceController.PostWindowSensors(null, request) as UnauthorizedResult;
+        ObjectResult result = _deviceController.PostWindowSensors(null, request) as UnauthorizedObjectResult;
         
         Assert.AreEqual(401, result.StatusCode);
     }
@@ -306,6 +294,17 @@ public class DevicesControllerTest
         
         
         Assert.AreEqual(201, result.StatusCode);
+    }
+    
+    private WindowSensorRequest CreateWindowSensorRequest()
+    {
+        return new WindowSensorRequest()
+        {
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            PhotoUrls = new List<string>() { DevicePhotoUrl },
+            Description = DeviceDescription,
+        };
     }
     
     private void SetupDefaultObjects()
