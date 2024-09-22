@@ -39,7 +39,7 @@ public class UserControllerTest
     }
 
     [TestMethod]
-    public void CreateUserValidRequest()
+    public void GetUsersValidRequest()
     {
 
         var user1 = new User
@@ -92,7 +92,7 @@ public class UserControllerTest
     
     
     [TestMethod]
-    public void CreateUserUnauthorized()
+    public void GetUsersUnauthorized()
     {
 
         var user1 = new User
@@ -122,6 +122,37 @@ public class UserControllerTest
         _sessionServiceMock.Verify();
         
         Assert.AreEqual(403, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void GetUsersOtherException()
+    {
+
+        var user1 = new User
+        {
+            Name = Name,
+            Email = Email1,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl,
+            Roles = _listOfRoles
+        };
+
+        var user2 = new User(); 
+
+        _session.User = user1;
+        _session.Id = new Guid(); 
+
+        List<User> listOfUsers = new List<User> { user1, user2 };
+        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new Exception()); 
+        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
+        
+        var result = _userController.GetUsers(_session.Id) as ObjectResult;
+
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
+        
+        Assert.AreEqual(500, result.StatusCode);
     }
     
     
