@@ -11,6 +11,13 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         deviceRepository.Add(device);
     }
     
+    public Device GetDeviceById(long id)
+    {
+        Device device = deviceRepository.GetById(id);
+        
+        return device;
+    }
+    
     public List<Device> GetAllDevices()
     {
         return deviceRepository.GetAll();
