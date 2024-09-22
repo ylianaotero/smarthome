@@ -2,7 +2,6 @@ using BusinessLogic.IServices;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Moq;
 using WebApi.Controllers;
 using WebApi.In;
@@ -118,15 +117,16 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetDeviceTypesOkStatusCode()
     {
+        Guid token = Guid.NewGuid();
         List<string> deviceTypes = new List<string>()
         {
             "SecurityCamera",
             "WindowSensor"
         };
-
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(deviceTypes);
         
-        ObjectResult result = _deviceController.GetDeviceTypes() as OkObjectResult;
+        ObjectResult result = _deviceController.GetDeviceTypes(token) as OkObjectResult;
         
         Assert.AreEqual(200, result.StatusCode);
     }
@@ -134,26 +134,27 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetDeviceTypesOkResponse()
     {
+        Guid token = Guid.NewGuid();
         List<string> deviceTypes = new List<string>()
         {
             "SecurityCamera",
             "WindowSensor"
         };
+        _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(deviceTypes);
-        
         DeviceTypesResponse expectedResponse = new DeviceTypesResponse()
         {
             DeviceTypes = deviceTypes,
         };
         
-        ObjectResult result = _deviceController.GetDeviceTypes() as OkObjectResult;
+        ObjectResult result = _deviceController.GetDeviceTypes(token) as OkObjectResult;
         DeviceTypesResponse response = result.Value as DeviceTypesResponse;
         
         Assert.AreEqual(expectedResponse, response);
     }
     
     [TestMethod]
-    public void TestGetDeviceTypesUnauthorizedtatusCode()
+    public void TestGetDeviceTypesUnauthorizedStatusCode()
     {
         ObjectResult result = _deviceController.GetDeviceTypes(null) as UnauthorizedObjectResult;
         

@@ -56,8 +56,13 @@ public class DeviceController : ControllerBase
     
     [HttpGet]
     [Route("types")]
-    public IActionResult GetDeviceTypes()
+    public IActionResult GetDeviceTypes([FromHeader] Guid? authorization)
     {
+        if (authorization == null)
+        {
+            return Unauthorized("");
+        }
+        
         List<string> deviceTypes = _deviceService.GetDeviceTypes();
         
         DeviceTypesResponse deviceTypesResponse = GetDeviceTypesResponse(deviceTypes);
