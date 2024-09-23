@@ -1,4 +1,5 @@
-using BusinessLogic;
+using DataAccess.Exceptions;
+using BusinessLogic.Services;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -9,6 +10,7 @@ namespace TestService;
 public class DeviceServiceTest
 {
     private Mock<IRepository<Device>> _mockDeviceRepository;
+    private DeviceService _deviceService;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
@@ -17,13 +19,14 @@ public class DeviceServiceTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
-    
+    private const string SecurityCameraType = "SecurityCamera";
+    private const string WindowSensorType = "WindowSensor";
     private const string CompanyName = "IoT Devices & Co.";
     
     [TestInitialize]
     public void TestInitialize()
     {
-        CreateMockDeviceRepository();
+        CreateMockAndService();
         SetupDefaultObjects();
     }
 
@@ -34,9 +37,8 @@ public class DeviceServiceTest
         devices.Add(_defaultCamera);
         devices.Add(_defaultWindowSensor);
         _mockDeviceRepository.Setup(x => x.GetAll()).Returns(devices);
-        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
-        List<Device> retrievedDevices =  deviceService.GetAllDevices();
+        List<Device> retrievedDevices =  _deviceService.GetAllDevices();
         
         Assert.AreEqual(devices, retrievedDevices);
     }
@@ -46,13 +48,12 @@ public class DeviceServiceTest
     {
         List<Device> devices = new List<Device>();
         devices.Add(_defaultCamera);
-        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == "SecurityCamera" &&
+        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == SecurityCameraType &&
                                          d.PhotoURLs.First() == DevicePhotoUrl && d.Company.Name == CompanyName;
         
         _mockDeviceRepository.Setup(x => x.GetByFilter(filter)).Returns(devices);
-        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
-        List<Device> retrievedDevices =  deviceService.GetDevicesByFilter(filter);
+        List<Device> retrievedDevices =  _deviceService.GetDevicesByFilter(filter);
         
         Assert.AreEqual(devices, retrievedDevices);
     }
@@ -62,12 +63,11 @@ public class DeviceServiceTest
     {
         List<string> deviceTypes = new List<string>()
         {
-            "SecurityCamera",
-            "WindowSensor"
+            SecurityCameraType,
+            WindowSensorType
         };
-        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
-        List<string> retrievedDeviceTypes = deviceService.GetDeviceTypes();
+        List<string> retrievedDeviceTypes = _deviceService.GetDeviceTypes();
         
         CollectionAssert.AreEqual(deviceTypes, retrievedDeviceTypes);
     }
@@ -76,10 +76,27 @@ public class DeviceServiceTest
     public void TestCreateDevice()
     {
         _mockDeviceRepository.Setup(x => x.Add(_defaultWindowSensor));
-        DeviceService deviceService = new DeviceService(_mockDeviceRepository.Object);
         
-        deviceService.CreateDevice(_defaultWindowSensor);
+        _deviceService.CreateDevice(_defaultWindowSensor);
         _mockDeviceRepository.Verify(x => x.Add(_defaultWindowSensor), Times.Once);
+    }
+
+    [TestMethod]
+    public void TestGetDeviceById()
+    {
+        _mockDeviceRepository.Setup(x => x.GetById(1)).Returns(_defaultCamera);
+        
+        Device retrievedDevice = _deviceService.GetDeviceById(1);
+        Assert.AreEqual(_defaultCamera, retrievedDevice);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFoundException))]
+    public void TestGetDeviceByIdThrowsException()
+    {
+        _mockDeviceRepository.Setup(x => x.GetById(1)).Returns((Device?)null);
+
+        _deviceService.GetDeviceById(1);
     }
     
     private void SetupDefaultObjects()
@@ -92,13 +109,14 @@ public class DeviceServiceTest
         _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
-            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "SecurityCamera" };
+            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = SecurityCameraType };
         _defaultWindowSensor = new WindowSensor()
-            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = "WindowSensor" };
+            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = WindowSensorType };
     }
 
-    private void CreateMockDeviceRepository()
+    private void CreateMockAndService()
     {
         _mockDeviceRepository = new Mock<IRepository<Device>>();
+        _deviceService = new DeviceService(_mockDeviceRepository.Object);
     }
 }

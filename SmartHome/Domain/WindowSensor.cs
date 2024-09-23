@@ -28,5 +28,6 @@ public class WindowSensor : Device
     public WindowSensor()
     {
         Kind = GetType().Name;
+        IsConnected = false;
     }
 }
