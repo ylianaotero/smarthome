@@ -15,6 +15,7 @@ public class Home
     
     [Key]
     public int Id { get; set; }
+    public long OwnerId { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
@@ -28,7 +29,7 @@ public class Home
     
     public List<Device> Devices { get; set; }
     
-    public Home(string street, int doorNumber,double latitude,double longitude)
+    public Home(long ownerId,string street, int doorNumber,double latitude,double longitude)
     {
         Street = street;
         DoorNumber = doorNumber;
