@@ -1,5 +1,5 @@
 using Domain;
-using WebApi.Out;
+using WebApi.Models.Out;
 
 namespace TestWebApi.Models.Out;
 

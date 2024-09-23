@@ -2,8 +2,8 @@ using BusinessLogic.Exceptions;
 using Domain.Exceptions.GeneralExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.In;
-using WebApi.Out;
+using WebApi.Models.In;
+using WebApi.Models.Out;
 
 namespace WebApi.Controllers;
 

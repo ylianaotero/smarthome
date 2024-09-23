@@ -1,6 +1,6 @@
 using Domain;
 
-namespace WebApi.In;
+namespace WebApi.Models.In;
 
 public class CreateHomeOwnerRequest
 {

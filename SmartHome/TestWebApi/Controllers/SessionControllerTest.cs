@@ -4,8 +4,8 @@ using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
-using WebApi.Out;
-using LoginRequest = WebApi.In.LoginRequest;
+using WebApi.Models.Out;
+using LoginRequest = WebApi.Models.In.LoginRequest;
 
 namespace TestWebApi.Controllers;
 

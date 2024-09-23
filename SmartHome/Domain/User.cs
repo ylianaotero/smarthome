@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.Exceptions.RoleExceptions;
 using Domain.Exceptions.GeneralExceptions;
-using IDomain;
 
 namespace Domain;
 

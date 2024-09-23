@@ -1,5 +1,4 @@
 using BusinessLogic;
-using BusinessLogic.Services;
 using DataAccess;
 using Domain;
 using IBusinessLogic;
@@ -30,6 +29,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();

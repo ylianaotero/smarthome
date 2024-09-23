@@ -1,7 +1,6 @@
 using Domain;
-using IDomain;
 
-namespace WebApi.Out;
+namespace WebApi.Models.Out;
 
 public class HomeOwnerResponse
 {

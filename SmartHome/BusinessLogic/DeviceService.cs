@@ -1,9 +1,9 @@
-using IBusinessLogic;
 using DataAccess.Exceptions;
 using Domain;
+using IBusinessLogic;
 using IDataAccess;
 
-namespace BusinessLogic.Services;
+namespace BusinessLogic;
 
 public class DeviceService(IRepository<Device> deviceRepository) : IDeviceService
 {

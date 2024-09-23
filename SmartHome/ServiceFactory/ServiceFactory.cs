@@ -1,5 +1,5 @@
 ﻿using BusinessLogic;
-using BusinessLogic.Services;
+using BusinessLogic;
 using IBusinessLogic;
 using Microsoft.Extensions.DependencyInjection;
 

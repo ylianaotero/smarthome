@@ -4,7 +4,8 @@ using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.In;
-using WebApi.Out;
+using WebApi.Models.Out;
+using WebApi;
 
 namespace WebApi.Controllers;
 
