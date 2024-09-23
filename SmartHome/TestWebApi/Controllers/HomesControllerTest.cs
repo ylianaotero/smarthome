@@ -112,66 +112,6 @@ public class HomesControllerTest
 
         Assert.AreEqual(expectedResponse, response);
     }
-    
-    /*
-    [TestMethod]
-    public void TestGetMembersByHomeIdOkStatusCode()
-    {
-        int homeId = 1;
-        List<Member> members = new List<Member>
-        {
-            new Member { Id = 1, Name = "John Doe", Email = "john.doe@example.com" },
-            new Member { Id = 2, Name = "Jane Doe", Email = "jane.doe@example.com" }
-        };
-    
-        _mockHomeService.Setup(service => service.GetMembersByHomeId(homeId)).Returns(members);
-
-        ObjectResult result = _homeController.GetMembersByHomeId(homeId) as OkObjectResult;
-
-        Assert.AreEqual(200, result.StatusCode);
-    }
-    */
-    
-    /*
-    [TestMethod]
-    public void TestGetMembersByHomeIdOkResponse()
-    {
-        int homeId = 1;
-        DateTime createdAtJohn = DateTime.Now.AddDays(-10);
-        DateTime createdAtJane = DateTime.Now.AddDays(-20);
-
-        List<Member> members = new List<Member>
-        {
-            new Member
-            {
-                Name = "John",
-                Surname = "Doe",
-                Roles = new List<Role> { new RoleTest(1) }
-            },
-            new Member
-            {
-                Name = "Jane",
-                Surname = "Doe",
-                Roles = new List<Role> { new RoleTest(2) }
-        };
-
-        members[0].GetType().GetProperty("CreatedAt").SetValue(members[0], createdAtJohn);
-        members[1].GetType().GetProperty("CreatedAt").SetValue(members[1], createdAtJane);
-
-        _mockHomeService.Setup(service => service.GetMembersByHomeId(homeId)).Returns(members);
-
-        var result = _homeController.GetMembersByHomeId(homeId) as OkObjectResult;
-        var response = result.Value as dynamic;
-
-        Assert.AreEqual("John Doe", response.Members[0].FullName);
-        Assert.AreEqual("Jane Doe", response.Members[1].FullName);
-
-        Assert.AreEqual(createdAtJohn, response.Members[0].CreatedAt);
-        Assert.AreEqual(createdAtJane, response.Members[1].CreatedAt);
-
-        Assert.AreEqual(1, response.Members[0].Roles.Count);
-        Assert.AreEqual(1, response.Members[1].Roles.Count);
-    }*/
 
     private void SetupHomeController()
     {

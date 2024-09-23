@@ -34,25 +34,6 @@ public class HomeController : ControllerBase
         HomesResponse homesResponse = GetHomesResponse(homes);
         return Ok(homesResponse);
     }
-    
-    /*
-    [HttpGet("{id}/members")]
-    public IActionResult GetMembersByHome([FromHeader] Guid userId)
-    {
-        try
-        {
-            List<Member> members = _homeService.GetMembersByHomeId(home.Id);
-        
-            List<UserResponse> memberResponses = members.Select(m => new UserResponse(m)).ToList();
-
-            return Ok(new { Members = memberResponses });
-        }
-        catch (Exception ex)
-        {
-            return NotFound(new { Message = ex.Message });
-        }
-    }
-    */
 
     private HomesResponse GetHomesResponse(List<Home> homes)
     {
