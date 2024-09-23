@@ -1,4 +1,5 @@
 using BusinessLogic;
+using BusinessLogic.Exceptions;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -73,12 +74,26 @@ public class HomeServiceTest
         }
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
-        List<Member> retrievedMembers = homeService.GetMembersByHomeId(1);
+        List<Member> retrievedMembers = homeService.GetMembersFromHome(1);
         CollectionAssert.AreEqual(members, retrievedMembers); 
     }
     
     [TestMethod]
-    public void TestGetDevicesByHomeId()
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotGetMemberByIdBecauseHomeDoesNotExist()
+    {
+        int searchedHomeId = 999;
+    
+        _mockHomeRepository.Setup(m => m.GetById(searchedHomeId)).Returns((Home)null);
+
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+
+        homeService.GetMembersFromHome(searchedHomeId);
+    }
+
+    
+    [TestMethod]
+    public void TestGetDevicesFromHome()
     {
         List<Device> devices = new List<Device>
         {
@@ -95,8 +110,20 @@ public class HomeServiceTest
     
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
-        List<Device> retrievedDevices = homeService.GetDevicesByHomeId(1);
+        List<Device> retrievedDevices = homeService.GetDevicesFromHome(1);
         CollectionAssert.AreEqual(devices, retrievedDevices);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotGetDeviceFromHomeBecauseItIsNotFound()
+    {
+        int searchedId = 999;
+        _mockHomeRepository.Setup(m => m.GetById(searchedId)).Returns((Home)null);
+    
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+
+        homeService.GetDevicesFromHome(searchedId);
     }
     
     [TestMethod]
@@ -113,5 +140,38 @@ public class HomeServiceTest
         Assert.IsTrue(_home.Members.Contains(member));
         _mockHomeRepository.Verify(m => m.Update(_home), Times.Once);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void TestCannotAddMemberToHomeBecauseItIsAlreadyExist()
+    {
+        int homeId = 1;
+        Member existingMember = new Member { Email = "existingmember@example.com", Permission = true };
+        Member newMember = new Member { Email = "existingmember@example.com", Permission = false };
+    
+        _home = new Home(Street, DoorNumber, Latitude, Longitude);
+        _home.AddMember(existingMember);
+    
+        _mockHomeRepository.Setup(m => m.GetById(homeId)).Returns(_home);
+
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+
+        homeService.AddMemberToHome(homeId, newMember);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotAddMemberToHomeBecauseItIsNotFound()
+    {
+        int nonExistentHomeId = 999;
+        Member newMember = new Member { Email = "existingmember@example.com", Permission = true };
+    
+        _mockHomeRepository.Setup(m => m.GetById(nonExistentHomeId)).Returns((Home)null);
+
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+
+        homeService.AddMemberToHome(nonExistentHomeId, newMember);
+    }
+
     
 }

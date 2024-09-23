@@ -1,3 +1,4 @@
+using BusinessLogic.Exceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -18,22 +19,22 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return homeRepository.GetAll();
     }
     
-    public List<Member> GetMembersByHomeId(int homeId)
+    public List<Member> GetMembersFromHome(int homeId)
     {
         var home = homeRepository.GetById(homeId);
         if (home == null)
         {
-            throw new Exception("Home not found");
+            throw new ElementNotFound("Home not found");
         }
         return home.Members;
     }
     
-    public List<Device> GetDevicesByHomeId(int homeId)
+    public List<Device> GetDevicesFromHome(int homeId)
     {
         var home = homeRepository.GetById(homeId);
         if (home == null)
         {
-            throw new Exception("Home not found");
+            throw new ElementNotFound("Home not found");
         }
         return home.Devices;
     }
@@ -43,9 +44,13 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         var home = homeRepository.GetById(homeId);
         if (home == null)
         {
-            throw new Exception("Home not found");
+            throw new ElementNotFound("Home not found");
         }
-
+        if (home.Members.Any(m => m.Email == member.Email))
+        {
+            throw new ElementAlreadyExist("A member with this email already exists on this home");
+        }
+        
         home.AddMember(member);
         
         homeRepository.Update(home);

@@ -10,6 +10,7 @@ namespace WebApi.Controllers;
 public class HomeController : ControllerBase
 {
     private readonly IHomeService _homeService;
+    private readonly ISessionService _sessionService;
     
     public HomeController(IHomeService homeService)
     {
@@ -17,7 +18,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetHomes([FromQuery] string? street,  [FromQuery] string? doorNumber, [FromQuery] string? latitude, [FromQuery] string? longitude)
+    public IActionResult GetHomes([FromQuery] string? street,  [FromQuery] string? doorNumber)
     {
         List<Home> homes = _homeService.GetAllHomes();
         if (street != null)
@@ -29,26 +30,18 @@ public class HomeController : ControllerBase
         {
             homes = homes.FindAll(h => h.DoorNumber.ToString() == doorNumber);
         }
-        if (latitude != null)
-        {
-            homes = homes.FindAll(h => h.Latitude.ToString() == latitude);
-        }
-
-        if (longitude != null)
-        {
-            homes = homes.FindAll(h => h.Longitude.ToString() == longitude);
-        }
         
         HomesResponse homesResponse = GetHomesResponse(homes);
         return Ok(homesResponse);
     }
     
+    /*
     [HttpGet("{id}/members")]
-    public IActionResult GetMembersByHomeId(int id)
+    public IActionResult GetMembersByHome([FromHeader] Guid userId)
     {
         try
         {
-            List<Member> members = _homeService.GetMembersByHomeId(id);
+            List<Member> members = _homeService.GetMembersByHomeId(home.Id);
         
             List<UserResponse> memberResponses = members.Select(m => new UserResponse(m)).ToList();
 
@@ -59,6 +52,7 @@ public class HomeController : ControllerBase
             return NotFound(new { Message = ex.Message });
         }
     }
+    */
 
     private HomesResponse GetHomesResponse(List<Home> homes)
     {

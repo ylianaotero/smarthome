@@ -33,8 +33,44 @@ public class HomesControllerTest
         homes.Add(newHome);
         _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
         
-        ObjectResult result = _homeController.GetHomes(null, null,null,null) as OkObjectResult;
+        ObjectResult result = _homeController.GetHomes(null, null) as OkObjectResult;
         Assert.AreEqual(200, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestGetHomesFilterByStreet()
+    {
+        List<Home> homes = new List<Home>
+        {
+            new Home("Calle del Sol", 23, 34.0207, -118.4912),
+            new Home("Avenida Siempre Viva", 742, 34.0522, -118.2437)
+        };
+    
+        _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
+        
+        ObjectResult result = _homeController.GetHomes("Calle del Sol", null) as OkObjectResult;
+        HomesResponse response = result.Value as HomesResponse;
+
+        Assert.AreEqual(1, response.Homes.Count);
+        Assert.AreEqual("Calle del Sol", response.Homes[0].Street);
+    }
+    
+    [TestMethod]
+    public void TestGetHomesFilterByDoorNumber()
+    {
+        List<Home> homes = new List<Home>
+        {
+            new Home("Calle del Sol", 23, 34.0207, -118.4912),
+            new Home("Avenida Siempre Viva", 742, 34.0522, -118.2437)
+        };
+    
+        _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
+
+        ObjectResult result = _homeController.GetHomes(null, "23") as OkObjectResult;
+        HomesResponse response = result.Value as HomesResponse;
+
+        Assert.AreEqual(1, response.Homes.Count);
+        Assert.AreEqual(23, response.Homes[0].DoorNumber);
     }
     
     [TestMethod]
@@ -71,12 +107,13 @@ public class HomesControllerTest
             Homes = expectedHomeResponses
         };
 
-        ObjectResult result = _homeController.GetHomes(null, null, null, null) as OkObjectResult;
+        ObjectResult result = _homeController.GetHomes(null, null) as OkObjectResult;
         HomesResponse response = result.Value as HomesResponse;
 
         Assert.AreEqual(expectedResponse, response);
     }
     
+    /*
     [TestMethod]
     public void TestGetMembersByHomeIdOkStatusCode()
     {
@@ -93,6 +130,7 @@ public class HomesControllerTest
 
         Assert.AreEqual(200, result.StatusCode);
     }
+    */
     
     /*
     [TestMethod]
@@ -108,14 +146,13 @@ public class HomesControllerTest
             {
                 Name = "John",
                 Surname = "Doe",
-                Roles = new List<Role> { new RoleTest(1) } // Usamos TestRole en lugar de Moq
+                Roles = new List<Role> { new RoleTest(1) }
             },
             new Member
             {
                 Name = "Jane",
                 Surname = "Doe",
-                Roles = new List<Role> { new RoleTest(2) } // Usamos TestRole en lugar de Moq
-            }
+                Roles = new List<Role> { new RoleTest(2) }
         };
 
         members[0].GetType().GetProperty("CreatedAt").SetValue(members[0], createdAtJohn);
