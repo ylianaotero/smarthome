@@ -18,6 +18,7 @@ public class HomesControllerTest
     private const int DoorNumber = 23;
     private const double Latitude = 34.0207;
     private const double Longitude = -118.4912;
+    private const long homeOwnerId = 1;
 
     [TestInitialize]
     public void TestInitialize()
@@ -29,7 +30,7 @@ public class HomesControllerTest
     public void TestGetAllHomesOkStatusCode()
     {
         List<Home> homes = new List<Home>();
-        Home newHome = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home newHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         homes.Add(newHome);
         _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
         
@@ -42,8 +43,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home("Calle del Sol", 23, 34.0207, -118.4912),
-            new Home("Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
+            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
         };
     
         _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
@@ -60,8 +61,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home("Calle del Sol", 23, 34.0207, -118.4912),
-            new Home("Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
+            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
         };
     
         _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
@@ -78,8 +79,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home("Calle del Sol", 23, 34.0207, -118.4912),
-            new Home("Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
+            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
         };
 
         _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);

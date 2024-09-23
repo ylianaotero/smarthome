@@ -13,6 +13,8 @@ public class HomeTest
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
     private const int Id = 11;
+    
+    private long _homeOwnerId;
 
     private Member _member; 
 
@@ -23,18 +25,19 @@ public class HomeTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _home = new Home(Street,DoorNumber,Latitude,Longitude);
+        _home = new Home(_homeOwnerId,Street,DoorNumber,Latitude,Longitude);
         _member = new Member();
         _member.Email = Email1;
         _member.Permission = false; 
         _device = new SecurityCamera();
-        _device.Id = Id; 
+        _device.Id = Id;
+        _homeOwnerId = 000;
     }
     
     [TestMethod]
     public void CreateNewHome()
     {
-        Home newHome = new Home(Street,DoorNumber,Latitude,Longitude);
+        Home newHome = new Home(_homeOwnerId,Street,DoorNumber,Latitude,Longitude);
         newHome.Id = Id; 
         
         Assert.IsTrue(

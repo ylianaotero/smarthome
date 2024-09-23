@@ -23,7 +23,7 @@ public class HomeOwnerTest
     public void TestAddNewHomeToHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home home = new Home(homeOwner.Id,Street, DoorNumber, Latitude, Longitude);
         homeOwner.AddHome(home);
         Assert.AreEqual(1, homeOwner.Homes.Count());
     }
@@ -32,7 +32,7 @@ public class HomeOwnerTest
     public void TestDeleteHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home home = new Home(homeOwner.Id,Street, DoorNumber, Latitude, Longitude);
         homeOwner.AddHome(home);
         homeOwner.RemoveHome(home);
         Assert.AreEqual(0, homeOwner.Homes.Count());
@@ -42,7 +42,7 @@ public class HomeOwnerTest
     public void TestSearchHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home home = new Home(homeOwner.Id,Street, DoorNumber, Latitude, Longitude);
         homeOwner.AddHome(home);
         Assert.AreEqual(home,homeOwner.SearchHome(home.Id));
     }
@@ -52,7 +52,7 @@ public class HomeOwnerTest
     public void TestCannotFindHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home home = new Home(homeOwner.Id,Street, DoorNumber, Latitude, Longitude);
         homeOwner.SearchHome(home.Id);
     }
 }

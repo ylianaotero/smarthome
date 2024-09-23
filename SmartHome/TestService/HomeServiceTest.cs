@@ -25,6 +25,7 @@ public class HomeServiceTest
     private const int DoorNumber = 23;
     private const double Latitude = 34.0207;
     private const double Longitude = -118.4912;
+    private const long homeOwnerId = 000;
     
     [TestInitialize]
     public void TestInitialize()
@@ -41,7 +42,7 @@ public class HomeServiceTest
     public void TestGetAllHomes()
     {
         List<Home> homes = new List<Home>();
-        Home newHome = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home newHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         homes.Add(newHome);
         _mockHomeRepository.Setup(m => m.GetAll()).Returns(homes);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
@@ -52,7 +53,7 @@ public class HomeServiceTest
     [TestMethod]
     public void TestCreateHome()
     {
-        Home newHome = new Home(Street, DoorNumber, Latitude, Longitude);
+        Home newHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         _mockHomeRepository.Setup(m => m.Add(newHome));
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
         homeService.CreateHome(newHome);
@@ -67,7 +68,7 @@ public class HomeServiceTest
             new Member { Email = "member1@example.com", Permission = true },
             new Member { Email = "member2@example.com", Permission = false }
         };
-        _home = new Home(Street, DoorNumber, Latitude, Longitude);
+        _home = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         foreach (Member member in members)
         {
             _home.AddMember(member);
@@ -101,7 +102,7 @@ public class HomeServiceTest
             new WindowSensor { Id = 2, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false }
         };
     
-        _home = new Home(Street, DoorNumber, Latitude, Longitude);
+        _home = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         
         foreach (Device device in devices)
         {
@@ -130,7 +131,7 @@ public class HomeServiceTest
     public void TestAddMemberToHome()
     {
         Member member = new Member { Email = "member3@example.com", Permission = true };
-        _home = new Home(Street, DoorNumber, Latitude, Longitude);
+        _home = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
@@ -149,7 +150,7 @@ public class HomeServiceTest
         Member existingMember = new Member { Email = "existingmember@example.com", Permission = true };
         Member newMember = new Member { Email = "existingmember@example.com", Permission = false };
     
-        _home = new Home(Street, DoorNumber, Latitude, Longitude);
+        _home = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         _home.AddMember(existingMember);
     
         _mockHomeRepository.Setup(m => m.GetById(homeId)).Returns(_home);
