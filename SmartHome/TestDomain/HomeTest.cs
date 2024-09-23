@@ -13,6 +13,8 @@ public class HomeTest
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
     private const int Id = 11;
+    
+    private Guid _guid;
 
     private Member _member; 
 
@@ -29,12 +31,13 @@ public class HomeTest
         _member.Permission = false; 
         _device = new SecurityCamera();
         _device.Id = Id; 
+        _guid = Guid.NewGuid();
     }
     
     [TestMethod]
     public void CreateNewHome()
     {
-        Home newHome = new Home(Street,DoorNumber,Latitude,Longitude);
+        Home newHome = new Home(_guid,Street,DoorNumber,Latitude,Longitude);
         newHome.Id = Id; 
         
         Assert.IsTrue(
