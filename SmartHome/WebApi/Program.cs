@@ -1,12 +1,7 @@
-using BusinessLogic;
 using DataAccess;
-using Domain;
-using IBusinessLogic;
-using IDataAccess;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using ServiceFactory;
-using WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,11 +20,6 @@ builder.Services.AddDbContext<SmartHomeContext>(options =>
 builder.Services.AddAuthentication("Basic")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
-builder.Services.AddScoped<IDeviceService, DeviceService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ISessionService, SessionService>();
-builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
