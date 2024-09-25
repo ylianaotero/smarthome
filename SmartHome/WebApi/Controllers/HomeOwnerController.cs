@@ -1,5 +1,4 @@
-using BusinessLogic.Exceptions;
-using Domain.Exceptions.GeneralExceptions;
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models.In;
@@ -25,10 +24,10 @@ public class HomeOwnerController : ControllerBase
     {
         try
         {
-            var user = createHomeOwnerRequest.ToEntity();
-            _userService.CreateUser(user);
-            var userResponse = new HomeOwnerResponse(user);
-            return CreatedAtAction(nameof(CreateHomeOwner), userResponse);
+            _userService.CreateUser(createHomeOwnerRequest.ToEntity());
+            HomeOwnerResponse response = new HomeOwnerResponse(createHomeOwnerRequest.ToEntity());
+            
+            return CreatedAtAction(nameof(CreateHomeOwner), response);
         }
         catch (InputNotValid inputNotValid)
         {
@@ -42,7 +41,6 @@ public class HomeOwnerController : ControllerBase
         {
             return StatusCode(500, new { message = ErrorMessageUnexpectedException });
         }
-        
     }
     
 }

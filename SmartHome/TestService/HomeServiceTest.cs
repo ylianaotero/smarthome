@@ -1,5 +1,5 @@
 using BusinessLogic;
-using BusinessLogic.Exceptions;
+using CustomExceptions;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -172,6 +172,22 @@ public class HomeServiceTest
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
 
         homeService.AddMemberToHome(nonExistentHomeId, newMember);
+    }
+
+    [TestMethod]
+    public void TestGetHomesByFilter()
+    {
+        Func<Home, bool> filter = home => home.Street == Street;
+        List<Home> homes = new List<Home>
+        {
+            new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude)
+        };
+        _mockHomeRepository.Setup(m => m.GetByFilter(filter)).Returns(homes);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        
+        List<Home> retrievedHomes = homeService.GetHomesByFilter(filter);
+        
+        CollectionAssert.AreEqual(homes, retrievedHomes);
     }
 
     

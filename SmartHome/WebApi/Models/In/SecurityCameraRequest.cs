@@ -1,6 +1,6 @@
 using Domain;
 
-namespace WebApi.In;
+namespace WebApi.Models.In;
 
 public class SecurityCameraRequest
 {
@@ -11,4 +11,18 @@ public class SecurityCameraRequest
     public LocationType? LocationType { get; set; }
     public List<SecurityCameraFunctionality> Functionalities { get; set; }
     public Company? Company { get; set; }
+    
+    public SecurityCamera ToEntity() 
+    {
+        return new SecurityCamera() 
+        {
+            Name = this.Name,
+            Model = this.Model,
+            Description = this.Description,
+            PhotoURLs = this.PhotoUrls,
+            LocationType = this.LocationType,
+            Functionalities = this.Functionalities,
+            Company = this.Company
+        };
+    }
 }

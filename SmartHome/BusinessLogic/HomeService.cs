@@ -1,4 +1,4 @@
-using BusinessLogic.Exceptions;
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -17,6 +17,11 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
     public List<Home> GetAllHomes()
     {
         return homeRepository.GetAll();
+    }
+
+    public List<Home> GetHomesByFilter(Func<Home, bool> filter)
+    {
+        return homeRepository.GetByFilter(filter);
     }
     
     public List<Member> GetMembersFromHome(int homeId)

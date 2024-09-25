@@ -1,6 +1,6 @@
-using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models.In;
 using WebApi.Models.Out;
 
 namespace WebApi.Controllers;
@@ -18,48 +18,10 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetHomes([FromQuery] string? street,  [FromQuery] string? doorNumber)
+    public IActionResult GetHomes([FromQuery] HomeRequest? request)
     {
-        List<Home> homes = _homeService.GetAllHomes();
-        if (street != null)
-        {
-            homes = homes.FindAll(h => h.Street == street);
-        }
-
-        if (doorNumber != null)
-        {
-            homes = homes.FindAll(h => h.DoorNumber.ToString() == doorNumber);
-        }
+        HomesResponse homesResponse = new HomesResponse(_homeService.GetHomesByFilter(request.ToFilter()));
         
-        HomesResponse homesResponse = GetHomesResponse(homes);
         return Ok(homesResponse);
-    }
-
-    private HomesResponse GetHomesResponse(List<Home> homes)
-    {
-        List<HomeResponse> homeResponses = new List<HomeResponse>();
-
-        foreach (Home home in homes)
-        {
-            homeResponses.Add(GetHomeResponse(home));
-        }
-
-        HomesResponse homesResponse = new HomesResponse()
-        {
-            Homes = homeResponses
-        };
-        return homesResponse;
-    }
-
-    private HomeResponse GetHomeResponse(Home home)
-    {
-        HomeResponse homeResponse = new HomeResponse()
-        {
-            Street = home.Street,
-            DoorNumber = home.DoorNumber,
-            Latitude = home.Latitude,
-            Longitude = home.Longitude
-        };
-        return homeResponse;
     }
 }

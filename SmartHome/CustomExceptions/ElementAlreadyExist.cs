@@ -1,4 +1,4 @@
-namespace BusinessLogic.Exceptions;
+namespace CustomExceptions;
 
 public class ElementAlreadyExist : Exception
 {

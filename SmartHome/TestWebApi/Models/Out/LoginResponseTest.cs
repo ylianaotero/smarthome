@@ -1,3 +1,4 @@
+using Domain;
 using WebApi.Models.Out;
 
 namespace TestWebApi.Models.Out;
@@ -11,10 +12,12 @@ public class LoginResponseTest
     [TestInitialize]
     public void Init()
     {
-        _response = new LoginResponse()
+        Session session = new Session()
         {
-            Token = _guid
+            Id = _guid
         };
+        
+        _response = new LoginResponse(session);
     }
     
     [TestMethod]

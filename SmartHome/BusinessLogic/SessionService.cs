@@ -1,5 +1,5 @@
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.GeneralExceptions;
 using IBusinessLogic;
 using IDataAccess;
 
@@ -45,8 +45,6 @@ public class SessionService : ISessionService
         }
 
         _sessionRepository.Delete(session);
-
-
     }
 
     public User GetUser(Guid token)
@@ -59,5 +57,26 @@ public class SessionService : ISessionService
         }
 
         return session.User; 
+    }
+    
+    public bool UserHasPermissions(Guid? authorization, string roleWithPermissions)
+    {
+        return GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r, roleWithPermissions));
+    }
+    
+    public bool AuthorizationIsValid(Guid? authorization)
+    {
+        return authorization != null && UserIsAuthenticated(authorization.Value);
+    } 
+    
+    private bool RoleIsAdequate(Role role, string roleWithPermissions)
+    {
+        return role.GetType().Name == roleWithPermissions;
+    }
+    
+    private bool UserIsAuthenticated(Guid authorization)
+    {
+        Session session = _sessionRepository.GetByFilter(s => s.Id == authorization).FirstOrDefault();
+        return session != null && session.User != null;
     }
 }

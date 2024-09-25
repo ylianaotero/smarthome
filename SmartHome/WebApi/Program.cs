@@ -1,16 +1,16 @@
-using BusinessLogic;
 using DataAccess;
-using Domain;
-using IBusinessLogic;
-using IDataAccess;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using ServiceFactory;
-using WebApi.Controllers;
+using WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(option =>
+{
+    option.Filters.Add<CustomExceptionFilter>();
+    option.Filters.Add<AuthenticationFilter>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -22,20 +22,11 @@ builder.Services.AddDbContext<SmartHomeContext>(options =>
         b => b.MigrationsAssembly("DataAccess")));
 
 
-builder.Services.AddAuthentication("Basic")
-    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
-
-builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
-builder.Services.AddScoped<IDeviceService, DeviceService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ISessionService, SessionService>();
-builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseRouting();
-app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
