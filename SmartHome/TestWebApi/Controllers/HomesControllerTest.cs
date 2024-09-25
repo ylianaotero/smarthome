@@ -3,6 +3,7 @@ using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
+using WebApi.Models.In;
 using WebApi.Models.Out;
 
 namespace TestWebApi.Controllers;
@@ -32,9 +33,11 @@ public class HomesControllerTest
         List<Home> homes = new List<Home>();
         Home newHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         homes.Add(newHome);
-        _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
+        _mockHomeService.Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>())).Returns(homes);
         
-        ObjectResult result = _homeController.GetHomes(null, null) as OkObjectResult;
+        HomeRequest request = new HomeRequest {};
+        
+        ObjectResult result = _homeController.GetHomes(request) as OkObjectResult;
         Assert.AreEqual(200, result.StatusCode);
     }
     
@@ -44,12 +47,16 @@ public class HomesControllerTest
         List<Home> homes = new List<Home>
         {
             new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
-            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
+        };
+        HomeRequest request = new HomeRequest
+        {
+            Street = "Calle del Sol",
+            DoorNumber = "23"
         };
     
-        _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
+        _mockHomeService.Setup(service => service.GetHomesByFilter(request.ToFilter())).Returns(homes);
         
-        ObjectResult result = _homeController.GetHomes("Calle del Sol", null) as OkObjectResult;
+        ObjectResult result = _homeController.GetHomes(request) as OkObjectResult;
         HomesResponse response = result.Value as HomesResponse;
 
         Assert.AreEqual(1, response.Homes.Count);
@@ -62,12 +69,16 @@ public class HomesControllerTest
         List<Home> homes = new List<Home>
         {
             new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
-            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
+        };
+        HomeRequest request = new HomeRequest
+        {
+            Street = null,
+            DoorNumber = "23"
         };
     
-        _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
-
-        ObjectResult result = _homeController.GetHomes(null, "23") as OkObjectResult;
+        _mockHomeService.Setup(service => service.GetHomesByFilter(request.ToFilter())).Returns(homes);
+        
+        ObjectResult result = _homeController.GetHomes(request) as OkObjectResult;
         HomesResponse response = result.Value as HomesResponse;
 
         Assert.AreEqual(1, response.Homes.Count);
@@ -77,38 +88,18 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetAllHomesOkResponse()
     {
+        Home expectedHome1 = new Home(1,"Calle del Sol", 23, 34.0207, -118.4912);
+        Home expectedHome2 = new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437);
         List<Home> homes = new List<Home>
         {
-            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
-            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            expectedHome1,
+            expectedHome2
         };
-
-        _mockHomeService.Setup(service => service.GetAllHomes()).Returns(homes);
-
-        List<HomeResponse> expectedHomeResponses = new List<HomeResponse>
-        {
-            new HomeResponse
-            {
-                Street = "Calle del Sol",
-                DoorNumber = 23,
-                Latitude = 34.0207,
-                Longitude = -118.4912
-            },
-            new HomeResponse
-            {
-                Street = "Avenida Siempre Viva",
-                DoorNumber = 742,
-                Latitude = 34.0522,
-                Longitude = -118.2437
-            }
-        };
-
-        HomesResponse expectedResponse = new HomesResponse()
-        {
-            Homes = expectedHomeResponses
-        };
-
-        ObjectResult result = _homeController.GetHomes(null, null) as OkObjectResult;
+        HomeRequest request = new HomeRequest {};
+        _mockHomeService.Setup(service => service.GetHomesByFilter(request.ToFilter())).Returns(homes);
+        HomesResponse expectedResponse = new HomesResponse(homes);
+        
+        ObjectResult result = _homeController.GetHomes(request) as OkObjectResult;
         HomesResponse response = result.Value as HomesResponse;
 
         Assert.AreEqual(expectedResponse, response);

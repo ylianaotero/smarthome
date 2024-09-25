@@ -29,12 +29,7 @@ public class SessionController : ControllerBase
         }
         try
         {
-            var session = _sessionService.LogIn(request.Email, request.Password);
-                
-            var response = new LoginResponse
-            {
-                Token = session.Id 
-            };
+            LoginResponse response = new LoginResponse(_sessionService.LogIn(request.Email, request.Password));
 
             return Ok(response);
         }

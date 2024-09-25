@@ -102,7 +102,7 @@ public class DeviceController : ControllerBase
 
     [HttpPost]
     [Route("security-cameras")]
-    public IActionResult PostSecurityCameras([FromHeader] Guid? authorization, [FromBody] SecurityCameraRequest request)
+    public IActionResult PostSecurityCameras([FromHeader] Guid? authorization, [FromBody] SecurityCameraRequest? request)
     {
         if (AuthorizationIsInvalid(authorization))
         {
