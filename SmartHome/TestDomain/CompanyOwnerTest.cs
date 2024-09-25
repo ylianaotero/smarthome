@@ -1,5 +1,5 @@
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.CompanyOwner;
 
 namespace TestDomain;
 
@@ -15,7 +15,7 @@ public class CompanyOwnerTest
     }
     
     [TestMethod]
-    [ExpectedException(typeof(ACompanyHasAlreadyBeenRegistredException))]
+    [ExpectedException(typeof(ElementAlreadyExist))]
     public void TestCannotAddCompanyToCompanyOwner()
     {
         Company company = new Company();

@@ -1,4 +1,4 @@
-using BusinessLogic.Exceptions;
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;

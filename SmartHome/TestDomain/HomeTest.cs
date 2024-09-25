@@ -1,5 +1,5 @@
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.GeneralExceptions;
 
 namespace TestDomain;
 

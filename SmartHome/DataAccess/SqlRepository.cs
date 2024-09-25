@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Reflection;
-using DataAccess.Exceptions;
+using CustomExceptions;
 using IDataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,7 +49,7 @@ public class SqlRepository<T> : IRepository<T> where T : class
         bool elementExists = _entities.Any(e => e == element);
         if (!elementExists)
         {
-            throw new ElementNotFoundException(ElementNotFoundExceptionMessage);
+            throw new ElementNotFound(ElementNotFoundExceptionMessage);
         }
         _entities.Remove(element);
         _database.SaveChanges();

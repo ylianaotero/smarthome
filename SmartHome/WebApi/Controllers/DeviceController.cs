@@ -1,7 +1,7 @@
+using CustomExceptions;
 using IBusinessLogic;
-using DataAccess.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Filters;
+using WebApi.Attributes;
 using WebApi.Models.Out;
 using WebApi.Models.In;
 
@@ -40,7 +40,7 @@ public class DeviceController : ControllerBase
         {
             deviceResponse = new DeviceResponse(_deviceService.GetDeviceById(id));
         }
-        catch (ElementNotFoundException)
+        catch (ElementNotFound)
         {
             return NotFound(NotFoundMessage);
         }

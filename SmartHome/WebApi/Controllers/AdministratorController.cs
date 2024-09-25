@@ -1,4 +1,4 @@
-using BusinessLogic.Exceptions;
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models.In;

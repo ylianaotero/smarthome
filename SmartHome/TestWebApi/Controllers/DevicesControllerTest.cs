@@ -1,5 +1,5 @@
+using CustomExceptions;
 using IBusinessLogic;
-using DataAccess.Exceptions;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -117,7 +117,7 @@ public class DevicesControllerTest
     {
         Guid token = Guid.NewGuid();
         _mockIDeviceService.Setup(service => service.GetDeviceById(1))
-            .Throws(new ElementNotFoundException(DeviceNotFoundExceptionMessage));
+            .Throws(new ElementNotFound(DeviceNotFoundExceptionMessage));
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
      
         IActionResult result = _deviceController.GetDeviceById(1);

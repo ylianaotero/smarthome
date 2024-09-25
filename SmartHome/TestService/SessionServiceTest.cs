@@ -1,6 +1,6 @@
 using BusinessLogic;
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.GeneralExceptions;
 using IBusinessLogic;
 using IDataAccess;
 using Moq;

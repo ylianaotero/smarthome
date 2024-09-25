@@ -1,5 +1,5 @@
+using CustomExceptions;
 using DataAccess;
-using DataAccess.Exceptions;
 using Domain;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using Microsoft.Data.Sqlite;
@@ -127,7 +127,7 @@ public class RepositoryTest
     }
     
     [TestMethod]
-    [ExpectedException(typeof(ElementNotFoundException))]
+    [ExpectedException(typeof(ElementNotFound))]
     public void TestDeleteNonexistentDevice()
     {
         List<Device> devices = new List<Device>

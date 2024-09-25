@@ -1,4 +1,4 @@
-using Domain.Exceptions.GeneralExceptions;
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +12,6 @@ namespace WebApi.Controllers;
 [AllowAnonymous]
 public class SessionController : ControllerBase
 {
-    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
-    
     private readonly ISessionService _sessionService;
 
     public SessionController(ISessionService sessionService)

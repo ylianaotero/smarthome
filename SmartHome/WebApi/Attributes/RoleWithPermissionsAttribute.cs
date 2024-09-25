@@ -1,4 +1,4 @@
-namespace WebApi.Filters;
+namespace WebApi.Attributes;
 
 public class RolesWithPermissionsAttribute : Attribute
 {

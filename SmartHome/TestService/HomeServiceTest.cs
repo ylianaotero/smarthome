@@ -1,5 +1,5 @@
 using BusinessLogic;
-using BusinessLogic.Exceptions;
+using CustomExceptions;
 using Domain;
 using IDataAccess;
 using Moq;

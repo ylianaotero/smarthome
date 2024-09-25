@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using Domain.Exceptions.HomeExceptions;
+
+using CustomExceptions;
 
 namespace Domain;
 
@@ -30,6 +30,6 @@ public class HomeOwner : Role
         {
             return home;
         }
-        throw new HomeNotFoundException(MessageHomeNotFound);
+        throw new ElementNotFound(MessageHomeNotFound);
     }
 }
