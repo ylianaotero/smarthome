@@ -15,4 +15,12 @@ public class AdminResponse
         Email = user.Email;
         Surname = user.Surname;
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is AdminResponse response &&
+               Name == response.Name &&
+               Email == response.Email &&
+               Surname == response.Surname;
+    }
 }

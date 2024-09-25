@@ -131,5 +131,42 @@ public class SessionServiceTest
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
         }
+        
+        [TestMethod]
+        public void UserHasPermissions()
+        {
+            _session.Id = new Guid(); 
+            _user.Roles = new List<Role> { new Administrator() };
+
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            bool response = sessionService.UserHasPermissions(_session.Id, "Administrator");
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+            
+            Assert.IsTrue(response);
+        }
+
+        [TestMethod]
+        public void AuthorizationIsValid()
+        {
+            _session.Id = new Guid(); 
+
+            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
+            
+            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            bool response = sessionService.AuthorizationIsValid(_session.Id);
+
+            _mockUserRepository.VerifyAll();
+            _mockSessionRepository.VerifyAll();
+            
+            Assert.IsTrue(response);
+        }
+        
+        
     
 }

@@ -1,12 +1,16 @@
 using DataAccess;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using ServiceFactory;
-using WebApi;
+using WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(option =>
+{
+    option.Filters.Add<CustomExceptionFilter>();
+    option.Filters.Add<AuthenticationFilter>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -18,15 +22,11 @@ builder.Services.AddDbContext<SmartHomeContext>(options =>
         b => b.MigrationsAssembly("DataAccess")));
 
 
-builder.Services.AddAuthentication("Basic")
-    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
-
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseRouting();
-app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
