@@ -24,7 +24,7 @@ public class HomesControllerTest
     private const int DoorNumber = 23;
     private const double Latitude = 34.0207;
     private const double Longitude = -118.4912;
-    private const long homeOwnerId = 1;
+    private const long HomeOwnerId = 1;
 
     [TestInitialize]
     public void TestInitialize()
@@ -119,6 +119,24 @@ public class HomesControllerTest
         IActionResult result = _homeController.GetHomeById(1);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+    
+    [TestMethod]
+    public void TestPostHomeOkStatusCode()
+    {
+        CreateHomeRequest request = new CreateHomeRequest()
+        {
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Devices = new List<Device>()
+        };
+        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        
+        ObjectResult? result = _homeController.PostHomes(request) as CreatedResult;
+        
+        Assert.AreEqual(201, result!.StatusCode);
     }
 
     private HomeResponse DefaultHomeResponse()
