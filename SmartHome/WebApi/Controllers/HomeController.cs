@@ -33,6 +33,14 @@ public class HomeController : ControllerBase
         
         return Ok(homesResponse);
     }
+
+    [HttpPost]
+    [RolesWithPermissions(RoleWithPermissions)]
+    public IActionResult PostHomes([FromBody] CreateHomeRequest request)
+    {
+        _homeService.CreateHome(request.ToEntity());
+        return Created(CreatedMessage, "/homes/");
+    }
     
     [HttpGet]
     [Route("{id}")]
