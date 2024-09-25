@@ -1,6 +1,5 @@
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.GeneralExceptions;
-using Domain.Exceptions.RoleExceptions;
 using Moq;
 
 namespace TestDomain;
@@ -114,7 +113,7 @@ public class UserTest
     }
     
     [TestMethod]
-    [ExpectedException(typeof(RoleNotFoundException))]
+    [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotDeleteRoleToUser()
     {
         User user = new User();

@@ -1,7 +1,5 @@
-
 using System.ComponentModel.DataAnnotations;
-using Domain.Exceptions.RoleExceptions;
-using Domain.Exceptions.GeneralExceptions;
+using CustomExceptions;
 
 namespace Domain;
 
@@ -115,7 +113,7 @@ public class User
         }
         else
         {
-            throw new RoleNotFoundException(MessageRoleNotFound);
+            throw new ElementNotFound(MessageRoleNotFound);
 
         }
     }

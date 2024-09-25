@@ -1,4 +1,4 @@
-using DataAccess.Exceptions;
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -19,7 +19,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         
         if (device == null)
         {
-            throw new ElementNotFoundException(DeviceNotFoundMessage);
+            throw new ElementNotFound(DeviceNotFoundMessage);
         }
         
         return device;

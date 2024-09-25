@@ -1,6 +1,6 @@
 using Domain;
 
-namespace WebApi.In;
+namespace WebApi.Models.In;
 
 public class WindowSensorRequest
 {
@@ -10,4 +10,17 @@ public class WindowSensorRequest
     public string Description { get; set; }
     public List<WindowSensorFunctionality>? Functionalities { get; set; }
     public Company? Company { get; set; }
+    
+    public WindowSensor ToEntity() 
+    {
+        return new WindowSensor() 
+        {
+            Name = this.Name,
+            Model = this.Model,
+            PhotoURLs = this.PhotoUrls,
+            Description = this.Description,
+            Functionalities = this.Functionalities,
+            Company = this.Company
+        };
+    }
 }

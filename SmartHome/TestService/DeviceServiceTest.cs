@@ -1,6 +1,5 @@
 using BusinessLogic;
-using DataAccess.Exceptions;
-using BusinessLogic;
+using CustomExceptions;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -92,7 +91,7 @@ public class DeviceServiceTest
     }
     
     [TestMethod]
-    [ExpectedException(typeof(ElementNotFoundException))]
+    [ExpectedException(typeof(ElementNotFound))]
     public void TestGetDeviceByIdThrowsException()
     {
         _mockDeviceRepository.Setup(x => x.GetById(1)).Returns((Device?)null);

@@ -1,3 +1,5 @@
+using Domain;
+
 namespace WebApi.Models.Out;
 
 public class HomeResponse
@@ -7,6 +9,13 @@ public class HomeResponse
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
+    public HomeResponse(Home home)
+    {
+        Street = home.Street;
+        DoorNumber = home.DoorNumber;
+        Latitude = home.Latitude;
+        Longitude = home.Longitude;
+    }
     public override bool Equals(object? obj)
     {
         return obj is HomeResponse response &&

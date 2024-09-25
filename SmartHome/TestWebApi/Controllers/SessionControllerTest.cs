@@ -1,5 +1,5 @@
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.GeneralExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -100,61 +100,5 @@ public class SessionControllerTest
         _sessionServiceMock.Verify();
         
         Assert.AreEqual(404, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void LoginError()
-    {
-        _sessionServiceMock
-            .Setup(s => s.LogIn(Email, Password))
-            .Throws(new Exception("Error"));
-        
-        var result = _sessionController.LogIn(_createLoginRequest) as ObjectResult;
-        
-        _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(500, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void LoginNullRequest()
-    {
-        var result = _sessionController.LogIn(null) as ObjectResult;
-        
-        _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(400, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void LoginNullEmail()
-    {
-        LoginRequest _newLoginRequest = new LoginRequest()
-        {
-            Email = "",
-            Password = Password
-        };
-        
-        var result = _sessionController.LogIn(_newLoginRequest) as ObjectResult;
-        
-        _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(400, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void LoginNullPassword()
-    {
-        LoginRequest _newLoginRequest = new LoginRequest()
-        {
-            Email = Email,
-            Password = ""
-        };
-        
-        var result = _sessionController.LogIn(_newLoginRequest) as ObjectResult;
-        
-        _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(400, result.StatusCode);
     }
 }

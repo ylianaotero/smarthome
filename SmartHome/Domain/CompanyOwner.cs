@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using Domain.Exceptions.CompanyOwner;
+using CustomExceptions;
 
 namespace Domain;
 
@@ -35,7 +34,7 @@ public class CompanyOwner : Role
     {
         if (HasACompleteCompany)
         {
-            throw new ACompanyHasAlreadyBeenRegistredException(MessageError);
+            throw new ElementAlreadyExist(MessageError);
         }
     }
 }

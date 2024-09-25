@@ -1,4 +1,4 @@
-namespace Domain.Exceptions.GeneralExceptions;
+namespace CustomExceptions;
 
 public class CannotFindItemInList : Exception
 {

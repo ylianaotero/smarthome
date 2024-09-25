@@ -1,5 +1,5 @@
+using CustomExceptions;
 using Domain;
-using Domain.Exceptions.HomeExceptions;
 
 namespace TestDomain;
 
@@ -48,7 +48,7 @@ public class HomeOwnerTest
     }
     
     [TestMethod]
-    [ExpectedException(typeof(HomeNotFoundException))]
+    [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotFindHomeFromHomeOwner()
     {
         HomeOwner homeOwner = new HomeOwner();

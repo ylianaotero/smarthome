@@ -1,4 +1,6 @@
-using DataAccess.Exceptions;
+using System.Collections;
+using System.Reflection;
+using CustomExceptions;
 using IDataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +37,11 @@ public class SqlRepository<T> : IRepository<T> where T : class
     
     public List<T> GetByFilter(Func<T, bool> filter)
     {
-        return _entities.Where(filter).ToList();
+        List<T> elements = _entities.Where(filter).ToList();
+        
+        LoadEntities(elements);
+        
+        return elements;
     }
     
     public void Delete(T element)
@@ -43,7 +49,7 @@ public class SqlRepository<T> : IRepository<T> where T : class
         bool elementExists = _entities.Any(e => e == element);
         if (!elementExists)
         {
-            throw new ElementNotFoundException(ElementNotFoundExceptionMessage);
+            throw new ElementNotFound(ElementNotFoundExceptionMessage);
         }
         _entities.Remove(element);
         _database.SaveChanges();
@@ -56,5 +62,43 @@ public class SqlRepository<T> : IRepository<T> where T : class
         _database.Entry(element).State = EntityState.Modified;
         
         _database.SaveChanges();
+    }
+    
+    private void LoadEntities(List<T> entities)
+    {
+        foreach (var element in entities)
+        {
+            List<PropertyInfo> properties = element.GetType().GetProperties().ToList();
+            foreach (var property in properties)
+            {
+                bool isList = typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string);
+                if (isList)
+                {
+                    LoadCollections(element, property);
+                }
+                else
+                {
+                    LoadReferences(element, property);
+                }
+            }
+        }
+    }
+    
+    private void LoadCollections(T element, PropertyInfo property)
+    {
+        var isNavigationCollection = _database.Entry(element).Metadata.FindNavigation(property.Name) != null;
+        if (isNavigationCollection)
+        {
+            _database.Entry(element).Collection(property.Name).Load();
+        }
+    }
+    
+    private void LoadReferences(T element, PropertyInfo property)
+    {
+        var isNavigationProperty = _database.Entry(element).Metadata.FindNavigation(property.Name) != null;
+        if (isNavigationProperty)
+        {
+            _database.Entry(element).Reference(property.Name).Load();
+        }
     }
 }

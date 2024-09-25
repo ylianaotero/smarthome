@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Domain.Exceptions.GeneralExceptions;
+using CustomExceptions;
 
 namespace Domain;
 
