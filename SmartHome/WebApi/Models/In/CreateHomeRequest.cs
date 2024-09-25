@@ -9,5 +9,21 @@ public class CreateHomeRequest
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-    public List<Member>? Members { get; set; }
+    //public List<Member> Members { get; set; }
+    
+    public List<Device>? Devices { get; set; }
+
+
+    public Home ToEntity()
+    {
+        return new Home()
+        {
+            OwnerId = this.OwnerId,
+            Street = this.Street,
+            DoorNumber = this.DoorNumber,
+            Latitude = this.Latitude,
+            Longitude = this.Longitude,
+            Devices = this.Devices
+        };
+    }
 }

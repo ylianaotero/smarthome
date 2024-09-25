@@ -6,6 +6,12 @@ public class HomeRequest
 {
     public string? Street { get; set; }
     public string? DoorNumber { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    
+    public List<Device> Devices { get; set; }
+
+    
 
     public Func<Home, bool> ToFilter()
     {
