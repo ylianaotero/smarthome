@@ -1,8 +1,10 @@
 using Domain;
+using Domain.Exceptions.GeneralExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
+using WebApi.Models.In;
 using WebApi.Models.Out;
 
 namespace TestWebApi.Controllers;
@@ -13,6 +15,9 @@ public class HomesControllerTest
 {
     private HomeController _homeController;
     private Mock<IHomeService> _mockHomeService;
+    private Mock<ISessionService> _mockSessionService;
+    
+    private const string SessionDoesNotExistExceptionMessage = "User not found";
     
     private const string Street = "Calle del Sol";
     private const int DoorNumber = 23;
@@ -113,10 +118,52 @@ public class HomesControllerTest
 
         Assert.AreEqual(expectedResponse, response);
     }
+    
+    [TestMethod]
+    public void TestPostHomesReturnsCreatedStatusCode()
+    {
+        Guid token = Guid.NewGuid();
+        CreateHomeRequest request = new CreateHomeRequest
+        {
+            Street = "Main St",
+            DoorNumber = 123,
+            Longitude = 50.1234,
+            Latitude = -30.5678
+        };
 
+        _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(DefaultUser());
+        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>())).Callback<Home>(home => home.Id = 1);
+        ObjectResult result = _homeController.PostHomes(token, request) as CreatedResult;
+
+        _mockHomeService.Verify(service => service.CreateHome(It.IsAny<Home>()), Times.Once);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(201, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostHomesUnauthorizedStatusCode()
+    {
+        
+        CreateHomeRequest request = new CreateHomeRequest
+        {
+            Street = "Main St",
+            DoorNumber = 123,
+            Longitude = 50.1234,
+            Latitude = -30.5678
+        };
+        ObjectResult? result = _homeController.PostHomes(null, request) as UnauthorizedObjectResult;
+        Assert.AreEqual(401,result.StatusCode);
+    }
+
+    private User DefaultUser()
+    {
+        return new User();
+    }
+    
     private void SetupHomeController()
     {
+        _mockSessionService = new Mock<ISessionService>();
         _mockHomeService = new Mock<IHomeService>();
-        _homeController = new HomeController(_mockHomeService.Object);
+        _homeController = new HomeController(_mockHomeService.Object, _mockSessionService.Object);
     }
 }
