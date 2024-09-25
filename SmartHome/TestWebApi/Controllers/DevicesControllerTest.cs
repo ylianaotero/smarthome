@@ -5,9 +5,8 @@ using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
-using WebApi.In;
 using WebApi.Models.Out;
-using WebApi;
+using WebApi.Models.In;
 
 namespace TestWebApi.Controllers;
 
@@ -52,10 +51,11 @@ public class DevicesControllerTest
             _defaultWindowSensor
         ];
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
-        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
         
-        ObjectResult? result = _deviceController.GetDevices(token, null, null, null, null) 
-            as OkObjectResult;
+        DeviceRequest request = new DeviceRequest();
+        
+        ObjectResult? result = _deviceController.GetDevices(token, request) as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);
     }
@@ -67,10 +67,11 @@ public class DevicesControllerTest
         List<Device> devices = [];
         
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
-        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
+
+        DeviceRequest request = new DeviceRequest();
         
-        ObjectResult? result = _deviceController.GetDevices(token, null, null, null, null) 
-            as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(token, request) as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);
     }
@@ -85,8 +86,9 @@ public class DevicesControllerTest
         ];
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult? result = _deviceController.GetDevices(null, null, null, null, null)
-            as UnauthorizedObjectResult;
+        DeviceRequest request = new DeviceRequest();
+        
+        ObjectResult? result = _deviceController.GetDevices(null, request) as UnauthorizedObjectResult;
         
         Assert.AreEqual(UnauthorizedStatusCode, result!.StatusCode);
     }
@@ -104,10 +106,11 @@ public class DevicesControllerTest
             .Throws(new CannotFindItemInList(SessionDoesNotExistExceptionMessage));
         _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
         
-        ObjectResult? result = _deviceController.GetDevices(token, null, null, null, null) 
-            as UnauthorizedObjectResult;
+        DeviceRequest request = new DeviceRequest();
         
-        Assert.AreEqual(UnauthorizedStatusCode, result!.StatusCode);
+        ObjectResult? result = _deviceController.GetDevices(token, request) as UnauthorizedObjectResult;
+        
+        Assert.AreEqual(UnauthorizedStatusCode, result.StatusCode);
     }
 
     [TestMethod]
@@ -120,11 +123,12 @@ public class DevicesControllerTest
             _defaultWindowSensor
         ];
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
-        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
         DevicesResponse expectedResponse = DefaultDevicesResponse();
+
+        DeviceRequest request = new DeviceRequest();
         
-        ObjectResult? result = _deviceController.GetDevices(token, null, null, null, null) 
-            as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(token, request) as OkObjectResult;
         DevicesResponse response = (result!.Value as DevicesResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
@@ -151,8 +155,7 @@ public class DevicesControllerTest
         _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
         DeviceResponse expectedResponse = DefaultSecurityCameraResponse();
         
-        ObjectResult? result = _deviceController.GetDeviceById(token, 1) 
-            as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDeviceById(token, 1) as OkObjectResult;
         DeviceResponse response = (result!.Value as DeviceResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
@@ -163,8 +166,7 @@ public class DevicesControllerTest
     {
         _mockIDeviceService.Setup(service => service.GetDeviceById(1)).Returns(_defaultCamera);
         
-        ObjectResult? result = _deviceController.GetDeviceById(null, 1) 
-            as UnauthorizedObjectResult;
+        ObjectResult? result = _deviceController.GetDeviceById(null, 1) as UnauthorizedObjectResult;
         
         Assert.AreEqual(UnauthorizedStatusCode, result!.StatusCode);
     }
@@ -237,11 +239,17 @@ public class DevicesControllerTest
         [
             _defaultCamera
         ];
-        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
+        DeviceRequest request = new DeviceRequest()
+        {
+            Name = CameraName,
+            Model = DeviceModel,
+            Company = CompanyName,
+            Kind = SecurityCameraType,
+        };
         
-        ObjectResult? result = _deviceController.GetDevices(token, CameraName, DeviceModel.ToString(), 
-            CompanyName, SecurityCameraType) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(token, request) as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);
     }
@@ -250,23 +258,32 @@ public class DevicesControllerTest
     public void TestGetDevicesFilteredByOkStatusResponse()
     {
         Guid token = Guid.NewGuid();
+        DeviceRequest request = new DeviceRequest()
+        {
+            Name = CameraName,
+            Model = DeviceModel,
+            Company = CompanyName,
+            Kind = SecurityCameraType,
+        };
         List<Device> devices =
         [
-            _defaultCamera
+            new SecurityCamera()
+            {
+                Name = request.Name,
+                Model = request.Model!.Value,
+                PhotoURLs = new List<string>() { DevicePhotoUrl },
+                Company = new Company()
+                {
+                    Name = request.Company
+                },
+                Kind = request.Kind!,
+            }
         ];
-        _mockIDeviceService.Setup(service => service.GetAllDevices()).Returns(devices);
+        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
-        DeviceResponse device1Response = DefaultSecurityCameraResponse();
-        DevicesResponse? expectedResponse = new DevicesResponse()
-        {
-            Devices =
-            [
-                device1Response
-            ],
-        };
+        DevicesResponse? expectedResponse = new DevicesResponse(devices);
         
-        ObjectResult? result = _deviceController.GetDevices(token, CameraName, DeviceModel.ToString(), 
-            CompanyName, SecurityCameraType) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(token, request) as OkObjectResult;
         DevicesResponse? response = result!.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);
@@ -425,38 +442,20 @@ public class DevicesControllerTest
         };
     }
     
-    private static DevicesResponse DefaultDevicesResponse()
+    private DevicesResponse DefaultDevicesResponse()
     {
-        return new DevicesResponse()
-        {
-            Devices =
-            [
-                DefaultSecurityCameraResponse(),
-                DefaultWindowSensorResponse()
-            ],
-        };
+        List<Device> devices =
+        [
+            _defaultCamera,
+            _defaultWindowSensor
+        ];
+
+        return new DevicesResponse(devices);
     }
     
-    private static DeviceResponse DefaultSecurityCameraResponse()
+    private DeviceResponse DefaultSecurityCameraResponse()
     {
-        return new DeviceResponse()
-        {
-            Name = CameraName,
-            Model = DeviceModel,
-            PhotoUrl = DevicePhotoUrl,
-            CompanyName = CompanyName,
-        };
-    }
-    
-    private static DeviceResponse DefaultWindowSensorResponse()
-    {
-        return new DeviceResponse()
-        {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrl = DevicePhotoUrl,
-            CompanyName = CompanyName,
-        };
+        return new DeviceResponse(_defaultCamera);
     }
 
     private User DefaultCompanyOwner()

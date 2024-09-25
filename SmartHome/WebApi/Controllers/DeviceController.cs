@@ -3,9 +3,8 @@ using DataAccess.Exceptions;
 using Domain;
 using Domain.Exceptions.GeneralExceptions;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.In;
 using WebApi.Models.Out;
-using WebApi;
+using WebApi.Models.In;
 
 namespace WebApi.Controllers;
 
@@ -30,22 +29,18 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetDevices([FromHeader] Guid? authorization, [FromQuery] string? name, 
-        [FromQuery] string? model, [FromQuery] string? company, [FromQuery] string? type)
+    public IActionResult GetDevices([FromHeader] Guid? authorization, [FromQuery] DeviceRequest request)
     {
         if (AuthorizationIsInvalid(authorization))
         {
             return Unauthorized(UnauthorizedMessage);
         }
-        
-        List<Device> devices = _deviceService.GetAllDevices();
 
-        devices = FilterDevices(devices, name, model, company, type);
-
-        DevicesResponse devicesResponse = GetDevicesResponse(devices);
+        DevicesResponse devicesResponse = new DevicesResponse(_deviceService.GetDevicesByFilter(request.ToFilter()));
         
         return Ok(devicesResponse);
     }
+    
     
     [HttpGet]
     [Route("{id}")]
@@ -56,18 +51,16 @@ public class DeviceController : ControllerBase
             return Unauthorized(UnauthorizedMessage);
         }
 
-        Device device;
+        DeviceResponse deviceResponse;
         
         try
         {
-            device = _deviceService.GetDeviceById(id);
+            deviceResponse = new DeviceResponse(_deviceService.GetDeviceById(id));
         }
         catch (ElementNotFoundException)
         {
             return NotFound(NotFoundMessage);
         }
-        
-        DeviceResponse deviceResponse = GetDeviceResponse(device);
         
         return Ok(deviceResponse);
     }
@@ -102,14 +95,9 @@ public class DeviceController : ControllerBase
             return Forbid(BasicAuthSchema);
         }
         
-        WindowSensor windowSensor = ParseWindowSensorRequest(request);
-        windowSensor.Company = GetUserCompany(authorization);
-        
-        _deviceService.CreateDevice(windowSensor);
-        
-        long windowSensorId = windowSensor.Id;
+        _deviceService.CreateDevice(request.ToEntity());
 
-        return Created(CreatedMessage, "/devices/" + windowSensorId);
+        return Created(CreatedMessage, "/devices/");
     }
 
     [HttpPost]
@@ -126,79 +114,9 @@ public class DeviceController : ControllerBase
             return Forbid(BasicAuthSchema);
         }
         
-        SecurityCamera securityCamera = ParseSecurityCameraRequest(request);
-        securityCamera.Company = GetUserCompany(authorization);
-        
-        _deviceService.CreateDevice(securityCamera);
-        
-        long securityCameraId = securityCamera.Id;
-
-        return Created(CreatedMessage, "/devices/" + securityCameraId);
-    }
-
-    private SecurityCamera ParseSecurityCameraRequest(SecurityCameraRequest request)
-    {
-        SecurityCamera securityCamera = new SecurityCamera()
-        {
-            Name = request.Name,
-            Model = request.Model,
-            PhotoURLs = request.PhotoUrls,
-            Description = request.Description,
-            LocationType = request.LocationType,
-            Functionalities = request.Functionalities,
-            Company = request.Company
-        };
-        
-        return securityCamera;
-    }
-    
-    private WindowSensor ParseWindowSensorRequest(WindowSensorRequest request)
-    {
-        WindowSensor windowSensor = new WindowSensor()
-        {
-            Name = request.Name,
-            Model = request.Model,
-            PhotoURLs = request.PhotoUrls,
-            Description = request.Description,
-            Functionalities = request.Functionalities,
-            Company = request.Company
-        };
-        
-        return windowSensor;
-    }
-    
-    private DevicesResponse GetDevicesResponse(List<Device> devices)
-    {
-        List<DeviceResponse> deviceResponses = new List<DeviceResponse>();
-
-        foreach (Device device in devices)
-        {
-            DeviceResponse response = GetDeviceResponse(device);
-            if (response != null)
-            {
-                deviceResponses.Add(response);
-            }
-        }
-
-        DevicesResponse devicesResponse = new DevicesResponse()
-        {
-            Devices = deviceResponses
-        };
-        
-        return devicesResponse;
-    }
-    
-    private DeviceResponse GetDeviceResponse(Device device)
-    {
-        DeviceResponse deviceResponse = new DeviceResponse()
-        {
-            Name = device.Name,
-            Model = device.Model,
-            PhotoUrl = device.PhotoURLs?.FirstOrDefault(),
-            CompanyName = device.Company?.Name
-        };
-
-        return deviceResponse;
+        _deviceService.CreateDevice(request.ToEntity());
+   
+        return Created(CreatedMessage, "/devices/");
     }
     
     private DeviceTypesResponse GetDeviceTypesResponse(List<string> deviceTypes)
@@ -246,27 +164,5 @@ public class DeviceController : ControllerBase
         {
             return false;
         }
-    }
-    
-    private List<Device> FilterDevices(List<Device> devices, string? name, string? model, string? company, string? type)
-    {
-        if (name != null)
-        {
-            devices = devices.FindAll(device => device.Name == name);
-        }
-        if (model != null)
-        {
-            devices = devices.FindAll(device => device.Model.ToString() == model);
-        }
-        if (company != null)
-        {
-            devices = devices.FindAll(device => device.Company.Name == company);
-        }
-        if (type != null)
-        {
-            devices = devices.FindAll(device => device.Kind == type);
-        }
-
-        return devices;
     }
 }

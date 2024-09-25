@@ -2,6 +2,7 @@ using DataAccess;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using ServiceFactory;
+using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
