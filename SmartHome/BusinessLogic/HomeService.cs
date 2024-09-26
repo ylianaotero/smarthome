@@ -27,7 +27,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return homeRepository.GetByFilter(filter);
     }
     
-    public List<Member> GetMembersFromHome(int homeId)
+    public List<Member> GetMembersFromHome(long homeId)
     {
         var home = homeRepository.GetById(homeId);
         if (home == null)

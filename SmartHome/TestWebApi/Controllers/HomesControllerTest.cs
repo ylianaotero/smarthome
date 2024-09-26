@@ -139,6 +139,37 @@ public class HomesControllerTest
         Assert.AreEqual(201, result!.StatusCode);
     }
 
+    [TestMethod]
+    public void TestGetMembersFromHomeOKResponse()
+    {
+        List<Member> members = new List<Member>
+        {
+            new Member { Id = 1, Name = "John", Email = "john@example.com" },
+            new Member { Id = 2, Name = "Jane", Email = "jane@example.com" }
+        };
+    
+        _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>())).Returns(members);
+        MembersResponse expectedResponse = new MembersResponse(members);
+
+        ObjectResult? result = _homeController.GetMembersFromHome(1) as OkObjectResult;
+    
+        Assert.IsNotNull(result);
+        MembersResponse actualResponse = result.Value as MembersResponse;
+    
+        Assert.AreEqual(expectedResponse, actualResponse);
+    }
+    
+    [TestMethod]
+    public void TestGetMembersFromHomeNotFoundStatusCode()
+    {
+        _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>()))
+            .Throws(new ElementNotFound("The requested resource was not found."));
+    
+        IActionResult result = _homeController.GetMembersFromHome(1);
+    
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
     private HomeResponse DefaultHomeResponse()
     {
         return new HomeResponse(_defaultHome);

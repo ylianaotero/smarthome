@@ -43,6 +43,21 @@ public class HomeController : ControllerBase
     }
     
     [HttpGet]
+    [Route("{id}/members")]
+    public IActionResult GetMembersFromHome([FromRoute] long id)
+    {
+        try
+        {
+            var members = _homeService.GetMembersFromHome(id);
+            return Ok(new MembersResponse(members));
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound("The requested resource was not found.");
+        }
+    }
+    
+    [HttpGet]
     [Route("{id}")]
     public IActionResult GetHomeById([FromRoute] long id)
     {
