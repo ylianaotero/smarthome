@@ -9,4 +9,6 @@ public interface IUserService
     List<User> GetAllUsers();
     
     bool IsAdmin(string email);
+    
+    void DeleteUser(long id);
 }

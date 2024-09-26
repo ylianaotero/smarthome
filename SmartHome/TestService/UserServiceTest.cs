@@ -208,6 +208,19 @@ public class UserServiceTest
         Assert.IsFalse(response);
         
     }
+    
+    [TestMethod]
+    public void TestDeleteUser()
+    {
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.DeleteUser(1);
+        
+        _mockUserRepository.Verify(repo => repo.Delete(It.Is<User>(u => u == _user)), Times.Once);
+    }
 
 
 }
