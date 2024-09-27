@@ -10,4 +10,9 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
     {
         return companyRepository.GetAll();
     }
+
+    public List<Company> GetCompaniesByFilter(Func<Company, bool> filter)
+    {
+        return companyRepository.GetByFilter(filter);
+    }
 }
