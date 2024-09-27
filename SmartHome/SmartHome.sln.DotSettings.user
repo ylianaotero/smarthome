@@ -34,5 +34,6 @@
     &lt;/TestAncestor&gt;
     &lt;ProjectFile&gt;C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A/f:HomeOwnerTest.cs&lt;/ProjectFile&gt;
     &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

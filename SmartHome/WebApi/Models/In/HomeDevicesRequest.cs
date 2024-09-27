@@ -6,15 +6,21 @@ public class HomeDevicesRequest
 { 
     public List<DeviceRequest> Devices { get; set; }
     
-    /*
-    public List<Device> ToEntities()
+    public List<WindowSensorRequest> WindowSensors { get; set; }
+    public List<SecurityCameraRequest> SecurityCameras { get; set; }
+
+    public List<Device> ToEntity()
     {
-        return Devices.Select(device => new Device()
+        List<Device> devices = new List<Device>();
+        foreach (var windowSensor in WindowSensors)
         {
-            Name = device.Name,
-            Model = device.Model,
-            Company = new Company() { Name = device.Company },
-            Kind = device.Kind
-        }).ToList();
-    }*/
+            devices.Add(windowSensor.ToEntity());
+        }
+        foreach (var securityCamera in SecurityCameras)
+        {
+            devices.Add(securityCamera.ToEntity());
+        }
+        return devices;
+    }
+    
 }

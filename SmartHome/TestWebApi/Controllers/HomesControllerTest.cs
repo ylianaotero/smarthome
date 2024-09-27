@@ -169,6 +169,21 @@ public class HomesControllerTest
     
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+    
+    [TestMethod]
+    public void TestPutDevicesInHomeOkStatusCode()
+    {
+        HomeDevicesRequest request = new HomeDevicesRequest()
+        {
+            Devices = new List<DeviceRequest>(),
+            WindowSensors = new List<WindowSensorRequest>(),
+            SecurityCameras = new List<SecurityCameraRequest>()
+        };
+    
+        ObjectResult? result = _homeController.PutDevicesInHome(request) as OkObjectResult;
+    
+        Assert.AreEqual(200, result!.StatusCode);
+    }
 
     private HomeResponse DefaultHomeResponse()
     {
