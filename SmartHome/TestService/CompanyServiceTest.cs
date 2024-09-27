@@ -36,4 +36,18 @@ public class CompanyServiceTest
         
         Assert.AreEqual(companies, retrievedCompanies);
     }
+    
+    [TestMethod]
+    public void TestGetCompaniesWithFilter()
+    {
+        List<Company> companies = new List<Company>();
+        companies.Add(_company);
+        Func<Company, bool> filter = c => c.Name == "IoT Devices & Co.";
+        
+        _mockCompanyRepository.Setup(x => x.GetByFilter(filter)).Returns(companies);
+        
+        List<Company> retrievedCompanies =  _companyService.GetCompaniesByFilter(filter);
+        
+        Assert.AreEqual(companies, retrievedCompanies);
+    }
 }
