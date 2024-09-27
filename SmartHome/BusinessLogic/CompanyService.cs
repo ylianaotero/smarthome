@@ -15,4 +15,9 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
     {
         return companyRepository.GetByFilter(filter);
     }
+
+    public void CreateCompany(Company company)
+    {
+        companyRepository.Add(company);
+    }
 }
