@@ -24,4 +24,16 @@ public class CompanyServiceTest
         _mockCompanyRepository = new Mock<IRepository<Company>>();
         _companyService = new CompanyService(_mockCompanyRepository.Object);
     }
+    
+    [TestMethod]
+    public void TestGetAllCompanies()
+    {
+        List<Company> companies = new List<Company>();
+        companies.Add(_company);
+        _mockCompanyRepository.Setup(x => x.GetAll()).Returns(companies);
+        
+        List<Company> retrievedCompanies =  _companyService.GetAllCompanies();
+        
+        Assert.AreEqual(companies, retrievedCompanies);
+    }
 }
