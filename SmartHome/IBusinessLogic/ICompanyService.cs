@@ -1,6 +1,9 @@
+using Domain;
+
 namespace IBusinessLogic;
 
-public class ICompanyService
+public interface ICompanyService
 {
-    
+    public List<Company> GetAllCompanies();
+    public List<Company> GetCompaniesByFilter(Func<Company, bool> filter);
 }

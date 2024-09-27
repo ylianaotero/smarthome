@@ -50,4 +50,19 @@ public class CompanyServiceTest
         
         Assert.AreEqual(companies, retrievedCompanies);
     }
+
+    [TestMethod]
+    public void TestCreateCompany()
+    {
+        _company = new Company()
+        {
+            Name = "IoT Devices & Co.",
+            RUT = "123456789",
+            LogoURL = "https://example.com/logo.jpg"
+
+        };
+        _mockCompanyRepository.Setup(x => x.Add(_company));
+        _companyService.CreateCompany(_company);
+        _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
+    }
 }
