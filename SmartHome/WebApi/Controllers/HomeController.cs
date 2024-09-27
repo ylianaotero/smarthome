@@ -74,5 +74,13 @@ public class HomeController : ControllerBase
         
         return Ok(homeResponse);
     }
-        
+
+    [HttpPut]
+    [Route("{id}/devices")]
+    [RolesWithPermissions(RoleWithPermissions)]
+    public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] HomeDevicesRequest request)
+    {
+        _homeService.PutDevicesInHome(id, request.ToEntity());
+        return Ok();
+    }
 }
