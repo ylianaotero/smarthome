@@ -1,6 +1,7 @@
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
@@ -28,6 +29,7 @@ public class HomeOwnerControllerTest
     private Mock<IUserService> _userServiceMock;
     private HomeOwnerController _homeOwnerController;
     private CreateHomeOwnerRequest _createHomeOwnerRequest;
+    private UpdateHomeOwnerRequest _updateHomeOwnerRequest;
     private User _user; 
     
     [TestInitialize]
@@ -44,6 +46,15 @@ public class HomeOwnerControllerTest
         _listOfRoles.Add(_homeOwner); 
         
         _createHomeOwnerRequest = new CreateHomeOwnerRequest
+        {
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
+        };
+        
+        _updateHomeOwnerRequest = new UpdateHomeOwnerRequest
         {
             Name = Name,
             Email = Email,
@@ -134,5 +145,63 @@ public class HomeOwnerControllerTest
         Assert.AreEqual(409, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestUpdateHomeOwnerOkResponse()
+    {
+        _userServiceMock.Setup(service => service.UpdateUser(It.IsAny<long>(), It.Is<User>(u =>
+            u.Name == _updateHomeOwnerRequest.Name &&
+            u.Email == _updateHomeOwnerRequest.Email &&
+            u.Password == _updateHomeOwnerRequest.Password &&
+            u.Surname == _updateHomeOwnerRequest.Surname &&
+            u.Photo == _updateHomeOwnerRequest.Photo
+        ))).Verifiable();
+
+        var result = _homeOwnerController.UpdateHomeOwner(1, _updateHomeOwnerRequest) as ObjectResult;
+        var userResponse = result?.Value as HomeOwnerResponse;
+        Assert.IsTrue(
+            result != null && 
+            userResponse != null && 
+            result.StatusCode == 200 &&
+            userResponse.Name == _updateHomeOwnerRequest.Name && 
+            userResponse.Email == _updateHomeOwnerRequest.Email &&
+            userResponse.Surname == _updateHomeOwnerRequest.Surname &&
+            userResponse.Photo == _updateHomeOwnerRequest.Photo
+        );
+
+        _userServiceMock.Verify();
+    }
     
+    //REVISAR
+    [TestMethod]
+    public void UpdateHomeOwnerInvalidRequest()
+    {
+        var updateHomeOwnerRequest = new UpdateHomeOwnerRequest
+        {
+            Name = "John",
+            Email = "john.doe@example.com",
+            Password = "newPassword",
+            Surname = "Doe",
+            Photo = "https://example.com/photo.jpg"
+        };
+
+        _userServiceMock
+            .Setup(service => service.UpdateUser(It.IsAny<long>(), It.IsAny<User>()))
+            .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
+
+        var result = _homeOwnerController.UpdateHomeOwner(1, updateHomeOwnerRequest) as ObjectResult;
+
+        Assert.AreEqual(400, result.StatusCode);
+    }
+
+    [TestMethod]
+    public void TestUpdateHomeOwnerElementNotFound()
+    {
+        _userServiceMock
+            .Setup(service => service.UpdateUser(It.IsAny<long>(), It.IsAny<User>()))
+            .Throws(new ElementNotFound("Element not found"));
+
+        var result = _homeOwnerController.UpdateHomeOwner(1, _updateHomeOwnerRequest) as ObjectResult;
+
+        Assert.AreEqual(404, result.StatusCode);
+    }
 }

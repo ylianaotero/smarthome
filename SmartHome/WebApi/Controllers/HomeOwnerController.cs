@@ -43,4 +43,25 @@ public class HomeOwnerController : ControllerBase
         }
     }
     
+     [HttpPut]
+       [Route("{id}")]
+       public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] UpdateHomeOwnerRequest updateHomeOwnerRequest)
+       {
+           try
+           {
+               _userService.UpdateUser(id, updateHomeOwnerRequest.ToEntity());
+               HomeOwnerResponse response = new HomeOwnerResponse(updateHomeOwnerRequest.ToEntity());
+               
+               return Ok(response);
+           }
+           catch (InputNotValid inputNotValid)
+           {
+               return BadRequest(new { message = inputNotValid.Message });
+           }
+           catch (ElementNotFound elementNotFound)
+           {
+               return NotFound(new { message = elementNotFound.Message });
+           }
+       }
+    
 }

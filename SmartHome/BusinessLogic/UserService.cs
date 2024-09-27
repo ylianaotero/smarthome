@@ -62,4 +62,18 @@ public class UserService : IUserService
         User user = GetBy(u => u.Id == id);
         _userRepository.Delete(user);
     }
+    
+    public void UpdateUser(long id, User user)
+    {
+        try
+        {
+            User existingUser = GetBy(u => u.Id == id);
+            existingUser.Update(user);
+            _userRepository.Update(existingUser);
+        }
+        catch (Exception e)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+    }
 }

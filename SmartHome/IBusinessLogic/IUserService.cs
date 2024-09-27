@@ -11,4 +11,5 @@ public interface IUserService
     bool IsAdmin(string email);
     
     void DeleteUser(long id);
+    void UpdateUser(long id, User user);
 }

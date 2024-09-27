@@ -221,6 +221,21 @@ public class UserServiceTest
         
         _mockUserRepository.Verify(repo => repo.Delete(It.Is<User>(u => u == _user)), Times.Once);
     }
-
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestDeleteUserNotFound()
+    {
+        List<User> listOfUsers = new List<User>();
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.DeleteUser(1);
+        
+        _mockUserRepository.Verify();
+    }
 
 }
