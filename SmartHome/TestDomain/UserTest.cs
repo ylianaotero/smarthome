@@ -255,4 +255,23 @@ public class UserTest
         
         Assert.AreEqual(InvalidPassword, user.Password);
     }
+
+    [TestMethod]
+    public void TestUpdateUser()
+    {
+        User user = new User()
+        {
+            Name = ValidName,
+            Surname = ValidSurname,
+            Email = ValidEmail,
+            Password = ValidPassword
+        };
+        User userUpdated = new User();
+        userUpdated.Name = "Juan";
+        userUpdated.Surname = "Perez";
+        userUpdated.Email = "juan@gmail.com";
+        userUpdated.Password = ValidPassword;
+        user.Update(userUpdated);
+        Assert.AreEqual(user.Email,userUpdated.Email);
+    }
 }
