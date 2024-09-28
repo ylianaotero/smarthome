@@ -228,5 +228,24 @@ public class HomeServiceTest
         Assert.AreEqual(home.Devices,homeDevices);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestPutDevicesInHomeThrowsElementNotFound()
+    {
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
+        
+        List<Device> homeDevices = new List<Device>
+        {
+            new WindowSensor
+            {
+                Id = 1, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false ,
+            },
+            new SecurityCamera { Id = 1, Name = "Cámara de seguridad", Model = 123, Description = "Cámara para exteriores", IsConnected = true }
+        };
+        
+        homeService.PutDevicesInHome(1, homeDevices);
+    }
+
     
 }

@@ -75,4 +75,18 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
 
         return home;
     }
+
+    public Home PutDevicesInHome(long homeId, List<Device> homeDevices)
+    {
+        Home home = homeRepository.GetById(homeId);
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        
+        home.Devices = homeDevices;
+        
+        homeRepository.Update(home);
+        return home;
+    }
 }

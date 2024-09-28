@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
@@ -16,6 +17,8 @@ public class HomeController : ControllerBase
     private readonly ISessionService _sessionService;
     
     private const string RoleWithPermissions = "CompanyOwner";
+    private const string UpdatedHomeMessage = "The home was updated successfully.";
+    private const string ResourceNotFoundMessage = "The requested resource was not found.";
     
     private const string UnauthorizedMessage = "Unauthorized access. Please provide valid credentials.";
     private const string CreatedMessage = "The resource was created successfully.";
@@ -53,7 +56,7 @@ public class HomeController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return NotFound("The requested resource was not found.");
+            return NotFound(ResourceNotFoundMessage);
         }
     }
     
@@ -69,7 +72,7 @@ public class HomeController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return NotFound("The requested resource was not found.");
+            return NotFound(ResourceNotFoundMessage);
         }
         
         return Ok(homeResponse);
@@ -80,7 +83,14 @@ public class HomeController : ControllerBase
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] HomeDevicesRequest request)
     {
-        _homeService.PutDevicesInHome(id, request.ToEntity());
-        return Ok();
+        try
+        {
+            _homeService.PutDevicesInHome(id, request.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return BadRequest();
+        }
     }
 }

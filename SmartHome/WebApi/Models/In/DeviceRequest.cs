@@ -9,19 +9,6 @@ public class DeviceRequest
     public string? Company { get; set; }
     public string? Kind { get; set; }
     
-    
-
-    public Device ToEntity()
-    {
-        return new Device()
-        {
-            Name = this.Name,
-            Model = this.Model,
-            Company = this.Company,
-            Kind = this.Kind
-        };
-    }
-    
     public Func<Device, bool> ToFilter() 
     {
         return device => (string.IsNullOrEmpty(this.Name) || device.Name == this.Name) &&

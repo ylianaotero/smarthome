@@ -19,12 +19,27 @@ public class HomesControllerTest
     private Home _defaultHome;
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
+    private const string ElementNotFoundMessage = "Element not found";
     
+    private const string HomeOwnerName = "John";
+    private const string HomeOwnerName2 = "Jane";
+    private const string HomeOwnerEmail = "john@example.com";
+    private const string HomeOwnerEmail2 = "jane@example.com";
     private const string Street = "Calle del Sol";
+    private const string Street2 = "Avenida Siempre Viva";
+    private const string Street3 = "Calle de la Luna";
     private const int DoorNumber = 23;
+    private const int DoorNumber2 = 742;
     private const double Latitude = 34.0207;
+    private const double Latitude2 = 34.0522;
     private const double Longitude = -118.4912;
+    private const double Longitude2 = -118.2437;
+    private const double Longitude3 = -119.4912;
     private const long HomeOwnerId = 1;
+    private const long HomeOwnerId2 = 2;
+    private const long HomeOwnerId3 = 13;
+    private const int OKStatusCode = 200;
+    private const int CreatedStatusCode = 201;
 
     [TestInitialize]
     public void TestInitialize()
@@ -38,8 +53,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
-            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
+            new Home(HomeOwnerId3,Street2, DoorNumber2, Latitude2, Longitude2)
         };
         _mockHomeService.Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>())).Returns(homes);
 
@@ -47,7 +62,7 @@ public class HomesControllerTest
 
         ObjectResult? result = _homeController.GetHomes(request) as OkObjectResult;
         
-        Assert.AreEqual(200, result!.StatusCode);
+        Assert.AreEqual(OKStatusCode, result!.StatusCode);
     }
 
     [TestMethod]
@@ -60,7 +75,7 @@ public class HomesControllerTest
         
         ObjectResult? result = _homeController.GetHomes(request) as OkObjectResult;
         
-        Assert.AreEqual(200, result!.StatusCode);
+        Assert.AreEqual(OKStatusCode, result!.StatusCode);
     }
 
     [TestMethod]
@@ -68,8 +83,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
-            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
+            new Home(HomeOwnerId2,Street2, DoorNumber2, Latitude2, Longitude2)
         };
         _mockHomeService.Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>())).Returns(homes);
         HomesResponse expectedResponse = DefaultHomesResponse();
@@ -85,14 +100,14 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetHomeByIdOkStatusCode()
     {
-        Home home = new Home(1, "Calle del Sol", 23, 34.0207, -118.4912);
+        Home home = new Home(HomeOwnerId, Street, DoorNumber, Latitude, Longitude);
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockHomeService.Setup(service => service.GetHomeById(1)).Returns(home);
         
         ObjectResult? result = _homeController.GetHomeById(1) 
             as OkObjectResult;
         
-        Assert.AreEqual(200, result!.StatusCode);
+        Assert.AreEqual(OKStatusCode, result!.StatusCode);
     }
     
     [TestMethod]
@@ -136,7 +151,7 @@ public class HomesControllerTest
         
         ObjectResult? result = _homeController.PostHomes(request) as CreatedResult;
         
-        Assert.AreEqual(201, result!.StatusCode);
+        Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
 
     [TestMethod]
@@ -144,14 +159,14 @@ public class HomesControllerTest
     {
         List<Member> members = new List<Member>
         {
-            new Member { Id = 1, Name = "John", Email = "john@example.com" },
-            new Member { Id = 2, Name = "Jane", Email = "jane@example.com" }
+            new Member { Id = HomeOwnerId, Name = HomeOwnerName, Email = HomeOwnerEmail },
+            new Member { Id = HomeOwnerId2, Name = HomeOwnerName2, Email = HomeOwnerEmail2 }
         };
     
         _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>())).Returns(members);
         MembersResponse expectedResponse = new MembersResponse(members);
 
-        ObjectResult? result = _homeController.GetMembersFromHome(1) as OkObjectResult;
+        ObjectResult? result = _homeController.GetMembersFromHome(HomeOwnerId) as OkObjectResult;
     
         Assert.IsNotNull(result);
         MembersResponse actualResponse = result.Value as MembersResponse;
@@ -163,7 +178,7 @@ public class HomesControllerTest
     public void TestGetMembersFromHomeNotFoundStatusCode()
     {
         _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>()))
-            .Throws(new ElementNotFound("The requested resource was not found."));
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
     
         IActionResult result = _homeController.GetMembersFromHome(1);
     
@@ -175,16 +190,67 @@ public class HomesControllerTest
     {
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            Devices = new List<DeviceRequest>(),
             WindowSensors = new List<WindowSensorRequest>(),
             SecurityCameras = new List<SecurityCameraRequest>()
         };
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
+        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
     
-        ObjectResult? result = _homeController.PutDevicesInHome(request) as OkObjectResult;
+        ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
-        Assert.AreEqual(200, result!.StatusCode);
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
-
+    
+    [TestMethod]
+    public void TestPutDevicesInHomeOkResponse()
+    {
+        HomeDevicesRequest request = new HomeDevicesRequest()
+        {
+            WindowSensors = new List<WindowSensorRequest>(),
+            SecurityCameras = new List<SecurityCameraRequest>()
+        };
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
+        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+    
+        ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
+    
+        Assert.IsNotNull(result);
+    }
+    
+    [TestMethod]
+    public void TestPutDevicesInHomeBadRequest()
+    {
+        HomeDevicesRequest request = new HomeDevicesRequest()
+        {
+            WindowSensors = new List<WindowSensorRequest>(),
+            SecurityCameras = new List<SecurityCameraRequest>()
+        };
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
+        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+    
+        IActionResult result = _homeController.PutDevicesInHome(_defaultHome.Id,request);
+    
+        Assert.IsInstanceOfType(result, result.GetType());
+    }
+    
+    
+    [TestMethod]
+    public void TestPutDevicesInHomeBadRequestWhenInputIsInvalid()
+    {
+        HomeDevicesRequest request = new HomeDevicesRequest()
+        {
+            WindowSensors = new List<WindowSensorRequest>(),
+            SecurityCameras = new List<SecurityCameraRequest>()
+        };
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
+        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+    
+        IActionResult result = _homeController.PutDevicesInHome(-1,request);
+    
+        Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+    }
+    
     private HomeResponse DefaultHomeResponse()
     {
         return new HomeResponse(_defaultHome);
@@ -194,15 +260,15 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(1,"Calle del Sol", 23, 34.0207, -118.4912),
-            new Home(2,"Avenida Siempre Viva", 742, 34.0522, -118.2437)
+            new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
+            new Home(HomeOwnerId2,Street2, DoorNumber2, Latitude2, Longitude2)
         };
         return new HomesResponse(homes);
     }
     
     private void SetupDefaultObjects()
     {
-        _defaultHome = new Home(13, "Calle de la luna", 23, 34.0297, -119.4912);
+        _defaultHome = new Home(HomeOwnerId3, Street3, DoorNumber, Latitude, Longitude3);
     }
 
     private void SetupHomeController()

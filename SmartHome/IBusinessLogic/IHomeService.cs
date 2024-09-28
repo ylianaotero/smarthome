@@ -11,4 +11,5 @@ public interface IHomeService
     List<Device> GetDevicesFromHome(int homeId);
     void AddMemberToHome(int homeId,Member member);
     Home GetHomeById(long id);
+    Home PutDevicesInHome(long homeId, List<Device> devices);
 }

@@ -15,13 +15,21 @@ public class HomeOwnerControllerTest
 {
     private const string ErrorMessageWhenInputIsInvalid = "Input not valid, try again";
     private const string ErrorMessageWhenElementAlreadyExists =  "Element already exists, try again";
+    private const string ErrorMessageWhenElementNotFound = "Element not found, try again";
     
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    private const int HomeOwnerId = 1;
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
     private const string InvalidEmail = "invalid email";
     private const string Password = "Securepassword1@";
     private const string Surname = "Doe";
+    private const int OkStatusCode = 200;
+    private const int CreatedStatusCode = 201;
+    private const int BadRequestStatusCode = 400;
+    private const int NotFoundStatusCode = 404;
+    private const int ConflictStatusCode = 409;
+    private const int InternalServerErrorStatusCode = 500;
 
     private List<Role> _listOfRoles;
     private HomeOwner _homeOwner; 
@@ -94,7 +102,7 @@ public class HomeOwnerControllerTest
         Assert.IsTrue(
             result != null &&
             userResponse != null &&
-            result.StatusCode == 201 &&
+            result.StatusCode == CreatedStatusCode &&
             _createHomeOwnerRequest.Name == userResponse.Name &&
             _createHomeOwnerRequest.Email == userResponse.Email &&
             _createHomeOwnerRequest.Surname == userResponse.Surname &&
@@ -114,7 +122,7 @@ public class HomeOwnerControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(400, result.StatusCode);
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -128,7 +136,7 @@ public class HomeOwnerControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(500, result.StatusCode);
+        Assert.AreEqual(InternalServerErrorStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -142,7 +150,7 @@ public class HomeOwnerControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(409, result.StatusCode);
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -161,7 +169,7 @@ public class HomeOwnerControllerTest
         Assert.IsTrue(
             result != null && 
             userResponse != null && 
-            result.StatusCode == 200 &&
+            result.StatusCode == OkStatusCode &&
             userResponse.Name == _updateHomeOwnerRequest.Name && 
             userResponse.Email == _updateHomeOwnerRequest.Email &&
             userResponse.Surname == _updateHomeOwnerRequest.Surname &&
@@ -190,7 +198,7 @@ public class HomeOwnerControllerTest
 
         var result = _homeOwnerController.UpdateHomeOwner(1, updateHomeOwnerRequest) as ObjectResult;
 
-        Assert.AreEqual(400, result.StatusCode);
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
 
     [TestMethod]
@@ -198,10 +206,10 @@ public class HomeOwnerControllerTest
     {
         _userServiceMock
             .Setup(service => service.UpdateUser(It.IsAny<long>(), It.IsAny<User>()))
-            .Throws(new ElementNotFound("Element not found"));
+            .Throws(new ElementNotFound(ErrorMessageWhenElementNotFound));
 
-        var result = _homeOwnerController.UpdateHomeOwner(1, _updateHomeOwnerRequest) as ObjectResult;
+        var result = _homeOwnerController.UpdateHomeOwner(HomeOwnerId, _updateHomeOwnerRequest) as ObjectResult;
 
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 }
