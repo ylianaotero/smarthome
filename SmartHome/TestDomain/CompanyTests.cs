@@ -63,4 +63,26 @@ public class CompanyTests
         
         Assert.AreNotEqual(company1, company2);
     }
+
+    [TestMethod]
+    public void TestCompaniesAreEqual()
+    {
+        Company company1 = new Company()
+        {
+            Id = 1,
+            Name = CompanyName,
+            RUT = CompanyRut,
+            LogoURL = CompanyLogoUrl
+        };
+        
+        Company company2 = new Company()
+        {
+            Id = 1,
+            Name = CompanyName,
+            RUT = CompanyRut,
+            LogoURL = CompanyLogoUrl
+        };
+        
+        Assert.AreEqual(company1, company2);
+    }
 }

@@ -30,4 +30,29 @@ public class CompanyOwnerTest
         CompanyOwner companyOwner = new CompanyOwner();
         Assert.IsFalse(companyOwner.HasACompleteCompany);
     }
+    
+    [TestMethod]
+    public void TestValidateExistingCompany()
+    {
+        Company company = new Company();
+        CompanyOwner companyOwner = new CompanyOwner(company);
+        Assert.IsTrue(companyOwner.HasACompleteCompany);
+    }
+    
+    [TestMethod]
+    public void TestValidateNotExistentCompanyException()
+    {
+        CompanyOwner companyOwner = new CompanyOwner();
+        Assert.IsFalse(companyOwner.HasACompleteCompany);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void TestValidateExistingCompanyException()
+    {
+        Company company = new Company();
+        CompanyOwner companyOwner = new CompanyOwner(company);
+        companyOwner.Company = new Company();
+    }
+    
 }

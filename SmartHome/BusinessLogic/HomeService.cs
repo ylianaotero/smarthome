@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
@@ -8,6 +9,8 @@ namespace BusinessLogic;
 public class HomeService (IRepository<Home> homeRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
+    private const string HomeNotFoundMessage = "Home not found";
+
 
     public void CreateHome(Home home)
     {
@@ -24,7 +27,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return homeRepository.GetByFilter(filter);
     }
     
-    public List<Member> GetMembersFromHome(int homeId)
+    public List<Member> GetMembersFromHome(long homeId)
     {
         var home = homeRepository.GetById(homeId);
         if (home == null)
@@ -59,5 +62,31 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         home.AddMember(member);
         
         homeRepository.Update(home);
+    }
+
+    public Home GetHomeById(long id)
+    {
+        Home home = homeRepository.GetById(id);
+
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+
+        return home;
+    }
+
+    public Home PutDevicesInHome(long homeId, List<Device> homeDevices)
+    {
+        Home home = homeRepository.GetById(homeId);
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        
+        home.Devices = homeDevices;
+        
+        homeRepository.Update(home);
+        return home;
     }
 }

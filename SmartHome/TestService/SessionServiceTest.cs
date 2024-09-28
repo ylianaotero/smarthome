@@ -51,7 +51,6 @@ public class SessionServiceTest
             _mockSessionRepository.VerifyAll();
             
             _mockSessionRepository.Verify(repo => repo.Add(It.Is<Session>(u => u == result)), Times.Once);
-
             Assert.AreEqual(result.User, _user);
         }
         

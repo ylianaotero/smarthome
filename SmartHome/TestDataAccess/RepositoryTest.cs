@@ -193,6 +193,25 @@ public class RepositoryTest
         Assert.AreEqual(companyOwners.Count(), retrievedHomeOwners.Count());
     }
 
+    [TestMethod]
+    public void TestUpdateDevices()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+        };
+        LoadContext(devices);
+        
+        _defaultCamera.Name = "New Name";
+        _devicesRepository.Update(_defaultCamera);
+        
+        Device? retrievedDevice = _devicesRepository.GetById(_defaultCamera.Id);
+        
+        Assert.AreEqual(retrievedDevice.Name, "New Name");
+    }
+    
+
     private void SetupRepository()
     {
         _connection = new SqliteConnection("Filename=:memory:");
@@ -208,8 +227,6 @@ public class RepositoryTest
         _devicesRepository = new SqlRepository<Device>(_context);
     }
     
-
-
     private void SetupDefaultObjects()
     {
         _defaultCompany = new Company

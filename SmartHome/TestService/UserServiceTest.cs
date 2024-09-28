@@ -208,6 +208,70 @@ public class UserServiceTest
         Assert.IsFalse(response);
         
     }
+    
+    [TestMethod]
+    public void TestDeleteUser()
+    {
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.DeleteUser(1);
+        
+        _mockUserRepository.Verify(repo => repo.Delete(It.Is<User>(u => u == _user)), Times.Once);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestDeleteUserNotFound()
+    {
+        List<User> listOfUsers = new List<User>();
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.DeleteUser(1);
+        
+        _mockUserRepository.Verify();
+    }
+    
+    [TestMethod]
+    public void TestUpdateUser()
+    {
+        _mockUserRepository.Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        User newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+        
+        _userService.UpdateUser(_user.Id, newUser);
 
+        _mockUserRepository.Verify(repo => repo.Update(It.Is<User>(u => u.Id == _user.Id)), Times.Once);
+        Assert.AreEqual(_user.Email,newUser.Email);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestUpdateUserNotFound()
+    {
+        List<User> listOfUsers = new List<User>();
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.UpdateUser(1, _user);
+        
+        _mockUserRepository.Verify();
+    }
 
 }

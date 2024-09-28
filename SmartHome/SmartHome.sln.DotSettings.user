@@ -1,15 +1,45 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AList_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FSourcesCache_003Fe747192abb38e2df82cbdb37e721567726f559914a7b81f8b26ba537de632f4_003FList_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/mariabelen/Library/Caches/JetBrains/Rider2024.2/resharper-host/temp/Rider/vAny/CoverageData/_SmartHome.728714798/Snapshot/snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f5522583_002Df860_002D434a_002Da97a_002D815e5c0f5be9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DevicesControllerTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Solution /&gt;
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AObject_002ECoreCLR_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FSourcesCache_003F12777fc8c60ccaa6418271ef2ea6562485b67c10b3799e4e6062947118bf65_003FObject_002ECoreCLR_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ASequenceEqual_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FSourcesCache_003F77c01d25d842aaedee1e5ff7ef8d1ae7440d88585e1ddd75c89e14f54b7407b_003FSequenceEqual_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/mariabelen/Library/Caches/JetBrains/Rider2024.1/resharper-host/temp/Rider/vAny/CoverageData/_SmartHome.-1009077502/Snapshot/snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=34786933_002D692f_002D4a81_002Db564_002D56813b8cfcf0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPutDevicesInHomeOkStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.HomesControllerTest.TestPutDevicesInHomeOkStatusCode&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
-    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
-    &lt;ProjectFile&gt;C38AF2E5-7E1A-451B-9502-06795F4C7BBE/d:Controllers/f:HomeOwnerControllerTest.cs&lt;/ProjectFile&gt;
-    &lt;ProjectFile&gt;C38AF2E5-7E1A-451B-9502-06795F4C7BBE/d:Controllers/f:HomesControllerTest.cs&lt;/ProjectFile&gt;
-    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
-    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+    &lt;And&gt;
+      &lt;Or&gt;
+        &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
+        &lt;ProjectFile&gt;C38AF2E5-7E1A-451B-9502-06795F4C7BBE/d:Controllers/f:HomeOwnerControllerTest.cs&lt;/ProjectFile&gt;
+        &lt;ProjectFile&gt;C38AF2E5-7E1A-451B-9502-06795F4C7BBE/d:Controllers/f:HomesControllerTest.cs&lt;/ProjectFile&gt;
+        &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
+        &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+        &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
+        &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
+      &lt;/Or&gt;
+      &lt;Not&gt;
+        &lt;TestAncestor&gt;
+          &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest.TestUpdateUser&lt;/TestId&gt;
+        &lt;/TestAncestor&gt;
+      &lt;/Not&gt;
+    &lt;/And&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyTests.TestCompaniesAreEqual&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestAddCompanyToCompanyOwner&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestValidateExistingCompany&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestValidateNotExistentCompanyException&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestValidateExistingCompanyException&lt;/TestId&gt;
+      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest.TestUpdateUser&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;ProjectFile&gt;C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A/f:HomeOwnerTest.cs&lt;/ProjectFile&gt;
+    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
+    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

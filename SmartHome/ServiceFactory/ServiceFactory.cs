@@ -15,5 +15,6 @@ public static class ServiceFactory
         serviceCollection.AddScoped<IUserService, UserService>();
         serviceCollection.AddScoped<ISessionService, SessionService>();
         serviceCollection.AddScoped<IHomeService, HomeService>();
+        serviceCollection.AddScoped<ICompanyService, CompanyService>();
     }
 }

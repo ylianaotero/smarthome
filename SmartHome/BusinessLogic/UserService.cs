@@ -56,4 +56,24 @@ public class UserService : IUserService
         bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
         return hasAdministrator; 
     }
+    
+    public void DeleteUser(long id)
+    {
+        User user = GetBy(u => u.Id == id);
+        _userRepository.Delete(user);
+    }
+    
+    public void UpdateUser(long id, User user)
+    {
+        try
+        {
+            User existingUser = GetBy(u => u.Id == id);
+            existingUser.Update(user);
+            _userRepository.Update(existingUser);
+        }
+        catch (Exception e)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+    }
 }

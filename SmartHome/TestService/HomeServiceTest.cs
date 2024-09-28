@@ -12,15 +12,7 @@ public class HomeServiceTest
     private Mock<IRepository<Home>> _mockHomeRepository;
     private Home _home;
     
-    private SecurityCamera _defaultCamera;
-    private WindowSensor _defaultWindowSensor;
-    private Company _defaultCompany;
-    
-    private const string CameraName = "My Security Camera";
-    private const string WindowSensorName = "My Window Sensor";
-    private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
-    private const string CompanyName = "IoT Devices & Co.";
+    private Home _defaultHome;
     private const string Street = "Calle del Sol";
     private const int DoorNumber = 23;
     private const double Latitude = 34.0207;
@@ -31,6 +23,12 @@ public class HomeServiceTest
     public void TestInitialize()
     {
         CreateMockHomeRepository();
+        SetupDefaultObjects();
+    }
+
+    private void SetupDefaultObjects()
+    {
+        _defaultHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
     }
 
     private void CreateMockHomeRepository()
@@ -188,6 +186,65 @@ public class HomeServiceTest
         List<Home> retrievedHomes = homeService.GetHomesByFilter(filter);
         
         CollectionAssert.AreEqual(homes, retrievedHomes);
+    }
+    
+    [TestMethod]
+    public void TestGetHomeById()
+    {
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(_defaultHome);
+        
+        Home retrivedHome = homeService.GetHomeById(1);
+        Assert.AreEqual(_defaultHome, retrivedHome);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestGetHomeByIdThrowsElementNotFound()
+    {
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
+        
+        homeService.GetHomeById(1);
+    }
+
+    [TestMethod]
+    public void TestPutDevicesInHome()
+    {
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        Home home = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
+        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(home);
+        
+        List<Device> homeDevices = new List<Device>
+        {
+            new WindowSensor
+            {
+                Id = 1, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false ,
+            },
+            new SecurityCamera { Id = 1, Name = "Cámara de seguridad", Model = 123, Description = "Cámara para exteriores", IsConnected = true }
+        };
+        
+        homeService.PutDevicesInHome(1, homeDevices);
+        Assert.AreEqual(home.Devices,homeDevices);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestPutDevicesInHomeThrowsElementNotFound()
+    {
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
+        
+        List<Device> homeDevices = new List<Device>
+        {
+            new WindowSensor
+            {
+                Id = 1, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false ,
+            },
+            new SecurityCamera { Id = 1, Name = "Cámara de seguridad", Model = 123, Description = "Cámara para exteriores", IsConnected = true }
+        };
+        
+        homeService.PutDevicesInHome(1, homeDevices);
     }
 
     

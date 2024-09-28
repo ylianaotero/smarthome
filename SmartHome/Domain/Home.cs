@@ -31,12 +31,17 @@ public class Home
     
     public Home(long ownerId,string street, int doorNumber,double latitude,double longitude)
     {
+        OwnerId = ownerId;
         Street = street;
         DoorNumber = doorNumber;
         Latitude = latitude;
         Longitude = longitude;
         Members = new();
         Devices = new List<Device>(); 
+    }
+
+    public Home()
+    {
     }
 
     public void AddMember(Member member)

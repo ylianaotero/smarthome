@@ -117,4 +117,13 @@ public class User
 
         }
     }
+
+    public void Update(User user)
+    {
+        Name = user.Name;
+        Surname = user.Surname;
+        Password = user.Password;
+        Email = user.Email;
+        Photo = user.Photo;
+    }
 }
