@@ -2,7 +2,7 @@ using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Models.Out;
+using Model.Out;
 
 namespace WebApi.Controllers;
 

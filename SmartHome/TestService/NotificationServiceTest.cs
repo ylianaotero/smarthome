@@ -35,7 +35,7 @@ public class NotificationServiceTest
     }
 
     [TestMethod]
-    public void TestGetNotifiactions()
+    public void TestGetNotifications()
     {
         List<Notification> notifications = new List<Notification>();
         Notification newNotification = new Notification("New event");

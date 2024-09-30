@@ -1,9 +1,9 @@
 using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
+using Model.Out;
 using WebApi.Attributes;
-using WebApi.Models.In;
-using WebApi.Models.Out;
 
 
 namespace WebApi.Controllers;

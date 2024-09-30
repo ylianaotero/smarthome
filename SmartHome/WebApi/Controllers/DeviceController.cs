@@ -1,9 +1,9 @@
 using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
+using Model.Out;
 using WebApi.Attributes;
-using WebApi.Models.Out;
-using WebApi.Models.In;
 
 namespace WebApi.Controllers;
 

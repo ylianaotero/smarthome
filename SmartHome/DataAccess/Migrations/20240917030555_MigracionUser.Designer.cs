@@ -76,7 +76,7 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsConnected")
                         .HasColumnType("bit");
 
-                    b.Property<long>("Model")
+                    b.Property<long>("ModelMain")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")

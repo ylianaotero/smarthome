@@ -12,8 +12,7 @@ public class NotificationService : INotificationService
     {
         _notificationRepository = notificationRepository;
     }
-
-
+    
     public void CreateNotification(Notification notification)
     {
         _notificationRepository.Add(notification);
