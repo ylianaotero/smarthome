@@ -40,7 +40,13 @@ public class HomeServiceTest
     public void TestGetAllHomes()
     {
         List<Home> homes = new List<Home>();
-        Home newHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
+        Home newHome = new Home()
+        {
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
         homes.Add(newHome);
         _mockHomeRepository.Setup(m => m.GetAll()).Returns(homes);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
