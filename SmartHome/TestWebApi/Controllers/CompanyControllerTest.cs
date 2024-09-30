@@ -1,7 +1,9 @@
 using Domain;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApi.Controllers;
+using WebApi.Models.In;
 
 
 namespace TestWebApi.Controllers;
@@ -10,7 +12,7 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class CompanyControllerTest
 {
-    private Mock<ICompanyService> _companyServiceMock;
+    private Mock<ICompanyService> _mockICompanyService;
     private CompanyController _companyController;
 
 
@@ -23,24 +25,24 @@ public class CompanyControllerTest
 
     private void SetupCompanyController()
     {
-        _companyServiceMock = new Mock<ICompanyService>();
-        _companyController = new CompanyController(_companyServiceMock.Object);
+        _mockICompanyService = new Mock<ICompanyService>();
+        _companyController = new CompanyController(_mockICompanyService.Object);
     }
 
 
     [TestMethod]
-    public void GetAllCompanies_ReturnsAllCompanies()
+    public void TestGetCompanies()
     {
         var companies = new List<Company>
         {
             new Company { Id = 1, Name = "Company 1" },
             new Company { Id = 2, Name = "Company 2" }
         };
-        _companyServiceMock.Setup(x => x.GetAllCompanies()).Returns(companies);
-
-
-        var result = _companyController.GetAllCompanies();
-      
-        Assert.AreEqual(companies, result);
+        _mockICompanyService.Setup(service => service.GetCompaniesByFilter(It.IsAny<Func<Company, bool>>())).Returns(companies);
+        
+        CompanyRequest request = new CompanyRequest();
+        ObjectResult? result = _companyController.GetCompanies(request) as ObjectResult;
+        
+        Assert.AreEqual(200, result?.StatusCode);
     }
 }

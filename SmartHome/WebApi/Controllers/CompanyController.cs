@@ -1,6 +1,8 @@
 using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models.In;
+using WebApi.Models.Out;
 
 
 namespace WebApi.Controllers;
@@ -17,8 +19,11 @@ public class CompanyController : ControllerBase
         _companyService = companyService;
     }
 
-    public List<Company>? GetAllCompanies()
+    [HttpGet]
+    public IActionResult GetCompanies([FromQuery] CompanyRequest request)
     {
-        throw new NotImplementedException();
+        CompaniesResponse companiesResponse = new CompaniesResponse(_companyService.GetCompaniesByFilter(request.ToFilter()));
+        
+        return Ok(companiesResponse);
     }
 }
