@@ -33,4 +33,15 @@ public class NotificationServiceTest
         notificationService.CreateNotification(newNotification);
         _mockNotificationRepository.Verify(m => m.Add(newNotification), Times.Once);
     }
+
+    [TestMethod]
+    public void TestGetNotifiactions()
+    {
+        List<Notification> notifications = new List<Notification>();
+        Notification newNotification = new Notification("New event");
+        notifications.Add(newNotification);
+        _mockNotificationRepository.Setup(m => m.GetAll()).Returns(notifications);
+        List<Notification> retrievedNotifications = _notificationService.GetNotifications();
+        Assert.AreEqual(notifications, retrievedNotifications);
+    }
 }
