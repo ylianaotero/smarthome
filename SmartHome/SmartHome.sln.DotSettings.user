@@ -5,14 +5,20 @@
 	
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/mariabelen/Library/Caches/JetBrains/Rider2024.1/resharper-host/temp/Rider/vAny/CoverageData/_SmartHome.-1009077502/Snapshot/snapshot.utdcvr</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=34786933_002D692f_002D4a81_002Db564_002D56813b8cfcf0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPutDevicesInHomeOkStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.HomesControllerTest.TestPutDevicesInHomeOkStatusCode&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6c468d98_002D28ed_002D433b_002D86f0_002D09a6e7c2920d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestPostCompany" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.CompanyControllerTest.TestPostCompanyOkStatusCode&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;Project Location="/Users/mariabelen/Desktop/ORT/Diseño2/301178_231810_280070/SmartHome/TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;And&gt;
       &lt;Or&gt;
