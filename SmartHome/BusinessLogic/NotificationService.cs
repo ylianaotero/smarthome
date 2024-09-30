@@ -18,4 +18,9 @@ public class NotificationService : INotificationService
     {
         _notificationRepository.Add(notification);
     }
+
+    public List<Notification> GetNotifications()
+    {
+        return _notificationRepository.GetAll();
+    }
 }
