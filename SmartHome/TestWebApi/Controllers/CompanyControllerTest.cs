@@ -45,4 +45,16 @@ public class CompanyControllerTest
         
         Assert.AreEqual(200, result?.StatusCode);
     }
+    
+    [TestMethod]
+    public void TestGetCompaniesWithEmptyRequest()
+    {
+        List<Company> companies = [];
+        _mockICompanyService.Setup(service => service.GetCompaniesByFilter(It.IsAny<Func<Company, bool>>())).Returns(companies);
+        
+        CompanyRequest request = new CompanyRequest();
+        ObjectResult? result = _companyController.GetCompanies(request) as ObjectResult;
+        
+        Assert.AreEqual(200, result?.StatusCode);
+    }
 }

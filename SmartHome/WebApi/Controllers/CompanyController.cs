@@ -26,4 +26,6 @@ public class CompanyController : ControllerBase
         
         return Ok(companiesResponse);
     }
+    
+    
 }
