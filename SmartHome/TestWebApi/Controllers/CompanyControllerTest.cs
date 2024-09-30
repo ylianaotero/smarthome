@@ -74,6 +74,23 @@ public class CompanyControllerTest
         Assert.AreEqual(200, result?.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostCompanyOkStatusCode()
+    {
+        CompanyRequest request = new CompanyRequest()
+        {
+            Name = "Company 1",
+            RUT = "123456789",
+            LogoURL = "https://www.logo.com"
+        };
+        
+        _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
+        
+        ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
+        
+        Assert.AreEqual(201, result?.StatusCode);
+    }
+    
     private CompaniesResponse DefaultCompaniesResponse()
     {
         var companies = new List<Company>
@@ -82,27 +99,5 @@ public class CompanyControllerTest
             new Company { Id = 2, Name = "Company 2" }
         };
         return new CompaniesResponse(companies);
-    }
-    
-    [TestMethod]
-    public void TestPostCompany()
-    {
-        CompanyRequest request = new CompanyRequest
-        {
-            Name = "Company 1",
-            RUT = "123456789",
-            LogoURL = "https://www.google.com"
-        };
-        Company company = new Company
-        {
-            Name = request.Name,
-            RUT = request.RUT,
-            LogoURL = request.LogoURL
-        };
-        _mockICompanyService.Setup(service => service.CreateCompany(company)).Returns(company);
-        
-        ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
-        
-        Assert.AreEqual(201, result?.StatusCode);
     }
 }
