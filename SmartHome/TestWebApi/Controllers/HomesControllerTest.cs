@@ -2,10 +2,10 @@ using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
+using Model.Out;
 using Moq;
 using WebApi.Controllers;
-using WebApi.Models.In;
-using WebApi.Models.Out;
 
 namespace TestWebApi.Controllers;
 

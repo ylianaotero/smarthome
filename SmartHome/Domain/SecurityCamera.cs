@@ -27,7 +27,7 @@ public class SecurityCamera : Device
                Id == camera.Id;
         /*return obj is SecurityCamera camera && //no me pasaba la prueba si busco con el first de la lista VER
                Name == camera.Name &&
-               Model == camera.Model &&
+               ModelMain == camera.ModelMain &&
                Description == camera.Description &&
                PhotoURLs.SequenceEqual(camera.PhotoURLs) &&
                Company.Equals(camera.Company) &&

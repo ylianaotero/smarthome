@@ -77,7 +77,7 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Model")
+                    b.Property<long>("ModelMain")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
