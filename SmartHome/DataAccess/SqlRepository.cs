@@ -30,14 +30,42 @@ public class SqlRepository<T> : IRepository<T> where T : class
         return _entities.Find(id);
     }
     
-    public List<T> GetAll()
+    public List<T> GetAll(PageData? pageData)
     {
-        return _entities.ToList();
+        List<T> elements;
+        
+        if (pageData == null)
+        {
+            elements = _entities.ToList();
+        }
+        else
+        {
+            elements = _entities
+                .Skip((pageData.PageNumber - 1) * pageData.PageSize)
+                .Take(pageData.PageSize)
+                .ToList();
+        }
+        
+        LoadEntities(elements);
+        
+        return elements;
     }
     
-    public List<T> GetByFilter(Func<T, bool> filter)
+    public List<T> GetByFilter(Func<T, bool> filter, PageData? pageData)
     {
-        List<T> elements = _entities.Where(filter).ToList();
+        List<T> elements;
+        
+        if (pageData == null)
+        {
+            elements = _entities.Where(filter).ToList();
+        }
+        else
+        {
+            elements = _entities.Where(filter)
+                .Skip((pageData.PageNumber - 1) * pageData.PageSize)
+                .Take(pageData.PageSize)
+                .ToList();
+        }
         
         LoadEntities(elements);
         

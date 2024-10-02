@@ -2,6 +2,7 @@ using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
 using Model.Out;
 
 namespace WebApi.Controllers;
@@ -23,14 +24,17 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetUsers([FromHeader] Guid Authorization)
+    public IActionResult GetUsers([FromHeader] Guid Authorization, [FromQuery] PageDataRequest pageDataRequest)
     {
         try
         {
             User userInSession = _sessionService.GetUser(Authorization);
             if (_userService.IsAdmin(userInSession.Email))
             {
-                return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
+                return Ok(_userService
+                        .GetAllUsers(pageDataRequest.ToPageData())
+                        .Select(u => new UserResponse(u))
+                        .ToList());
             }
 
             return StatusCode(403, ErrorMessageUnauthorizedAccess);

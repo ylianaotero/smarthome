@@ -6,9 +6,9 @@ public interface IRepository<T>
     
     T? GetById(long id);
 
-    List<T> GetByFilter(Func<T, bool> filter);
+    List<T> GetByFilter(Func<T, bool> filter, PageData? pageData);
     
-    List<T> GetAll();
+    List<T> GetAll(PageData? pageData);
     
     void Delete(T element);
     

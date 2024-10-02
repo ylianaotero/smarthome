@@ -48,7 +48,7 @@ public class HomeServiceTest
             Longitude = Longitude
         };
         homes.Add(newHome);
-        _mockHomeRepository.Setup(m => m.GetAll()).Returns(homes);
+        _mockHomeRepository.Setup(m => m.GetAll(It.IsAny<PageData>())).Returns(homes);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
         List<Home> retrievedHomes = homeService.GetAllHomes();
         Assert.AreEqual(homes, retrievedHomes); 
@@ -102,8 +102,23 @@ public class HomeServiceTest
     {
         List<Device> devices = new List<Device>
         {
-            new SecurityCamera { Id = 1, Name = "Cámara de seguridad", Model = 123, Description = "Cámara para exteriores", IsConnected = true },
-            new WindowSensor { Id = 2, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false }
+            new SecurityCamera
+            {
+                Id = 1, 
+                Name = "Cámara de seguridad", 
+                Model = 123, 
+                Description = "Cámara para exteriores", 
+                IsConnected = true
+            },
+            
+            new WindowSensor 
+            { 
+                Id = 2, 
+                Name = "Sensor de ventana", 
+                Model = 456, 
+                Description = "Sensor para ventanas", 
+                IsConnected = false 
+            }
         };
     
         _home = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
@@ -186,7 +201,9 @@ public class HomeServiceTest
         {
             new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude)
         };
-        _mockHomeRepository.Setup(m => m.GetByFilter(filter)).Returns(homes);
+        _mockHomeRepository
+            .Setup(m => m.GetByFilter(filter, It.IsAny<PageData>()))
+            .Returns(homes);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
         
         List<Home> retrievedHomes = homeService.GetHomesByFilter(filter);
@@ -225,9 +242,20 @@ public class HomeServiceTest
         {
             new WindowSensor
             {
-                Id = 1, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false ,
+                Id = 1, 
+                Name = "Sensor de ventana", 
+                Model = 456, 
+                Description = "Sensor para ventanas", 
+                IsConnected = false ,
             },
-            new SecurityCamera { Id = 1, Name = "Cámara de seguridad", Model = 123, Description = "Cámara para exteriores", IsConnected = true }
+            new SecurityCamera
+            {
+                Id = 1, 
+                Name = "Cámara de seguridad", 
+                Model = 123, 
+                Description = "Cámara para exteriores", 
+                IsConnected = true
+            }
         };
         
         homeService.PutDevicesInHome(1, homeDevices);
@@ -245,9 +273,20 @@ public class HomeServiceTest
         {
             new WindowSensor
             {
-                Id = 1, Name = "Sensor de ventana", Model = 456, Description = "Sensor para ventanas", IsConnected = false ,
+                Id = 1, 
+                Name = "Sensor de ventana", 
+                Model = 456, 
+                Description = "Sensor para ventanas", 
+                IsConnected = false ,
             },
-            new SecurityCamera { Id = 1, Name = "Cámara de seguridad", Model = 123, Description = "Cámara para exteriores", IsConnected = true }
+            new SecurityCamera
+            {
+                Id = 1, 
+                Name = "Cámara de seguridad", 
+                Model = 123, 
+                Description = "Cámara para exteriores", 
+                IsConnected = true
+            }
         };
         
         homeService.PutDevicesInHome(1, homeDevices);

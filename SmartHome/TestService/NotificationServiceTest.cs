@@ -40,8 +40,10 @@ public class NotificationServiceTest
         List<Notification> notifications = new List<Notification>();
         Notification newNotification = new Notification("New event");
         notifications.Add(newNotification);
-        _mockNotificationRepository.Setup(m => m.GetAll()).Returns(notifications);
-        List<Notification> retrievedNotifications = _notificationService.GetNotifications();
+        _mockNotificationRepository
+            .Setup(m => m.GetAll(It.IsAny<PageData>()))
+            .Returns(notifications);
+        List<Notification> retrievedNotifications = _notificationService.GetNotifications(PageData.Default);
         Assert.AreEqual(notifications, retrievedNotifications);
     }
 }

@@ -1,7 +1,9 @@
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
+using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
 using Model.Out;
 using Moq;
 using WebApi.Controllers;
@@ -78,10 +80,12 @@ public class UserControllerTest
     {
         _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
-        _userServiceMock.Setup(service => service.GetAllUsers()).Returns(_listOfUsers); 
+        _userServiceMock
+            .Setup(service => service.GetAllUsers(It.IsAny<PageData>()))
+            .Returns(_listOfUsers); 
         
 
-        var result = _userController.GetUsers(_session.Id) as OkObjectResult;
+        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as OkObjectResult;
         List<UserResponse> userResponse = result.Value as List<UserResponse>;
 
         _userServiceMock.Verify();
@@ -107,7 +111,7 @@ public class UserControllerTest
         _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
         
-        var result = _userController.GetUsers(_session.Id) as ObjectResult;
+        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as ObjectResult;
 
         _userServiceMock.Verify();
         _sessionServiceMock.Verify();
@@ -121,7 +125,7 @@ public class UserControllerTest
         _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new Exception()); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
         
-        var result = _userController.GetUsers(_session.Id) as ObjectResult;
+        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as ObjectResult;
 
         _userServiceMock.Verify();
         _sessionServiceMock.Verify();
@@ -132,10 +136,12 @@ public class UserControllerTest
     [TestMethod]
     public void GetUsersInvalidToken()
     {
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindUser )); 
+        _sessionServiceMock
+            .Setup(service => service.GetUser(_session.Id))
+            .Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindUser )); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         
-        var result = _userController.GetUsers(_session.Id) as ObjectResult;
+        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as ObjectResult;
 
         _userServiceMock.Verify();
         _sessionServiceMock.Verify();
@@ -143,5 +149,13 @@ public class UserControllerTest
         Assert.AreEqual(401, result.StatusCode);
     }
     
-    
+    private PageDataRequest DefaultPageDataRequest()
+    {
+        PageDataRequest request = new PageDataRequest();
+        
+        request.Page = 1;
+        request.PageSize = 10;
+        
+        return request;
+    }
 }

@@ -1,4 +1,5 @@
 using Domain;
+using IDataAccess;
 
 namespace IBusinessLogic;
 
@@ -6,7 +7,7 @@ public interface IUserService
 {
     void CreateUser(User user);
     
-    List<User> GetAllUsers();
+    List<User> GetAllUsers(PageData pageData);
     
     bool IsAdmin(string email);
     

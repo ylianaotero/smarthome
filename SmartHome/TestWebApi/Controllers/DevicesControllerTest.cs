@@ -1,6 +1,7 @@
 using CustomExceptions;
 using IBusinessLogic;
 using Domain;
+using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -46,11 +47,14 @@ public class DevicesControllerTest
             _defaultCamera,
             _defaultWindowSensor
         ];
-        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
+        _mockIDeviceService
+            .Setup(service => service
+                .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
+            .Returns(devices);
         
         DeviceRequest request = new DeviceRequest();
         
-        ObjectResult? result = _deviceController.GetDevices(request) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);
     }
@@ -60,11 +64,14 @@ public class DevicesControllerTest
     {
         List<Device> devices = [];
         
-        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
+        _mockIDeviceService
+            .Setup(service => service
+                .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
+            .Returns(devices);
 
         DeviceRequest request = new DeviceRequest();
         
-        ObjectResult? result = _deviceController.GetDevices(request) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);
     }
@@ -77,12 +84,15 @@ public class DevicesControllerTest
             _defaultCamera,
             _defaultWindowSensor
         ];
-        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
+        _mockIDeviceService
+            .Setup(service => service
+                .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
+            .Returns(devices);
         DevicesResponse expectedResponse = DefaultDevicesResponse();
 
         DeviceRequest request = new DeviceRequest();
         
-        ObjectResult? result = _deviceController.GetDevices(request) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         DevicesResponse response = (result!.Value as DevicesResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
@@ -167,7 +177,10 @@ public class DevicesControllerTest
         [
             _defaultCamera
         ];
-        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
+        _mockIDeviceService
+            .Setup(service => service
+                .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
+            .Returns(devices);
         DeviceRequest request = new DeviceRequest()
         {
             Name = CameraName,
@@ -176,7 +189,7 @@ public class DevicesControllerTest
             Kind = SecurityCameraType,
         };
         
-        ObjectResult? result = _deviceController.GetDevices(request) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         
         Assert.AreEqual(OkStatusCode, result!.StatusCode);
     }
@@ -205,10 +218,13 @@ public class DevicesControllerTest
                 Kind = request.Kind!,
             }
         ];
-        _mockIDeviceService.Setup(service => service.GetDevicesByFilter(It.IsAny<Func<Device, bool>>())).Returns(devices);
+        _mockIDeviceService
+            .Setup(service => service
+                .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
+            .Returns(devices);
         DevicesResponse? expectedResponse = new DevicesResponse(devices);
         
-        ObjectResult? result = _deviceController.GetDevices(request) as OkObjectResult;
+        ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         DevicesResponse? response = result!.Value as DevicesResponse;
         
         Assert.AreEqual(expectedResponse, response);
@@ -280,9 +296,21 @@ public class DevicesControllerTest
         _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
-            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = SecurityCameraType };
+        {
+            Name = CameraName, 
+            Model = DeviceModel, 
+            PhotoURLs = photos, 
+            Company = _defaultCompany, 
+            Kind = SecurityCameraType
+        };
         _defaultWindowSensor = new WindowSensor()
-            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = WindowSensorType };
+        {
+            Name = WindowSensorName, 
+            Model = DeviceModel, 
+            PhotoURLs = photos, 
+            Company = _defaultCompany, 
+            Kind = WindowSensorType
+        };
     }
 
     private void SetupDeviceController()
@@ -317,6 +345,16 @@ public class DevicesControllerTest
             LocationType = LocationType.Indoor,
             Functionalities = [SecurityCameraFunctionality.MotionDetection],
         };
+    }
+    
+    private PageDataRequest DefaultPageDataRequest()
+    {
+        PageDataRequest request = new PageDataRequest();
+        
+        request.Page = 1;
+        request.PageSize = 10;
+        
+        return request;
     }
     
     private DevicesResponse DefaultDevicesResponse()

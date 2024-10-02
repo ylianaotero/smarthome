@@ -8,6 +8,7 @@ namespace BusinessLogic;
 public class DeviceService(IRepository<Device> deviceRepository) : IDeviceService
 {
     private const string DeviceNotFoundMessage = "Device not found";
+    
     public void CreateDevice(Device device)
     {
         deviceRepository.Add(device);
@@ -25,14 +26,14 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         return device;
     }
     
-    public List<Device> GetAllDevices()
+    public List<Device> GetAllDevices(PageData pageData)
     {
-        return deviceRepository.GetAll();
+        return deviceRepository.GetAll(pageData);
     }
     
-    public List<Device> GetDevicesByFilter(Func<Device, bool> filter)
+    public List<Device> GetDevicesByFilter(Func<Device, bool> filter, PageData pageData)
     {
-        return deviceRepository.GetByFilter(filter);
+        return deviceRepository.GetByFilter(filter, pageData);
     }
     
     public List<string> GetDeviceTypes()
@@ -44,5 +45,4 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
 
         return deviceTypes;
     }
-    
 }

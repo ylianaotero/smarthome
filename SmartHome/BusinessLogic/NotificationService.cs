@@ -18,8 +18,8 @@ public class NotificationService : INotificationService
         _notificationRepository.Add(notification);
     }
 
-    public List<Notification> GetNotifications()
+    public List<Notification> GetNotifications(PageData pageData)
     {
-        return _notificationRepository.GetAll();
+        return _notificationRepository.GetAll(pageData);
     }
 }
