@@ -106,6 +106,36 @@ public class UserServiceTest
 
     }
     
+    [TestMethod]
+    public void GetUsersWithFilter()
+    {
+        List<User> users = new List<User>();
+        User user1 = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+        users.Add(user1);
+        Func<User, bool> filter = u => u.Email == NewEmail && 
+                                       u.Name == NewName && 
+                                       u.Surname == NewSurname 
+                                       && u.Password == NewPassword;
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(filter, It.IsAny<PageData>())).Returns(users);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        List<User> responseList = _userService.GetUsersByFilter(filter, PageData.Default);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.AreEqual(users, responseList);
+
+    }
+    
     
     [TestMethod]
     public void UserIsAdmin()
