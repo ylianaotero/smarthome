@@ -44,4 +44,14 @@ public class NotificationServiceTest
         List<Notification> retrievedNotifications = _notificationService.GetNotifications();
         Assert.AreEqual(notifications, retrievedNotifications);
     }
+    
+    [TestMethod]
+    public void TestGetNotificationById()
+    {
+        long id = 1;
+        Notification newNotification = new Notification("New event");
+        _mockNotificationRepository.Setup(m => m.GetById(id)).Returns(newNotification);
+        Notification retrievedNotification = _notificationService.GetNotificationById(id);
+        Assert.AreEqual(newNotification, retrievedNotification);
+    }
 }
