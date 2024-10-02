@@ -50,6 +50,11 @@ public class UserService : IUserService
         return _userRepository.GetAll(pageData);
     }
 
+    public List<User> GetUsersByFilter(Func<User, bool> filter, PageData pageData)
+    {
+        return _userRepository.GetByFilter(filter, pageData);
+    }
+
     public bool IsAdmin(string email)
     {
         User existingUser =  GetBy(u => u.Email == email, PageData.Default);

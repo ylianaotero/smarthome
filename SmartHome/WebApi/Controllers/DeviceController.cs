@@ -23,7 +23,6 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
-    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         DevicesResponse devicesResponse = new DevicesResponse
