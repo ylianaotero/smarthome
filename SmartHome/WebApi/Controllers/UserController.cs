@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetUsers([FromHeader] Guid Authorization, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetUsers([FromHeader] Guid Authorization, [FromQuery] UsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         try
         {
