@@ -30,9 +30,9 @@ public class CompanyServiceTest
     {
         List<Company> companies = new List<Company>();
         companies.Add(_company);
-        _mockCompanyRepository.Setup(x => x.GetAll()).Returns(companies);
+        _mockCompanyRepository.Setup(x => x.GetAll(It.IsAny<PageData>())).Returns(companies);
         
-        List<Company> retrievedCompanies =  _companyService.GetAllCompanies();
+        List<Company> retrievedCompanies =  _companyService.GetAllCompanies(PageData.Default);
         
         Assert.AreEqual(companies, retrievedCompanies);
     }
@@ -44,9 +44,11 @@ public class CompanyServiceTest
         companies.Add(_company);
         Func<Company, bool> filter = c => c.Name == "IoT Devices & Co.";
         
-        _mockCompanyRepository.Setup(x => x.GetByFilter(filter)).Returns(companies);
+        _mockCompanyRepository
+            .Setup(x => x.GetByFilter(filter, It.IsAny<PageData>()))
+            .Returns(companies);
         
-        List<Company> retrievedCompanies =  _companyService.GetCompaniesByFilter(filter);
+        List<Company> retrievedCompanies =  _companyService.GetCompaniesByFilter(filter, PageData.Default);
         
         Assert.AreEqual(companies, retrievedCompanies);
     }

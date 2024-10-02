@@ -1,6 +1,7 @@
 using CustomExceptions;
 using DataAccess;
 using Domain;
+using IDataAccess;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,7 @@ public class RepositoryTest
     }
     
     [TestMethod]
-    public void TestGetDevicesByFilter()
+    public void TestGetDevicesByFilterWithPagination()
     {
         long otherModel = 1345354616347;
         List<Device> devices = new List<Device>
@@ -64,13 +65,13 @@ public class RepositoryTest
 
         Func<Device,bool> filter = d => d.Model == DeviceModel;
 
-        List<Device> retrievedDevices = _devicesRepository.GetByFilter(filter);
+        List<Device> retrievedDevices = _devicesRepository.GetByFilter(filter, PageData.Default);
         
         Assert.IsTrue(retrievedDevices.TrueForAll(retrievedDevice => retrievedDevice.Model == DeviceModel));
     }
 
     [TestMethod]
-    public void TestGetAllDevices()
+    public void TestGetAllDevicesWithPagination()
     {
         List<Device> devices = new List<Device>
         {
@@ -79,7 +80,49 @@ public class RepositoryTest
         };
         LoadContext(devices);
         
-        List<Device> retrievedDevices = _devicesRepository.GetAll();
+        List<Device> retrievedDevices = _devicesRepository.GetAll(PageData.Default);
+        
+        Assert.AreEqual(devices.Count(), retrievedDevices.Count());
+    }
+    
+    [TestMethod]
+    public void TestGetDevicesByFilterWithoutPagination()
+    {
+        long otherModel = 1345354616347;
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+            new SecurityCamera
+            {
+                Name = CameraName,
+                Model = otherModel,
+                Description = DeviceDescription,
+                PhotoURLs = new List<string> { DevicePhotoUrl },
+                Company = _defaultCompany,
+                IsConnected = DeviceIsConnected,
+            },
+        };
+        LoadContext(devices);
+
+        Func<Device,bool> filter = d => d.Model == DeviceModel;
+
+        List<Device> retrievedDevices = _devicesRepository.GetByFilter(filter, null);
+        
+        Assert.IsTrue(retrievedDevices.TrueForAll(retrievedDevice => retrievedDevice.Model == DeviceModel));
+    }
+
+    [TestMethod]
+    public void TestGetAllDevicesWithoutPagination()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+        };
+        LoadContext(devices);
+        
+        List<Device> retrievedDevices = _devicesRepository.GetAll(null);
         
         Assert.AreEqual(devices.Count(), retrievedDevices.Count());
     }
@@ -104,7 +147,7 @@ public class RepositoryTest
     {
         _devicesRepository.Add(_defaultCamera);
         
-        List<Device> retrievedDevices = _devicesRepository.GetAll();
+        List<Device> retrievedDevices = _devicesRepository.GetAll(PageData.Default);
         
         CollectionAssert.Contains(retrievedDevices, _defaultCamera);
     }
@@ -121,7 +164,7 @@ public class RepositoryTest
         
         _devicesRepository.Delete(_defaultCamera);
         
-        List<Device> retrievedDevices = _devicesRepository.GetAll();
+        List<Device> retrievedDevices = _devicesRepository.GetAll(PageData.Default);
         
         CollectionAssert.DoesNotContain(retrievedDevices, _defaultCamera);
     }
@@ -152,7 +195,7 @@ public class RepositoryTest
         
         SqlRepository<HomeOwner> _homeOwnersRepository = new SqlRepository<HomeOwner>(_context);
         
-        List<HomeOwner> retrievedHomeOwners = _homeOwnersRepository.GetAll();
+        List<HomeOwner> retrievedHomeOwners = _homeOwnersRepository.GetAll(PageData.Default);
         
         Assert.AreEqual(homeOwners.Count(), retrievedHomeOwners.Count());
     }
@@ -170,7 +213,7 @@ public class RepositoryTest
         
         SqlRepository<Administrator> _administratorsRepository = new SqlRepository<Administrator>(_context);
         
-        List<Administrator> retrievedAdministrators = _administratorsRepository.GetAll();
+        List<Administrator> retrievedAdministrators = _administratorsRepository.GetAll(PageData.Default);
         
         Assert.AreEqual(administrators.Count(), retrievedAdministrators.Count());
     }
@@ -188,7 +231,7 @@ public class RepositoryTest
         
         SqlRepository<CompanyOwner> _companyOwnersRepository = new SqlRepository<CompanyOwner>(_context);
         
-        List<CompanyOwner> retrievedHomeOwners = _companyOwnersRepository.GetAll();
+        List<CompanyOwner> retrievedHomeOwners = _companyOwnersRepository.GetAll(PageData.Default);
         
         Assert.AreEqual(companyOwners.Count(), retrievedHomeOwners.Count());
     }
@@ -209,6 +252,28 @@ public class RepositoryTest
         Device? retrievedDevice = _devicesRepository.GetById(_defaultCamera.Id);
         
         Assert.AreEqual(retrievedDevice.Name, "New Name");
+    }
+    
+    
+    [TestMethod]
+    public void TestPageData()
+    {
+        List<Device> devices = new List<Device>
+        {
+            _defaultCamera,
+            _defaultWindowSensor,
+        };
+        LoadContext(devices);
+        
+        PageData pageData = new PageData()
+        {
+            PageNumber = 1,
+            PageSize = 1
+        };
+        
+        List<Device> retrievedDevices = _devicesRepository.GetAll(pageData);
+        
+        Assert.AreEqual(retrievedDevices.Count(), 1);
     }
     
 

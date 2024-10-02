@@ -1,5 +1,6 @@
 using Domain;
 using IBusinessLogic;
+using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -37,10 +38,13 @@ public class CompanyControllerTest
             new Company { Id = 1, Name = "Company 1" },
             new Company { Id = 2, Name = "Company 2" }
         };
-        _mockICompanyService.Setup(service => service.GetCompaniesByFilter(It.IsAny<Func<Company, bool>>())).Returns(companies);
+        _mockICompanyService
+            .Setup(service => service
+                .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
+            .Returns(companies);
         
         CompanyRequest request = new CompanyRequest();
-        ObjectResult? result = _companyController.GetCompanies(request) as ObjectResult;
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
         Assert.AreEqual(200, result?.StatusCode);
     }
@@ -49,11 +53,14 @@ public class CompanyControllerTest
     public void TestGetCompaniesWithEmptyRequest()
     {
         List<Company> companies = [];
-        _mockICompanyService.Setup(service => service.GetCompaniesByFilter(It.IsAny<Func<Company, bool>>())).Returns(companies);
+        _mockICompanyService
+            .Setup(service => service
+                .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
+            .Returns(companies);
         CompaniesResponse expectedResponse = DefaultCompaniesResponse();
         
         CompanyRequest request = new CompanyRequest();
-        ObjectResult? result = _companyController.GetCompanies(request) as ObjectResult;
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
         Assert.AreEqual(200, result?.StatusCode);
     }
@@ -66,10 +73,13 @@ public class CompanyControllerTest
             new Company { Id = 1, Name = "Company 1" },
             new Company { Id = 2, Name = "Company 2" }
         };
-        _mockICompanyService.Setup(service => service.GetCompaniesByFilter(It.IsAny<Func<Company, bool>>())).Returns(companies);
+        _mockICompanyService
+            .Setup(service => service
+                .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
+            .Returns(companies);
         
         CompanyRequest request = new CompanyRequest();
-        ObjectResult? result = _companyController.GetCompanies(request) as ObjectResult;
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
         Assert.AreEqual(200, result?.StatusCode);
     }
@@ -99,5 +109,15 @@ public class CompanyControllerTest
             new Company { Id = 2, Name = "Company 2" }
         };
         return new CompaniesResponse(companies);
+    }
+    
+    private PageDataRequest DefaultPageDataRequest()
+    {
+        PageDataRequest request = new PageDataRequest();
+        
+        request.Page = 1;
+        request.PageSize = 10;
+        
+        return request;
     }
 }

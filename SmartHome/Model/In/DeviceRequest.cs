@@ -1,4 +1,5 @@
 using Domain;
+using IDataAccess;
 
 namespace Model.In;
 
@@ -12,7 +13,7 @@ public class DeviceRequest
     public Func<Device, bool> ToFilter() 
     {
         return device => (string.IsNullOrEmpty(this.Name) || device.Name == this.Name) &&
-                           (this.Model == 0 || device.Model == this.Model) &&
+                           (this.Model == null || device.Model == this.Model) &&
                            (string.IsNullOrEmpty(this.Company) || 
                             (device.Company != null && device.Company.Name == this.Company)) &&
                            (string.IsNullOrEmpty(this.Kind) || device.Kind == this.Kind);

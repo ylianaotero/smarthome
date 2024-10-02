@@ -23,9 +23,11 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetDevices([FromQuery] DeviceRequest request)
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+    public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        DevicesResponse devicesResponse = new DevicesResponse(_deviceService.GetDevicesByFilter(request.ToFilter()));
+        DevicesResponse devicesResponse = new DevicesResponse
+            (_deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         
         return Ok(devicesResponse);
     }

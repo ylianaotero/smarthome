@@ -39,9 +39,15 @@ public class SessionServiceTest
         [TestMethod]
         public void LogIn()
         {
-            _mockUserRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(new List<User> { _user });
+            _mockUserRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<User> { _user });
+    
 
-            _mockSessionRepository.Setup(repo => repo.Add(It.IsAny<Session>())).Verifiable();
+            _mockSessionRepository
+                .Setup(repo => repo.Add(It.IsAny<Session>()))
+                .Verifiable();
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -50,7 +56,9 @@ public class SessionServiceTest
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
             
-            _mockSessionRepository.Verify(repo => repo.Add(It.Is<Session>(u => u == result)), Times.Once);
+            _mockSessionRepository
+                .Verify(repo => repo
+                    .Add(It.Is<Session>(u => u == result)), Times.Once);
             Assert.AreEqual(result.User, _user);
         }
         
@@ -58,7 +66,10 @@ public class SessionServiceTest
         [ExpectedException(typeof(CannotFindItemInList))]
         public void TryToLogInWithUserThatDoesNotExist()
         {
-            _mockUserRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(new List<User>());
+            _mockUserRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<User>());
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -71,9 +82,14 @@ public class SessionServiceTest
         [TestMethod]
         public void LogOut()
         {
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session> { _session });
 
-            _mockSessionRepository.Setup(repo => repo.Delete(It.IsAny<Session>())).Verifiable();
+            _mockSessionRepository
+                .Setup(repo => repo.Delete(It.IsAny<Session>()))
+                .Verifiable();
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -82,7 +98,8 @@ public class SessionServiceTest
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
             
-            _mockSessionRepository.Verify(repo => repo.Delete(It.IsAny<Session>()), Times.Once);
+            _mockSessionRepository
+                .Verify(repo => repo.Delete(It.IsAny<Session>()), Times.Once);
         }
         
         [TestMethod]
@@ -90,7 +107,10 @@ public class SessionServiceTest
         public void InvalidLogOut()
         {
 
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session>());
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session>());
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -105,7 +125,10 @@ public class SessionServiceTest
         {
             _session.Id = new Guid(); 
 
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session> { _session });
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -121,7 +144,10 @@ public class SessionServiceTest
         [ExpectedException(typeof(CannotFindItemInList))]
         public void GetUserOfANotExistingSession()
         {
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session>());
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session>());
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -137,7 +163,10 @@ public class SessionServiceTest
             _session.Id = new Guid(); 
             _user.Roles = new List<Role> { new Administrator() };
 
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session> { _session });
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
@@ -154,7 +183,10 @@ public class SessionServiceTest
         {
             _session.Id = new Guid(); 
 
-            _mockSessionRepository.Setup(logic => logic.GetByFilter(It.IsAny<Func<Session, bool>>())).Returns(new List<Session> { _session });
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session> { _session });
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 

@@ -1,10 +1,8 @@
-using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
 using WebApi.Attributes;
-
 
 namespace WebApi.Controllers;
 
@@ -25,9 +23,10 @@ public class CompanyController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetCompanies([FromQuery] CompanyRequest request)
+    public IActionResult GetCompanies([FromQuery] CompanyRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        CompaniesResponse companiesResponse = new CompaniesResponse(_companyService.GetCompaniesByFilter(request.ToFilter()));
+        CompaniesResponse companiesResponse = new CompaniesResponse
+            (_companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         
         return Ok(companiesResponse);
     }
