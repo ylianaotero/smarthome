@@ -30,6 +30,7 @@ public class UserControllerTest
     private UserController _userController;
     private User _user_1_example; 
     private User _user_2_example;
+    private User _user_3_example;
     private List<User> _listOfUsers;
 
     private string _fullName; 
@@ -41,8 +42,8 @@ public class UserControllerTest
         _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
 
         _userController = new UserController(_userServiceMock.Object,_sessionServiceMock.Object);
-
-        _listOfRoles = new List<Role>();
+        Role role = new Administrator();
+        _listOfRoles = new List<Role>() {};
 
         _session = new Session(); 
         
@@ -64,6 +65,16 @@ public class UserControllerTest
             Surname = Surname,
             Photo = ProfilePictureUrl,
             Roles = _listOfRoles
+        };
+        
+        _user_3_example = new User
+        {
+            Name = Name,
+            Email = Email2,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl,
+            Roles = new List<Role>(){role}
         };
         
         _session.User = _user_1_example;
@@ -147,6 +158,31 @@ public class UserControllerTest
         _sessionServiceMock.Verify();
         
         Assert.AreEqual(401, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void GetUsersByFullNameAndRole()
+    {
+        UsersRequest request = new UsersRequest
+        {
+            FullName = _fullName,
+            Role = "Administrator"
+        };
+        List<User> listOfUsers = new List<User> { _user_3_example};
+        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
+        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
+        _userServiceMock
+            .Setup(service => service.GetAllUsers(It.IsAny<PageData>()))
+            .Returns(listOfUsers); 
+        UsersResponse expectedResponse = new UsersResponse(listOfUsers);
+
+        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as OkObjectResult;
+        UsersResponse usersResponse = result.Value as UsersResponse;
+
+        _userServiceMock.Verify();
+        _sessionServiceMock.Verify();
+
+        Assert.Equals(expectedResponse, usersResponse);
     }
     
     private PageDataRequest DefaultPageDataRequest()
