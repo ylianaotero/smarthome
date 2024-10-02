@@ -176,7 +176,7 @@ public class UserControllerTest
             .Returns(listOfUsers); 
         UsersResponse expectedResponse = new UsersResponse(listOfUsers);
 
-        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as OkObjectResult;
+        var result = _userController.GetUsers(_session.Id, request, DefaultPageDataRequest()) as OkObjectResult;
         UsersResponse usersResponse = result.Value as UsersResponse;
 
         _userServiceMock.Verify();
