@@ -21,6 +21,16 @@ public class UserResponse
         CreatedAt = user.CreatedAt; 
         Roles =  LoadRolesList(user.Roles);
     }
+    
+    public override bool Equals(object? obj)
+    {
+        return obj is UserResponse response &&
+               Name == response.Name &&
+               Surname == response.Surname &&
+               FullName == response.FullName &&
+               CreatedAt == response.CreatedAt &&
+               Roles.SequenceEqual(response.Roles);
+    }
 
     private List<Role> LoadRolesList(List<Role> listOfRoles)
     {

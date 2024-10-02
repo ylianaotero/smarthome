@@ -4,8 +4,8 @@ namespace Model.In;
 
 public class UsersRequest
 {
-    public string FullName { get; set; }
-    public string Role { get; set; }
+    public string? FullName { get; set; }
+    public string? Role { get; set; }
     
     public Func<User, bool> ToFilter()
     {
@@ -21,19 +21,26 @@ public class UsersRequest
     
     private (string,string) SplitFullName()
     {
-        string[] splitName = FullName.Split(" ");
-        
-        if (splitName.Length == 0)
+        string[] splitName;
+
+        if (FullName != null)
         {
-            return ("","");
+            splitName = FullName.Split(" ");
+            
+            if (splitName.Length == 0)
+            {
+                return ("","");
+            }
+            
+            if (splitName.Length == 1)
+            {
+                return (splitName[0], "");
+            }
+            
+            return (splitName[0], splitName[1]);
         }
-        
-        if (splitName.Length == 1)
-        {
-            return (splitName[0], "");
-        }
-        
-        return (splitName[0], splitName[1]);
+
+        return ("", "");
     }
     
     private Func<User,bool> FilterWithEmptyOrIncompleteFullName(string? name)

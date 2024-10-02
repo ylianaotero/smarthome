@@ -9,6 +9,8 @@ public interface IUserService
     
     List<User> GetAllUsers(PageData pageData);
     
+    List<User> GetUsersByFilter(Func<User, bool> filter, PageData pageData);
+    
     bool IsAdmin(string email);
     
     void DeleteUser(long id);

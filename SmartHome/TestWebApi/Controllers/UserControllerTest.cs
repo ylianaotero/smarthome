@@ -1,4 +1,3 @@
-using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -13,9 +12,7 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class UserControllerTest
 {
-    private const string ErrorMessageWhenCannotFindUser =  "Cannot find user";
-    
-   private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string Name =  "John";
     private const string Email1 = "john.doe@example.com";
     private const string Email2 = "john.lopez@example.com";
@@ -92,72 +89,18 @@ public class UserControllerTest
         _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         _userServiceMock
-            .Setup(service => service.GetAllUsers(It.IsAny<PageData>()))
+            .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers); 
+        UsersRequest request = new UsersRequest();
+        UsersResponse expectedResponse = new UsersResponse(_listOfUsers);
         
-
-        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as OkObjectResult;
-        List<UserResponse> userResponse = result.Value as List<UserResponse>;
-
-        _userServiceMock.Verify();
-        _sessionServiceMock.Verify();
-
-        Assert.IsTrue(
-            result != null &&
-            result.StatusCode == 200 &&
-            userResponse != null &&
-            userResponse.All(user =>
-                user.Name == Name &&
-                user.Surname == Surname &&
-                user.FullName == _fullName &&
-                user.CreatedAt.Date == DateTime.Today.Date &&
-                user.Roles.Count == 0
-            ));
-    }
-    
-    
-    [TestMethod]
-    public void GetUsersUnauthorized()
-    {
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
-        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
-        
-        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as ObjectResult;
+        var result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
+        UsersResponse userResponse = result.Value as UsersResponse;
 
         _userServiceMock.Verify();
         _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(403, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void GetUsersOtherException()
-    {
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Throws(new Exception()); 
-        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(false); 
-        
-        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as ObjectResult;
 
-        _userServiceMock.Verify();
-        _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(500, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void GetUsersInvalidToken()
-    {
-        _sessionServiceMock
-            .Setup(service => service.GetUser(_session.Id))
-            .Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindUser )); 
-        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
-        
-        var result = _userController.GetUsers(_session.Id, DefaultPageDataRequest()) as ObjectResult;
-
-        _userServiceMock.Verify();
-        _sessionServiceMock.Verify();
-        
-        Assert.AreEqual(401, result.StatusCode);
+        Assert.AreEqual(expectedResponse, userResponse);
     }
     
     [TestMethod]
@@ -168,21 +111,21 @@ public class UserControllerTest
             FullName = _fullName,
             Role = "Administrator"
         };
-        List<User> listOfUsers = new List<User> { _user_3_example};
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
-        _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
+        List<User> listOfUsers =
+        [
+            _user_3_example,
+        ];
         _userServiceMock
-            .Setup(service => service.GetAllUsers(It.IsAny<PageData>()))
+            .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(listOfUsers); 
         UsersResponse expectedResponse = new UsersResponse(listOfUsers);
-
-        var result = _userController.GetUsers(_session.Id, request, DefaultPageDataRequest()) as OkObjectResult;
+        
+        var result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
         UsersResponse usersResponse = result.Value as UsersResponse;
 
         _userServiceMock.Verify();
-        _sessionServiceMock.Verify();
 
-        Assert.Equals(expectedResponse, usersResponse);
+        Assert.AreEqual(expectedResponse, usersResponse);
     }
     
     private PageDataRequest DefaultPageDataRequest()
