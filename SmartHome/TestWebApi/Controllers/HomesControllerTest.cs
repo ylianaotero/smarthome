@@ -192,7 +192,7 @@ public class HomesControllerTest
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         
-        ObjectResult? result = _homeController.PostHomes(request) as CreatedResult;
+        ObjectResult? result = _homeController.PostHomes(request) as CreatedAtActionResult;
         
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }

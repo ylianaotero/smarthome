@@ -12,8 +12,7 @@ public class CreateHomeRequest
     //public List<Member> Members { get; set; }
     
     public List<Device>? Devices { get; set; }
-
-
+    
     public Home ToEntity()
     {
         return new Home()

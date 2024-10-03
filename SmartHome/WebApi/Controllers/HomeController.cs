@@ -1,8 +1,5 @@
-using System.ComponentModel;
 using CustomExceptions;
-using Domain;
 using IBusinessLogic;
-using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -17,12 +14,10 @@ public class HomeController : ControllerBase
     private readonly IHomeService _homeService;
     private readonly ISessionService _sessionService;
     
-    private const string RoleWithPermissions = "CompanyOwner";
+    private const string RoleWithPermissionToUpdateHome = "HomeOwner";
+    private const string RoleWithPermissionToGetAllHomes = "Administrator";
     private const string UpdatedHomeMessage = "The home was updated successfully.";
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
-    
-    private const string UnauthorizedMessage = "Unauthorized access. Please provide valid credentials.";
-    private const string CreatedMessage = "The resource was created successfully.";
 
     
     public HomeController(IHomeService homeService)
@@ -31,6 +26,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet]
+    [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
     public IActionResult GetHomes([FromQuery] HomeRequest request)
     {
         HomesResponse homesResponse = new HomesResponse(_homeService.GetHomesByFilter(request.ToFilter()));
@@ -39,15 +35,19 @@ public class HomeController : ControllerBase
     }
 
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissions)]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult PostHomes([FromBody] CreateHomeRequest request)
     {
         _homeService.CreateHome(request.ToEntity());
-        return Created(CreatedMessage, "/homes/");
+        
+        HomeResponse homeResponse = new HomeResponse(request.ToEntity());
+        
+        return CreatedAtAction(nameof(PostHomes), homeResponse);
     }
     
     [HttpGet]
     [Route("{id}/members")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult GetMembersFromHome([FromRoute] long id)
     {
         try
@@ -63,6 +63,7 @@ public class HomeController : ControllerBase
     
     [HttpGet]
     [Route("{id}")]
+    [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
     public IActionResult GetHomeById([FromRoute] long id)
     {
         HomeResponse homeResponse;
@@ -81,7 +82,7 @@ public class HomeController : ControllerBase
 
     [HttpPut]
     [Route("{id}/devices")]
-    [RolesWithPermissions(RoleWithPermissions)]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] HomeDevicesRequest request)
     {
         try

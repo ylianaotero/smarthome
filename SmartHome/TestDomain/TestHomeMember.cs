@@ -46,6 +46,6 @@ public class TestHomeMember
         HomeMember homeMember = new HomeMember();
         Notification notification = new Notification("Notification");
         homeMember.AddNotification(notification);
-        Assert.IsTrue(homeMember.GetNotifications().Contains(notification));
+        Assert.IsTrue(homeMember.Notifications.Contains(notification));
     }
 }
