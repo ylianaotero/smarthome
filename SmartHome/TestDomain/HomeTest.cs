@@ -174,7 +174,13 @@ public class HomeTest
     [TestMethod]
     public void TestAddDevice()
     {
-        _home.AddDevice(_device); 
+        DeviceUnit unit = new DeviceUnit()
+        {
+            HardwareId = 1234567890,
+            Connected = true
+        };
+        
+        _home.AddDevice(unit); 
         
         Assert.AreEqual(1, _home.Devices.Count());
         
