@@ -49,7 +49,7 @@ public class NotificationServiceTest
     [TestMethod]
     public void TestGetNotificationById()
     {
-        long id = 1;
+        int id = 1;
         Notification newNotification = new Notification("New event");
         _mockNotificationRepository.Setup(m => m.GetById(id)).Returns(newNotification);
         Notification retrievedNotification = _notificationService.GetNotificationById(id);
@@ -60,7 +60,7 @@ public class NotificationServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestGetNotificationByIdNotFound()
     {
-        long id = 1;
+        int id = 1;
         _mockNotificationRepository.Setup(m => m.GetById(id)).Returns((Notification)null);
         _notificationService.GetNotificationById(id);
     }

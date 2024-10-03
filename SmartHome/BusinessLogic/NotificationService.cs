@@ -24,7 +24,7 @@ public class NotificationService : INotificationService
         return _notificationRepository.GetAll();
     }
     
-    public Notification GetNotificationById(long id)
+    public Notification GetNotificationById(int id)
     {
         Notification notification = _notificationRepository.GetById(id);
         if(notification == null)

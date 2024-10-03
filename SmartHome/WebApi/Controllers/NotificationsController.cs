@@ -10,9 +10,11 @@ namespace WebApi.Controllers;
 public class NotificationsController : ControllerBase
 {
     private readonly INotificationService _notificationService;
+    private const string ResourceNotFoundMessage = "The requested resource was not found.";
     
     public NotificationsController(INotificationService notificationService)
     {
         _notificationService = notificationService;
     }
+
 }
