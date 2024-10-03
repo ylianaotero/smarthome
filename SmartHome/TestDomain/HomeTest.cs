@@ -15,6 +15,7 @@ public class HomeTest
     private const int Id = 11;
     
     private long _homeOwnerId;
+    private HomeDTO _homeDto;
 
     private Member _member; 
 
@@ -25,7 +26,15 @@ public class HomeTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _home = new Home(_homeOwnerId,Street,DoorNumber,Latitude,Longitude);
+        _homeDto = new HomeDTO()
+        {
+            OwnerId = _homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
+        _home = new Home(_homeDto);
         _member = new Member();
         _member.Email = Email1;
         _member.Permission = false; 
@@ -37,7 +46,7 @@ public class HomeTest
     [TestMethod]
     public void CreateNewHome()
     {
-        Home newHome = new Home(_homeOwnerId,Street,DoorNumber,Latitude,Longitude);
+        Home newHome = new Home(_homeDto);
         newHome.Id = Id; 
         
         Assert.IsTrue(

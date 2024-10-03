@@ -29,13 +29,13 @@ public class Home
     
     public List<Device> Devices { get; set; }
     
-    public Home(long ownerId,string street, int doorNumber,double latitude,double longitude)
+    public Home(HomeDTO homeDTO)
     {
-        OwnerId = ownerId;
-        Street = street;
-        DoorNumber = doorNumber;
-        Latitude = latitude;
-        Longitude = longitude;
+        OwnerId = homeDTO.OwnerId;
+        Street = homeDTO.Street;
+        DoorNumber = homeDTO.DoorNumber;
+        Latitude = homeDTO.Latitude;
+        Longitude = homeDTO.Longitude;
         Members = new();
         Devices = new List<Device>(); 
     }

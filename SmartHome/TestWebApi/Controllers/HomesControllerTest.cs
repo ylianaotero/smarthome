@@ -1,7 +1,6 @@
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
-using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -18,6 +17,8 @@ public class HomesControllerTest
     private Mock<IHomeService> _mockHomeService;
     private Mock<ISessionService> _mockSessionService;
     private Home _defaultHome;
+    private HomeDTO _homeDto;
+    private HomeDTO _homeDto2;
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
@@ -54,8 +55,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
-            new Home(HomeOwnerId3,Street2, DoorNumber2, Latitude2, Longitude2)
+            new Home(_homeDto),
+            new Home(_homeDto2)
         };
         _mockHomeService
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
@@ -88,8 +89,8 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
-            new Home(HomeOwnerId2,Street2, DoorNumber2, Latitude2, Longitude2)
+            new Home(_homeDto),
+            new Home(_homeDto2)
         };
         _mockHomeService
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
@@ -107,7 +108,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetHomeByIdOkStatusCode()
     {
-        Home home = new Home(HomeOwnerId, Street, DoorNumber, Latitude, Longitude);
+        Home home = new Home(_homeDto);
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockHomeService.Setup(service => service.GetHomeById(1)).Returns(home);
         
@@ -277,15 +278,31 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
-            new Home(HomeOwnerId2,Street2, DoorNumber2, Latitude2, Longitude2)
+            new Home(_homeDto),
+            new Home(_homeDto2)
         };
         return new HomesResponse(homes);
     }
     
     private void SetupDefaultObjects()
     {
-        _defaultHome = new Home(HomeOwnerId3, Street3, DoorNumber, Latitude, Longitude3);
+        _homeDto = new HomeDTO()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
+        _homeDto2 = new HomeDTO()
+        {
+            OwnerId = HomeOwnerId2,
+            Street = Street2,
+            DoorNumber = DoorNumber2,
+            Latitude = Latitude2,
+            Longitude = Longitude2
+        };
+        _defaultHome = new Home(_homeDto);
     }
 
     private void SetupHomeController()
