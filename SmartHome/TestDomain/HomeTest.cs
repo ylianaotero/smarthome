@@ -43,7 +43,7 @@ public class HomeTest
         _deviceUnit = new DeviceUnit()
         {
             HardwareId = new Guid(),
-            Connected = true,
+            IsConnected = true,
             Id = Id,
             Device = new SecurityCamera()
         };

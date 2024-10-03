@@ -9,10 +9,10 @@ public class DeviceUnit
     public long Id { get; set; }
     public Guid HardwareId { get; set; }
     public Device Device { get; set; }
-    public bool Connected { get; set; }
+    public bool IsConnected { get; set; }
     
     public DeviceUnit()
     {
-        Connected = false;
+        IsConnected = false;
     }
 }
