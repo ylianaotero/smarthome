@@ -26,7 +26,13 @@ public class HomeTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _homeDto = new HomeDTO()
+        _member = new Member();
+        _member.Email = Email1;
+        _member.Permission = false; 
+        _device = new SecurityCamera();
+        _device.Id = Id;
+        _homeOwnerId = 000;
+        _home = new Home()
         {
             OwnerId = _homeOwnerId,
             Street = Street,
@@ -34,19 +40,19 @@ public class HomeTest
             Latitude = Latitude,
             Longitude = Longitude
         };
-        _home = new Home(_homeDto);
-        _member = new Member();
-        _member.Email = Email1;
-        _member.Permission = false; 
-        _device = new SecurityCamera();
-        _device.Id = Id;
-        _homeOwnerId = 000;
     }
     
     [TestMethod]
     public void CreateNewHome()
     {
-        Home newHome = new Home(_homeDto);
+        Home newHome = new Home()
+        {
+            OwnerId = _homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         newHome.Id = Id; 
         
         Assert.IsTrue(

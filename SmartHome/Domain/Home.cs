@@ -28,20 +28,16 @@ public class Home
     }
     
     public List<Device> Devices { get; set; }
-    
-    public Home(HomeDTO homeDTO)
-    {
-        OwnerId = homeDTO.OwnerId;
-        Street = homeDTO.Street;
-        DoorNumber = homeDTO.DoorNumber;
-        Latitude = homeDTO.Latitude;
-        Longitude = homeDTO.Longitude;
-        Members = new();
-        Devices = new List<Device>(); 
-    }
 
     public Home()
     {
+        OwnerId = OwnerId;
+        Street = Street;
+        DoorNumber = DoorNumber;
+        Latitude = Latitude;
+        Longitude = Longitude;
+        Members = new List<Member>();
+        Devices = new List<Device>();
     }
 
     public void AddMember(Member member)

@@ -29,7 +29,7 @@ public class HomeServiceTest
 
     private void SetupDefaultObjects()
     {
-        _homeDto = new HomeDTO()
+        _defaultHome = new Home()
         {
             OwnerId = homeOwnerId,
             Street = Street,
@@ -37,7 +37,6 @@ public class HomeServiceTest
             Latitude = Latitude,
             Longitude = Longitude
         };
-        _defaultHome = new Home(_homeDto);
     }
 
     private void CreateMockHomeRepository()
@@ -81,7 +80,14 @@ public class HomeServiceTest
             new Member { Email = "member1@example.com", Permission = true },
             new Member { Email = "member2@example.com", Permission = false }
         };
-        _home = new Home(_homeDto);
+        _home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         foreach (Member member in members)
         {
             _home.AddMember(member);
@@ -130,7 +136,14 @@ public class HomeServiceTest
             }
         };
     
-        _home = new Home(_homeDto);
+        _home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         
         foreach (Device device in devices)
         {
@@ -159,7 +172,14 @@ public class HomeServiceTest
     public void TestAddMemberToHome()
     {
         Member member = new Member { Email = "member3@example.com", Permission = true };
-        _home = new Home(_homeDto);
+        _home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
@@ -178,7 +198,14 @@ public class HomeServiceTest
         Member existingMember = new Member { Email = "existingmember@example.com", Permission = true };
         Member newMember = new Member { Email = "existingmember@example.com", Permission = false };
     
-        _home = new Home(_homeDto);
+        _home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         _home.AddMember(existingMember);
     
         _mockHomeRepository.Setup(m => m.GetById(homeId)).Returns(_home);
@@ -208,7 +235,14 @@ public class HomeServiceTest
         Func<Home, bool> filter = home => home.Street == Street;
         List<Home> homes = new List<Home>
         {
-            new Home(_homeDto)
+            new Home()
+            {
+                OwnerId = homeOwnerId,
+                Street = Street,
+                DoorNumber = DoorNumber,
+                Latitude = Latitude,
+                Longitude = Longitude,
+            }
         };
         _mockHomeRepository
             .Setup(m => m.GetByFilter(filter, It.IsAny<PageData>()))
@@ -244,7 +278,14 @@ public class HomeServiceTest
     public void TestPutDevicesInHome()
     {
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
-        Home home = new Home(_homeDto);
+        Home home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(home);
         
         List<Device> homeDevices = new List<Device>

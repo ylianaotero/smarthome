@@ -22,15 +22,14 @@ public class HomeOwnerTest
     [TestMethod]
     public void TestAddNewHomeToHomeOwner()
     {
-        HomeDTO homeDTO = new HomeDTO()
+        HomeOwner homeOwner = new HomeOwner();
+        Home home = new Home()
         {
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
         };
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(homeDTO);
         homeOwner.AddHome(home);
         Assert.AreEqual(1, homeOwner.Homes.Count());
     }
@@ -38,15 +37,14 @@ public class HomeOwnerTest
     [TestMethod]
     public void TestDeleteHomeFromHomeOwner()
     {
-        HomeDTO homeDTO = new HomeDTO()
+        HomeOwner homeOwner = new HomeOwner();
+        Home home = new Home()
         {
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
         };
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(homeDTO);
         homeOwner.AddHome(home);
         homeOwner.RemoveHome(home);
         Assert.AreEqual(0, homeOwner.Homes.Count());
@@ -55,15 +53,14 @@ public class HomeOwnerTest
     [TestMethod]
     public void TestSearchHomeFromHomeOwner()
     {
-        HomeDTO homeDTO = new HomeDTO()
+        HomeOwner homeOwner = new HomeOwner();
+        Home home = new Home()
         {
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
         };
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(homeDTO);
         homeOwner.AddHome(home);
         Assert.AreEqual(home,homeOwner.SearchHome(home.Id));
     }
@@ -72,15 +69,14 @@ public class HomeOwnerTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotFindHomeFromHomeOwner()
     {
-        HomeDTO homeDTO = new HomeDTO()
+        HomeOwner homeOwner = new HomeOwner();
+        Home home = new Home()
         {
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
         };
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home(homeDTO);
         homeOwner.SearchHome(home.Id);
     }
 }

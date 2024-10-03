@@ -55,8 +55,22 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(_homeDto),
-            new Home(_homeDto2)
+            new Home()
+            {
+                OwnerId = HomeOwnerId,
+                Street = Street,
+                DoorNumber = DoorNumber,
+                Latitude = Latitude,
+                Longitude = Longitude
+            },
+            new Home()
+            {
+                OwnerId = HomeOwnerId2,
+                Street = Street2,
+                DoorNumber = DoorNumber2,
+                Latitude = Latitude2,
+                Longitude = Longitude2
+            }
         };
         _mockHomeService
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
@@ -89,8 +103,22 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(_homeDto),
-            new Home(_homeDto2)
+            new Home()
+            {
+                OwnerId = HomeOwnerId,
+                Street = Street,
+                DoorNumber = DoorNumber,
+                Latitude = Latitude,
+                Longitude = Longitude
+            },
+            new Home()
+            {
+                OwnerId = HomeOwnerId2,
+                Street = Street2,
+                DoorNumber = DoorNumber2,
+                Latitude = Latitude2,
+                Longitude = Longitude2
+            }
         };
         _mockHomeService
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
@@ -108,7 +136,14 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetHomeByIdOkStatusCode()
     {
-        Home home = new Home(_homeDto);
+        Home home = new Home()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
         _mockSessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
         _mockHomeService.Setup(service => service.GetHomeById(1)).Returns(home);
         
@@ -278,31 +313,37 @@ public class HomesControllerTest
     {
         List<Home> homes = new List<Home>
         {
-            new Home(_homeDto),
-            new Home(_homeDto2)
+            new Home()
+            {
+                OwnerId = HomeOwnerId,
+                Street = Street,
+                DoorNumber = DoorNumber,
+                Latitude = Latitude,
+                Longitude = Longitude
+            },
+            new Home()
+            {
+                OwnerId = HomeOwnerId2,
+                Street = Street2,
+                DoorNumber = DoorNumber2,
+                Latitude = Latitude2,
+                Longitude = Longitude2
+            }
         };
         return new HomesResponse(homes);
     }
     
     private void SetupDefaultObjects()
     {
-        _homeDto = new HomeDTO()
+        _defaultHome = new Home()
         {
+            Id = 1,
             OwnerId = HomeOwnerId,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
         };
-        _homeDto2 = new HomeDTO()
-        {
-            OwnerId = HomeOwnerId2,
-            Street = Street2,
-            DoorNumber = DoorNumber2,
-            Latitude = Latitude2,
-            Longitude = Longitude2
-        };
-        _defaultHome = new Home(_homeDto);
     }
 
     private void SetupHomeController()
