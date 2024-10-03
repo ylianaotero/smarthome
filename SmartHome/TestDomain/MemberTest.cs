@@ -5,6 +5,8 @@ namespace TestDomain;
 [TestClass]
 public class MemberTest
 {
+    private string _notificationEvent = "New Notification";
+    
     [TestMethod]
     public void CreateNewHome()
     {
@@ -29,7 +31,7 @@ public class MemberTest
     public void AddNotification()
     {
         Member member = new Member();
-        Notification notification = new Notification("New Notification");
+        Notification notification = new Notification(_notificationEvent);
 
         member.AddNotification(notification);
         
@@ -40,7 +42,7 @@ public class MemberTest
     public void RemoveNotification()
     {
         Member member = new Member();
-        Notification notification = new Notification("New Notification");
+        Notification notification = new Notification(_notificationEvent);
 
         member.AddNotification(notification);
         member.RemoveNotification(notification);
@@ -52,7 +54,7 @@ public class MemberTest
     public void GetNotificationById()
     {
         Member member = new Member();
-        Notification notification = new Notification("New Notification");
+        Notification notification = new Notification(_notificationEvent);
 
         member.AddNotification(notification);
         
