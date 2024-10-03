@@ -36,9 +36,11 @@ public class DeviceServiceTest
         List<Device> devices = new List<Device>();
         devices.Add(_defaultCamera);
         devices.Add(_defaultWindowSensor);
-        _mockDeviceRepository.Setup(x => x.GetAll()).Returns(devices);
+        _mockDeviceRepository
+            .Setup(x => x.GetAll(null))
+            .Returns(devices);
         
-        List<Device> retrievedDevices =  _deviceService.GetAllDevices();
+        List<Device> retrievedDevices =  _deviceService.GetAllDevices(null);
         
         Assert.AreEqual(devices, retrievedDevices);
     }
@@ -48,12 +50,16 @@ public class DeviceServiceTest
     {
         List<Device> devices = new List<Device>();
         devices.Add(_defaultCamera);
-        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName && d.Kind == SecurityCameraType &&
-                                         d.PhotoURLs.First() == DevicePhotoUrl && d.Company.Name == CompanyName;
+        Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName 
+                                                                && d.Kind == SecurityCameraType 
+                                                                && d.PhotoURLs.First() == DevicePhotoUrl 
+                                                                && d.Company.Name == CompanyName;
         
-        _mockDeviceRepository.Setup(x => x.GetByFilter(filter)).Returns(devices);
+        _mockDeviceRepository
+            .Setup(x => x.GetByFilter(filter, null))
+            .Returns(devices);
         
-        List<Device> retrievedDevices =  _deviceService.GetDevicesByFilter(filter);
+        List<Device> retrievedDevices =  _deviceService.GetDevicesByFilter(filter, null);
         
         Assert.AreEqual(devices, retrievedDevices);
     }
@@ -109,9 +115,22 @@ public class DeviceServiceTest
         _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
-            { Name = CameraName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = SecurityCameraType };
+            { 
+                Name = CameraName, 
+                Model = DeviceModel, 
+                PhotoURLs = photos, 
+                Company = _defaultCompany, 
+                Kind = SecurityCameraType 
+            };
+        
         _defaultWindowSensor = new WindowSensor()
-            { Name = WindowSensorName, Model = DeviceModel, PhotoURLs = photos, Company = _defaultCompany, Kind = WindowSensorType };
+        {
+            Name = WindowSensorName, 
+            Model = DeviceModel, 
+            PhotoURLs = photos, 
+            Company = _defaultCompany, 
+            Kind = WindowSensorType
+        };
     }
 
     private void CreateMockAndService()

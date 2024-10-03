@@ -44,7 +44,8 @@ public class UserServiceTest
     public void CreateUser()
     {
         _mockUserRepository
-            .Setup(repo => repo.GetByFilter(It.IsAny<Func<User, bool>>()))
+            .Setup(repo => repo
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(new List<User>());
         
         
@@ -52,7 +53,9 @@ public class UserServiceTest
         
         _userService.CreateUser(_user);
         
-        _mockUserRepository.Verify(repo => repo.Add(It.Is<User>(u => u == _user)), Times.Once);
+        _mockUserRepository
+            .Verify(repo => repo
+                .Add(It.Is<User>(u => u == _user)), Times.Once);
     }
     
     [TestMethod]
@@ -61,7 +64,9 @@ public class UserServiceTest
     {
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(_listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
 
@@ -86,11 +91,11 @@ public class UserServiceTest
         _listOfUsers.Add(user2);
         
         _mockUserRepository
-            .Setup(v => v.GetAll()).Returns(_listOfUsers);
+            .Setup(v => v.GetAll(It.IsAny<PageData>())).Returns(_listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
-        List<User> responseList = _userService.GetAllUsers();
+        List<User> responseList = _userService.GetAllUsers(PageData.Default);
         
         _mockUserRepository.Verify();
         
@@ -98,6 +103,36 @@ public class UserServiceTest
             _listOfUsers.Count == responseList.Count && 
             _listOfUsers.All(user => responseList.Contains(user))
         );
+
+    }
+    
+    [TestMethod]
+    public void GetUsersWithFilter()
+    {
+        List<User> users = new List<User>();
+        User user1 = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+        users.Add(user1);
+        Func<User, bool> filter = u => u.Email == NewEmail && 
+                                       u.Name == NewName && 
+                                       u.Surname == NewSurname 
+                                       && u.Password == NewPassword;
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(filter, It.IsAny<PageData>())).Returns(users);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        List<User> responseList = _userService.GetUsersByFilter(filter, PageData.Default);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.AreEqual(users, responseList);
 
     }
     
@@ -120,7 +155,9 @@ public class UserServiceTest
         listOfUsers.Add(newUser);
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
@@ -150,7 +187,9 @@ public class UserServiceTest
         listOfUsers.Add(newUser);
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
@@ -170,7 +209,9 @@ public class UserServiceTest
         List<User> listOfUsers = new List<User>();
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
@@ -196,7 +237,9 @@ public class UserServiceTest
         listOfUsers.Add(newUser);
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
@@ -213,13 +256,17 @@ public class UserServiceTest
     public void TestDeleteUser()
     {
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(_listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
         _userService.DeleteUser(1);
         
-        _mockUserRepository.Verify(repo => repo.Delete(It.Is<User>(u => u == _user)), Times.Once);
+        _mockUserRepository
+            .Verify(repo => repo
+                .Delete(It.Is<User>(u => u == _user)), Times.Once);
     }
     
     [TestMethod]
@@ -229,7 +276,9 @@ public class UserServiceTest
         List<User> listOfUsers = new List<User>();
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         
@@ -241,7 +290,10 @@ public class UserServiceTest
     [TestMethod]
     public void TestUpdateUser()
     {
-        _mockUserRepository.Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(_listOfUsers);
+        _mockUserRepository
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(_listOfUsers);
         _userService = new UserService(_mockUserRepository.Object);
         
         User newUser = new User
@@ -254,7 +306,9 @@ public class UserServiceTest
         
         _userService.UpdateUser(_user.Id, newUser);
 
-        _mockUserRepository.Verify(repo => repo.Update(It.Is<User>(u => u.Id == _user.Id)), Times.Once);
+        _mockUserRepository
+            .Verify(repo => repo
+                .Update(It.Is<User>(u => u.Id == _user.Id)), Times.Once);
         Assert.AreEqual(_user.Email,newUser.Email);
     }
     
@@ -265,7 +319,8 @@ public class UserServiceTest
         List<User> listOfUsers = new List<User>();
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>())).Returns(listOfUsers);
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>(), PageData.Default))
+            .Returns(listOfUsers);
         
         _userService = new UserService(_mockUserRepository.Object);
         

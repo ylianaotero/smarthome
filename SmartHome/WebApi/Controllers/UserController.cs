@@ -1,8 +1,9 @@
 using CustomExceptions;
-using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
 using Model.Out;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers;
 
@@ -10,8 +11,8 @@ namespace WebApi.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
-    private const string ErrorMessageUnauthorizedAccess =  "You do not have permission to access this resource.";
+    private const string NotFoundMessage = "The requested resource was not found.";
+    private const string RoleWithPermissions = "Administrator";
     
     private readonly IUserService _userService;
     private readonly ISessionService _sessionService;
@@ -23,27 +24,21 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetUsers([FromHeader] Guid Authorization)
+    [RolesWithPermissions(RoleWithPermissions)]
+    public IActionResult GetUsers([FromQuery] UsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
+        UsersResponse usersResponse;
+
         try
         {
-            User userInSession = _sessionService.GetUser(Authorization);
-            if (_userService.IsAdmin(userInSession.Email))
-            {
-                return Ok(_userService.GetAllUsers().Select(u => new UserResponse(u)).ToList());
-            }
-
-            return StatusCode(403, ErrorMessageUnauthorizedAccess);
+            usersResponse = new UsersResponse
+                (_userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         }
-        catch (CannotFindItemInList cannotFindItemInList)
+        catch (CannotFindItemInList)
         {
-            return Unauthorized(new { message = cannotFindItemInList.Message });
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, new { message = ErrorMessageUnexpectedException});
+            return NotFound(NotFoundMessage);
         }
         
+        return Ok(usersResponse);
     }
-    
 }

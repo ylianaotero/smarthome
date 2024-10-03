@@ -1,6 +1,7 @@
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
+using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -56,7 +57,9 @@ public class HomesControllerTest
             new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
             new Home(HomeOwnerId3,Street2, DoorNumber2, Latitude2, Longitude2)
         };
-        _mockHomeService.Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>())).Returns(homes);
+        _mockHomeService
+            .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
+            .Returns(homes);
 
         HomeRequest request = new HomeRequest();
 
@@ -69,7 +72,9 @@ public class HomesControllerTest
     public void TestGetAllHomesWhenThereAreNoOkStatusCode()
     {
         List<Home> homes = [];
-        _mockHomeService.Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>())).Returns(homes);
+        _mockHomeService
+            .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
+            .Returns(homes);
 
         HomeRequest request = new HomeRequest();
         
@@ -86,7 +91,9 @@ public class HomesControllerTest
             new Home(HomeOwnerId,Street, DoorNumber, Latitude, Longitude),
             new Home(HomeOwnerId2,Street2, DoorNumber2, Latitude2, Longitude2)
         };
-        _mockHomeService.Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>())).Returns(homes);
+        _mockHomeService
+            .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
+            .Returns(homes);
         HomesResponse expectedResponse = DefaultHomesResponse();
         
         HomeRequest request = new HomeRequest();
@@ -194,7 +201,9 @@ public class HomesControllerTest
             SecurityCameras = new List<SecurityCameraRequest>()
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
-        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+        _mockHomeService
+            .Setup(service => service
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
     
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
@@ -210,7 +219,9 @@ public class HomesControllerTest
             SecurityCameras = new List<SecurityCameraRequest>()
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
-        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+        _mockHomeService
+            .Setup(service => service
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
     
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
@@ -225,8 +236,12 @@ public class HomesControllerTest
             WindowSensors = new List<WindowSensorRequest>(),
             SecurityCameras = new List<SecurityCameraRequest>()
         };
-        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
-        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+        _mockHomeService
+            .Setup(service => service.GetHomeById(It.IsAny<long>()))
+            .Returns(_defaultHome);
+        _mockHomeService
+            .Setup(service => service
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
     
         IActionResult result = _homeController.PutDevicesInHome(_defaultHome.Id,request);
     
@@ -243,7 +258,9 @@ public class HomesControllerTest
             SecurityCameras = new List<SecurityCameraRequest>()
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
-        _mockHomeService.Setup(service => service.PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()))
+        _mockHomeService
+            .Setup(service => service
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
     
         IActionResult result = _homeController.PutDevicesInHome(-1,request);

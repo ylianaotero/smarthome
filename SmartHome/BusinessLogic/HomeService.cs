@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
@@ -19,12 +18,12 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
     
     public List<Home> GetAllHomes()
     {
-        return homeRepository.GetAll();
+        return homeRepository.GetAll(null);
     }
 
     public List<Home> GetHomesByFilter(Func<Home, bool> filter)
     {
-        return homeRepository.GetByFilter(filter);
+        return homeRepository.GetByFilter(filter, null);
     }
     
     public List<Member> GetMembersFromHome(long homeId)

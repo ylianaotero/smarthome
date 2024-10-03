@@ -18,11 +18,12 @@ public class SessionService : ISessionService
         _userRepository = userRepository;
         _sessionRepository = sessionRepository;
     }
-
-
+    
     public Session LogIn(string email, string password)
     {
-        User user = _userRepository.GetByFilter(u => u.Email == email && u.Password == password).FirstOrDefault();
+        User user = _userRepository
+            .GetByFilter(u => u.Email == email && u.Password == password, PageData.Default)
+            .FirstOrDefault();
         
         if (user == null)
         {
@@ -37,7 +38,7 @@ public class SessionService : ISessionService
 
     public void LogOut(Guid token)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == token).FirstOrDefault();
+        Session session = _sessionRepository.GetByFilter(s => s.Id == token, PageData.Default).FirstOrDefault();
 
         if (session == null)
         {
@@ -49,7 +50,7 @@ public class SessionService : ISessionService
 
     public User GetUser(Guid token)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == token).FirstOrDefault();
+        Session session = _sessionRepository.GetByFilter(s => s.Id == token, PageData.Default).FirstOrDefault();
 
         if (session == null)
         {
@@ -76,7 +77,10 @@ public class SessionService : ISessionService
     
     private bool UserIsAuthenticated(Guid authorization)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == authorization).FirstOrDefault();
+        Session session = _sessionRepository
+            .GetByFilter(s => s.Id == authorization, PageData.Default)
+            .FirstOrDefault();
+        
         return session != null && session.User != null;
     }
 }

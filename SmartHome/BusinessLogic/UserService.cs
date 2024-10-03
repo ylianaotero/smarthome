@@ -21,7 +21,7 @@ public class UserService : IUserService
     {
         try
         {
-            GetBy(u => u.Email == user.Email);
+            GetBy(u => u.Email == user.Email, PageData.Default);
             
             throw new ElementAlreadyExist(UserAlreadyExistExceptionMessage);
         }
@@ -32,9 +32,9 @@ public class UserService : IUserService
         
     }
 
-    private User GetBy(Func<User, bool> predicate)
+    private User GetBy(Func<User, bool> predicate, PageData pageData)
     {
-        List<User> listOfuser = _userRepository.GetByFilter(predicate); 
+        List<User> listOfuser = _userRepository.GetByFilter(predicate, pageData); 
         User user = listOfuser.FirstOrDefault();
         
         if (user == null)
@@ -45,21 +45,26 @@ public class UserService : IUserService
         return user; 
     }
 
-    public List<User> GetAllUsers()
+    public List<User> GetAllUsers(PageData pageData)
     {
-        return _userRepository.GetAll(); 
+        return _userRepository.GetAll(pageData);
+    }
+
+    public List<User> GetUsersByFilter(Func<User, bool> filter, PageData pageData)
+    {
+        return _userRepository.GetByFilter(filter, pageData);
     }
 
     public bool IsAdmin(string email)
     {
-        User existingUser =  GetBy(u => u.Email == email);
+        User existingUser =  GetBy(u => u.Email == email, PageData.Default);
         bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
         return hasAdministrator; 
     }
     
     public void DeleteUser(long id)
     {
-        User user = GetBy(u => u.Id == id);
+        User user = GetBy(u => u.Id == id, PageData.Default);
         _userRepository.Delete(user);
     }
     
@@ -67,7 +72,7 @@ public class UserService : IUserService
     {
         try
         {
-            User existingUser = GetBy(u => u.Id == id);
+            User existingUser = GetBy(u => u.Id == id, PageData.Default);
             existingUser.Update(user);
             _userRepository.Update(existingUser);
         }
