@@ -10,8 +10,14 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=542f1b83_002D5d9a_002D41c1_002Da97d_002D6a9ae4d1766f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestGetNotificationByIdOkResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6c468d98_002D28ed_002D433b_002D86f0_002D09a6e7c2920d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPostCompany" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Solution /&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6c468d98_002D28ed_002D433b_002D86f0_002D09a6e7c2920d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestPostCompany" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.CompanyControllerTest.TestPostCompanyOkStatusCode&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=706417ba_002Da780_002D4757_002D9b8e_002Daa3c103fafeb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestDeleteMember" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;

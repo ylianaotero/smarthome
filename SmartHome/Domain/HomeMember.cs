@@ -5,6 +5,8 @@ public class HomeMember : Role
     public List<Notification> Notifications { get; set; }
     public Home Home { get; set; }
     
+    public bool HasPermissionToListDevices { get; set; }
+    
     public bool HasPermissionToAddADevice { get; set; }
     
     public bool ReceivesNotifications { get; set; }
@@ -13,7 +15,8 @@ public class HomeMember : Role
     {
         Notifications = new List<Notification>();
         HasPermissionToAddADevice = true;
-        ReceivesNotifications = false; 
+        ReceivesNotifications = false;
+        HasPermissionToListDevices = true; 
     }
     
     public void AddNotification(Notification notification)
