@@ -31,7 +31,7 @@ public class Home
         return Members;
     }
 
-    public List<Device> Devices { get; set; }
+    public List<DeviceUnit> Devices { get; set; }
 
     public Home()
     {
@@ -41,7 +41,7 @@ public class Home
         Latitude = Latitude;
         Longitude = Longitude;
         Members = new List<User>();
-        Devices = new List<Device>();
+        Devices = new List<DeviceUnit>();
     }
 
     public void AddMember(User member)
@@ -131,7 +131,7 @@ public class Home
         user.DeleteRole(member);
     }
 
-    public void AddDevice(Device device)
+    public void AddDevice(DeviceUnit device)
     {
         if (!DeviceExist(device.Id))
         {
@@ -146,7 +146,7 @@ public class Home
     
     private bool DeviceExist(long id)
     {
-        Device device = Devices.FirstOrDefault(d => d.Id == id);
+        DeviceUnit device = Devices.FirstOrDefault(d => d.Id == id);
         if (device == null)
         {
             return false; 
@@ -154,7 +154,7 @@ public class Home
         return true; 
     }
 
-    public Device FindDevice(long id)
+    public DeviceUnit FindDevice(long id)
     {
         if (DeviceExist(id))
         {

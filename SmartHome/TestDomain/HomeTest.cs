@@ -184,7 +184,7 @@ public class HomeTest
         
         Assert.AreEqual(1, _home.Devices.Count());
         
-        Device device = _home.Devices.FirstOrDefault(d => d.Id == Id);
+        DeviceUnit device = _home.Devices.FirstOrDefault(d => d.Id == Id);
         
         Assert.IsNotNull(device);
     }
@@ -232,7 +232,6 @@ public class HomeTest
         _home.DeleteDevice(11); 
         
         Assert.AreEqual(0, _home.Devices.Count());
-        
     }
     
 }
