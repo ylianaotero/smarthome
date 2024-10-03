@@ -13,7 +13,7 @@ public class HomeMember : Role
     {
         Notifications = new List<Notification>();
         HasPermissionToAddADevice = true;
-        ReceivesNotifications = false; //Se deja asi?
+        ReceivesNotifications = false; 
     }
     
     public void AddNotification(Notification notification)

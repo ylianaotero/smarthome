@@ -41,6 +41,15 @@ public class TestHomeMember
     }
     
     [TestMethod]
+    public void TestAddPermissionToGetListOfDevicesToMemberRole()
+    {
+        HomeMember homeMember = new HomeMember();
+        homeMember.HasPermissionListDevices = true;
+        Assert.IsTrue(homeMember.ReceivesNotifications);
+    }
+
+    
+    [TestMethod]
     public void TestAddNotificationsToMemberRole()
     {
         HomeMember homeMember = new HomeMember();
