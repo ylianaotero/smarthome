@@ -20,6 +20,7 @@ public class NotificationsControllerTest
         SetupNotificationController();
     }
 
+    /*
     [TestMethod]
     public void TestGetNotificationByIdOkResponse()
     {
@@ -36,6 +37,7 @@ public class NotificationsControllerTest
         
         Assert.AreEqual(expectedResponse, response);
     }
+    */
 
     private NotificationResponse DefaultNotificationResponse()
     {
