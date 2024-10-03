@@ -22,6 +22,7 @@ public class CompanyController : ControllerBase
         _companyService = companyService;
     }
 
+    /*
     [HttpGet]
     public IActionResult GetCompanies([FromQuery] CompanyRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
@@ -30,6 +31,7 @@ public class CompanyController : ControllerBase
         
         return Ok(companiesResponse);
     }
+    */
     
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissions)]

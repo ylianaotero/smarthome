@@ -17,7 +17,7 @@ public class HomeTest
     private long _homeOwnerId;
     private HomeDTO _homeDto;
 
-    private Member _member; 
+    private User _member; 
 
     private Device _device; 
 
@@ -26,12 +26,7 @@ public class HomeTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _member = new Member();
-        _member.Email = Email1;
-        _member.Permission = false; 
-        _device = new SecurityCamera();
-        _device.Id = Id;
-        _homeOwnerId = 000;
+        _member = new User();
         _home = new Home()
         {
             OwnerId = _homeOwnerId,
@@ -40,6 +35,14 @@ public class HomeTest
             Latitude = Latitude,
             Longitude = Longitude
         };
+        _member.Roles.Add(new HomeMember()
+        {
+            Home = _home
+        });
+        _member.Email = Email1;
+        _device = new SecurityCamera();
+        _device.Id = Id;
+        _homeOwnerId = 000;
     }
     
     [TestMethod]
@@ -92,16 +95,15 @@ public class HomeTest
     [TestMethod]
     public void TestFindMember()
     {
-        Member member2 = new Member(); 
+        User member2 = new User(); 
         member2.Email = Email2;
-        member2.Permission = true; 
         
         _home.AddMember(_member); 
         _home.AddMember(member2); 
         
-        Member result = _home.FindMember(Email2); 
+        User result = _home.FindMember(Email1);
         
-        Assert.AreEqual(member2, result);
+        Assert.AreEqual(member2.Id, result.Id);
     }
     
     [TestMethod]
@@ -141,21 +143,22 @@ public class HomeTest
     [TestMethod]
     public void TestDeleteMember()
     {
-        Member member2 = new Member(); 
+        User member2 = new User(); 
         member2.Email = Email2;
-        member2.Permission = true; 
-        
+        member2.AddRole(new HomeMember()
+        {
+            Home = _home
+        });
         _home.AddMember(_member); 
         _home.AddMember(member2); 
         
         _home.DeleteMember(Email1); 
         
-        Assert.AreEqual(1, _home.Members.Count);
+        Assert.AreEqual(1, _home.GetMembers().Count);
         
-        var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Email == Email1);
+        User memberWithEmail1 = _home.GetMembers().FirstOrDefault(m => m.Email == Email1);
         
         Assert.IsNull( memberWithEmail1);
-
     }
     
     [TestMethod]

@@ -16,6 +16,15 @@ public class CompanyControllerTest
 {
     private Mock<ICompanyService> _mockICompanyService;
     private CompanyController _companyController;
+    
+    private string Name = "Company 1";
+    private string Name2 = "Company 2";
+    private long Id = 1;
+    private long Id2 = 2;
+    private string RUT = "123456789";
+    private int OkStatusCode = 200;
+    private int CreatedStatusCode = 201;
+    private string LogoURL = "https://www.logo.com";
 
 
     [TestInitialize]
@@ -35,8 +44,8 @@ public class CompanyControllerTest
     {
         var companies = new List<Company>
         {
-            new Company { Id = 1, Name = "Company 1" },
-            new Company { Id = 2, Name = "Company 2" }
+            new Company { Id = Id, Name = Name },
+            new Company { Id = Id2, Name = Name2}
         };
         _mockICompanyService
             .Setup(service => service
@@ -46,7 +55,7 @@ public class CompanyControllerTest
         CompanyRequest request = new CompanyRequest();
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
-        Assert.AreEqual(200, result?.StatusCode);
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
     }
     
     [TestMethod]
@@ -62,7 +71,7 @@ public class CompanyControllerTest
         CompanyRequest request = new CompanyRequest();
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
-        Assert.AreEqual(200, result?.StatusCode);
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
     }
 
     [TestMethod]
@@ -70,8 +79,8 @@ public class CompanyControllerTest
     {
         var companies = new List<Company>
         {
-            new Company { Id = 1, Name = "Company 1" },
-            new Company { Id = 2, Name = "Company 2" }
+            new Company { Id = Id, Name = Name },
+            new Company { Id = Id2, Name = Name2 }
         };
         _mockICompanyService
             .Setup(service => service
@@ -81,7 +90,7 @@ public class CompanyControllerTest
         CompanyRequest request = new CompanyRequest();
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
-        Assert.AreEqual(200, result?.StatusCode);
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
     }
     
     [TestMethod]
@@ -89,24 +98,24 @@ public class CompanyControllerTest
     {
         CompanyRequest request = new CompanyRequest()
         {
-            Name = "Company 1",
-            RUT = "123456789",
-            LogoURL = "https://www.logo.com"
+            Name = Name,
+            RUT = RUT,
+            LogoURL = LogoURL
         };
         
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
         ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
         
-        Assert.AreEqual(201, result?.StatusCode);
+        Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
     }
     
     private CompaniesResponse DefaultCompaniesResponse()
     {
         var companies = new List<Company>
         {
-            new Company { Id = 1, Name = "Company 1" },
-            new Company { Id = 2, Name = "Company 2" }
+            new Company { Id = Id, Name = Name },
+            new Company { Id = Id2, Name = Name2 }
         };
         return new CompaniesResponse(companies);
     }

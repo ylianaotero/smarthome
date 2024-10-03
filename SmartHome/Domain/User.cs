@@ -117,6 +117,11 @@ public class User
 
         }
     }
+    
+    public List<Role> GetRoles()
+    {
+        return Roles;
+    }
 
     public void Update(User user)
     {

@@ -8,11 +8,11 @@ public class MemberResponse
     public string Email { get; set; }
     public bool Permission { get; set; }
 
-    public MemberResponse(Member member)
+    public MemberResponse(User member)
     {
         Name = member.Name;
         Email = member.Email;
-        Permission = member.Permission;
+        //Permission = member.Permission;
     }
 
     public override bool Equals(object? obj)

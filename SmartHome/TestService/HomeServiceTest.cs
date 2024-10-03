@@ -94,7 +94,7 @@ public class HomeServiceTest
         }
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
-        List<Member> retrievedMembers = homeService.GetMembersFromHome(1);
+        List<User> retrievedMembers = homeService.GetMembersFromHome(1);
         CollectionAssert.AreEqual(members, retrievedMembers); 
     }
     

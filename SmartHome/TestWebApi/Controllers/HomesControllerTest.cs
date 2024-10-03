@@ -200,10 +200,10 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetMembersFromHomeOKResponse()
     {
-        List<Member> members = new List<Member>
+        List<User> members = new List<User>
         {
-            new Member { Id = HomeOwnerId, Name = HomeOwnerName, Email = HomeOwnerEmail },
-            new Member { Id = HomeOwnerId2, Name = HomeOwnerName2, Email = HomeOwnerEmail2 }
+            new User { Id = HomeOwnerId, Name = HomeOwnerName, Email = HomeOwnerEmail },
+            new User { Id = HomeOwnerId2, Name = HomeOwnerName2, Email = HomeOwnerEmail2 }
         };
     
         _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>())).Returns(members);
