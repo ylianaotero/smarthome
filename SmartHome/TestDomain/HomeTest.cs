@@ -15,11 +15,10 @@ public class HomeTest
     private const int Id = 11;
     
     private long _homeOwnerId;
-    private HomeDTO _homeDto;
 
     private User _member; 
 
-    private Device _device; 
+    private DeviceUnit _deviceUnit; 
 
     private Home _home; 
     
@@ -40,9 +39,24 @@ public class HomeTest
             Home = _home
         });
         _member.Email = Email1;
-        _device = new SecurityCamera();
-        _device.Id = Id;
+        
+        _deviceUnit = new DeviceUnit()
+        {
+            HardwareId = 1234567890,
+            Connected = true,
+            Id = Id,
+            Device = new SecurityCamera()
+        };
+        
         _homeOwnerId = 000;
+    }
+    
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        _home = null;
+        _member = null;
+        _deviceUnit = null;
     }
     
     [TestMethod]
@@ -174,13 +188,7 @@ public class HomeTest
     [TestMethod]
     public void TestAddDevice()
     {
-        DeviceUnit unit = new DeviceUnit()
-        {
-            HardwareId = 1234567890,
-            Connected = true
-        };
-        
-        _home.AddDevice(unit); 
+        _home.AddDevice(_deviceUnit); 
         
         Assert.AreEqual(1, _home.Devices.Count());
         
@@ -194,18 +202,18 @@ public class HomeTest
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddExistingDevice()
     {
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
         
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
     }
     
         
     [TestMethod]
     public void TestFindDevice()
     {
-        _home.AddDevice(_device);
+        _home.AddDevice(_deviceUnit);
 
-        Device result = _home.FindDevice(_device.Id); 
+        DeviceUnit result = _home.FindDevice(_deviceUnit.Id); 
         
         Assert.AreEqual(Id, result.Id);
     }
@@ -214,20 +222,20 @@ public class HomeTest
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestCannotFindDevice()
     {
-        _home.FindDevice(_device.Id); 
+        _home.FindDevice(_deviceUnit.Id); 
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestTryToDeleteDevice()
     {
-        _home.DeleteDevice(_device.Id); 
+        _home.DeleteDevice(_deviceUnit.Id); 
     }
     
     [TestMethod]
     public void TestDeleteDevice()
     {
-        _home.AddDevice(_device);
+        _home.AddDevice(_deviceUnit);
         
         _home.DeleteDevice(11); 
         
