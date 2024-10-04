@@ -21,7 +21,7 @@ public class NotificationsController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetNotifications(NotificationsRequest request)
+    public IActionResult GetNotifications([FromQuery] NotificationsRequest request)
     {
         NotificationsResponse notificationsResponse;
         try
@@ -39,7 +39,6 @@ public class NotificationsController : ControllerBase
     [HttpPost]
     public IActionResult CreateNotification(CreateNotificationRequest request)
     {
-        NotificationResponse notificationResponse;
         try
         {
             _notificationService.SendNotifications(request.ToEntity());
