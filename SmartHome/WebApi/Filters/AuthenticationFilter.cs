@@ -1,3 +1,4 @@
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,7 +17,7 @@ namespace WebApi.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
+            AllowAnonymousAttribute? allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<AllowAnonymousAttribute>()
                 .FirstOrDefault();
 
@@ -24,7 +25,7 @@ namespace WebApi.Filters
             {
                 return;
             }
-            
+
             if (!context.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues token))
             {
                 SetUnauthorizedResult(context, MissingHeaderMessage);
@@ -38,7 +39,7 @@ namespace WebApi.Filters
             }
 
             ISessionService sessionService = GetSessionService(context);
-            
+
             Guid uppercaseToken = Guid.Parse(token.ToString().ToUpper());
 
             if (!sessionService.AuthorizationIsValid(uppercaseToken))
@@ -47,25 +48,69 @@ namespace WebApi.Filters
                 return;
             }
 
-            var rolesWithPermissionsAttribute = context.ActionDescriptor.EndpointMetadata
+            RolesWithPermissionsAttribute? rolesWithPermissionsAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<RolesWithPermissionsAttribute>()
                 .FirstOrDefault();
 
             if (rolesWithPermissionsAttribute != null)
             {
                 bool correctUser = rolesWithPermissionsAttribute.RolesWithPermissions
-                    .Any(role => sessionService.UserHasPermissions(uppercaseToken, role));
+                    .Any(role => sessionService.UserHasCorrectRole(uppercaseToken, role));
 
                 if (!correctUser)
                 {
                     SetForbiddenResult(context, UserDoesNotHavePermissionsMessage);
                 }
             }
+
+            long homeId = context.HttpContext.Request.RouteValues["{id}"] as long? ?? -1;
+            if (homeId != -1)
+            {
+                RestrictToPrivilegedMembersAttribute? restrictToPrivilegedMembersAttribute = context.ActionDescriptor.EndpointMetadata
+                    .OfType<RestrictToPrivilegedMembersAttribute>()
+                    .FirstOrDefault();
+                
+                if (restrictToPrivilegedMembersAttribute != null)
+                {
+                    IHomeService homeService = GetHomeService(context);
+
+                    try
+                    {
+                        if (restrictToPrivilegedMembersAttribute.WithAddPermissions && 
+                            !sessionService.UserCanAddDevicesInHome(uppercaseToken, homeService.GetHomeById(homeId)))
+                        {
+                            SetForbiddenResult(context, UserDoesNotHavePermissionsMessage);
+                        }
+                    } catch (ElementNotFound)
+                    {
+                        return;
+                    }
+                    
+                    try 
+                    {
+                        if (restrictToPrivilegedMembersAttribute.WithListPermissions && 
+                            !sessionService.UserCanListDevicesInHome(uppercaseToken, homeService.GetHomeById(homeId)))
+                        {
+                            SetForbiddenResult(context, UserDoesNotHavePermissionsMessage);
+                        }
+                    } catch (ElementNotFound)
+                    {
+                        return;
+                    }
+                }
+            }
+
+        
         }
 
         private ISessionService GetSessionService(AuthorizationFilterContext context)
         {
             return context.HttpContext.RequestServices.GetService(typeof(ISessionService)) as ISessionService;
+        }
+        
+        private IHomeService GetHomeService(AuthorizationFilterContext context)
+        {
+            return context.HttpContext.RequestServices.GetService(typeof(IHomeService)) as IHomeService;
         }
 
         private void SetUnauthorizedResult(AuthorizationFilterContext context, string message)
