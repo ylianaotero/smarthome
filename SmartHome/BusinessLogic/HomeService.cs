@@ -57,6 +57,12 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
         {
             throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
         }
+        
+        if (home.Members.Count >= home.MaximumMembers)
+        {
+            throw new CannotAddItem("Home is full");
+        }
+        
         home.AddMember(member);
         homeRepository.Update(home);
     }

@@ -10,8 +10,6 @@ public class Home
     private const string MessageDeviceAlreadyExists = "Device already exists"; 
     private const string MessageDeviceNotFound = "Device not found";
     
-    
-    
     [Key]
     public int Id { get; set; }
     public long OwnerId { get; set; } // poner objeto
@@ -19,6 +17,7 @@ public class Home
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public int MaximumMembers { get; set; }
   
     public List<DeviceUnit> Devices { get; set; }
     public List<Member> Members { get; set; }
