@@ -38,13 +38,12 @@ public class CompanyController : ControllerBase
     */
     
     [HttpPost]
-    [Route("{id}/companies")]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult PostCompany([FromRoute] long id, [FromBody] CompanyRequest request)
+    public IActionResult PostCompany([FromBody] CompanyRequest request)
     {
         try
         {
-            _companyService.CreateCompany(_userService.AddOwnerToCompany(id,request.ToEntity()));
+            _companyService.CreateCompany(_userService.AddOwnerToCompany(request.OwnerId,request.ToEntity()));
             return Created(CreatedMessage,"/companies/");
         }
         catch (ElementNotFound)
