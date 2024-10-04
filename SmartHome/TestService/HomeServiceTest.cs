@@ -385,7 +385,7 @@ public class HomeServiceTest
         _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns(homeOwner);
         
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
-        homeService.CreateHome(_defaultHome);
+        _mockHomeRepository.Setup(m => m.GetById(home.Id)).Returns(home);
         
         Home homeWithOwner = homeService.AddOwnerToHome(homeOwner.Id, home);
         
