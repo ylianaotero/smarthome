@@ -227,6 +227,14 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutDevicesInHomeOkStatusCode()
     {
+        DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
+        {
+            DeviceId = 1,
+            IsConnected = true
+        };
+        
+        DeviceUnitsRequests deviceUnitsRequests = new DeviceUnitsRequests(new List<DeviceUnitRequests> {deviceUnitRequest});
+        
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
             WindowSensors = new List<WindowSensorRequest>(),
