@@ -39,6 +39,16 @@ public class HomesControllerTest
     private const long HomeOwnerId2 = 2;
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
+    
+    private WindowSensor _defaultWindowSensor;
+    private Company _defaultCompany;
+    
+    private const string WindowSensorName = "My Window Sensor";
+    private const string DevicePhotoUrl = "https://example.com/photo.jpg";
+    private const long DeviceModel = 1345354616346;
+    private const string SecurityCameraType = "SecurityCamera";
+    private const string WindowSensorType = "WindowSensor";
+    private const string CompanyName = "IoT Devices & Co.";
 
     [TestInitialize]
     public void TestInitialize()
@@ -229,13 +239,13 @@ public class HomesControllerTest
     {
         DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
         {
-            DeviceId = 1,
+            DeviceId = _defaultWindowSensor.Id,
             IsConnected = true
         };
         
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            DeviceUnits = new List<DeviceUnitRequests> {deviceUnitRequest}
+            DeviceUnits = new List<DeviceUnitRequest> {deviceUnitRequest}
         };
         
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
@@ -253,8 +263,7 @@ public class HomesControllerTest
     {
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
+            
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
@@ -271,8 +280,6 @@ public class HomesControllerTest
     {
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
         };
         _mockHomeService
             .Setup(service => service.GetHomeById(It.IsAny<long>()))
@@ -292,8 +299,7 @@ public class HomesControllerTest
     {
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
+            
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
@@ -345,6 +351,15 @@ public class HomesControllerTest
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
+        };
+        
+        _defaultWindowSensor = new WindowSensor()
+        {
+            Id = 1,
+            Name = WindowSensorName,
+            PhotoURLs = new List<string> {DevicePhotoUrl},
+            Model = DeviceModel,
+            Company = _defaultCompany
         };
     }
 

@@ -16,6 +16,7 @@
   &lt;TestAncestor&gt;
     &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.HomeTest&lt;/TestId&gt;
     &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.HomeServiceTest&lt;/TestId&gt;
+    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.HomesControllerTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	

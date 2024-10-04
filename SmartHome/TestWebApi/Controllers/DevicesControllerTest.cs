@@ -25,7 +25,7 @@ public class DevicesControllerTest
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
     private const string DeviceDescription = "This is a device";
-    private const string CompanyName = "IoT Devices & Co.";
+    private const string CompanyName = "IoT DeviceUnits & Co.";
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
