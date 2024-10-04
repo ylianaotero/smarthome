@@ -36,19 +36,6 @@ public class NotificationServiceTest
         notificationService.CreateNotification(newNotification);
         _mockNotificationRepository.Verify(m => m.Add(newNotification), Times.Once);
     }
-
-    [TestMethod]
-    public void TestGetNotifications()
-    {
-        List<Notification> notifications = new List<Notification>();
-        Notification newNotification = new Notification("New event");
-        notifications.Add(newNotification);
-        _mockNotificationRepository
-            .Setup(m => m.GetAll(It.IsAny<PageData>()))
-            .Returns(notifications);
-        List<Notification> retrievedNotifications = _notificationService.GetNotifications(PageData.Default);
-        Assert.AreEqual(notifications, retrievedNotifications);
-    }
     
     [TestMethod]
     public void TestGetNotificationById()
@@ -67,5 +54,16 @@ public class NotificationServiceTest
         int id = 1;
         _mockNotificationRepository.Setup(m => m.GetById(id)).Returns((Notification)null);
         _notificationService.GetNotificationById(id);
+    }
+
+    [TestMethod]
+    public void TestGetNotificationsByFilter()
+    {
+        string eventName = "New event";
+        Notification newNotification = new Notification(eventName);
+        List<Notification> notifications = new List<Notification> { newNotification };
+        _mockNotificationRepository.Setup(m => m.GetByFilter(It.IsAny<Func<Notification, bool>>(), null)).Returns(notifications);
+        List<Notification> retrievedNotifications = _notificationService.GetNotificationsByFilter(n => n.Event == eventName, null);
+        Assert.AreEqual(notifications, retrievedNotifications);
     }
 }

@@ -19,9 +19,9 @@ public class NotificationService : INotificationService
         _notificationRepository.Add(notification);
     }
 
-    public List<Notification> GetNotifications(PageData pageData)
+    public List<Notification> GetNotificationsByFilter(Func<Notification, bool> filter, PageData pageData)
     {
-        return _notificationRepository.GetAll(pageData);
+        return _notificationRepository.GetByFilter(filter, null);
     }
     
     public Notification GetNotificationById(int id)

@@ -3,6 +3,9 @@
 public class Notification
 {
     public int Id { get; set; }
+    public Home Home { get; set; }
+    public User User { get; set; }
+    public DeviceUnit DeviceUnit { get; set; }
     public string Event { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool Read { get; private set; }

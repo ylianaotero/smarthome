@@ -4,10 +4,10 @@ namespace Model.Out;
 
 public class NotificationResponse
 {
-    public string Event { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public bool Read { get; private set; }
-    public DateTime ReadAt { get; private set; }
+    public string Event { get;  set; }
+    public DateTime CreatedAt { get;  set; }
+    public bool Read { get;  set; }
+    public DateTime ReadAt { get;  set; }
     
     public NotificationResponse(Notification notification)
     {
