@@ -26,6 +26,17 @@ public class HomeServiceTest
     private const string NewEmail = "juan.perez@example.com";
     private const string NewEmail2 = "juan.lopez@example.com";
     private const int MaxMembers = 10;
+    private const string NameSecurityCamera = "Camara de Seguridad";
+    private const string NameWindowSensor = "Sensor de Ventana";
+    private const string DescriptionWindowSensor = "Sensor para ventanas";
+    private const string DescriptionSecurityCamera = "Cámara para exteriores";
+    private const int ModelWindowSensor = 456;
+    private const int ModelSecurityCamera = 123;
+    private const int Id1 = 1;
+    private const int Id2 = 999;
+    private const int Id3 = 2;
+    private const bool IsConectedTrue = true;
+    private const bool IsConnectedFalse = false;
 
     private User _user1;
     private User _user2;
@@ -99,7 +110,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotGetMemberByIdBecauseHomeDoesNotExist()
     {
-        int searchedHomeId = 999;
+        int searchedHomeId = Id2;
     
         _mockHomeRepository.Setup(m => m.GetById(searchedHomeId)).Returns((Home)null);
 
@@ -130,7 +141,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotGetDeviceFromHomeBecauseItIsNotFound()
     {
-        int searchedId = 999;
+        int searchedId = Id2;
         _mockHomeRepository.Setup(m => m.GetById(searchedId)).Returns((Home)null);
     
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
@@ -186,7 +197,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotAddMemberToHomeBecauseItIsNotFound()
     {
-        int nonExistentHomeId = 999;
+        int nonExistentHomeId = Id2;
     
         _mockHomeRepository.Setup(m => m.GetById(nonExistentHomeId)).Returns((Home)null);
 
