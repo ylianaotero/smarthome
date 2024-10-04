@@ -26,16 +26,16 @@ public class CompanyController : ControllerBase
         _userService = userService; 
     }
 
-    /*
+    
     [HttpGet]
-    public IActionResult GetCompanies([FromQuery] CompanyRequest request, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetCompanies([FromQuery] CompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         CompaniesResponse companiesResponse = new CompaniesResponse
             (_companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         
         return Ok(companiesResponse);
     }
-    */
+    
     
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissions)]
