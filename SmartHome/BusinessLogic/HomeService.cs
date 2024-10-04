@@ -5,10 +5,11 @@ using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (IRepository<Home> homeRepository) : IHomeService
+public class HomeService (IRepository<Home> homeRepository, IRepository<Device> deviceRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
+    private const string DeviceNotFoundMessage = "Device not found";
 
 
     public void CreateHome(Home home)
@@ -84,36 +85,31 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         }
         
         List<DeviceUnit> devices = new List<DeviceUnit>();
-        int cont = 0;
-        foreach (var device in homeDevices)
-        {
-            if (cont == 0)
-            {
-                cont++;
-                devices.Add(new DeviceUnit
-                {
-                    Device = new WindowSensor()
-                    {
-                        Id = device.DeviceId
-                    },
-                    IsConnected = device.IsConnected
-                });
-            }
-            else
-            {
-                devices.Add(new DeviceUnit
-                {
-                    Device = new SecurityCamera()
-                    {
-                        Id = device.DeviceId
-                    },
-                    IsConnected = device.IsConnected
-                });
-            }
-        }
+      
+        MapDevices(homeDevices, devices);
         
         home.Devices = devices;
         
         homeRepository.Update(home);
+    }
+    
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    {
+        foreach (var device in homeDevices)
+        {
+            Device deviceEntity = deviceRepository.GetById(device.DeviceId);
+            
+            if (deviceEntity == null)
+            {
+                throw new ElementNotFound(DeviceNotFoundMessage);
+            }
+            
+            devices.Add(new DeviceUnit
+            {
+                Device = deviceEntity,
+                IsConnected = device.IsConnected,
+                HardwareId = Guid.NewGuid(),
+            });
+        }
     }
 }
