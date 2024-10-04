@@ -238,13 +238,13 @@ public class HomesControllerTest
             Longitude = Longitude,
             MaximumMembers = MaxHomeMembers
         };
-        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        
         _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
             .Throws(new CannotAddItem("User is not a home owner"));
         
-        StatusCodeResult? result = _homeController.PostHomes(request) as StatusCodeResult;
+        ObjectResult? result2 = (ObjectResult?)_homeController.PostHomes(request);
         
-        Assert.AreEqual(412, result!.StatusCode);
+        Assert.AreEqual(412, result2!.StatusCode);
     }
 
     [TestMethod]

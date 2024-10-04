@@ -47,6 +47,13 @@ public class HomeController : ControllerBase
         {
             return NotFound(HomeOwnerNotFoundMessage);
         }
+        catch (CannotAddItem e)
+        {
+            if (e.Message == "User is not a home owner")
+            {
+                return StatusCode(StatusCodes.Status412PreconditionFailed, "User is not a home owner");
+            }
+        }
         
         HomeResponse homeResponse = new HomeResponse(request.ToEntity());
         
