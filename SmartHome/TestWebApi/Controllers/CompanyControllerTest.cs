@@ -184,7 +184,8 @@ public class CompanyControllerTest
             OwnerId = user.Id
         };
 
-        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id, request.ToEntity())).Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
+        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id, request.ToEntity()))
+            .Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
         ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
