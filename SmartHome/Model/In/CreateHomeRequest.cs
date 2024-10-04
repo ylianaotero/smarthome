@@ -9,10 +9,7 @@ public class CreateHomeRequest
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-    
-    //public List<Member> Members { get; set; }
-    
-    public List<Device>? Devices { get; set; }
+    public int MaximumMembers { get; set; }
     
     public Home ToEntity()
     {
@@ -22,8 +19,7 @@ public class CreateHomeRequest
             Street = this.Street,
             DoorNumber = this.DoorNumber,
             Latitude = this.Latitude,
-            Longitude = this.Longitude,
-            Devices = this.Devices
+            Longitude = this.Longitude
         };
     }
 }

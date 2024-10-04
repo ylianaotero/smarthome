@@ -5,13 +5,15 @@ using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (IRepository<Home> homeRepository) : IHomeService
+public class HomeService (IRepository<Home> homeRepository, IRepository<Device> deviceRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
+    private const string DeviceNotFoundMessage = "Device not found";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
-    
+    private const string HomeIsFullMessage = "The home is full";
+
     public void CreateHome(Home home)
     {
         try
@@ -42,7 +44,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return home.Members;
     }
     
-    public List<Device> GetDevicesFromHome(int homeId)
+    public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
         Home home = GetHomeById(homeId);
         return home.Devices;
@@ -55,6 +57,12 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         {
             throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
         }
+        
+        if (home.Members.Count >= home.MaximumMembers)
+        {
+            throw new CannotAddItem(HomeIsFullMessage);
+        }
+        
         home.AddMember(member);
         homeRepository.Update(home);
     }
@@ -71,12 +79,40 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return home;
     }
 
-    public Home PutDevicesInHome(long homeId, List<Device> homeDevices)
+    public void PutDevicesInHome(long homeId, List<DeviceUnitDTO> homeDevices)
     {
-        Home home = GetHomeById(homeId);
-        home.Devices = homeDevices;
-        homeRepository.Update(home);
+        Home home = homeRepository.GetById(homeId);
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
         
-        return home;
+        List<DeviceUnit> devices = new List<DeviceUnit>();
+      
+        MapDevices(homeDevices, devices);
+        
+        home.Devices = devices;
+        
+        homeRepository.Update(home);
+    }
+    
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    {
+        foreach (var device in homeDevices)
+        {
+            Device deviceEntity = deviceRepository.GetById(device.DeviceId);
+            
+            if (deviceEntity == null)
+            {
+                throw new ElementNotFound(DeviceNotFoundMessage);
+            }
+            
+            devices.Add(new DeviceUnit
+            {
+                Device = deviceEntity,
+                IsConnected = device.IsConnected,
+                HardwareId = Guid.NewGuid(),
+            });
+        }
     }
 }

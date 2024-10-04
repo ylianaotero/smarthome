@@ -35,12 +35,18 @@ public class HomesControllerTest
     private const double Latitude2 = 34.0522;
     private const double Longitude = -118.4912;
     private const double Longitude2 = -118.2437;
-    private const double Longitude3 = -119.4912;
+    private const int MaxHomeMembers = 5;
     private const long HomeOwnerId = 1;
     private const long HomeOwnerId2 = 2;
-    private const long HomeOwnerId3 = 13;
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
+    
+    private WindowSensor _defaultWindowSensor;
+    private Company _defaultCompany;
+    
+    private const string WindowSensorName = "My Window Sensor";
+    private const string DevicePhotoUrl = "https://example.com/photo.jpg";
+    private const long DeviceModel = 1345354616346;
 
     [TestInitialize]
     public void TestInitialize()
@@ -155,7 +161,6 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetHomeByIdOkResponse()
     {
-        
         _mockHomeService.Setup(service => service.GetHomeById(1)).Returns(_defaultHome);
         HomeResponse expectedResponse = DefaultHomeResponse();
 
@@ -187,7 +192,7 @@ public class HomesControllerTest
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude,
-            Devices = new List<Device>()
+            MaximumMembers = MaxHomeMembers
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         
@@ -229,15 +234,21 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutDevicesInHomeOkStatusCode()
     {
-        HomeDevicesRequest request = new HomeDevicesRequest()
+        DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
         {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
+            DeviceId = _defaultWindowSensor.Id,
+            IsConnected = true
         };
+        
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
+        {
+            DeviceUnits = new List<DeviceUnitRequest> {deviceUnitRequest}
+        };
+        
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
     
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
@@ -247,59 +258,41 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutDevicesInHomeOkResponse()
     {
-        HomeDevicesRequest request = new HomeDevicesRequest()
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
         {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
+            DeviceUnits = new List<DeviceUnitRequest>
+            {
+                new DeviceUnitRequest()
+                {
+                    DeviceId = _defaultWindowSensor.Id,
+                    IsConnected = true
+                }
+            }
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
     
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
         Assert.IsNotNull(result);
     }
     
-    [TestMethod]
-    public void TestPutDevicesInHomeBadRequest()
-    {
-        HomeDevicesRequest request = new HomeDevicesRequest()
-        {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
-        };
-        _mockHomeService
-            .Setup(service => service.GetHomeById(It.IsAny<long>()))
-            .Returns(_defaultHome);
-        _mockHomeService
-            .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()));
-    
-        IActionResult result = _homeController.PutDevicesInHome(_defaultHome.Id,request);
-    
-        Assert.IsInstanceOfType(result, result.GetType());
-    }
-    
     
     [TestMethod]
-    public void TestPutDevicesInHomeBadRequestWhenInputIsInvalid()
+    public void TestPutDevicesInHomeNotFoundWhenInputIsInvalid()
     {
-        HomeDevicesRequest request = new HomeDevicesRequest()
-        {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
-        };
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest() {};
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<Device>>()))
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
     
         IActionResult result = _homeController.PutDevicesInHome(-1,request);
     
-        Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
     
     private HomeResponse DefaultHomeResponse()
@@ -347,6 +340,15 @@ public class HomesControllerTest
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude
+        };
+        
+        _defaultWindowSensor = new WindowSensor()
+        {
+            Id = 1,
+            Name = WindowSensorName,
+            PhotoURLs = new List<string> {DevicePhotoUrl},
+            Model = DeviceModel,
+            Company = _defaultCompany
         };
     }
 

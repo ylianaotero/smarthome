@@ -82,7 +82,7 @@ public class HomeController : ControllerBase
     [HttpPut]
     [Route("{id}/devices")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] HomeDevicesRequest request)
+    public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] PutHomeDevicesRequest request)
     {
         try
         {
@@ -91,7 +91,7 @@ public class HomeController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return BadRequest();
+            return NotFound(ResourceNotFoundMessage);
         }
     }
 }

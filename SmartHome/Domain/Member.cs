@@ -1,7 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Domain;
 
 public class Member
 {
+    [Key]
+    public long Id { get; set; }
     public User User { get; set; }
     public List<Notification> Notifications { get; set; }
     
@@ -14,6 +18,11 @@ public class Member
     public Member(User user)
     {
         User = user; 
+        Notifications = new List<Notification>();
+    }
+
+    public Member()
+    {
         Notifications = new List<Notification>();
     }
     
