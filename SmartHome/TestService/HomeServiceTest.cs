@@ -122,8 +122,7 @@ public class HomeServiceTest
                 Id = 1, 
                 Name = "Cámara de seguridad", 
                 Model = 123, 
-                Description = "Cámara para exteriores", 
-                IsConnected = true
+                Description = "Cámara para exteriores"
             },
             
             new WindowSensor 
@@ -131,8 +130,7 @@ public class HomeServiceTest
                 Id = 2, 
                 Name = "Sensor de ventana", 
                 Model = 456, 
-                Description = "Sensor para ventanas", 
-                IsConnected = false 
+                Description = "Sensor para ventanas"
             }
         };
     
@@ -287,24 +285,36 @@ public class HomeServiceTest
             Longitude = Longitude,
         };
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(home);
-        
-        List<Device> homeDevices = new List<Device>
+        Device windowSensor = new WindowSensor
         {
-            new WindowSensor
+            Id = 1, 
+            Name = "Sensor de ventana", 
+            Model = 456, 
+            Description = "Sensor para ventanas"
+        };
+        
+        Device securityCamera = new SecurityCamera
+        {
+            Id = 1, 
+            Name = "Cámara de seguridad", 
+            Model = 123, 
+            Description = "Cámara para exteriores"
+        };
+        
+        
+        List<DeviceUnit> homeDevices = new List<DeviceUnit>
+        {
+            new DeviceUnit
             {
-                Id = 1, 
-                Name = "Sensor de ventana", 
-                Model = 456, 
-                Description = "Sensor para ventanas", 
-                IsConnected = false ,
-            },
-            new SecurityCamera
-            {
-                Id = 1, 
-                Name = "Cámara de seguridad", 
-                Model = 123, 
-                Description = "Cámara para exteriores", 
+                Device = windowSensor,
+                HardwareId = new Guid(),
                 IsConnected = true
+            },
+            new DeviceUnit
+            {
+                Device = securityCamera,
+                HardwareId = new Guid(),
+                IsConnected = false
             }
         };
         

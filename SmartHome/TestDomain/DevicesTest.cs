@@ -1,7 +1,6 @@
 using Domain;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-
 namespace TestDomain;
 
 [TestClass]

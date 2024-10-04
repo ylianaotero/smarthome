@@ -14,7 +14,6 @@ public class DeviceUnitTest
     private const long DeviceModel = 1345354616346;
     private const bool DeviceIsConnected = true;
     
-    
     [TestInitialize]
     public void TestInitialize()
     {
