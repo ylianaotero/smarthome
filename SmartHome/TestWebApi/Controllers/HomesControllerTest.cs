@@ -47,6 +47,7 @@ public class HomesControllerTest
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
     private const int PreconditionFailedStatusCode = 412;
+    private const int ServerFailedStatusCode = 500;
     
     private const bool Permission = false; 
     
@@ -304,6 +305,26 @@ public class HomesControllerTest
         ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as OkObjectResult;
     
         Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+        
+    [TestMethod]
+    public void TestPutMemberInHomeOtherExceptionStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService.Setup(service => service.AddMemberToHome(_defaultHome.Id , memberRequest.ToEntity())).Throws(new Exception());
+    
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(ServerFailedStatusCode, result.StatusCode);
     }
     
     [TestMethod]
