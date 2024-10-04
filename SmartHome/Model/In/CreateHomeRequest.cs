@@ -15,7 +15,6 @@ public class CreateHomeRequest
     {
         return new Home()
         {
-            OwnerId = this.OwnerId,
             Street = this.Street,
             DoorNumber = this.DoorNumber,
             Latitude = this.Latitude,

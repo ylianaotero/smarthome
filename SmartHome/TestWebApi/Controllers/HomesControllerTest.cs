@@ -17,6 +17,7 @@ public class HomesControllerTest
     private Mock<IHomeService> _mockHomeService;
     private Mock<ISessionService> _mockSessionService;
     private Home _defaultHome;
+    private User _defaultOwner;
     private Member _member1;
     private Member _member2; 
     
@@ -62,7 +63,7 @@ public class HomesControllerTest
         {
             new Home()
             {
-                OwnerId = HomeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -70,7 +71,7 @@ public class HomesControllerTest
             },
             new Home()
             {
-                OwnerId = HomeOwnerId2,
+                Owner = _defaultOwner,
                 Street = Street2,
                 DoorNumber = DoorNumber2,
                 Latitude = Latitude2,
@@ -110,7 +111,7 @@ public class HomesControllerTest
         {
             new Home()
             {
-                OwnerId = HomeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -118,7 +119,7 @@ public class HomesControllerTest
             },
             new Home()
             {
-                OwnerId = HomeOwnerId2,
+                Owner = _defaultOwner,
                 Street = Street2,
                 DoorNumber = DoorNumber2,
                 Latitude = Latitude2,
@@ -143,7 +144,7 @@ public class HomesControllerTest
     {
         Home home = new Home()
         {
-            OwnerId = HomeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -306,7 +307,7 @@ public class HomesControllerTest
         {
             new Home()
             {
-                OwnerId = HomeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -314,7 +315,7 @@ public class HomesControllerTest
             },
             new Home()
             {
-                OwnerId = HomeOwnerId2,
+                Owner = _defaultOwner,
                 Street = Street2,
                 DoorNumber = DoorNumber2,
                 Latitude = Latitude2,
@@ -332,10 +333,20 @@ public class HomesControllerTest
         _member1 = new Member(user1);
         _member2 = new Member(user2); 
         
+        _defaultOwner = new User()
+        {
+            Email = HomeOwnerEmail,
+            Id = HomeOwnerId,
+            Roles = new List<Role>()
+            {
+                new HomeOwner(),
+            }
+        };
+        
         _defaultHome = new Home()
         {
             Id = 1,
-            OwnerId = HomeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,

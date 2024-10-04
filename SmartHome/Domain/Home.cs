@@ -12,7 +12,7 @@ public class Home
     
     [Key]
     public int Id { get; set; }
-    public long OwnerId { get; set; }
+    public User Owner { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }

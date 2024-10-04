@@ -5,7 +5,10 @@ using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (IRepository<Home> homeRepository, IRepository<Device> deviceRepository) : IHomeService
+public class HomeService (
+    IRepository<Home> homeRepository, 
+    IRepository<Device> deviceRepository, 
+    IRepository<User> userRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
@@ -43,14 +46,14 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
         Home home = GetHomeById(homeId);
         return home.Members;
     }
-    
+
     public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
         Home home = GetHomeById(homeId);
         return home.Devices;
     }
 
-    public void AddMemberToHome(int homeId, Member member)
+    public void AddMemberToHome(long homeId, Member member)
     {
         Home home = GetHomeById(homeId);
         if (home.Members.Any(m => m.User.Email == member.User.Email))
@@ -65,6 +68,22 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
         
         home.AddMember(member);
         homeRepository.Update(home);
+    }
+
+    public Home AddOwnerToHome(long userId, Home home)
+    {
+        User user = userRepository.GetById(userId);
+        
+        HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner;
+        
+        role.Homes.Add(home);
+        home.Owner = user;
+        
+        userRepository.Update(user);
+        
+        homeRepository.Update(home);
+
+        return home;
     }
 
     public Home GetHomeById(long id)
