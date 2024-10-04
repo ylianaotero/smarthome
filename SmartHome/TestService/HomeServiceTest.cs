@@ -319,6 +319,26 @@ public class HomeServiceTest
         homeService.PutDevicesInHome(1, homeDevicesDTO);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestAddMemberToHomeFailsIfMaxMembersHasBeenReached()
+    {
+        _home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = 1,
+        };
+        _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
+
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        
+        homeService.AddMemberToHome(_home.Id, _member1);
+        homeService.AddMemberToHome(_home.Id, _member2);
+    }
     
     private void SetupDefaultObjects()
     {

@@ -79,17 +79,6 @@ public class Home
             throw new CannotFindItemInList(MessageMemberNotFound); 
         }
     }
-    
-    private void RemoveMemberRoleFromUser(string email)
-    {
-        User user = FindMember(email);
-        HomeMember member = MemberOfActualHome(user);
-        if(member == null)
-        {
-            throw new CannotFindItemInList(MessageMemberNotFound);
-        }
-        user.DeleteRole(member);
-    }
 
     public void AddDevice(DeviceUnit device)
     {
