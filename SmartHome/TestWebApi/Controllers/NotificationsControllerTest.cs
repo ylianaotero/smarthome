@@ -11,6 +11,8 @@ namespace TestWebApi.Controllers;
 
 public class NotificationsControllerTest
 {
+    private const string EventName = "Event";
+    
     private NotificationsController _notificationController;
     private Mock<INotificationService> _mockINotificationService;
     
@@ -41,7 +43,7 @@ public class NotificationsControllerTest
 
     private NotificationResponse DefaultNotificationResponse()
     {
-        Notification notification = new Notification("Title")
+        Notification notification = new Notification(EventName)
         {
             Id = 1
         };

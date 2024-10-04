@@ -179,17 +179,16 @@ public class HomeOwnerControllerTest
         _userServiceMock.Verify();
     }
     
-    //REVISAR
     [TestMethod]
     public void UpdateHomeOwnerInvalidRequest()
     {
         var updateHomeOwnerRequest = new UpdateHomeOwnerRequest
         {
-            Name = "John",
-            Email = "john.doe@example.com",
-            Password = "newPassword",
-            Surname = "Doe",
-            Photo = "https://example.com/photo.jpg"
+            Name = Name,
+            Email = InvalidEmail,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
         };
 
         _userServiceMock

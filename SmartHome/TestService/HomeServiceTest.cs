@@ -20,6 +20,17 @@ public class HomeServiceTest
     private const long homeOwnerId = 000;
     private const string NewEmail = "juan.perez@example.com";
     private const string NewEmail2 = "juan.lopez@example.com";
+    private const string NameSecurityCamera = "Camara de Seguridad";
+    private const string NameWindowSensor = "Sensor de Ventana";
+    private const string DescriptionWindowSensor = "Sensor para ventanas";
+    private const string DescriptionSecurityCamera = "Cámara para exteriores";
+    private const int ModelWindowSensor = 456;
+    private const int ModelSecurityCamera = 123;
+    private const int Id1 = 1;
+    private const int Id2 = 999;
+    private const int Id3 = 2;
+    private const bool IsConectedTrue = true;
+    private const bool IsConnectedFalse = false;
 
     private User _user1;
     private User _user2;
@@ -112,7 +123,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotGetMemberByIdBecauseHomeDoesNotExist()
     {
-        int searchedHomeId = 999;
+        int searchedHomeId = Id2;
     
         _mockHomeRepository.Setup(m => m.GetById(searchedHomeId)).Returns((Home)null);
 
@@ -129,20 +140,20 @@ public class HomeServiceTest
         {
             new SecurityCamera
             {
-                Id = 1, 
-                Name = "Cámara de seguridad", 
-                Model = 123, 
-                Description = "Cámara para exteriores", 
-                IsConnected = true
+                Id = Id1, 
+                Name = NameSecurityCamera, 
+                Model = ModelSecurityCamera, 
+                Description = DescriptionSecurityCamera, 
+                IsConnected = IsConectedTrue
             },
             
             new WindowSensor 
             { 
-                Id = 2, 
-                Name = "Sensor de ventana", 
-                Model = 456, 
-                Description = "Sensor para ventanas", 
-                IsConnected = false 
+                Id = Id3, 
+                Name = NameWindowSensor, 
+                Model = ModelWindowSensor, 
+                Description = DescriptionWindowSensor, 
+                IsConnected = IsConnectedFalse 
             }
         };
     
@@ -170,7 +181,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotGetDeviceFromHomeBecauseItIsNotFound()
     {
-        int searchedId = 999;
+        int searchedId = Id2;
         _mockHomeRepository.Setup(m => m.GetById(searchedId)).Returns((Home)null);
     
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
@@ -225,7 +236,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotAddMemberToHomeBecauseItIsNotFound()
     {
-        int nonExistentHomeId = 999;
+        int nonExistentHomeId = Id2;
     
         _mockHomeRepository.Setup(m => m.GetById(nonExistentHomeId)).Returns((Home)null);
 
@@ -297,18 +308,18 @@ public class HomeServiceTest
         {
             new WindowSensor
             {
-                Id = 1, 
-                Name = "Sensor de ventana", 
-                Model = 456, 
-                Description = "Sensor para ventanas", 
+                Id = Id1, 
+                Name = NameWindowSensor, 
+                Model = ModelWindowSensor, 
+                Description = DescriptionWindowSensor, 
                 IsConnected = false ,
             },
             new SecurityCamera
             {
-                Id = 1, 
-                Name = "Cámara de seguridad", 
-                Model = 123, 
-                Description = "Cámara para exteriores", 
+                Id = Id1, 
+                Name = NameSecurityCamera, 
+                Model = ModelSecurityCamera, 
+                Description = DescriptionSecurityCamera, 
                 IsConnected = true
             }
         };
@@ -328,18 +339,18 @@ public class HomeServiceTest
         {
             new WindowSensor
             {
-                Id = 1, 
-                Name = "Sensor de ventana", 
-                Model = 456, 
-                Description = "Sensor para ventanas", 
+                Id = Id1, 
+                Name = NameWindowSensor, 
+                Model = ModelWindowSensor, 
+                Description = DescriptionWindowSensor, 
                 IsConnected = false ,
             },
             new SecurityCamera
             {
-                Id = 1, 
-                Name = "Cámara de seguridad", 
-                Model = 123, 
-                Description = "Cámara para exteriores", 
+                Id = Id1, 
+                Name = NameSecurityCamera, 
+                Model = ModelSecurityCamera, 
+                Description = DescriptionSecurityCamera, 
                 IsConnected = true
             }
         };
@@ -356,6 +367,5 @@ public class HomeServiceTest
         homeService.CreateHome(_defaultHome);
         _mockHomeRepository.Verify(m => m.GetById(_defaultHome.Id), Times.Once);
     }
-
     
 }

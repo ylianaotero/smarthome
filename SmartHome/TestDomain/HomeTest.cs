@@ -13,6 +13,8 @@ public class HomeTest
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
     private const int Id = 11;
+    private const int Id2 = 000;
+    private const int IdToDelete = 11;
     
     private long _homeOwnerId;
     
@@ -40,7 +42,7 @@ public class HomeTest
         _member = new Member(_user); 
         _device = new SecurityCamera();
         _device.Id = Id;
-        _homeOwnerId = 000;
+        _homeOwnerId = Id2;
     }
     
     [TestMethod]
@@ -205,7 +207,7 @@ public class HomeTest
     {
         _home.AddDevice(_device);
         
-        _home.DeleteDevice(11); 
+        _home.DeleteDevice(IdToDelete); 
         
         Assert.AreEqual(0, _home.Devices.Count());
         
