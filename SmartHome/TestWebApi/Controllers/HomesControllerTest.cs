@@ -225,6 +225,27 @@ public class HomesControllerTest
         
         Assert.AreEqual(404, result!.StatusCode);
     }
+    
+    [TestMethod]
+    public void TestPostHomePreconditionFailedStatusCode()
+    {
+        CreateHomeRequest request = new CreateHomeRequest()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = MaxHomeMembers
+        };
+        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Throws(new CannotAddItem("User is not a home owner"));
+        
+        StatusCodeResult? result = _homeController.PostHomes(request) as StatusCodeResult;
+        
+        Assert.AreEqual(412, result!.StatusCode);
+    }
 
     [TestMethod]
     public void TestGetMembersFromHomeOKResponse()
