@@ -74,8 +74,7 @@ public class HomeService (
     {
         User user = GetUserById(userId);
 
-        HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner ??
-                         throw new CannotAddItem("User is not a home owner");
+        HomeOwner role = GetHomeOwner(user);
         
         role.Homes.Add(home);
         home.Owner = user;
@@ -85,6 +84,17 @@ public class HomeService (
         homeRepository.Update(home);
 
         return home;
+    }
+    
+    private HomeOwner GetHomeOwner(User user)
+    {
+        HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner;
+        if (role == null)
+        {
+            throw new CannotAddItem("User is not a home owner");
+        }
+
+        return role;
     }
     
     private User GetUserById(long userId)
