@@ -14,8 +14,6 @@ public class HomeOwnerController : ControllerBase
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
     
     private readonly IUserService _userService;
-    
-    private const string RoleWithPermissions = "Administrator";
 
     private const int StatusCodeInternalServerError = 500; 
 

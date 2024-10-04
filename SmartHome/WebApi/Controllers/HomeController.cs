@@ -34,6 +34,23 @@ public class HomeController : ControllerBase
         
         return Ok(homesResponse);
     }
+    
+    [HttpPut]
+    [Route("{id}/members")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] ChangePermissionsRequest request)
+    {
+        try
+        {
+            _homeService.ChangePermission(request.ToEntity(),id);
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
 
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
