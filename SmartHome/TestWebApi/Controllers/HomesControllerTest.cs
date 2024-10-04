@@ -46,9 +46,6 @@ public class HomesControllerTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
-    private const string SecurityCameraType = "SecurityCamera";
-    private const string WindowSensorType = "WindowSensor";
-    private const string CompanyName = "IoT Devices & Co.";
 
     [TestInitialize]
     public void TestInitialize()
