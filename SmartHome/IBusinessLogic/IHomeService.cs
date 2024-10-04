@@ -9,7 +9,7 @@ public interface IHomeService
     List<Home> GetHomesByFilter(Func<Home, bool> filter);
     List<DeviceUnit> GetDevicesFromHome(int homeId);
     List<Member> GetMembersFromHome(long homeId);
-    void AddMemberToHome(long homeId, Member member);
+    void AddMemberToHome(long homeId, MemberDTO memberDTO);
     Home AddOwnerToHome(long userId, Home home);
     Home GetHomeById(long id);
     void PutDevicesInHome(long homeId, List<DeviceUnitDTO> devices);

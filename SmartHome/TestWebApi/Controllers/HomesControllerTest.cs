@@ -248,7 +248,7 @@ public class HomesControllerTest
     }
 
     [TestMethod]
-    public void TestGetMembersFromHomeOKResponse()
+    public void TestGetMembersFromHomeOkResponse()
     {
         List<Member> members = new List<Member>
         {
@@ -276,6 +276,31 @@ public class HomesControllerTest
     
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+    
+    [TestMethod]
+    public void TestPutMembersInHomeOkStatusCode()
+    {
+        DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
+        {
+            DeviceId = _defaultWindowSensor.Id,
+            IsConnected = true
+        };
+        
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
+        {
+            DeviceUnits = new List<DeviceUnitRequest> {deviceUnitRequest}
+        };
+        
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
+        _mockHomeService
+            .Setup(service => service
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
+    
+        ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
+    
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+
     
     [TestMethod]
     public void TestPutDevicesInHomeOkStatusCode()
