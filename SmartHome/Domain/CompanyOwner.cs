@@ -15,19 +15,12 @@ public class CompanyOwner : Role
         {
             ValidateExistingCompany();
             _company = value;
+            HasACompleteCompany = true;
         }
     }
     public CompanyOwner()
     {
         HasACompleteCompany = false;
-    }
-
-
-    public CompanyOwner(Company company)
-    {
-        ValidateExistingCompany();
-        Company = company;
-        HasACompleteCompany = true;
     }
     
     private void ValidateExistingCompany()

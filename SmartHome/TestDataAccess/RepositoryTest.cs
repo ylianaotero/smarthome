@@ -223,7 +223,7 @@ public class RepositoryTest
     {
         List<CompanyOwner> companyOwners = new List<CompanyOwner>
         {
-            new CompanyOwner(_defaultCompany)
+            new CompanyOwner() {Company = _defaultCompany}
         };
         
         _context.CompanyOwners.AddRange(companyOwners);

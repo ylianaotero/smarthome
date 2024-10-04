@@ -171,6 +171,38 @@ public class UserServiceTest
     }
     
     [TestMethod]
+    public void UserIsIncompleteCompanyOwner()
+    {
+        CompanyOwner companyOwner = new CompanyOwner(); 
+        Administrator admin = new Administrator(); 
+        var newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{admin,companyOwner}
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetById(newUser.Id))
+            .Returns(newUser);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        bool response = _userService.CompanyOwnerIsComplete();
+        
+        _mockUserRepository.Verify();
+        
+        Assert.IsFalse(response);
+        
+    }
+    
+    [TestMethod]
     public void UserIsNotAdmin()
     {
         HomeOwner homeOwner = new HomeOwner(); 
