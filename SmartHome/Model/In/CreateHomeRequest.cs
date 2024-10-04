@@ -18,7 +18,8 @@ public class CreateHomeRequest
             Street = this.Street,
             DoorNumber = this.DoorNumber,
             Latitude = this.Latitude,
-            Longitude = this.Longitude
+            Longitude = this.Longitude,
+            MaximumMembers = this.MaximumMembers
         };
     }
 }

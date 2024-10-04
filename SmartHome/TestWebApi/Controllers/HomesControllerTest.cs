@@ -220,8 +220,8 @@ public class HomesControllerTest
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
-
-        NotFoundResult? result = _homeController.PostHomes(request) as NotFoundResult;
+        
+        NotFoundObjectResult? result = _homeController.PostHomes(request) as NotFoundObjectResult;
         
         Assert.AreEqual(404, result!.StatusCode);
     }
