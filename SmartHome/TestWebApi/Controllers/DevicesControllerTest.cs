@@ -243,7 +243,7 @@ public class DevicesControllerTest
             ((device as WindowSensor)!).Functionalities!.SequenceEqual(request.Functionalities!)
         )));
         
-        ObjectResult? result = _deviceController.PostWindowSensors(request) as CreatedResult;
+        ObjectResult? result = _deviceController.PostWindowSensors(request) as CreatedAtActionResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
@@ -271,7 +271,7 @@ public class DevicesControllerTest
             ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
         )));
         
-        ObjectResult? result = _deviceController.PostSecurityCameras(request) as CreatedResult;
+        ObjectResult? result = _deviceController.PostSecurityCameras(request) as CreatedAtActionResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
