@@ -254,7 +254,21 @@ public class HomeServiceTest
             _securityCameraUnit
         };
         
-        homeService.PutDevicesInHome(1, homeDevices);
+        List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO>
+        {
+            new DeviceUnitDTO
+            {
+                DeviceId = _windowSensor.Id,
+                IsConnected = _windowSensorUnit.IsConnected
+            },
+            new DeviceUnitDTO
+            {
+                DeviceId = _securityCamera.Id,
+                IsConnected = _securityCameraUnit.IsConnected
+            }
+        };
+        
+        homeService.PutDevicesInHome(1, homeDevicesDTO);
         Assert.AreEqual(home.Devices,homeDevices);
     }
 
