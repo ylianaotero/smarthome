@@ -189,6 +189,7 @@ public class HomesControllerTest
     {
         CreateHomeRequest request = new CreateHomeRequest()
         {
+            OwnerId = HomeOwnerId,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -196,10 +197,33 @@ public class HomesControllerTest
             MaximumMembers = MaxHomeMembers
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Returns(It.IsAny<Home>());
         
         ObjectResult? result = _homeController.PostHomes(request) as CreatedAtActionResult;
         
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostHomeNotFoundStatusCode()
+    {
+        CreateHomeRequest request = new CreateHomeRequest()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = MaxHomeMembers
+        };
+        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+
+        NotFoundResult? result = _homeController.PostHomes(request) as NotFoundResult;
+        
+        Assert.AreEqual(404, result!.StatusCode);
     }
 
     [TestMethod]
