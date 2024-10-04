@@ -24,6 +24,7 @@ public class HomesControllerTest
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
     private const string ElementAlreadyExistsMessage = "Element already exists";
+    private const string CannotAddItem = "Cannot Add Item";
     
     private const string Name = "John";
     private const string Name2 = "Jane";
@@ -45,6 +46,7 @@ public class HomesControllerTest
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
+    private const int PreconditionFailedStatusCode = 412;
     
     private const bool Permission = false; 
     
@@ -347,6 +349,27 @@ public class HomesControllerTest
         ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
     
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
+    }
+    
+    public void TestTryToPutMemberInAFullHomeStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
+            .Throws(new CannotAddItem(CannotAddItem));
+        
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
     }
 
     
