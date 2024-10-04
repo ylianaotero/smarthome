@@ -1,5 +1,4 @@
 using Domain;
-using IDataAccess;
 
 namespace IBusinessLogic;
 
@@ -12,5 +11,5 @@ public interface IHomeService
     List<Device> GetDevicesFromHome(int homeId);
     void AddMemberToHome(int homeId, User member);
     Home GetHomeById(long id);
-    Home PutDevicesInHome(long homeId, List<Device> devices);
+    void PutDevicesInHome(long homeId, List<DeviceUnit> devices);
 }

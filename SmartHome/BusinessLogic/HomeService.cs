@@ -75,7 +75,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return home;
     }
 
-    public Home PutDevicesInHome(long homeId, List<Device> homeDevices)
+    public void PutDevicesInHome(long homeId, List<DeviceUnit> homeDevices)
     {
         Home home = homeRepository.GetById(homeId);
         if (home == null)
