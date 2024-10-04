@@ -233,13 +233,11 @@ public class HomesControllerTest
             IsConnected = true
         };
         
-        DeviceUnitsRequests deviceUnitsRequests = new DeviceUnitsRequests(new List<DeviceUnitRequests> {deviceUnitRequest});
-        
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            WindowSensors = new List<WindowSensorRequest>(),
-            SecurityCameras = new List<SecurityCameraRequest>()
+            DeviceUnits = new List<DeviceUnitRequests> {deviceUnitRequest}
         };
+        
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
