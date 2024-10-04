@@ -12,7 +12,7 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
     private const string DeviceNotFoundMessage = "Device not found";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
-    
+    private const string HomeIsFullMessage = "The home is full";
 
     public void CreateHome(Home home)
     {
@@ -60,7 +60,7 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
         
         if (home.Members.Count >= home.MaximumMembers)
         {
-            throw new CannotAddItem("Home is full");
+            throw new CannotAddItem(HomeIsFullMessage);
         }
         
         home.AddMember(member);

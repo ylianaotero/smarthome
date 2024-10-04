@@ -1,7 +1,6 @@
 using BusinessLogic;
 using CustomExceptions;
 using Domain;
-using IBusinessLogic;
 using IDataAccess;
 using Moq;
 
@@ -26,6 +25,7 @@ public class HomeServiceTest
     private const long homeOwnerId = 000;
     private const string NewEmail = "juan.perez@example.com";
     private const string NewEmail2 = "juan.lopez@example.com";
+    private const int MaxMembers = 10;
 
     private User _user1;
     private User _user2;
@@ -81,6 +81,7 @@ public class HomeServiceTest
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude,
+            MaximumMembers = MaxMembers,
         };
         foreach (Member member in members)
         {
@@ -147,6 +148,7 @@ public class HomeServiceTest
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude,
+            MaximumMembers = MaxMembers,
         };
         _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
 
@@ -340,13 +342,6 @@ public class HomeServiceTest
         homeService.AddMemberToHome(_home.Id, _member2);
     }
     
-    private void SetupDefaultObjects()
-    {
-        SetUpDefaultHome();
-        SetUpDefaultDevices();
-        SetUpDefaultDeviceUnits();
-    }
-    
     [TestMethod]
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToCreateExistingHome()
@@ -356,7 +351,14 @@ public class HomeServiceTest
         homeService.CreateHome(_defaultHome);
         _mockHomeRepository.Verify(m => m.GetById(_defaultHome.Id), Times.Once);
     }
-
+    
+    private void SetupDefaultObjects()
+    {
+        SetUpDefaultHome();
+        SetUpDefaultDevices();
+        SetUpDefaultDeviceUnits();
+        SetUpDefaultMembers();
+    }
     
     private void SetUpDefaultDevices()
     {
@@ -404,6 +406,14 @@ public class HomeServiceTest
             Latitude = Latitude,
             Longitude = Longitude
         };
+    }
+
+    private void SetUpDefaultMembers()
+    {
+        _user1 = new User() {Email = NewEmail};
+        _user2 = new User() {Email = NewEmail2};
+        _member1 = new Member(_user1);
+        _member2 = new Member(_user2); 
     }
 
     private void CreateRepositoryMocks()
