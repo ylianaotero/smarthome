@@ -35,7 +35,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)] // cambiar
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)] // COMO VINCULA EL USUARIO CON EL HOME ???
     public IActionResult PostHomes([FromBody] CreateHomeRequest request)
     {
         _homeService.CreateHome(request.ToEntity());
