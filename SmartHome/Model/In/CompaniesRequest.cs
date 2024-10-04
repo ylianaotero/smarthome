@@ -4,12 +4,9 @@ namespace Model.In;
 
 public class CompaniesRequest
 {
-    public string? Name { get; set; }
+    public string? Company { get; set; }
+    public string? Owner { get; set; }
     
-    public int RUT { get; set; }
-    public string? FullName { get; set; }
-    
-    public string Email { get; set; }
 
     public Func<Company, bool> ToFilter()
     {
@@ -27,9 +24,9 @@ public class CompaniesRequest
     {
         string[] splitName;
 
-        if (FullName != null)
+        if (Owner != null)
         {
-            splitName = FullName.Split(" ");
+            splitName = Owner.Split(" ");
             
             if (splitName.Length == 0)
             {

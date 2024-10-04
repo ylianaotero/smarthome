@@ -51,7 +51,7 @@ public class CompanyControllerTest
         _companyController = new CompanyController(_mockICompanyService.Object, _mockIUserService.Object);
     }
 
-    /*[TestMethod]
+    [TestMethod]
     public void TestGetCompanies()
     {
         var companies = new List<Company>
@@ -87,7 +87,7 @@ public class CompanyControllerTest
     }
 
     [TestMethod]
-    public void TestGetAllCopmaniesOkResponse()
+    public void TestGetAllCompaniesOkResponse()
     {
         var companies = new List<Company>
         {
@@ -99,28 +99,11 @@ public class CompanyControllerTest
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
         
-        CompanyRequest request = new CompanyRequest();
-     //   ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
+        CompaniesRequest request = new CompaniesRequest();
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
-     //   Assert.AreEqual(OkStatusCode, result?.StatusCode);
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
     }
-    
-    [TestMethod]
-    public void TestPostCompanyOkStatusCode()
-    {
-        CompanyRequest request = new CompanyRequest()
-        {
-            Name = Name,
-            RUT = RUT,
-            LogoURL = LogoURL
-        };
-        
-        _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
-        
-        ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
-        
-        Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
-    }*/
     
     [TestMethod]
     public void TestPostCompanyOkStatusCode()
