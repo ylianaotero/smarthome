@@ -348,6 +348,7 @@ public class HomesControllerTest
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
+    
     [TestMethod]
     public void TestPutDevicesInHomeOkResponse()
     {
