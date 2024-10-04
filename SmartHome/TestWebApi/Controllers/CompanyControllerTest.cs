@@ -87,7 +87,7 @@ public class CompanyControllerTest
     }
 
     [TestMethod]
-    public void TestGetAllCompaniesOkResponse()
+    public void TestGetAllCompaniesOkStatusCode()
     {
         var companies = new List<Company>
         {
