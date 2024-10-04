@@ -19,7 +19,7 @@ public class HomeController : ControllerBase
     private const string UpdatedHomeMessage = "The home was updated successfully.";
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
-
+    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
     
     public HomeController(IHomeService homeService)
     {
@@ -49,9 +49,9 @@ public class HomeController : ControllerBase
         }
         catch (CannotAddItem e)
         {
-            if (e.Message == "User is not a home owner")
+            if (e.Message == UserIsNotHomeOwnerMessage)
             {
-                return StatusCode(StatusCodes.Status412PreconditionFailed, "User is not a home owner");
+                return StatusCode(StatusCodes.Status412PreconditionFailed, UserIsNotHomeOwnerMessage);
             }
         }
         
