@@ -179,21 +179,12 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPostHomeOkStatusCode()
     {
-        DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
-        {
-            DeviceId = 1,
-            IsConnected = true
-        };
-        
-        DeviceUnitsRequests deviceUnitsRequests = new DeviceUnitsRequests(new List<DeviceUnitRequests> {deviceUnitRequest});
-        
         CreateHomeRequest request = new CreateHomeRequest()
         {
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
-            Longitude = Longitude,
-            Devices = deviceUnitsRequests
+            Longitude = Longitude
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         
