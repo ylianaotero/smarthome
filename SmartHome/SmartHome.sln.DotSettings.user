@@ -35,6 +35,8 @@
     &lt;/TestAncestor&gt;&#xD;
     &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;&#xD;
     &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
