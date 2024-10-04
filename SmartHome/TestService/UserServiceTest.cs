@@ -194,11 +194,44 @@ public class UserServiceTest
         
         _userService = new UserService(_mockUserRepository.Object);
         
-        bool response = _userService.CompanyOwnerIsComplete();
+        bool response = _userService.CompanyOwnerIsComplete(newUser.Id);
         
         _mockUserRepository.Verify();
         
         Assert.IsFalse(response);
+        
+    }
+    
+    [TestMethod]
+    public void UserIsCompleteCompanyOwner()
+    {
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.HasACompleteCompany = true; 
+        Administrator admin = new Administrator(); 
+        var newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{admin,companyOwner}
+        };
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetById(newUser.Id))
+            .Returns(newUser);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        bool response = _userService.CompanyOwnerIsComplete(newUser.Id);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.IsTrue(response);
         
     }
     

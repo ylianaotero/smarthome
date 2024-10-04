@@ -61,6 +61,44 @@ public class UserService : IUserService
         bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
         return hasAdministrator; 
     }
+
+    private User GetUserById(long Id)
+    {
+        User user = _userRepository.GetById(Id); 
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
+    }
+    
+    public bool CompanyOwnerIsComplete(long id)
+    {
+        User existingUser =  GetUserById(id);
+        
+        List<CompanyOwner> companyOwnerRoles = existingUser.Roles
+            .Where(role => role is CompanyOwner)
+            .Cast<CompanyOwner>()
+            .ToList();
+
+        Role role = searchAnIncompleteCompanyOwnerRole(companyOwnerRoles);
+
+        if (role == null)
+        {
+            return true; 
+        }
+
+        return false; 
+    }
+
+    private Role searchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
+    {
+        Role incompleteRole = companyOwnerRoles
+            .FirstOrDefault(role => role.HasACompleteCompany == false);  
+
+        return incompleteRole;
+    }
     
     public void DeleteUser(long id)
     {
@@ -81,4 +119,5 @@ public class UserService : IUserService
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
     }
+    
 }
