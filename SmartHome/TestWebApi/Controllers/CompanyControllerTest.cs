@@ -52,35 +52,41 @@ public class CompanyControllerTest
     }
 
     [TestMethod]
-    public void TestGetCompanies()
+    public void TestGetCompaniesByFilterOkResponse()
     {
-        var companies = new List<Company>
+        User owner = new User()
         {
-            new Company { Id = Id, Name = Name },
-            new Company { Id = Id2, Name = Name2}
+            Email = Email1,
+            Name = "John",
+            Surname = "Doe",
+            Roles = new List<Role>() { _companyOwner },
+            Id = 1
         };
+        
+        Company company1 = new Company()
+        {
+            Id = Id,
+            Name = Name,
+            Owner = owner,
+            RUT = RUT,
+            LogoURL = "https://www.logo.com"
+        };
+        
+        List<Company> companies = new List<Company>
+        {
+            company1
+        };
+        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
-        
-        CompanyRequest request = new CompanyRequest();
-        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
-        
-        Assert.AreEqual(OkStatusCode, result?.StatusCode);
-    }
-    
-    [TestMethod]
-    public void TestGetCompaniesWithEmptyRequest()
-    {
-        List<Company> companies = [];
-        _mockICompanyService
-            .Setup(service => service
-                .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
-            .Returns(companies);
-        CompaniesResponse expectedResponse = DefaultCompaniesResponse();
-        
-        CompanyRequest request = new CompanyRequest();
+
+        CompaniesRequest request = new CompaniesRequest()
+        {
+            Company = Name,
+            Owner = owner.Name + " " + owner.Surname
+        };
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
         Assert.AreEqual(OkStatusCode, result?.StatusCode);
