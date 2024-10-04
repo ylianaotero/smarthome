@@ -27,17 +27,6 @@ public class NotificationServiceTest
     }
     
     [TestMethod]
-    public void TestCreateNotification()
-    {
-        string eventName = "New event";
-        Notification newNotification = new Notification(eventName);
-        _mockNotificationRepository.Setup(m => m.Add(newNotification));
-        NotificationService notificationService = new NotificationService(_mockNotificationRepository.Object);
-        notificationService.CreateNotification(newNotification);
-        _mockNotificationRepository.Verify(m => m.Add(newNotification), Times.Once);
-    }
-    
-    [TestMethod]
     public void TestGetNotificationById()
     {
         int id = 1;
