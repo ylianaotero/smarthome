@@ -16,9 +16,11 @@ public class HomeTest
     private const int Id2 = 000;
     private const int IdToDelete = 11;
     
+    
     private long _homeOwnerId;
     
     private User _user; 
+    private User _defaultOwner;
 
     private Member _member; 
 
@@ -30,9 +32,19 @@ public class HomeTest
     public void TestInitialize()
     {
         _user = new User();
+        _defaultOwner = new User()
+        {
+            Email = Email1,
+            Id = 1,
+            Roles = new List<Role>()
+            {
+                new HomeOwner(),
+            }
+        };
+        
         _home = new Home()
         {
-            OwnerId = _homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -66,7 +78,7 @@ public class HomeTest
     {
         Home newHome = new Home()
         {
-            OwnerId = _homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,

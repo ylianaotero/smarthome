@@ -17,6 +17,7 @@ public class HomesControllerTest
     private Mock<IHomeService> _mockHomeService;
     private Mock<ISessionService> _mockSessionService;
     private Home _defaultHome;
+    private User _defaultOwner;
     private Member _member1;
     private Member _member2; 
     
@@ -62,7 +63,7 @@ public class HomesControllerTest
         {
             new Home()
             {
-                OwnerId = HomeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -70,7 +71,7 @@ public class HomesControllerTest
             },
             new Home()
             {
-                OwnerId = HomeOwnerId2,
+                Owner = _defaultOwner,
                 Street = Street2,
                 DoorNumber = DoorNumber2,
                 Latitude = Latitude2,
@@ -110,7 +111,7 @@ public class HomesControllerTest
         {
             new Home()
             {
-                OwnerId = HomeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -118,7 +119,7 @@ public class HomesControllerTest
             },
             new Home()
             {
-                OwnerId = HomeOwnerId2,
+                Owner = _defaultOwner,
                 Street = Street2,
                 DoorNumber = DoorNumber2,
                 Latitude = Latitude2,
@@ -143,7 +144,7 @@ public class HomesControllerTest
     {
         Home home = new Home()
         {
-            OwnerId = HomeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -188,6 +189,7 @@ public class HomesControllerTest
     {
         CreateHomeRequest request = new CreateHomeRequest()
         {
+            OwnerId = HomeOwnerId,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -195,10 +197,54 @@ public class HomesControllerTest
             MaximumMembers = MaxHomeMembers
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Returns(It.IsAny<Home>());
         
         ObjectResult? result = _homeController.PostHomes(request) as CreatedAtActionResult;
         
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostHomeNotFoundStatusCode()
+    {
+        CreateHomeRequest request = new CreateHomeRequest()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = MaxHomeMembers
+        };
+        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        NotFoundObjectResult? result = _homeController.PostHomes(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(404, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostHomePreconditionFailedStatusCode()
+    {
+        CreateHomeRequest request = new CreateHomeRequest()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = MaxHomeMembers
+        };
+        
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Throws(new CannotAddItem("User is not a home owner"));
+        
+        ObjectResult? result2 = (ObjectResult?)_homeController.PostHomes(request);
+        
+        Assert.AreEqual(412, result2!.StatusCode);
     }
 
     [TestMethod]
@@ -306,7 +352,7 @@ public class HomesControllerTest
         {
             new Home()
             {
-                OwnerId = HomeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -314,7 +360,7 @@ public class HomesControllerTest
             },
             new Home()
             {
-                OwnerId = HomeOwnerId2,
+                Owner = _defaultOwner,
                 Street = Street2,
                 DoorNumber = DoorNumber2,
                 Latitude = Latitude2,
@@ -332,10 +378,20 @@ public class HomesControllerTest
         _member1 = new Member(user1);
         _member2 = new Member(user2); 
         
+        _defaultOwner = new User()
+        {
+            Email = HomeOwnerEmail,
+            Id = HomeOwnerId,
+            Roles = new List<Role>()
+            {
+                new HomeOwner(),
+            }
+        };
+        
         _defaultHome = new Home()
         {
             Id = 1,
-            OwnerId = HomeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,

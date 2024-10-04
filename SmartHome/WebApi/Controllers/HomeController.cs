@@ -18,7 +18,8 @@ public class HomeController : ControllerBase
     private const string RoleWithPermissionToGetAllHomes = "Administrator";
     private const string UpdatedHomeMessage = "The home was updated successfully.";
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
-
+    private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
+    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
     
     public HomeController(IHomeService homeService)
     {
@@ -35,10 +36,24 @@ public class HomeController : ControllerBase
     }
 
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)] // COMO VINCULA EL USUARIO CON EL HOME ???
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult PostHomes([FromBody] CreateHomeRequest request)
     {
-        _homeService.CreateHome(request.ToEntity());
+        try
+        {
+            _homeService.CreateHome(_homeService.AddOwnerToHome(request.OwnerId, request.ToEntity()));
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(HomeOwnerNotFoundMessage);
+        }
+        catch (CannotAddItem e)
+        {
+            if (e.Message == UserIsNotHomeOwnerMessage)
+            {
+                return StatusCode(StatusCodes.Status412PreconditionFailed, UserIsNotHomeOwnerMessage);
+            }
+        }
         
         HomeResponse homeResponse = new HomeResponse(request.ToEntity());
         
