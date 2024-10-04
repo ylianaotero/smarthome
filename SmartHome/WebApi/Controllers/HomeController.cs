@@ -22,6 +22,7 @@ public class HomeController : ControllerBase
     private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
     private const string SourceAlreadyExistsMessage = "Source Already Exists";
     
+    private const int PreconditionFailedStatusCode = 412;
     public HomeController(IHomeService homeService)
     {
         _homeService = homeService;
@@ -128,6 +129,10 @@ public class HomeController : ControllerBase
         catch (ElementAlreadyExist)
         {
             return Conflict(SourceAlreadyExistsMessage);
+        }
+        catch (CannotAddItem e)
+        {
+            return StatusCode(PreconditionFailedStatusCode, e.Message);
         }
         
     }
