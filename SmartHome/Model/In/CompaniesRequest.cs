@@ -47,7 +47,10 @@ public class CompaniesRequest
     private Func<Company,bool> FilterWithEmptyOrIncompleteFullName(string? name)
     {
         return company => (string.IsNullOrEmpty(name) || 
-                        company.Owner.Name.ToLower().Contains(name.ToLower()) || company.Owner.Surname.Contains(name.ToLower()));
+                        company.Owner.Name.ToLower().Contains(name.ToLower()) || 
+                        company.Owner.Surname.Contains(name.ToLower())) &&
+                          (string.IsNullOrEmpty(Company) || company.Name.ToLower().Contains(Company.ToLower()));
+                          
     }
     
     private Func<Company,bool> FilterWithFullName(string name, string surname)
@@ -56,6 +59,7 @@ public class CompaniesRequest
         string lowerCaseSurname = surname.ToLower();
 
         return company => (company.Owner.Name.ToLower().Contains(lowerCaseName) &&
-                        company.Owner.Surname.ToLower().Contains(lowerCaseSurname));
+                        company.Owner.Surname.ToLower().Contains(lowerCaseSurname)) &&
+                          (string.IsNullOrEmpty(Company) || company.Name.ToLower().Contains(Company.ToLower()));
     }
 }
