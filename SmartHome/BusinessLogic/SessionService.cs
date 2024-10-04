@@ -60,7 +60,7 @@ public class SessionService : ISessionService
         return session.User; 
     }
     
-    public bool UserHasPermissions(Guid? authorization, string roleWithPermissions)
+    public bool UserHasCorrectRole(Guid? authorization, string roleWithPermissions)
     {
         return GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r, roleWithPermissions));
     }
@@ -68,7 +68,31 @@ public class SessionService : ISessionService
     public bool AuthorizationIsValid(Guid? authorization)
     {
         return authorization != null && UserIsAuthenticated(authorization.Value);
-    } 
+    }
+
+    public bool UserCanListDevicesInHome(Guid token, Home home)
+    {
+        User user = GetUser(token);
+        bool isOwner = home.Owner == user;
+        if (isOwner)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool UserCanAddDevicesInHome(Guid token, Home home)
+    {
+        User user = GetUser(token);
+        bool isOwner = home.Owner == user;
+        if (isOwner)
+        {
+            return true;
+        }
+
+        return false;
+    }
     
     private bool RoleIsAdequate(Role role, string roleWithPermissions)
     {
