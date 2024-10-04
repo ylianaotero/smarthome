@@ -72,19 +72,15 @@ public class SessionService : ISessionService
 
     public bool UserCanListDevicesInHome(Guid token, Home home)
     {
-        User user = GetUser(token);
-        bool isOwner = home.Owner == user;
-        if (isOwner)
-        {
-            return true;
-        }
-        
-        bool canListDevices = home.Members.Exists(m => m.User == user && m.HasPermissionToListDevices);
-
-        return canListDevices;
+        return UserHasPermissionOrIsOwner(token, home, m => m.HasPermissionToListDevices);
     }
 
     public bool UserCanAddDevicesInHome(Guid token, Home home)
+    {
+        return UserHasPermissionOrIsOwner(token, home, m => m.HasPermissionToAddADevice);
+    }
+    
+    private bool UserHasPermissionOrIsOwner(Guid token, Home home, Func<Member, bool> permissionCheck)
     {
         User user = GetUser(token);
         bool isOwner = home.Owner == user;
@@ -93,9 +89,9 @@ public class SessionService : ISessionService
             return true;
         }
 
-        bool canAddDevices = home.Members.Exists(m => m.User == user && m.HasPermissionToAddADevice);
+        bool hasPermission = home.Members.Exists(m => m.User == user && permissionCheck(m));
 
-        return canAddDevices;
+        return hasPermission;
     }
     
     private bool RoleIsAdequate(Role role, string roleWithPermissions)

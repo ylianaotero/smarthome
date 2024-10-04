@@ -239,7 +239,7 @@ public class SessionServiceTest
         {
             User user = new User();
             Session session = new Session { User = user };
-            var home = new Home { Owner = user };
+            Home home = new Home { Owner = user };
             Member member = new Member()
             {
                 User = user,
@@ -264,7 +264,7 @@ public class SessionServiceTest
         {
             User user = new User();
             Session session = new Session { User = user };
-            var home = new Home { Owner = user };
+            Home home = new Home { Owner = user };
             Member member = new Member()
             {
                 User = user,
