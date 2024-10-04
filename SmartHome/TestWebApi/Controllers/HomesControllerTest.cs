@@ -23,6 +23,7 @@ public class HomesControllerTest
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
+    private const string ElementAlreadyExistsMessage = "Element already exists";
     
     private const string Name = "John";
     private const string Name2 = "Jane";
@@ -316,6 +317,29 @@ public class HomesControllerTest
         _mockHomeService
             .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+        
+    [TestMethod]
+    public void TestTryToPutMemberThatAlreadyExistsStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
+            .Throws(new ElementAlreadyExist(ElementAlreadyExistsMessage));
         
         _homeController = new HomeController(_mockHomeService.Object); 
         
