@@ -47,8 +47,7 @@ public class HomeTest
         
         _user.Email = Email1;
         _member = new Member(_user); 
-        _device = new SecurityCamera();
-        _device.Id = Id;
+        
         _homeOwnerId = 000;
     }
     

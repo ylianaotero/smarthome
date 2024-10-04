@@ -39,24 +39,6 @@ public class HomeServiceTest
         CreateRepositoryMocks();
         SetupDefaultObjects();
     }
-
-    private void SetupDefaultObjects()
-    {
-        _user1 = new User() {Email = NewEmail};
-        _user2 = new User() {Email = NewEmail2};
-        _member1 = new Member(_user1);
-        _member2 = new Member(_user2); 
-        
-        _defaultHome = new Home()
-        {
-            OwnerId = homeOwnerId,
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-    }
-
     
     [TestMethod]
     public void TestGetAllHomes()
@@ -107,7 +89,6 @@ public class HomeServiceTest
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
 
-        HomeService homeService = new HomeService(_mockHomeRepository.Object);
         List<Member> retrievedMembers = homeService.GetMembersFromHome(1);
 
         CollectionAssert.AreEqual(members, retrievedMembers); 
@@ -351,7 +332,7 @@ public class HomeServiceTest
     public void TestTryToCreateExistingHome()
     {
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
         homeService.CreateHome(_defaultHome);
         _mockHomeRepository.Verify(m => m.GetById(_defaultHome.Id), Times.Once);
     }
