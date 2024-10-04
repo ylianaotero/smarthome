@@ -16,6 +16,8 @@ public class UserServiceTest
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
     
+    private const string UserDoesNotExistExceptionMessage = "User not found";
+    
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;
 
@@ -232,6 +234,106 @@ public class UserServiceTest
         _mockUserRepository.Verify();
         
         Assert.IsTrue(response);
+        
+    }
+    
+    [TestMethod]
+    public void TestAddCompanyToOwner()
+    {
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.HasACompleteCompany = false; 
+        Administrator admin = new Administrator(); 
+        User newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{admin,companyOwner}
+        };
+
+        Company company = new Company(); 
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetById(newUser.Id))
+            .Returns(newUser);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        Company response = _userService.AddOwnerToCompany(newUser.Id, company);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.IsTrue(response.Id == company.Id && response.Owner.Email == newUser.Email);
+        
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddCompanyToOwnerThatIsComplete()
+    {
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.HasACompleteCompany = true; 
+        Administrator admin = new Administrator(); 
+        User newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname,
+            Roles = new List<Role>{admin,companyOwner}
+        };
+
+        Company company = new Company(); 
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetById(newUser.Id))
+            .Returns(newUser);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.AddOwnerToCompany(newUser.Id, company);
+        
+        _mockUserRepository.Verify();
+        
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddCompanyToNotFoundOwner()
+    {
+        Administrator admin = new Administrator(); 
+        User newUser = new User
+        {
+            Name = NewName,
+            Email = NewEmail,
+            Password = NewPassword,
+            Surname = NewSurname
+        };
+
+        Company company = new Company(); 
+        
+        List<User> listOfUsers = new List<User>();
+        listOfUsers.Add(newUser);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetById(newUser.Id))
+            .Returns((User?)null);
+        
+        _userService = new UserService(_mockUserRepository.Object);
+        
+        _userService.AddOwnerToCompany(newUser.Id, company);
+        
+        _mockUserRepository.Verify();
         
     }
     

@@ -73,16 +73,34 @@ public class UserService : IUserService
         return user; 
     }
     
+    public Company AddOwnerToCompany(long id, Company company)
+    {
+        User user = GetUserById(id);
+        if (!CompanyOwnerIsComplete(id))
+        {
+            company.Owner = user; 
+            List<CompanyOwner> companyOwnerRoles = GetCompanyOwnerRoles(user); 
+
+            CompanyOwner  role = SearchAnIncompleteCompanyOwnerRole(companyOwnerRoles);
+
+            role.Company = company;
+
+            return company; 
+        }
+        else
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+    }
+    
     public bool CompanyOwnerIsComplete(long id)
     {
         User existingUser =  GetUserById(id);
-        
-        List<CompanyOwner> companyOwnerRoles = existingUser.Roles
-            .Where(role => role is CompanyOwner)
-            .Cast<CompanyOwner>()
-            .ToList();
 
-        Role role = searchAnIncompleteCompanyOwnerRole(companyOwnerRoles);
+        List<CompanyOwner> companyOwnerRoles = GetCompanyOwnerRoles(existingUser); 
+
+        CompanyOwner  role = SearchAnIncompleteCompanyOwnerRole(companyOwnerRoles);
 
         if (role == null)
         {
@@ -92,9 +110,17 @@ public class UserService : IUserService
         return false; 
     }
 
-    private Role searchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
+    private List<CompanyOwner> GetCompanyOwnerRoles(User user)
     {
-        Role incompleteRole = companyOwnerRoles
+        return user.Roles
+            .Where(role => role is CompanyOwner)
+            .Cast<CompanyOwner>()
+            .ToList();
+    }
+
+    private CompanyOwner SearchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
+    {
+        CompanyOwner incompleteRole = companyOwnerRoles
             .FirstOrDefault(role => role.HasACompleteCompany == false);  
 
         return incompleteRole;

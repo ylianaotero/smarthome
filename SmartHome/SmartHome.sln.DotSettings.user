@@ -5,8 +5,8 @@
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\angel\AppData\Local\JetBrains\Rider2023.3\resharper-host\temp\Rider\vAny\CoverageData\_SmartHome.-210195473\Snapshot\snapshot.utdcvr</s:String>
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=34786933_002D692f_002D4a81_002Db564_002D56813b8cfcf0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPutDevicesInHomeOkStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Solution /&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=34786933_002D692f_002D4a81_002Db564_002D56813b8cfcf0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPutDevicesInHomeOkStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=542f1b83_002D5d9a_002D41c1_002Da97d_002D6a9ae4d1766f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestGetNotificationByIdOkResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;

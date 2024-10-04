@@ -25,7 +25,6 @@ public class HomeOwnerController : ControllerBase
     }
     
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
     {
         try

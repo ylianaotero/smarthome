@@ -16,14 +16,9 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
         return companyRepository.GetByFilter(filter, pageData);
     }
 
-    private void CreateCompany(Company company)
+    public void CreateCompany(Company company)
     {
         companyRepository.Add(company);
     }
-
-    public void AddOwnerToCompany(User owner, Company company)
-    {
-        company.Owner = owner; 
-        CreateCompany(company); 
-    }
+    
 }

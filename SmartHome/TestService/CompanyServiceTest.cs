@@ -67,7 +67,7 @@ public class CompanyServiceTest
 
         };
         _mockCompanyRepository.Setup(x => x.Add(_company));
-        _companyService.AddOwnerToCompany(_user,_company);
+        _companyService.CreateCompany(_company);
         _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
     }
 }

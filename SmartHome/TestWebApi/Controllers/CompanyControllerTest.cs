@@ -1,4 +1,5 @@
-/*using Domain;
+using CustomExceptions;
+using Domain;
 using IBusinessLogic;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,11 @@ namespace TestWebApi.Controllers;
 public class CompanyControllerTest
 {
     private Mock<ICompanyService> _mockICompanyService;
+    private Mock<IUserService> _mockIUserService;
     private CompanyController _companyController;
+    private CompanyOwner _companyOwner; 
+    
+    private const string UserDoesNotExistExceptionMessage = "User not found";
     
     private string Name = "Company 1";
     private string Name2 = "Company 2";
@@ -24,22 +29,29 @@ public class CompanyControllerTest
     private string RUT = "123456789";
     private int OkStatusCode = 200;
     private int CreatedStatusCode = 201;
+    private int NotFoundStatusCode = 404;
     private string LogoURL = "https://www.logo.com";
+    
+    private const string UserName =  "John";
+    private const string Email1 = "john.doe@example.com";
 
 
     [TestInitialize]
     public void Initialize()
     {
         SetupCompanyController();
+
+        _companyOwner = new CompanyOwner(); 
     }
 
     private void SetupCompanyController()
     {
-        _mockICompanyService = new Mock<ICompanyService>();
-        _companyController = new CompanyController(_mockICompanyService.Object);
+        _mockIUserService = new Mock<IUserService>(MockBehavior.Strict);
+        _mockICompanyService = new Mock<ICompanyService>(MockBehavior.Strict);
+        _companyController = new CompanyController(_mockICompanyService.Object, _mockIUserService.Object);
     }
 
-    [TestMethod]
+    /*[TestMethod]
     public void TestGetCompanies()
     {
         var companies = new List<Company>
@@ -108,6 +120,72 @@ public class CompanyControllerTest
         ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
         
         Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
+    }*/
+    
+    [TestMethod]
+    public void TestPostCompanyOkStatusCode()
+    {
+        User user = new User()
+        {
+            Email = Email1,
+            Name = UserName,
+            Roles = new List<Role>() { _companyOwner }
+        };
+
+        Company company = new Company()
+        {
+            Name = Name,
+            LogoURL = LogoURL,
+            RUT = RUT,
+            Owner = user
+        }; 
+        
+        CompanyRequest request = new CompanyRequest()
+        {
+            Name = Name,
+            RUT = RUT,
+            LogoURL = LogoURL
+        };
+
+        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity())).Returns(company); 
+        _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
+        
+        ObjectResult? result = _companyController.PostCompany(user.Id,request) as ObjectResult;
+        
+        Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostCompanyNotFoundStatusCode()
+    {
+        User user = new User()
+        {
+            Email = Email1,
+            Name = UserName,
+            Roles = new List<Role>() { _companyOwner }
+        };
+
+        Company company = new Company()
+        {
+            Name = Name,
+            LogoURL = LogoURL,
+            RUT = RUT,
+            Owner = user
+        }; 
+        
+        CompanyRequest request = new CompanyRequest()
+        {
+            Name = Name,
+            RUT = RUT,
+            LogoURL = LogoURL
+        };
+
+        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity())).Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
+        _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
+        
+        ObjectResult? result = _companyController.PostCompany(user.Id,request) as ObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result?.StatusCode);
     }
     
     private CompaniesResponse DefaultCompaniesResponse()
@@ -129,4 +207,4 @@ public class CompanyControllerTest
         
         return request;
     }
-}*/
+}

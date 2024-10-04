@@ -1,3 +1,4 @@
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -17,6 +18,7 @@ public class CompanyController : ControllerBase
     
     private const string RoleWithPermissions = "CompanyOwner";
     private const string CreatedMessage = "The resource was created successfully.";
+    private const string CompanyOwnerNotFound = "Incomplete CompanyOwner was not found.";
 
     public CompanyController(ICompanyService companyService,IUserService userService)
     {
@@ -40,8 +42,14 @@ public class CompanyController : ControllerBase
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostCompany([FromRoute] long id, [FromBody] CompanyRequest request)
     {
-        _companyService.CreateCompany(request.ToEntity());
-        return Created(CreatedMessage,"/companies/");
-        
+        try
+        {
+            _companyService.CreateCompany(_userService.AddOwnerToCompany(id,request.ToEntity()));
+            return Created(CreatedMessage,"/companies/");
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(CompanyOwnerNotFound);
+        }
     }
 }
