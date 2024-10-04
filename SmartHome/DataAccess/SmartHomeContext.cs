@@ -15,6 +15,7 @@ public class SmartHomeContext : DbContext
     
     public DbSet<Session> Sessions { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Member> Members { get; set; }
     
     public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
     {
