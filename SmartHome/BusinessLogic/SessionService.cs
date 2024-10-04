@@ -78,8 +78,10 @@ public class SessionService : ISessionService
         {
             return true;
         }
+        
+        bool canListDevices = home.Members.Exists(m => m.User == user && m.HasPermissionToListDevices);
 
-        return false;
+        return canListDevices;
     }
 
     public bool UserCanAddDevicesInHome(Guid token, Home home)
@@ -91,7 +93,9 @@ public class SessionService : ISessionService
             return true;
         }
 
-        return false;
+        bool canAddDevices = home.Members.Exists(m => m.User == user && m.HasPermissionToAddADevice);
+
+        return canAddDevices;
     }
     
     private bool RoleIsAdequate(Role role, string roleWithPermissions)
