@@ -395,6 +395,34 @@ public class HomeServiceTest
         Assert.AreEqual(homeOwner, homeWithOwner.Owner);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddUnexistentOwnerToHome()
+    {
+        HomeOwner role = new HomeOwner();
+        User homeOwner = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+            Roles = new List<Role>(){role},
+        };
+        Home home = new Home()
+        {
+            Owner = null,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1
+        };
+        _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns((User?)null);
+        
+        HomeService homeService = new HomeService
+            (_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        Home homeWithOwner = homeService.AddOwnerToHome(homeOwner.Id, home);
+    }
+    
     private void SetupDefaultObjects()
     {
         SetUpDefaultHome();
