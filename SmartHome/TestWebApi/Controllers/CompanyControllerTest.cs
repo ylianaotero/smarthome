@@ -144,13 +144,16 @@ public class CompanyControllerTest
         {
             Name = Name,
             RUT = RUT,
-            LogoURL = LogoURL
+            LogoURL = LogoURL,
+            OwnerId = user.Id
         };
 
-        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity())).Returns(company); 
+        _mockIUserService
+            .Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity()))
+            .Returns(company); 
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
-        ObjectResult? result = _companyController.PostCompany(user.Id,request) as ObjectResult;
+        ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
         
         Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
     }
@@ -177,10 +180,11 @@ public class CompanyControllerTest
         {
             Name = Name,
             RUT = RUT,
-            LogoURL = LogoURL
+            LogoURL = LogoURL,
+            Owner = user
         };
 
-        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity())).Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
+        _mockIUserService.Setup(service => service.AddOwnerToCompany(request.ToEntity())).Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
         ObjectResult? result = _companyController.PostCompany(user.Id,request) as ObjectResult;
