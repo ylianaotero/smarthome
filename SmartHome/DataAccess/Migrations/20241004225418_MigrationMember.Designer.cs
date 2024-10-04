@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SmartHomeContext))]
-    [Migration("20241004032932_MigracionDeviceUnit")]
-    partial class MigracionDeviceUnit
+    [Migration("20241004225418_MigrationMember")]
+    partial class MigrationMember
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Company");
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("Domain.Device", b =>
@@ -150,6 +150,9 @@ namespace DataAccess.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
+                    b.Property<int>("MaximumMembers")
+                        .HasColumnType("int");
+
                     b.Property<long>("OwnerId")
                         .HasColumnType("bigint");
 
@@ -161,7 +164,82 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("HomeOwnerId");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Home");
+                });
+
+            modelBuilder.Entity("Domain.Member", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("HasPermissionToAddADevice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasPermissionToListDevices")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("HomeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ReceivesNotifications")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("Domain.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("DeviceUnitId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Event")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HomeId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("MemberId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Read")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ReadAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceUnitId");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -222,9 +300,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HomeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -242,8 +317,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HomeId");
 
                     b.ToTable("Users");
                 });
@@ -348,6 +421,56 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.HomeOwner", null)
                         .WithMany("Homes")
                         .HasForeignKey("HomeOwnerId");
+
+                    b.HasOne("Domain.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Domain.Member", b =>
+                {
+                    b.HasOne("Domain.Home", null)
+                        .WithMany("Members")
+                        .HasForeignKey("HomeId");
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Notification", b =>
+                {
+                    b.HasOne("Domain.DeviceUnit", "DeviceUnit")
+                        .WithMany()
+                        .HasForeignKey("DeviceUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Home", "Home")
+                        .WithMany()
+                        .HasForeignKey("HomeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Member", "Member")
+                        .WithMany("Notifications")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DeviceUnit");
+
+                    b.Navigation("Home");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -368,13 +491,6 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
-                {
-                    b.HasOne("Domain.Home", null)
-                        .WithMany("Members")
-                        .HasForeignKey("HomeId");
-                });
-
             modelBuilder.Entity("Domain.CompanyOwner", b =>
                 {
                     b.HasOne("Domain.Company", "Company")
@@ -391,6 +507,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Devices");
 
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("Domain.Member", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -22,7 +23,7 @@ public class DeviceController : ControllerBase
         _deviceService = deviceService;
     }
     
-    [HttpGet]
+    [HttpGet] 
     public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         DevicesResponse devicesResponse = new DevicesResponse
