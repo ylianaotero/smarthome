@@ -75,7 +75,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return home;
     }
 
-    public void PutDevicesInHome(long homeId, List<DeviceUnit> homeDevices)
+    public void PutDevicesInHome(long homeId, List<DeviceUnitDTO> homeDevices)
     {
         Home home = homeRepository.GetById(homeId);
         if (home == null)
@@ -83,7 +83,36 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
             throw new ElementNotFound(HomeNotFoundMessage);
         }
         
-        home.Devices = homeDevices;
+        List<DeviceUnit> devices = new List<DeviceUnit>();
+        int cont = 0;
+        foreach (var device in homeDevices)
+        {
+            if (cont == 0)
+            {
+                cont++;
+                devices.Add(new DeviceUnit
+                {
+                    Device = new WindowSensor()
+                    {
+                        Id = device.DeviceId
+                    },
+                    IsConnected = device.IsConnected
+                });
+            }
+            else
+            {
+                devices.Add(new DeviceUnit
+                {
+                    Device = new SecurityCamera()
+                    {
+                        Id = device.DeviceId
+                    },
+                    IsConnected = device.IsConnected
+                });
+            }
+        }
+        
+        home.Devices = devices;
         
         homeRepository.Update(home);
     }

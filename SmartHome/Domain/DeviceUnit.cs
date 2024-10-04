@@ -15,4 +15,10 @@ public class DeviceUnit
     {
         IsConnected = false;
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is DeviceUnit unit &&
+               Device.Id == unit.Device.Id;
+    }
 }

@@ -1,6 +1,7 @@
 using BusinessLogic;
 using CustomExceptions;
 using Domain;
+using IBusinessLogic;
 using IDataAccess;
 using Moq;
 
@@ -278,14 +279,10 @@ public class HomeServiceTest
     {
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
+       
+        List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO> {};
         
-        List<DeviceUnit> homeDevices = new List<DeviceUnit>
-        {
-            _windowSensorUnit,
-            _securityCameraUnit
-        };
-        
-        homeService.PutDevicesInHome(1, homeDevices);
+        homeService.PutDevicesInHome(1, homeDevicesDTO);
     }
     
     
