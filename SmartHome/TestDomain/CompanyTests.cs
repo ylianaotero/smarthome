@@ -85,4 +85,14 @@ public class CompanyTests
         
         Assert.AreEqual(company1, company2);
     }
+    
+    [TestMethod]
+    public void TestAddOwnerToCompany()
+    {
+        User owner = new User();
+        _company.Owner = owner;
+        owner.AddRole(new CompanyOwner());
+        
+        Assert.AreEqual(owner, _company.Owner);
+    }
 }

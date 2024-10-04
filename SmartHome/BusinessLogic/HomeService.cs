@@ -5,15 +5,27 @@ using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (IRepository<Home> homeRepository) : IHomeService
+public class HomeService (IRepository<Home> homeRepository, IRepository<Device> deviceRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
-
+    private const string DeviceNotFoundMessage = "Device not found";
+    private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
+    private const string HomeAlreadyExists = "A home with this id already exists";
+    private const string HomeIsFullMessage = "The home is full";
 
     public void CreateHome(Home home)
     {
-        homeRepository.Add(home);
+        try
+        {
+            GetHomeById(home.Id);
+            
+            throw new CannotAddItem(HomeAlreadyExists);
+        }
+        catch (ElementNotFound)
+        {
+            homeRepository.Add(home);
+        }
     }
     
     public List<Home> GetAllHomes()
@@ -28,38 +40,30 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
     
     public List<Member> GetMembersFromHome(long homeId)
     {
-        var home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound("Home not found");
-        }
+        Home home = GetHomeById(homeId);
         return home.Members;
     }
     
-    public List<Device> GetDevicesFromHome(int homeId)
+    public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
-        var home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound("Home not found");
-        }
+        Home home = GetHomeById(homeId);
         return home.Devices;
     }
 
     public void AddMemberToHome(int homeId, Member member)
     {
-        var home = homeRepository.GetById(homeId);
-        if (home == null)
+        Home home = GetHomeById(homeId);
+        if (home.Members.Any(m => m.User.Email == member.User.Email))
         {
-            throw new ElementNotFound("Home not found");
+            throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
         }
-        if (home.Members.Any(m => m.Email == member.Email))
+        
+        if (home.Members.Count >= home.MaximumMembers)
         {
-            throw new ElementAlreadyExist("A member with this email already exists on this home");
+            throw new CannotAddItem(HomeIsFullMessage);
         }
         
         home.AddMember(member);
-        
         homeRepository.Update(home);
     }
 
@@ -75,7 +79,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return home;
     }
 
-    public Home PutDevicesInHome(long homeId, List<Device> homeDevices)
+    public void PutDevicesInHome(long homeId, List<DeviceUnitDTO> homeDevices)
     {
         Home home = homeRepository.GetById(homeId);
         if (home == null)
@@ -83,9 +87,32 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
             throw new ElementNotFound(HomeNotFoundMessage);
         }
         
-        home.Devices = homeDevices;
+        List<DeviceUnit> devices = new List<DeviceUnit>();
+      
+        MapDevices(homeDevices, devices);
+        
+        home.Devices = devices;
         
         homeRepository.Update(home);
-        return home;
+    }
+    
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    {
+        foreach (var device in homeDevices)
+        {
+            Device deviceEntity = deviceRepository.GetById(device.DeviceId);
+            
+            if (deviceEntity == null)
+            {
+                throw new ElementNotFound(DeviceNotFoundMessage);
+            }
+            
+            devices.Add(new DeviceUnit
+            {
+                Device = deviceEntity,
+                IsConnected = device.IsConnected,
+                HardwareId = Guid.NewGuid(),
+            });
+        }
     }
 }

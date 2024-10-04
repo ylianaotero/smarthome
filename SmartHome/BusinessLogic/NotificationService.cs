@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -21,5 +22,15 @@ public class NotificationService : INotificationService
     public List<Notification> GetNotifications(PageData pageData)
     {
         return _notificationRepository.GetAll(pageData);
+    }
+    
+    public Notification GetNotificationById(int id)
+    {
+        Notification notification = _notificationRepository.GetById(id);
+        if(notification == null)
+        {
+            throw new ElementNotFound("Notification not found");
+        }
+        return notification;
     }
 }

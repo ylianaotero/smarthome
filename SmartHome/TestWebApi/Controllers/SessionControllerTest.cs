@@ -6,7 +6,6 @@ using Model.In;
 using Model.Out;
 using Moq;
 using WebApi.Controllers;
-//using LoginRequest = Models.In.LoginRequest;
 
 namespace TestWebApi.Controllers;
 

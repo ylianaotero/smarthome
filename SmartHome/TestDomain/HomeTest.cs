@@ -15,29 +15,61 @@ public class HomeTest
     private const int Id = 11;
     
     private long _homeOwnerId;
+    
+    private User _user; 
 
     private Member _member; 
 
-    private Device _device; 
+    private DeviceUnit _deviceUnit; 
 
-    private Home _home; 
+    private Home _home;
     
     [TestInitialize]
     public void TestInitialize()
     {
-        _home = new Home(_homeOwnerId,Street,DoorNumber,Latitude,Longitude);
-        _member = new Member();
-        _member.Email = Email1;
-        _member.Permission = false; 
-        _device = new SecurityCamera();
-        _device.Id = Id;
+        _user = new User();
+        _home = new Home()
+        {
+            OwnerId = _homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
+        
+        _deviceUnit = new DeviceUnit()
+        {
+            HardwareId = new Guid(),
+            IsConnected = true,
+            Id = Id,
+            Device = new SecurityCamera()
+        };
+        
+        _user.Email = Email1;
+        _member = new Member(_user); 
+        
         _homeOwnerId = 000;
+    }
+    
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        _home = null;
+        _member = null;
+        _deviceUnit = null;
     }
     
     [TestMethod]
     public void CreateNewHome()
     {
-        Home newHome = new Home(_homeOwnerId,Street,DoorNumber,Latitude,Longitude);
+        Home newHome = new Home()
+        {
+            OwnerId = _homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
         newHome.Id = Id; 
         
         Assert.IsTrue(
@@ -55,8 +87,7 @@ public class HomeTest
     [TestMethod]
     public void TestAddMember()
     {
-        Member member = new Member();
-        _home.AddMember(member); 
+        _home.AddMember(_member); 
         Assert.AreEqual(1, _home.Members.Count());
     }
     
@@ -64,29 +95,22 @@ public class HomeTest
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddMemberThatAlreadyExists()
     {
-        Member member2 = new Member(); 
-        member2.Email = Email2;
-        member2.Permission = true; 
-        
         _home.AddMember(_member); 
-        _home.AddMember(member2); 
-        
         _home.AddMember(_member); 
     }
     
     [TestMethod]
     public void TestFindMember()
     {
-        Member member2 = new Member(); 
-        member2.Email = Email2;
-        member2.Permission = true; 
+        User user2 = new User() { Email = Email2 }; 
+        Member member2 = new Member(user2); 
         
         _home.AddMember(_member); 
         _home.AddMember(member2); 
         
-        Member result = _home.FindMember(Email2); 
+        Member result = _home.FindMember(Email1);
         
-        Assert.AreEqual(member2, result);
+        Assert.AreEqual(result, _member);
     }
     
     [TestMethod]
@@ -99,18 +123,14 @@ public class HomeTest
     }
     
     [TestMethod]
-    public void TestCheckIfMemberCanReceiveNotifications()
+    public void TestCheckIfMemberCanReceiveNotificationsDefault()
     {
-        Member member2 = new Member(); 
-        member2.Email = Email2;
-        member2.Permission = true; 
         
         _home.AddMember(_member); 
-        _home.AddMember(member2); 
         
-        bool result = _home.MemberCanReceiveNotifications(Email2); 
+        bool result = _home.MemberCanReceiveNotifications(_member.User.Email); 
         
-        Assert.IsTrue(result);
+        Assert.IsFalse(result);
     }
     
         
@@ -126,21 +146,17 @@ public class HomeTest
     [TestMethod]
     public void TestDeleteMember()
     {
-        Member member2 = new Member(); 
-        member2.Email = Email2;
-        member2.Permission = true; 
-        
+        User user2 = new User() { Email = Email2 }; 
+        Member member2 = new Member(user2); 
+
         _home.AddMember(_member); 
         _home.AddMember(member2); 
         
         _home.DeleteMember(Email1); 
         
-        Assert.AreEqual(1, _home.Members.Count);
+        Member memberWithEmail1 = _home.Members.FirstOrDefault(m => m.User.Email == Email1);
         
-        var memberWithEmail1 = _home.Members.FirstOrDefault(m => m.Email == Email1);
-        
-        Assert.IsNull( memberWithEmail1);
-
+        Assert.IsNull(memberWithEmail1);
     }
     
     [TestMethod]
@@ -156,11 +172,11 @@ public class HomeTest
     [TestMethod]
     public void TestAddDevice()
     {
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
         
         Assert.AreEqual(1, _home.Devices.Count());
         
-        Device device = _home.Devices.FirstOrDefault(d => d.Id == Id);
+        DeviceUnit device = _home.Devices.FirstOrDefault(d => d.Id == Id);
         
         Assert.IsNotNull(device);
     }
@@ -170,18 +186,18 @@ public class HomeTest
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddExistingDevice()
     {
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
         
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
     }
     
         
     [TestMethod]
     public void TestFindDevice()
     {
-        _home.AddDevice(_device);
+        _home.AddDevice(_deviceUnit);
 
-        Device result = _home.FindDevice(_device.Id); 
+        DeviceUnit result = _home.FindDevice(_deviceUnit.Id); 
         
         Assert.AreEqual(Id, result.Id);
     }
@@ -190,25 +206,24 @@ public class HomeTest
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestCannotFindDevice()
     {
-        _home.FindDevice(_device.Id); 
+        _home.FindDevice(_deviceUnit.Id); 
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestTryToDeleteDevice()
     {
-        _home.DeleteDevice(_device.Id); 
+        _home.DeleteDevice(_deviceUnit.Id); 
     }
     
     [TestMethod]
     public void TestDeleteDevice()
     {
-        _home.AddDevice(_device);
+        _home.AddDevice(_deviceUnit);
         
         _home.DeleteDevice(11); 
         
         Assert.AreEqual(0, _home.Devices.Count());
-        
     }
     
 }

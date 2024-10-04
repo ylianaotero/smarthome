@@ -23,7 +23,6 @@ public class UserControllerTest
     private Session _session; 
     
     private Mock<IUserService> _userServiceMock;
-    private Mock<ISessionService> _sessionServiceMock;
     private UserController _userController;
     private User _user_1_example; 
     private User _user_2_example;
@@ -36,9 +35,8 @@ public class UserControllerTest
     public void SetUp()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
-        _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
 
-        _userController = new UserController(_userServiceMock.Object,_sessionServiceMock.Object);
+        _userController = new UserController(_userServiceMock.Object);
         Role role = new Administrator();
         _listOfRoles = new List<Role>() {};
 
@@ -86,7 +84,6 @@ public class UserControllerTest
     [TestMethod]
     public void GetUsersValidRequest()
     {
-        _sessionServiceMock.Setup(service => service.GetUser(_session.Id)).Returns(_user_1_example); 
         _userServiceMock.Setup(service => service.IsAdmin(_session.User.Email)).Returns(true); 
         _userServiceMock
             .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
@@ -98,7 +95,6 @@ public class UserControllerTest
         UsersResponse userResponse = result.Value as UsersResponse;
 
         _userServiceMock.Verify();
-        _sessionServiceMock.Verify();
 
         Assert.AreEqual(expectedResponse, userResponse);
     }

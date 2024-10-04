@@ -19,11 +19,4 @@ public class CompanyRequest
             LogoURL = this.LogoURL
         };
     }
-    
-    public Func<Company, bool> ToFilter() 
-    {
-        return company => (string.IsNullOrEmpty(this.Name) || company.Name == this.Name) &&
-                           (string.IsNullOrEmpty(this.RUT) || company.RUT == this.RUT) &&
-                           (string.IsNullOrEmpty(this.LogoURL) || company.LogoURL == this.LogoURL);
-    }
 }

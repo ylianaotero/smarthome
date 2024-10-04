@@ -1,4 +1,5 @@
 using BusinessLogic;
+using CustomExceptions;
 using Domain;
 using IDataAccess;
 using Moq;
@@ -45,5 +46,24 @@ public class NotificationServiceTest
             .Returns(notifications);
         List<Notification> retrievedNotifications = _notificationService.GetNotifications(PageData.Default);
         Assert.AreEqual(notifications, retrievedNotifications);
+    }
+    
+    [TestMethod]
+    public void TestGetNotificationById()
+    {
+        int id = 1;
+        Notification newNotification = new Notification("New event");
+        _mockNotificationRepository.Setup(m => m.GetById(id)).Returns(newNotification);
+        Notification retrievedNotification = _notificationService.GetNotificationById(id);
+        Assert.AreEqual(newNotification, retrievedNotification);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestGetNotificationByIdNotFound()
+    {
+        int id = 1;
+        _mockNotificationRepository.Setup(m => m.GetById(id)).Returns((Notification)null);
+        _notificationService.GetNotificationById(id);
     }
 }
