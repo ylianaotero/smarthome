@@ -4,12 +4,9 @@ namespace Model.In;
 
 public class CompaniesRequest
 {
-    public string? Name { get; set; }
+    public string? Company { get; set; }
+    public string? Owner { get; set; }
     
-    public int RUT { get; set; }
-    public string? FullName { get; set; }
-    
-    public string Email { get; set; }
 
     public Func<Company, bool> ToFilter()
     {
@@ -27,9 +24,9 @@ public class CompaniesRequest
     {
         string[] splitName;
 
-        if (FullName != null)
+        if (Owner != null)
         {
-            splitName = FullName.Split(" ");
+            splitName = Owner.Split(" ");
             
             if (splitName.Length == 0)
             {
@@ -50,7 +47,10 @@ public class CompaniesRequest
     private Func<Company,bool> FilterWithEmptyOrIncompleteFullName(string? name)
     {
         return company => (string.IsNullOrEmpty(name) || 
-                        company.Owner.Name.ToLower().Contains(name.ToLower()) || company.Owner.Surname.Contains(name.ToLower()));
+                        company.Owner.Name.ToLower().Contains(name.ToLower()) || 
+                        company.Owner.Surname.Contains(name.ToLower())) &&
+                          (string.IsNullOrEmpty(Company) || company.Name.ToLower().Contains(Company.ToLower()));
+                          
     }
     
     private Func<Company,bool> FilterWithFullName(string name, string surname)
@@ -59,6 +59,7 @@ public class CompaniesRequest
         string lowerCaseSurname = surname.ToLower();
 
         return company => (company.Owner.Name.ToLower().Contains(lowerCaseName) &&
-                        company.Owner.Surname.ToLower().Contains(lowerCaseSurname));
+                        company.Owner.Surname.ToLower().Contains(lowerCaseSurname)) &&
+                          (string.IsNullOrEmpty(Company) || company.Name.ToLower().Contains(Company.ToLower()));
     }
 }

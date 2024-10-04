@@ -20,6 +20,11 @@ public class AdministratorControllerTest
     private const string Email = "john.doe@example.com";
     private const string Password = "Securepassword1@";
     private const string Surname = "Doe";
+    private const int CreatedStatusCode = 201;
+    private const int ConflictStatusCode = 409;
+    private const int InternalServerErrorStatusCode = 500;
+    private const int NotFoundStatusCode = 404;
+    private const int OkStatusCode = 200;
     private static readonly Guid Token = new Guid();
 
 
@@ -81,7 +86,7 @@ public class AdministratorControllerTest
         AdminResponse expectedResponse = new AdminResponse(_user);
 
         Assert.AreEqual(userResponse, expectedResponse);
-        Assert.AreEqual(201, result.StatusCode);
+        Assert.AreEqual(CreatedStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -97,7 +102,7 @@ public class AdministratorControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(409, result.StatusCode);
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -113,7 +118,7 @@ public class AdministratorControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(500, result.StatusCode);
+        Assert.AreEqual(InternalServerErrorStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -127,7 +132,7 @@ public class AdministratorControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(200, result.StatusCode);
+        Assert.AreEqual(OkStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -142,6 +147,6 @@ public class AdministratorControllerTest
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 }

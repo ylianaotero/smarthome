@@ -10,6 +10,7 @@ public class UserTest
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string ValidName = "Juan";
     private const string ValidSurname = "Lopez";
+    private const string ValidSurname2 = "Perez";
     private const string ValidEmail = "juanlopez@gmail.com";
     private const string ValidPassword = "juanLop1@";
     private const int ValidId = 1234;
@@ -267,9 +268,9 @@ public class UserTest
             Password = ValidPassword
         };
         User userUpdated = new User();
-        userUpdated.Name = "Juan";
-        userUpdated.Surname = "Perez";
-        userUpdated.Email = "juan@gmail.com";
+        userUpdated.Name = ValidName;
+        userUpdated.Surname = ValidSurname2;
+        userUpdated.Email = ValidEmail;
         userUpdated.Password = ValidPassword;
         user.Update(userUpdated);
         Assert.AreEqual(user.Email,userUpdated.Email);

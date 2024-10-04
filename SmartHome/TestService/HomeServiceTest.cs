@@ -11,6 +11,7 @@ public class HomeServiceTest
 {
     private Mock<IRepository<Home>> _mockHomeRepository;
     private Mock<IRepository<Device>> _mockDeviceRepository;
+    private Mock<IRepository<User>> _mockUserRepository;
     private Home _home;
     private WindowSensor _windowSensor;
     private SecurityCamera _securityCamera;
@@ -18,6 +19,7 @@ public class HomeServiceTest
     private DeviceUnit _securityCameraUnit;
     
     private Home _defaultHome;
+    private User _defaultOwner;
     private const string Street = "Calle del Sol";
     private const int DoorNumber = 23;
     private const double Latitude = 34.0207;
@@ -26,6 +28,17 @@ public class HomeServiceTest
     private const string NewEmail = "juan.perez@example.com";
     private const string NewEmail2 = "juan.lopez@example.com";
     private const int MaxMembers = 10;
+    private const string NameSecurityCamera = "Camara de Seguridad";
+    private const string NameWindowSensor = "Sensor de Ventana";
+    private const string DescriptionWindowSensor = "Sensor para ventanas";
+    private const string DescriptionSecurityCamera = "Cámara para exteriores";
+    private const int ModelWindowSensor = 456;
+    private const int ModelSecurityCamera = 123;
+    private const int Id1 = 1;
+    private const int Id2 = 999;
+    private const int Id3 = 2;
+    private const bool IsConectedTrue = true;
+    private const bool IsConnectedFalse = false;
 
     private User _user1;
     private User _user2;
@@ -53,7 +66,7 @@ public class HomeServiceTest
         };
         homes.Add(newHome);
         _mockHomeRepository.Setup(m => m.GetAll(It.IsAny<PageData>())).Returns(homes);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         List<Home> retrievedHomes = homeService.GetAllHomes();
         Assert.AreEqual(homes, retrievedHomes); 
     }
@@ -62,7 +75,7 @@ public class HomeServiceTest
     public void TestCreateHome()
     {
         _mockHomeRepository.Setup(m => m.Add(_defaultHome));
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         homeService.CreateHome(_defaultHome);
         _mockHomeRepository.Verify(m => m.Add(_defaultHome), Times.Once);
     }
@@ -76,7 +89,7 @@ public class HomeServiceTest
         };
         _home = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -88,7 +101,7 @@ public class HomeServiceTest
             _home.AddMember(member);
         }
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
         List<Member> retrievedMembers = homeService.GetMembersFromHome(1);
 
@@ -99,11 +112,11 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotGetMemberByIdBecauseHomeDoesNotExist()
     {
-        int searchedHomeId = 999;
+        int searchedHomeId = Id2;
     
         _mockHomeRepository.Setup(m => m.GetById(searchedHomeId)).Returns((Home)null);
 
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
         homeService.GetMembersFromHome(searchedHomeId);
     }
@@ -121,7 +134,7 @@ public class HomeServiceTest
         _defaultHome.Devices = devices;
         
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_defaultHome);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         List<DeviceUnit> retrievedDevices = homeService.GetDevicesFromHome(1);
         CollectionAssert.AreEqual(devices, retrievedDevices);
     }
@@ -130,10 +143,10 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotGetDeviceFromHomeBecauseItIsNotFound()
     {
-        int searchedId = 999;
+        int searchedId = Id2;
         _mockHomeRepository.Setup(m => m.GetById(searchedId)).Returns((Home)null);
     
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
         homeService.GetDevicesFromHome(searchedId);
     }
@@ -143,7 +156,7 @@ public class HomeServiceTest
     {
         _home = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -152,7 +165,7 @@ public class HomeServiceTest
         };
         _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
 
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
         homeService.AddMemberToHome(_home.Id, _member1);
         
@@ -167,7 +180,7 @@ public class HomeServiceTest
     {
         _home = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -177,7 +190,7 @@ public class HomeServiceTest
     
         _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
 
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
         homeService.AddMemberToHome(_home.Id, _member1);
     }
@@ -186,11 +199,11 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotAddMemberToHomeBecauseItIsNotFound()
     {
-        int nonExistentHomeId = 999;
+        int nonExistentHomeId = Id2;
     
         _mockHomeRepository.Setup(m => m.GetById(nonExistentHomeId)).Returns((Home)null);
 
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
         homeService.AddMemberToHome(nonExistentHomeId, _member1);
     }
@@ -203,7 +216,7 @@ public class HomeServiceTest
         {
             new Home()
             {
-                OwnerId = homeOwnerId,
+                Owner = _defaultOwner,
                 Street = Street,
                 DoorNumber = DoorNumber,
                 Latitude = Latitude,
@@ -213,7 +226,7 @@ public class HomeServiceTest
         _mockHomeRepository
             .Setup(m => m.GetByFilter(filter, It.IsAny<PageData>()))
             .Returns(homes);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
         List<Home> retrievedHomes = homeService.GetHomesByFilter(filter);
         
@@ -223,7 +236,7 @@ public class HomeServiceTest
     [TestMethod]
     public void TestGetHomeById()
     {
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(_defaultHome);
         
         Home retrivedHome = homeService.GetHomeById(1);
@@ -234,7 +247,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestGetHomeByIdThrowsElementNotFound()
     {
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
         
         homeService.GetHomeById(1);
@@ -243,10 +256,10 @@ public class HomeServiceTest
     [TestMethod]
     public void TestPutDevicesInHome()
     {
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         Home home = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -285,7 +298,7 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestPutDevicesInHomeThrowsElementNotFound()
     {
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
        
         List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO> {};
@@ -297,10 +310,10 @@ public class HomeServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestPutDevicesInHomeThrowsElementNotFoundBecauseOfDevice()
     {
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         Home home = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -327,7 +340,7 @@ public class HomeServiceTest
     {
         _home = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -336,7 +349,7 @@ public class HomeServiceTest
         };
         _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
 
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
         homeService.AddMemberToHome(_home.Id, _member1);
         homeService.AddMemberToHome(_home.Id, _member2);
@@ -347,9 +360,93 @@ public class HomeServiceTest
     public void TestTryToCreateExistingHome()
     {
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         homeService.CreateHome(_defaultHome);
         _mockHomeRepository.Verify(m => m.GetById(_defaultHome.Id), Times.Once);
+    }
+
+    [TestMethod]
+    public void TestAddOwnerToHome()
+    {
+        HomeOwner role = new HomeOwner();
+        User homeOwner = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+            Roles = new List<Role>(){role},
+        };
+        Home home = new Home()
+        {
+            Owner = null,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1
+        };
+        _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns(homeOwner);
+        _mockHomeRepository.Setup(m => m.GetById(home.Id)).Returns(home);
+        
+        HomeService homeService = new HomeService
+            (_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        Home homeWithOwner = homeService.AddOwnerToHome(homeOwner.Id, home);
+        
+        Assert.AreEqual(homeOwner, homeWithOwner.Owner);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddUnexistentOwnerToHome()
+    {
+        HomeOwner role = new HomeOwner();
+        User homeOwner = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+            Roles = new List<Role>(){role},
+        };
+        Home home = new Home()
+        {
+            Owner = null,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1
+        };
+        _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns((User?)null);
+        
+        HomeService homeService = new HomeService
+            (_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        Home homeWithOwner = homeService.AddOwnerToHome(homeOwner.Id, home);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestAddUserThatIsNotHomeOwnerToHome()
+    {
+        User user = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+        };
+        Home home = new Home()
+        {
+            Owner = null,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1
+        };
+        _mockUserRepository.Setup(m => m.GetById(user.Id)).Returns(user);
+        
+        HomeService homeService = new HomeService
+            (_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.AddOwnerToHome(user.Id, home);
     }
     
     private void SetupDefaultObjects()
@@ -398,9 +495,19 @@ public class HomeServiceTest
 
     private void SetUpDefaultHome()
     {
+        _defaultOwner = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+            Roles = new List<Role>()
+            {
+                new HomeOwner(),
+            }
+        };
+        
         _defaultHome = new Home()
         {
-            OwnerId = homeOwnerId,
+            Owner = _defaultOwner,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -420,5 +527,6 @@ public class HomeServiceTest
     {
         _mockHomeRepository = new Mock<IRepository<Home>>();
         _mockDeviceRepository = new Mock<IRepository<Device>>();
+        _mockUserRepository = new Mock<IRepository<User>>();
     }
 }

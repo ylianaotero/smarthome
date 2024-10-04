@@ -8,20 +8,17 @@ namespace BusinessLogic;
 public class NotificationService : INotificationService
 {
     private readonly IRepository<Notification> _notificationRepository;
+    private readonly IRepository<Home> _homeRepository;
+    private const string NotificationDoesNotExistExceptionMessage = "Notification not found";
     
     public NotificationService(IRepository<Notification> notificationRepository)
     {
         _notificationRepository = notificationRepository;
     }
-    
-    public void CreateNotification(Notification notification)
-    {
-        _notificationRepository.Add(notification);
-    }
 
-    public List<Notification> GetNotifications(PageData pageData)
+    public List<Notification> GetNotificationsByFilter(Func<Notification, bool> filter, PageData pageData)
     {
-        return _notificationRepository.GetAll(pageData);
+        return _notificationRepository.GetByFilter(filter, null);
     }
     
     public Notification GetNotificationById(int id)
@@ -33,4 +30,62 @@ public class NotificationService : INotificationService
         }
         return notification;
     }
+    
+    private Notification GetBy(Func<Notification, bool> predicate, PageData pageData)
+    {
+        List<Notification> listOfNotifications = _notificationRepository.GetByFilter(predicate, pageData); 
+        Notification notification = listOfNotifications.FirstOrDefault();
+        
+        if (notification == null)
+        {
+            throw new ElementNotFound(NotificationDoesNotExistExceptionMessage);
+        }
+        
+
+        return notification; 
+    }
+    
+    public void CreateNotification(Notification notification)
+    {
+        try
+        {
+            GetBy(n => n.Event == notification.Event, PageData.Default);
+            
+            throw new ElementAlreadyExist("Notification already exists");
+        }
+        catch (ElementNotFound)
+        {
+            _notificationRepository.Add(notification);
+        }
+        
+    }
+
+    public void SendNotifications(NotificationDTO notificationData)
+    {
+        Home home = _homeRepository.GetById(notificationData.HomeId);
+        if(home == null)
+        {
+            throw new ElementNotFound("Home not found");
+        }
+        List<DeviceUnit> devices = home.Devices;
+        if(devices == null)
+        {
+            throw new ElementNotFound("Devices not found");
+        }
+
+        DeviceUnit device = devices.FirstOrDefault(d => d.HardwareId.ToString() == notificationData.HardwareId.ToString());
+
+        List<Member> membersToSendNotification = home.Members.Where(m => m.ReceivesNotifications).ToList();
+
+        foreach (Member member in membersToSendNotification)
+        {
+            Notification notification = new Notification();
+            notification.Event = notificationData.Event;
+            notification.Home = home;
+            notification.DeviceUnit = device;
+            notification.User = member.User;
+            member.Notifications.Add(notification);
+        }
+    }
+
 }

@@ -8,9 +8,7 @@ using Model.Out;
 using Moq;
 using WebApi.Controllers;
 
-
 namespace TestWebApi.Controllers;
-
 
 [TestClass]
 public class CompanyControllerTest
@@ -18,7 +16,10 @@ public class CompanyControllerTest
     private Mock<ICompanyService> _mockICompanyService;
     private Mock<IUserService> _mockIUserService;
     private CompanyController _companyController;
-    private CompanyOwner _companyOwner; 
+    private CompanyOwner _companyOwner;
+    private Company _defaultCompany1;
+    private Company _defaultCompany2;
+    private User _defaultUser;
     
     private const string UserDoesNotExistExceptionMessage = "User not found";
     
@@ -33,6 +34,7 @@ public class CompanyControllerTest
     private string LogoURL = "https://www.logo.com";
     
     private const string UserName =  "John";
+    private const string UserSurname = "Doe";
     private const string Email1 = "john.doe@example.com";
 
 
@@ -40,69 +42,79 @@ public class CompanyControllerTest
     public void Initialize()
     {
         SetupCompanyController();
-
-        _companyOwner = new CompanyOwner(); 
+        SetupDefaultObjects();
     }
 
-    private void SetupCompanyController()
+    [TestMethod]
+    public void TestGetCompaniesByFilterOkStatusCode()
     {
-        _mockIUserService = new Mock<IUserService>(MockBehavior.Strict);
-        _mockICompanyService = new Mock<ICompanyService>(MockBehavior.Strict);
-        _companyController = new CompanyController(_mockICompanyService.Object, _mockIUserService.Object);
-    }
-
-    /*[TestMethod]
-    public void TestGetCompanies()
-    {
-        var companies = new List<Company>
+        List<Company> companies = new List<Company>
         {
-            new Company { Id = Id, Name = Name },
-            new Company { Id = Id2, Name = Name2}
+            _defaultCompany1,
+            _defaultCompany2
         };
+        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
+
+        CompaniesRequest request = new CompaniesRequest()
+        {
+            Company = Name,
+            Owner = _defaultUser.Name + " " + _defaultUser.Surname
+        };
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
-        CompanyRequest request = new CompanyRequest();
-      //  ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
-        
-     //   Assert.AreEqual(OkStatusCode, result?.StatusCode);
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
     }
     
     [TestMethod]
-    public void TestGetCompaniesWithEmptyRequest()
+    public void TestGetCompaniesByFilterOkResponse()
     {
-        List<Company> companies = [];
+        List<Company> companies = new List<Company>
+        {
+            _defaultCompany1,
+            _defaultCompany2
+        };
+        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
+
+        CompaniesRequest request = new CompaniesRequest()
+        {
+            Company = Name,
+            Owner = _defaultUser.Name + " " + _defaultUser.Surname
+        };
+        
         CompaniesResponse expectedResponse = DefaultCompaniesResponse();
         
-        CompanyRequest request = new CompanyRequest();
-      //  ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
+        CompaniesResponse response = result?.Value as CompaniesResponse;
         
-     //   Assert.AreEqual(OkStatusCode, result?.StatusCode);
+        Assert.AreEqual(expectedResponse, response);
     }
-
+    
     [TestMethod]
-    public void TestGetAllCopmaniesOkResponse()
+    public void TestGetAllCompaniesOkStatusCode()
     {
-        var companies = new List<Company>
+        List<Company> companies = new List<Company>
         {
-            new Company { Id = Id, Name = Name },
-            new Company { Id = Id2, Name = Name2 }
+            _defaultCompany1,
+            _defaultCompany2
         };
+        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
         
-        CompanyRequest request = new CompanyRequest();
-     //   ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
+        CompaniesRequest request = new CompaniesRequest();
+        ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
-     //   Assert.AreEqual(OkStatusCode, result?.StatusCode);
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
     }
     
     [TestMethod]
@@ -112,45 +124,16 @@ public class CompanyControllerTest
         {
             Name = Name,
             RUT = RUT,
-            LogoURL = LogoURL
+            LogoURL = LogoURL,
+            OwnerId = _defaultUser.Id
         };
-        
+
+        _mockIUserService
+            .Setup(service => service.AddOwnerToCompany(_defaultUser.Id,request.ToEntity()))
+            .Returns(_defaultCompany1); 
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
         ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
-        
-        Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
-    }*/
-    
-    [TestMethod]
-    public void TestPostCompanyOkStatusCode()
-    {
-        User user = new User()
-        {
-            Email = Email1,
-            Name = UserName,
-            Roles = new List<Role>() { _companyOwner }
-        };
-
-        Company company = new Company()
-        {
-            Name = Name,
-            LogoURL = LogoURL,
-            RUT = RUT,
-            Owner = user
-        }; 
-        
-        CompanyRequest request = new CompanyRequest()
-        {
-            Name = Name,
-            RUT = RUT,
-            LogoURL = LogoURL
-        };
-
-        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity())).Returns(company); 
-        _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
-        
-        ObjectResult? result = _companyController.PostCompany(user.Id,request) as ObjectResult;
         
         Assert.AreEqual(CreatedStatusCode, result?.StatusCode);
     }
@@ -158,44 +141,69 @@ public class CompanyControllerTest
     [TestMethod]
     public void TestPostCompanyNotFoundStatusCode()
     {
-        User user = new User()
-        {
-            Email = Email1,
-            Name = UserName,
-            Roles = new List<Role>() { _companyOwner }
-        };
-
-        Company company = new Company()
-        {
-            Name = Name,
-            LogoURL = LogoURL,
-            RUT = RUT,
-            Owner = user
-        }; 
-        
         CompanyRequest request = new CompanyRequest()
         {
             Name = Name,
             RUT = RUT,
-            LogoURL = LogoURL
+            LogoURL = LogoURL,
+            OwnerId = _defaultUser.Id
         };
 
-        _mockIUserService.Setup(service => service.AddOwnerToCompany(user.Id,request.ToEntity())).Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
+        _mockIUserService.
+            Setup(service => service.AddOwnerToCompany(_defaultUser.Id, request.ToEntity()))
+            .Throws(new ElementNotFound(UserDoesNotExistExceptionMessage)); 
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
-        ObjectResult? result = _companyController.PostCompany(user.Id,request) as ObjectResult;
+        ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result?.StatusCode);
     }
     
-    private CompaniesResponse DefaultCompaniesResponse()
+    private void SetupCompanyController()
     {
-        var companies = new List<Company>
+        _mockIUserService = new Mock<IUserService>(MockBehavior.Strict);
+        _mockICompanyService = new Mock<ICompanyService>(MockBehavior.Strict);
+        _companyController = new CompanyController(_mockICompanyService.Object, _mockIUserService.Object);
+    }
+
+    private void SetupDefaultObjects()
+    {
+        SetupDefaultUser();
+        SetupDefaultCompanies();
+    }
+
+    private void SetupDefaultUser()
+    {
+        _companyOwner = new CompanyOwner(); 
+        _defaultUser = new User()
         {
-            new Company { Id = Id, Name = Name },
-            new Company { Id = Id2, Name = Name2 }
+            Id = 1,
+            Email = Email1,
+            Name = UserName,
+            Surname = UserSurname,
+            Roles = new List<Role>() { _companyOwner }
         };
-        return new CompaniesResponse(companies);
+    }
+
+    private void SetupDefaultCompanies()
+    {
+        _defaultCompany1 = new Company()
+        {
+            Id = Id,
+            Name = Name,
+            RUT = RUT,
+            LogoURL = LogoURL,
+            Owner = _defaultUser
+        };
+        
+        _defaultCompany2 = new Company()
+        {
+            Id = Id2,
+            Name = Name2,
+            RUT = RUT,
+            LogoURL = LogoURL,
+            Owner = _defaultUser
+        };
     }
     
     private PageDataRequest DefaultPageDataRequest()
@@ -206,5 +214,16 @@ public class CompanyControllerTest
         request.PageSize = 10;
         
         return request;
+    }
+    
+    private CompaniesResponse DefaultCompaniesResponse()
+    {
+        List<Company> companies = new List<Company>
+        {
+            _defaultCompany1,
+            _defaultCompany2
+        };
+        
+        return new CompaniesResponse(companies);
     }
 }

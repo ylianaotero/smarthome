@@ -18,6 +18,9 @@ public class UserControllerTest
     private const string Email2 = "john.lopez@example.com";
     private const string Password = "Securepassword1@";
     private const string Surname = "Doe";
+    private const int Page = 1;
+    private const int PageSize = 10;
+    private const string Role = "Administrator";
 
     private List<Role> _listOfRoles;
     private Session _session; 
@@ -105,7 +108,7 @@ public class UserControllerTest
         UsersRequest request = new UsersRequest
         {
             FullName = _fullName,
-            Role = "Administrator"
+            Role = Role
         };
         List<User> listOfUsers =
         [
@@ -128,8 +131,8 @@ public class UserControllerTest
     {
         PageDataRequest request = new PageDataRequest();
         
-        request.Page = 1;
-        request.PageSize = 10;
+        request.Page = Page;
+        request.PageSize = PageSize;
         
         return request;
     }

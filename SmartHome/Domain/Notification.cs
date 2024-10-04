@@ -3,7 +3,10 @@
 public class Notification
 {
     public int Id { get; set; }
-    public string Event { get; private set; }
+    public Home Home { get; set; }
+    public User User { get; set; }
+    public DeviceUnit DeviceUnit { get; set; }
+    public string Event { get; set; }
     public DateTime CreatedAt { get; private set; }
     public bool Read { get; private set; }
     public DateTime ReadAt { get; private set; }

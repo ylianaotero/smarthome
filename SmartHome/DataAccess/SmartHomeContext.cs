@@ -1,7 +1,6 @@
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace DataAccess;
 
@@ -16,6 +15,7 @@ public class SmartHomeContext : DbContext
     public DbSet<Session> Sessions { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Member> Members { get; set; }
+    public DbSet<Company> Companies { get; set; }
     
     public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
     {
@@ -49,5 +49,8 @@ public class SmartHomeContext : DbContext
             .HasDiscriminator<string>("DeviceType")
             .HasValue<SecurityCamera>("SecurityCamera")
             .HasValue<WindowSensor>("WindowSensor");
+        modelBuilder.Entity<Device>().HasOne<Company>(d=>d.Company);
+        modelBuilder.Entity<Company>().Property(c => c.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Company>().HasOne<User>(c => c.Owner);
     }
 }

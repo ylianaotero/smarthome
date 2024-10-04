@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SmartHomeContext))]
-    partial class SmartHomeContextModelSnapshot : ModelSnapshot
+    [Migration("20241004172614_MigracionHomeOwner")]
+    partial class MigracionHomeOwner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,15 +212,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("DeviceUnitId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Event")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HomeId")
-                        .HasColumnType("int");
 
                     b.Property<long?>("MemberId")
                         .HasColumnType("bigint");
@@ -228,18 +225,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("ReadAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceUnitId");
-
-                    b.HasIndex("HomeId");
-
                     b.HasIndex("MemberId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Notification");
                 });
@@ -450,33 +438,9 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Notification", b =>
                 {
-                    b.HasOne("Domain.DeviceUnit", "DeviceUnit")
-                        .WithMany()
-                        .HasForeignKey("DeviceUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Home", "Home")
-                        .WithMany()
-                        .HasForeignKey("HomeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Member", null)
                         .WithMany("Notifications")
                         .HasForeignKey("MemberId");
-
-                    b.HasOne("Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DeviceUnit");
-
-                    b.Navigation("Home");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>

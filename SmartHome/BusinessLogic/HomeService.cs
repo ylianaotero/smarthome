@@ -5,11 +5,16 @@ using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (IRepository<Home> homeRepository, IRepository<Device> deviceRepository) : IHomeService
+public class HomeService (
+    IRepository<Home> homeRepository, 
+    IRepository<Device> deviceRepository, 
+    IRepository<User> userRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
+    private const string UserNotFoundMessage = "User not found";
+    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
     private const string HomeIsFullMessage = "The home is full";
@@ -43,14 +48,14 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
         Home home = GetHomeById(homeId);
         return home.Members;
     }
-    
+
     public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
         Home home = GetHomeById(homeId);
         return home.Devices;
     }
 
-    public void AddMemberToHome(int homeId, Member member)
+    public void AddMemberToHome(long homeId, Member member)
     {
         Home home = GetHomeById(homeId);
         if (home.Members.Any(m => m.User.Email == member.User.Email))
@@ -65,6 +70,20 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
         
         home.AddMember(member);
         homeRepository.Update(home);
+    }
+
+    public Home AddOwnerToHome(long userId, Home home)
+    {
+        (User user, HomeOwner role) = GetHomeOwner(userId);
+        
+        role.Homes.Add(home);
+        home.Owner = user;
+        
+        userRepository.Update(user);
+        
+        homeRepository.Update(home);
+
+        return home;
     }
 
     public Home GetHomeById(long id)
@@ -114,5 +133,28 @@ public class HomeService (IRepository<Home> homeRepository, IRepository<Device> 
                 HardwareId = Guid.NewGuid(),
             });
         }
+    }
+    
+    private (User, HomeOwner) GetHomeOwner(long userId)
+    {
+        User user = userRepository.GetById(userId);
+        if (user == null)
+        {
+            throw new ElementNotFound(UserNotFoundMessage);
+        }
+         
+        List<Role> userRoles = user.Roles;
+        if (userRoles == null || userRoles.Count == 0)
+        {
+            throw new CannotAddItem(UserIsNotHomeOwnerMessage);
+        }
+
+        Role role = userRoles.FirstOrDefault(r => r is HomeOwner);
+        if (role == null)
+        {
+            throw new CannotAddItem(UserIsNotHomeOwnerMessage);
+        }
+
+        return (user, role as HomeOwner);
     }
 }

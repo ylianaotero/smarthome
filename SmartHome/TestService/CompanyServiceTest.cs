@@ -14,6 +14,10 @@ public class CompanyServiceTest
     private Company _company;
     private User _user; 
     private const string NewEmail = "juan.perez@example.com";
+    
+    private const string CompanyName = "IoT Devices & Co.";
+    private const string RUT = "123456789";
+    private const string LogoUrl = "https://example.com/logo.jpg";
 
     [TestInitialize]
     public void TestInitialize()
@@ -45,7 +49,7 @@ public class CompanyServiceTest
     {
         List<Company> companies = new List<Company>();
         companies.Add(_company);
-        Func<Company, bool> filter = c => c.Name == "IoT Devices & Co.";
+        Func<Company, bool> filter = c => c.Name == CompanyName;
         
         _mockCompanyRepository
             .Setup(x => x.GetByFilter(filter, It.IsAny<PageData>()))
@@ -61,9 +65,9 @@ public class CompanyServiceTest
     {
         _company = new Company()
         {
-            Name = "IoT Devices & Co.",
-            RUT = "123456789",
-            LogoURL = "https://example.com/logo.jpg"
+            Name = CompanyName,
+            RUT = RUT,
+            LogoURL = LogoUrl
 
         };
         _mockCompanyRepository.Setup(x => x.Add(_company));

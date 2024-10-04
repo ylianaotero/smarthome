@@ -21,6 +21,9 @@ public class SessionControllerTest
     private const string Password = "Securepassword1@";
     private const string Surname = "Doe";
     
+    private const int NotFoundStatusCode = 404;
+    private const int OkStatusCode = 200;
+    
     private List<Role> _listOfRoles;
     private HomeOwner _homeOwner; 
     
@@ -81,7 +84,7 @@ public class SessionControllerTest
         
         Assert.IsTrue(
             result != null &&
-            result.StatusCode == 200 &&
+            result.StatusCode == OkStatusCode &&
             response != null &&
             response.Token == _session.Id
         );
@@ -99,6 +102,6 @@ public class SessionControllerTest
         
         _sessionServiceMock.Verify();
         
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 }

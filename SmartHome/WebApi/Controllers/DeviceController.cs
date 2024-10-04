@@ -67,7 +67,7 @@ public class DeviceController : ControllerBase
     {
         _deviceService.CreateDevice(request.ToEntity());
 
-        return Created(CreatedMessage, "/devices/");
+        return CreatedAtAction(nameof(PostWindowSensors), request);
     }
 
     [HttpPost]
@@ -77,7 +77,7 @@ public class DeviceController : ControllerBase
     {
         _deviceService.CreateDevice(request.ToEntity());
    
-        return Created(CreatedMessage, "/devices/");
+        return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
     
     private DeviceTypesResponse GetDeviceTypesResponse(List<string> deviceTypes)
