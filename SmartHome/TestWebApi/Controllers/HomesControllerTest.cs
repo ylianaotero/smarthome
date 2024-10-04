@@ -29,17 +29,14 @@ public class HomesControllerTest
     private const string HomeOwnerEmail2 = "jane@example.com";
     private const string Street = "Calle del Sol";
     private const string Street2 = "Avenida Siempre Viva";
-    private const string Street3 = "Calle de la Luna";
     private const int DoorNumber = 23;
     private const int DoorNumber2 = 742;
     private const double Latitude = 34.0207;
     private const double Latitude2 = 34.0522;
     private const double Longitude = -118.4912;
     private const double Longitude2 = -118.2437;
-    private const double Longitude3 = -119.4912;
     private const long HomeOwnerId = 1;
     private const long HomeOwnerId2 = 2;
-    private const long HomeOwnerId3 = 13;
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
 
@@ -182,13 +179,21 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPostHomeOkStatusCode()
     {
+        DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
+        {
+            DeviceId = 1,
+            IsConnected = true
+        };
+        
+        DeviceUnitsRequests deviceUnitsRequests = new DeviceUnitsRequests(new List<DeviceUnitRequests> {deviceUnitRequest});
+        
         CreateHomeRequest request = new CreateHomeRequest()
         {
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude,
-            Devices = new List<Device>()
+            Devices = deviceUnitsRequests
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         
