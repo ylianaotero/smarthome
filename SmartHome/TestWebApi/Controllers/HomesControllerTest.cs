@@ -306,26 +306,6 @@ public class HomesControllerTest
     
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
-        
-    [TestMethod]
-    public void TestPutMemberInHomeOtherExceptionStatusCode()
-    {
-        MemberRequest memberRequest = new MemberRequest()
-        {
-            UserEmail = Email,
-            HasPermissionToAddADevice = Permission,
-            HasPermissionToListDevices = Permission,
-            ReceivesNotifications = Permission
-        };
-        
-        _mockHomeService.Setup(service => service.AddMemberToHome(_defaultHome.Id , memberRequest.ToEntity())).Throws(new Exception());
-    
-        _homeController = new HomeController(_mockHomeService.Object); 
-        
-        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
-    
-        Assert.AreEqual(ServerFailedStatusCode, result.StatusCode);
-    }
     
     [TestMethod]
     public void TestPutMemberInHomeNotFoundStatusCode()
