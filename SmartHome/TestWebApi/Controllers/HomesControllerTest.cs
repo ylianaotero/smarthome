@@ -239,7 +239,7 @@ public class HomesControllerTest
             IsConnected = true
         };
         
-        HomeDevicesRequest request = new HomeDevicesRequest()
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
         {
             DeviceUnits = new List<DeviceUnitRequest> {deviceUnitRequest}
         };
@@ -247,7 +247,7 @@ public class HomesControllerTest
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnit>>()));
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
     
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
@@ -257,7 +257,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutDevicesInHomeOkResponse()
     {
-        HomeDevicesRequest request = new HomeDevicesRequest()
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
         {
             DeviceUnits = new List<DeviceUnitRequest>
             {
@@ -271,7 +271,7 @@ public class HomesControllerTest
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnit>>()));
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
     
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
@@ -281,7 +281,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutDevicesInHomeBadRequest()
     {
-        HomeDevicesRequest request = new HomeDevicesRequest()
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
         {
         };
         _mockHomeService
@@ -289,7 +289,7 @@ public class HomesControllerTest
             .Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnit>>()));
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
     
         IActionResult result = _homeController.PutDevicesInHome(_defaultHome.Id,request);
     
@@ -300,14 +300,14 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutDevicesInHomeBadRequestWhenInputIsInvalid()
     {
-        HomeDevicesRequest request = new HomeDevicesRequest()
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
         {
             
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnit>>()))
+                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
     
         IActionResult result = _homeController.PutDevicesInHome(-1,request);

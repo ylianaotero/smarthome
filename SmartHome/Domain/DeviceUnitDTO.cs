@@ -1,4 +1,4 @@
-namespace IBusinessLogic;
+namespace Domain;
 
 public class DeviceUnitDTO
 {
