@@ -362,6 +362,35 @@ public class HomeServiceTest
         homeService.CreateHome(_defaultHome);
         _mockHomeRepository.Verify(m => m.GetById(_defaultHome.Id), Times.Once);
     }
+
+    [TestMethod]
+    public void TestAddOwnerToHome()
+    {
+        HomeOwner role = new HomeOwner();
+        User homeOwner = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+            Roles = new List<Role>(){role},
+        };
+        Home home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1
+        };
+        _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns(homeOwner);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        homeService.CreateHome(_defaultHome);
+        
+        Home homeWithOwner = homeService.AddOwnerToHome(homeOwner.Id, home);
+        
+        Assert.AreEqual(homeOwner, homeWithOwner.Owner);
+    }
     
     private void SetupDefaultObjects()
     {
