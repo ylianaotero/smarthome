@@ -1,15 +1,19 @@
 namespace Domain;
 
-public class Member : User
+public class Member
 {
-    public bool Permission { get; set; }
+    public User User { get; set; }
+    public List<Notification> Notifications { get; set; }
+    
+    public bool HasPermissionToListDevices { get; set; }
+    
+    public bool HasPermissionToAddADevice { get; set; }
     
     public bool ReceivesNotifications { get; set; }
     
-    private List<Notification> Notifications { get; set; }
-    
-    public Member()
+    public Member(User user)
     {
+        User = user; 
         Notifications = new List<Notification>();
     }
     
@@ -27,9 +31,14 @@ public class Member : User
     {
         return Notifications.FirstOrDefault(n => n.Id == id);
     }
-
-    public List<Notification> GetAllNotifications()
+    
+    public override bool Equals(object? obj)
     {
-        return Notifications;
+        return obj is Member member &&
+               Notifications == member.Notifications &&
+               ReceivesNotifications == member.ReceivesNotifications &&
+               HasPermissionToListDevices == member.HasPermissionToListDevices &&
+               HasPermissionToAddADevice == member.HasPermissionToAddADevice &&
+               User.Email == member.User.Email; 
     }
 }

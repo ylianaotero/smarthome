@@ -10,62 +10,41 @@ public class Home
     private const string MessageDeviceAlreadyExists = "Device already exists"; 
     private const string MessageDeviceNotFound = "Device not found";
     
-    private List<User> _members;
+    
     
     [Key]
     public int Id { get; set; }
-    public long OwnerId { get; set; }
+    public long OwnerId { get; set; } // poner objeto
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-    
-    public List<User> Members
-    {
-        get => _members;
-        set => _members = value;
-    }
-
-    public List<User> GetMembers()
-    {
-        return Members;
-    }
-
+  
     public List<DeviceUnit> Devices { get; set; }
+    public List<Member> Members { get; set; }
+
+    
+    // cantidad de miembros
 
     public Home()
     {
-        OwnerId = OwnerId;
-        Street = Street;
-        DoorNumber = DoorNumber;
-        Latitude = Latitude;
-        Longitude = Longitude;
-        Members = new List<User>();
+        Members = new List<Member>();
         Devices = new List<DeviceUnit>();
     }
 
-    public void AddMember(User member)
+    public void AddMember(Member member)
     {
-        if (MemberExist(member.Email))
+        if (MemberExist(member.User.Email))
         {
             throw new CannotAddItem(MessageMemberAlreadyExists); 
         }
-        
         Members.Add(member);
-        AddMemberRoleToUser(member);
     }
     
-    private void AddMemberRoleToUser(User member)
-    {
-        member.Roles.Add(new HomeMember()
-        {
-            Home = this,
-        });
-    }
 
-    private bool MemberExist(string email)
+    public bool MemberExist(string email)
     {
-        User member = Members.FirstOrDefault(m => m.Email == email);
+        Member member = Members.FirstOrDefault(m => m.User.Email == email);
         if (member == null)
         {
             return false; 
@@ -73,37 +52,19 @@ public class Home
         return true; 
     }
     
-    public User FindMember(string email)
+    public Member FindMember(string email)
     {
         if (!MemberExist(email))
         {
             throw new CannotFindItemInList(MessageMemberNotFound ); 
         }
-        return Members.FirstOrDefault(m => m.Email == email); 
-    }
-    
-    private HomeMember MemberOfActualHome(User actualUser)
-    {
-        List<Role> roles = actualUser.GetRoles().FindAll(role => role.GetType().Name == "HomeMember");
-        foreach (Role role in roles)
-        {
-            if (((HomeMember) role).Home.Id == Id)
-            {
-                return (HomeMember) role;
-            }
-        }
-        return null;
+        return Members.FirstOrDefault(m => m.User.Email == email); 
     }
     
     public bool MemberCanReceiveNotifications(string email)
     {
-        User user = FindMember(email);
-        HomeMember member = MemberOfActualHome(user);
-        if(member == null)
-        {
-            return false;
-        }
-        return member.ReceivesNotifications;
+        Member member = FindMember(email);
+        return member.ReceivesNotifications; 
 
     }
 
@@ -111,7 +72,6 @@ public class Home
     {
         try
         {
-            RemoveMemberRoleFromUser(email);
             Members.Remove(FindMember(email));
         }
         catch
@@ -167,10 +127,5 @@ public class Home
     public void DeleteDevice(long id)
     {
         Devices.Remove(FindDevice(id));
-    }
-    
-    public bool Equals(Home home)
-    {
-        return Id == home.Id;
     }
 }

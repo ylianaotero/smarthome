@@ -24,7 +24,14 @@ public class HomeServiceTest
     private const double Latitude = 34.0207;
     private const double Longitude = -118.4912;
     private const long homeOwnerId = 000;
-    private HomeDTO _homeDto;
+    private const string NewEmail = "juan.perez@example.com";
+    private const string NewEmail2 = "juan.lopez@example.com";
+
+    private User _user1;
+    private User _user2;
+
+    private Member _member2;
+    private Member _member1; 
     
     [TestInitialize]
     public void TestInitialize()
@@ -32,6 +39,24 @@ public class HomeServiceTest
         CreateRepositoryMocks();
         SetupDefaultObjects();
     }
+
+    private void SetupDefaultObjects()
+    {
+        _user1 = new User() {Email = NewEmail};
+        _user2 = new User() {Email = NewEmail2};
+        _member1 = new Member(_user1);
+        _member2 = new Member(_user2); 
+        
+        _defaultHome = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
+    }
+
     
     [TestMethod]
     public void TestGetAllHomes()
@@ -54,7 +79,6 @@ public class HomeServiceTest
     [TestMethod]
     public void TestCreateHome()
     {
-        //Home newHome = new Home(homeOwnerId,Street, DoorNumber, Latitude, Longitude);
         _mockHomeRepository.Setup(m => m.Add(_defaultHome));
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
         homeService.CreateHome(_defaultHome);
@@ -66,8 +90,7 @@ public class HomeServiceTest
     { 
         List<Member> members = new List<Member>
         {
-            new Member { Email = "member1@example.com", Permission = true },
-            new Member { Email = "member2@example.com", Permission = false }
+            _member1, _member2
         };
         _home = new Home()
         {
@@ -83,7 +106,10 @@ public class HomeServiceTest
         }
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
-        List<User> retrievedMembers = homeService.GetMembersFromHome(1);
+
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        List<Member> retrievedMembers = homeService.GetMembersFromHome(1);
+
         CollectionAssert.AreEqual(members, retrievedMembers); 
     }
     
@@ -133,7 +159,6 @@ public class HomeServiceTest
     [TestMethod]
     public void TestAddMemberToHome()
     {
-        Member member = new Member { Email = "member3@example.com", Permission = true };
         _home = new Home()
         {
             OwnerId = homeOwnerId,
@@ -142,24 +167,21 @@ public class HomeServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
         };
-        _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
+        _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
         
-        homeService.AddMemberToHome(1, member);
+        homeService.AddMemberToHome(_home.Id, _member1);
         
-        Assert.IsTrue(_home.Members.Contains(member));
         _mockHomeRepository.Verify(m => m.Update(_home), Times.Once);
+        
+        Assert.IsTrue(_home.Members.Contains(_member1));
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementAlreadyExist))]
     public void TestCannotAddMemberToHomeBecauseItIsAlreadyExist()
     {
-        int homeId = 1;
-        Member existingMember = new Member { Email = "existingmember@example.com", Permission = true };
-        Member newMember = new Member { Email = "existingmember@example.com", Permission = false };
-    
         _home = new Home()
         {
             OwnerId = homeOwnerId,
@@ -168,13 +190,13 @@ public class HomeServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
         };
-        _home.AddMember(existingMember);
+        _home.AddMember(_member1);
     
-        _mockHomeRepository.Setup(m => m.GetById(homeId)).Returns(_home);
+        _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
 
-        homeService.AddMemberToHome(homeId, newMember);
+        homeService.AddMemberToHome(_home.Id, _member1);
     }
 
     [TestMethod]
@@ -182,13 +204,12 @@ public class HomeServiceTest
     public void TestCannotAddMemberToHomeBecauseItIsNotFound()
     {
         int nonExistentHomeId = 999;
-        Member newMember = new Member { Email = "existingmember@example.com", Permission = true };
     
         _mockHomeRepository.Setup(m => m.GetById(nonExistentHomeId)).Returns((Home)null);
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
 
-        homeService.AddMemberToHome(nonExistentHomeId, newMember);
+        homeService.AddMemberToHome(nonExistentHomeId, _member1);
     }
 
     [TestMethod]
@@ -324,6 +345,17 @@ public class HomeServiceTest
         SetUpDefaultDevices();
         SetUpDefaultDeviceUnits();
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestTryToCreateExistingHome()
+    {
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        HomeService homeService = new HomeService(_mockHomeRepository.Object);
+        homeService.CreateHome(_defaultHome);
+        _mockHomeRepository.Verify(m => m.GetById(_defaultHome.Id), Times.Once);
+    }
+
     
     private void SetUpDefaultDevices()
     {

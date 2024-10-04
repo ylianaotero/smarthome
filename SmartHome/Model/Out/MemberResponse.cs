@@ -4,22 +4,36 @@ namespace Model.Out;
 
 public class MemberResponse
 {
-    public string Name { get; set; }
+    public string FullName { get; set; }
     public string Email { get; set; }
-    public bool Permission { get; set; }
+    
+    public string Photo { get; set; }
+    
+    public bool HasPermissionToListDevices { get; set; }
+    
+    public bool HasPermissionToAddADevice { get; set; }
+    
+    public bool ReceivesNotifications { get; set; }
 
-    public MemberResponse(User member)
+    public MemberResponse(Member member)
     {
-        Name = member.Name;
-        Email = member.Email;
-        //Permission = member.Permission;
+        FullName = member.User.Name + " " + member.User.Surname;
+        Email = member.User.Email;
+        Photo = member.User.Photo;
+        HasPermissionToListDevices = member.HasPermissionToListDevices;
+        HasPermissionToAddADevice = member.HasPermissionToAddADevice;
+        ReceivesNotifications = member.ReceivesNotifications;
     }
 
     public override bool Equals(object? obj)
     {
-        return obj is MemberResponse response &&
-               Name == response.Name &&
-               Email == response.Email &&
-               Permission == response.Permission;
+    
+        return obj is MemberResponse response  &&
+                      FullName == response.FullName &&
+                      Email == response.Email &&
+                      Photo == response.Photo &&
+                      HasPermissionToListDevices == response.HasPermissionToListDevices &&
+                      HasPermissionToAddADevice == response.HasPermissionToAddADevice &&
+                      ReceivesNotifications == response.ReceivesNotifications;
     }
 }
