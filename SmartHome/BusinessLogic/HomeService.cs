@@ -13,6 +13,8 @@ public class HomeService (
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
+    private const string UserNotFoundMessage = "User not found";
+    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
     private const string HomeIsFullMessage = "The home is full";
@@ -72,9 +74,7 @@ public class HomeService (
 
     public Home AddOwnerToHome(long userId, Home home)
     {
-        User user = GetUserById(userId);
-
-        HomeOwner role = GetHomeOwner(user);
+        (User user, HomeOwner role) = GetHomeOwner(userId);
         
         role.Homes.Add(home);
         home.Owner = user;
@@ -84,28 +84,6 @@ public class HomeService (
         homeRepository.Update(home);
 
         return home;
-    }
-    
-    private HomeOwner GetHomeOwner(User user)
-    {
-        HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner;
-        if (role == null)
-        {
-            throw new CannotAddItem("User is not a home owner");
-        }
-
-        return role;
-    }
-    
-    private User GetUserById(long userId)
-    {
-        User user = userRepository.GetById(userId);
-        if (user == null)
-        {
-            throw new ElementNotFound("User not found");
-        }
-
-        return user;
     }
 
     public Home GetHomeById(long id)
@@ -155,5 +133,28 @@ public class HomeService (
                 HardwareId = Guid.NewGuid(),
             });
         }
+    }
+    
+    private (User, HomeOwner) GetHomeOwner(long userId)
+    {
+        User user = userRepository.GetById(userId);
+        if (user == null)
+        {
+            throw new ElementNotFound(UserNotFoundMessage);
+        }
+         
+        List<Role> userRoles = user.Roles;
+        if (userRoles == null || userRoles.Count == 0)
+        {
+            throw new CannotAddItem(UserIsNotHomeOwnerMessage);
+        }
+
+        Role role = userRoles.FirstOrDefault(r => r is HomeOwner);
+        if (role == null)
+        {
+            throw new CannotAddItem(UserIsNotHomeOwnerMessage);
+        }
+
+        return (user, role as HomeOwner);
     }
 }
