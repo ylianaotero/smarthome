@@ -73,8 +73,9 @@ public class HomeService (
     public Home AddOwnerToHome(long userId, Home home)
     {
         User user = GetUserById(userId);
-        
-        HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner;
+
+        HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner ??
+                         throw new CannotAddItem("User is not a home owner");
         
         role.Homes.Add(home);
         home.Owner = user;
