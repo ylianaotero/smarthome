@@ -289,6 +289,34 @@ public class HomeServiceTest
         homeService.PutDevicesInHome(1, homeDevicesDTO);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestPutDevicesInHomeThrowsElementNotFoundBecauseOfDevice()
+    {
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object);
+        Home home = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+        };
+        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(home);
+        _mockDeviceRepository.Setup(x=>x.GetById(_securityCamera.Id)).Returns((Device?)null);
+        
+        List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO>
+        {
+            new DeviceUnitDTO
+            {
+                DeviceId = _securityCamera.Id,
+                IsConnected = _securityCameraUnit.IsConnected
+            }
+        };
+        
+        homeService.PutDevicesInHome(1, homeDevicesDTO);
+    }
+    
     
     private void SetupDefaultObjects()
     {
