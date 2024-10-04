@@ -109,4 +109,22 @@ public class HomeController : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
+    
+    [HttpPut]
+    [Route("{id}/members")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] MemberRequest request)
+    {
+        try
+        {
+            _homeService.AddMemberToHome(id, request.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    
 }
