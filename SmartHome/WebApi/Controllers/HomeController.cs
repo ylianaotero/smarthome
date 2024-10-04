@@ -92,7 +92,7 @@ public class HomeController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return BadRequest();
+            return NotFound(ResourceNotFoundMessage);
         }
     }
 }

@@ -190,7 +190,8 @@ public class HomesControllerTest
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
-            Longitude = Longitude
+            Longitude = Longitude,
+            MaximumMembers = 5
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         
@@ -277,32 +278,11 @@ public class HomesControllerTest
         Assert.IsNotNull(result);
     }
     
-    [TestMethod]
-    public void TestPutDevicesInHomeBadRequest()
-    {
-        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
-        {
-        };
-        _mockHomeService
-            .Setup(service => service.GetHomeById(It.IsAny<long>()))
-            .Returns(_defaultHome);
-        _mockHomeService
-            .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
-    
-        IActionResult result = _homeController.PutDevicesInHome(_defaultHome.Id,request);
-    
-        Assert.IsInstanceOfType(result, result.GetType());
-    }
-    
     
     [TestMethod]
-    public void TestPutDevicesInHomeBadRequestWhenInputIsInvalid()
+    public void TestPutDevicesInHomeNotFoundWhenInputIsInvalid()
     {
-        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
-        {
-            
-        };
+        PutHomeDevicesRequest request = new PutHomeDevicesRequest() {};
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
             .Setup(service => service
@@ -311,7 +291,7 @@ public class HomesControllerTest
     
         IActionResult result = _homeController.PutDevicesInHome(-1,request);
     
-        Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
     
     private HomeResponse DefaultHomeResponse()
