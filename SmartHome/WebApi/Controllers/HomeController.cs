@@ -20,6 +20,7 @@ public class HomeController : ControllerBase
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
     private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
+    private const string SourceAlreadyExistsMessage = "Source Already Exists";
     
     public HomeController(IHomeService homeService)
     {
@@ -123,6 +124,10 @@ public class HomeController : ControllerBase
         catch (ElementNotFound)
         {
             return NotFound(ResourceNotFoundMessage);
+        }
+        catch (ElementAlreadyExist)
+        {
+            return Conflict(SourceAlreadyExistsMessage);
         }
     }
     

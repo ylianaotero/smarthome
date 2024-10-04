@@ -44,6 +44,7 @@ public class HomesControllerTest
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
+    private const int ConflictStatusCode = 409;
     
     private const bool Permission = false; 
     
@@ -345,7 +346,7 @@ public class HomesControllerTest
         
         ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
     
-        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
 
     
