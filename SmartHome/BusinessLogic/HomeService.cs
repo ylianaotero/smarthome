@@ -72,7 +72,7 @@ public class HomeService (
 
     public Home AddOwnerToHome(long userId, Home home)
     {
-        User user = userRepository.GetById(userId) ?? throw new ElementNotFound("User not found");
+        User user = GetUserById(userId);
         
         HomeOwner role = user.Roles.FirstOrDefault(r => r is HomeOwner) as HomeOwner;
         
@@ -84,6 +84,17 @@ public class HomeService (
         homeRepository.Update(home);
 
         return home;
+    }
+    
+    private User GetUserById(long userId)
+    {
+        User user = userRepository.GetById(userId);
+        if (user == null)
+        {
+            throw new ElementNotFound("User not found");
+        }
+
+        return user;
     }
 
     public Home GetHomeById(long id)
