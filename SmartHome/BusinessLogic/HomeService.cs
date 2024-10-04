@@ -9,11 +9,21 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
 {
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
-
-
+    private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
+    private const string HomeAlreadyExists = "A home with this id already exists";
+    
     public void CreateHome(Home home)
     {
-        homeRepository.Add(home);
+        try
+        {
+            GetHomeById(home.Id);
+            
+            throw new CannotAddItem(HomeAlreadyExists);
+        }
+        catch (ElementNotFound)
+        {
+            homeRepository.Add(home);
+        }
     }
     
     public List<Home> GetAllHomes()
@@ -26,40 +36,26 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return homeRepository.GetByFilter(filter, null);
     }
     
-    public List<User> GetMembersFromHome(long homeId)
+    public List<Member> GetMembersFromHome(long homeId)
     {
-        var home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound("Home not found");
-        }
+        Home home = GetHomeById(homeId);
         return home.Members;
     }
     
     public List<Device> GetDevicesFromHome(int homeId)
     {
-        var home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound("Home not found");
-        }
+        Home home = GetHomeById(homeId);
         return home.Devices;
     }
 
-    public void AddMemberToHome(int homeId, User member)
+    public void AddMemberToHome(int homeId, Member member)
     {
-        var home = homeRepository.GetById(homeId);
-        if (home == null)
+        Home home = GetHomeById(homeId);
+        if (home.Members.Any(m => m.User.Email == member.User.Email))
         {
-            throw new ElementNotFound("Home not found");
+            throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
         }
-        if (home.Members.Any(m => m.Email == member.Email))
-        {
-            throw new ElementAlreadyExist("A member with this email already exists on this home");
-        }
-        
         home.AddMember(member);
-        
         homeRepository.Update(home);
     }
 
@@ -77,15 +73,10 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
 
     public Home PutDevicesInHome(long homeId, List<Device> homeDevices)
     {
-        Home home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
-        
+        Home home = GetHomeById(homeId);
         home.Devices = homeDevices;
-        
         homeRepository.Update(home);
+        
         return home;
     }
 }

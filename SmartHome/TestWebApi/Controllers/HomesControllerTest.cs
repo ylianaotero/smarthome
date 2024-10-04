@@ -17,8 +17,8 @@ public class HomesControllerTest
     private Mock<IHomeService> _mockHomeService;
     private Mock<ISessionService> _mockSessionService;
     private Home _defaultHome;
-    private HomeDTO _homeDto;
-    private HomeDTO _homeDto2;
+    private Member _member1;
+    private Member _member2; 
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
@@ -200,10 +200,9 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetMembersFromHomeOKResponse()
     {
-        List<User> members = new List<User>
+        List<Member> members = new List<Member>
         {
-            new User { Id = HomeOwnerId, Name = HomeOwnerName, Email = HomeOwnerEmail },
-            new User { Id = HomeOwnerId2, Name = HomeOwnerName2, Email = HomeOwnerEmail2 }
+            _member1, _member2
         };
     
         _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>())).Returns(members);
@@ -335,6 +334,12 @@ public class HomesControllerTest
     
     private void SetupDefaultObjects()
     {
+        User user1 = new User { Id = HomeOwnerId, Name = HomeOwnerName, Email = HomeOwnerEmail };
+        User user2 = new User { Id = HomeOwnerId2, Name = HomeOwnerName2, Email = HomeOwnerEmail2 };
+
+        _member1 = new Member(user1);
+        _member2 = new Member(user2); 
+        
         _defaultHome = new Home()
         {
             Id = 1,

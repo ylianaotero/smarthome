@@ -1,4 +1,5 @@
 using CustomExceptions;
+using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -35,7 +36,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)] // cambiar
     public IActionResult PostHomes([FromBody] CreateHomeRequest request)
     {
         _homeService.CreateHome(request.ToEntity());
@@ -52,8 +53,7 @@ public class HomeController : ControllerBase
     {
         try
         {
-            var members = _homeService.GetMembersFromHome(id);
-            return Ok(new MembersResponse(members));
+            return Ok(new MembersResponse(_homeService.GetMembersFromHome(id)));
         }
         catch (ElementNotFound)
         {

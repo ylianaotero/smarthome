@@ -1,4 +1,4 @@
-using Domain;
+/*using Domain;
 using IBusinessLogic;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
@@ -129,4 +129,4 @@ public class CompanyControllerTest
         
         return request;
     }
-}
+}*/

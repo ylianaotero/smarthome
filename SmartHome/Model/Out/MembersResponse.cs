@@ -6,7 +6,7 @@ public class MembersResponse
 {
     public List<MemberResponse> Members { get; set; }
 
-    public MembersResponse(List<User> members)
+    public MembersResponse(List<Member> members)
     {
         Members = members.Select(member => new MemberResponse(member)).ToList();
     }
