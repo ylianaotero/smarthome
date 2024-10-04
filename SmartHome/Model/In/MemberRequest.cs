@@ -14,8 +14,6 @@ public class MemberRequest
     
     public MemberDTO ToEntity()
     {
-        MemberDTO memberDTO = new MemberDTO();
-        
         return new MemberDTO
         {
             UserEmail = UserEmail, 

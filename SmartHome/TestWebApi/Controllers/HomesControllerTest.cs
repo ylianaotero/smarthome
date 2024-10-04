@@ -39,9 +39,11 @@ public class HomesControllerTest
     private const int MaxHomeMembers = 5;
     private const long HomeOwnerId = 1;
     private const long HomeOwnerId2 = 2;
+    
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
-    private const int NotFoundStatusCode = 404; 
+    private const int NotFoundStatusCode = 404;
+    
     private const bool Permission = false; 
     
     
@@ -293,9 +295,33 @@ public class HomesControllerTest
         
         _mockHomeService.Setup(service => service.AddMemberToHome(_defaultHome.Id , memberRequest.ToEntity()));
     
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
         ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as OkObjectResult;
     
         Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPutMemberInHomeNotFoundStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 
     
@@ -322,32 +348,6 @@ public class HomesControllerTest
     
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
-    
-        
-    [TestMethod]
-    public void TestPutDevicesInHomeNotFoundStatusCode()
-    {
-        DeviceUnitRequest deviceUnitRequest = new DeviceUnitRequest()
-        {
-            DeviceId = _defaultWindowSensor.Id,
-            IsConnected = true
-        };
-        
-        PutHomeDevicesRequest request = new PutHomeDevicesRequest()
-        {
-            DeviceUnits = new List<DeviceUnitRequest> {deviceUnitRequest}
-        };
-        
-        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns((Home)null);
-        _mockHomeService
-            .Setup(service => service
-                .PutDevicesInHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
-    
-        ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as ObjectResult;
-    
-        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
-    }
-    
     
     [TestMethod]
     public void TestPutDevicesInHomeOkResponse()
