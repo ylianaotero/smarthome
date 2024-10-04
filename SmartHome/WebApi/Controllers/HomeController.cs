@@ -109,4 +109,20 @@ public class HomeController : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
+    
+    [HttpGet]
+    [Route("{id}/devices")]
+    public IActionResult GetDevicesFromHome([FromRoute] int id)
+    {
+        DevicesUnitResponse devicesUnitResponse;
+        try
+        {
+            devicesUnitResponse = new DevicesUnitResponse(_homeService.GetDevicesFromHome(id));
+            return Ok(devicesUnitResponse);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
 }
