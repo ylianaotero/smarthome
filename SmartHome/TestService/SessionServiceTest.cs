@@ -170,7 +170,7 @@ public class SessionServiceTest
             
             var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
 
-            bool response = sessionService.UserHasPermissions(_session.Id, "Administrator");
+            bool response = sessionService.UserHasCorrectRole(_session.Id, "Administrator");
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -198,6 +198,40 @@ public class SessionServiceTest
             Assert.IsTrue(response);
         }
         
+        [TestMethod]
+        public void UserCanListDevicesInHomeWhenUserIsOwner()
+        {
+            User user = new User();
+            Session session = new Session { User = user };
+            var home = new Home { Owner = user };
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session> { session });
+            
+             _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+             bool response = _sessionService.UserCanListDevicesInHome(Guid.NewGuid(), home);
+
+            Assert.IsTrue(response);
+        }
         
+        [TestMethod]
+        public void UserCanAddDevicesInHomeWhenUserIsOwner()
+        {
+            User user = new User();
+            Session session = new Session { User = user };
+            var home = new Home { Owner = user };
+            _mockSessionRepository
+                .Setup(logic => logic
+                    .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+                .Returns(new List<Session> { session });
+            
+            _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
+
+            bool response = _sessionService.UserCanAddDevicesInHome(Guid.NewGuid(), home);
+
+            Assert.IsTrue(response);
+        }
     
 }
