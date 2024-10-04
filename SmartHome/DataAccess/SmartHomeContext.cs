@@ -8,6 +8,7 @@ namespace DataAccess;
 public class SmartHomeContext : DbContext
 {
     public DbSet<Device> Devices { get; set; }
+    public DbSet<DeviceUnit> DeviceUnits { get; set; }
     public DbSet<HomeOwner> HomeOwners { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
     public DbSet<CompanyOwner> CompanyOwners { get; set; }
