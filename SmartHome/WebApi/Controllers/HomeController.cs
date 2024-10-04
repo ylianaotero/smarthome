@@ -13,7 +13,6 @@ namespace WebApi.Controllers;
 public class HomeController : ControllerBase
 {
     private readonly IHomeService _homeService;
-    private readonly ISessionService _sessionService;
     
     private const string RoleWithPermissionToUpdateHome = "HomeOwner";
     private const string RoleWithPermissionToGetAllHomes = "Administrator";

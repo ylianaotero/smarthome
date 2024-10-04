@@ -12,10 +12,13 @@ public class CompanyServiceTest
     private Mock<IRepository<Company>> _mockCompanyRepository;
     private CompanyService _companyService;
     private Company _company;
+    private User _user; 
+    private const string NewEmail = "juan.perez@example.com";
 
     [TestInitialize]
     public void TestInitialize()
     {
+        _user = new User() { Email = NewEmail }; 
         CreateMockCompanyRepository();
     }
 
@@ -35,6 +38,22 @@ public class CompanyServiceTest
         List<Company> retrievedCompanies =  _companyService.GetAllCompanies(PageData.Default);
         
         Assert.AreEqual(companies, retrievedCompanies);
+    }
+    
+        
+    [TestMethod]
+    public void TestAddOwnerToCompany()
+    {
+        _company = new Company()
+        {
+            Name = "IoT Devices & Co.",
+            RUT = "123456789",
+            LogoURL = "https://example.com/logo.jpg"
+
+        };
+        _mockCompanyRepository.Setup(x => x.Add(_company));
+        _companyService.AddOwnerToCompany(_user.Id,_company);
+        _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
     }
     
     [TestMethod]

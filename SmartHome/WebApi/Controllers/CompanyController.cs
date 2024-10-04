@@ -34,10 +34,12 @@ public class CompanyController : ControllerBase
     */
     
     [HttpPost]
+    [Route("{id}/companies")]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult PostCompany([FromBody] CompanyRequest request)
+    public IActionResult PostCompany([FromRoute] long id, [FromBody] CompanyRequest request)
     {
         _companyService.CreateCompany(request.ToEntity());
         return Created(CreatedMessage,"/companies/");
+        
     }
 }

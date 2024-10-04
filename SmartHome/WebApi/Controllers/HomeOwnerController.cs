@@ -3,6 +3,7 @@ using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers;
 
@@ -13,6 +14,10 @@ public class HomeOwnerController : ControllerBase
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
     
     private readonly IUserService _userService;
+    
+    private const string RoleWithPermissions = "Administrator";
+
+    private const int StatusCodeInternalServerError = 500; 
 
     public HomeOwnerController(IUserService userService)
     {
@@ -20,6 +25,7 @@ public class HomeOwnerController : ControllerBase
     }
     
     [HttpPost]
+    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
     {
         try
@@ -39,7 +45,7 @@ public class HomeOwnerController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(500, new { message = ErrorMessageUnexpectedException });
+            return StatusCode(StatusCodeInternalServerError, new { message = ErrorMessageUnexpectedException });
         }
     }
     

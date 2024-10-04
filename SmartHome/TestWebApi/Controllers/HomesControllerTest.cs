@@ -29,7 +29,6 @@ public class HomesControllerTest
     private const string HomeOwnerEmail2 = "jane@example.com";
     private const string Street = "Calle del Sol";
     private const string Street2 = "Avenida Siempre Viva";
-    private const string Street3 = "Calle de la Luna";
     private const int DoorNumber = 23;
     private const int DoorNumber2 = 742;
     private const double Latitude = 34.0207;
