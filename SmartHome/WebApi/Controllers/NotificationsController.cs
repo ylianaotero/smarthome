@@ -13,6 +13,7 @@ public class NotificationsController : ControllerBase
 {
     private readonly INotificationService _notificationService;
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
+    private const string CreatedMessage = "The resource was created successfully.";
     
     public NotificationsController(INotificationService notificationService)
     {
@@ -33,6 +34,22 @@ public class NotificationsController : ControllerBase
         }
 
         return Ok(notificationsResponse);
+    }
+    
+    [HttpPost]
+    public IActionResult CreateNotification(CreateNotificationRequest request)
+    {
+        NotificationResponse notificationResponse;
+        try
+        {
+            _notificationService.SendNotifications(request.ToEntity());
+        }
+        catch (CannotFindItemInList)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+
+        return Created("/notifications",CreatedMessage);
     }
 
 }

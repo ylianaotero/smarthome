@@ -13,12 +13,14 @@ namespace TestWebApi.Controllers;
 
 public class NotificationsControllerTest
 {
-    private const string EventName = "Event";
     private const string CannotFindItemInListMessage = "The requested resource was not found.";
-    
+    private const string CreatedMessage = "The resource was created successfully.";
     private NotificationsController _notificationController;
     private Mock<INotificationService> _mockINotificationService;
     private List<Notification> _listOfNotifications;
+    private const string EventName = "Event";
+    private const int CreatedStatusCode = 201;
+    private const int NotFoundStatusCode = 404;
     
     [TestInitialize]
     public void TestInitialize()
@@ -34,7 +36,7 @@ public class NotificationsControllerTest
         NotificationsRequest request = new NotificationsRequest();
         NotificationsResponse notificationResponse = new NotificationsResponse(_listOfNotifications);
         
-        var result = _notificationController.GetNotifications(request) as OkObjectResult;
+        ObjectResult result = _notificationController.GetNotifications(request) as OkObjectResult;
         NotificationsResponse response = result.Value as NotificationsResponse;
         
         _mockINotificationService.Verify();
@@ -48,11 +50,61 @@ public class NotificationsControllerTest
         _mockINotificationService.Setup(x => x.GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null)).Throws(new CannotFindItemInList(CannotFindItemInListMessage));
         NotificationsRequest request = new NotificationsRequest();
         
-        var result = _notificationController.GetNotifications(request) as NotFoundObjectResult;
+        ObjectResult result = _notificationController.GetNotifications(request) as NotFoundObjectResult;
         
         _mockINotificationService.Verify();
         
-        Assert.AreEqual("The requested resource was not found.", result.Value);
+        Assert.AreEqual(CannotFindItemInListMessage, result.Value);
+    }
+    
+    [TestMethod]
+    public void TestCreateNotification()
+    {
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        NotificationDTO notification = new NotificationDTO();
+        _mockINotificationService.Setup(x => x.SendNotifications(notification));
+        
+        ObjectResult result = _notificationController.CreateNotification(request) as CreatedResult;
+        
+        _mockINotificationService.Verify();
+        
+        Assert.AreEqual(CreatedMessage, result.Value);
+    }
+    
+    [TestMethod]
+    public void TestCreateNotificationStatusCode()
+    {
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        NotificationDTO notification = new NotificationDTO();
+        _mockINotificationService.Setup(x => x.SendNotifications(notification));
+        
+        ObjectResult result = _notificationController.CreateNotification(request) as CreatedResult;
+        
+        Assert.AreEqual(CreatedStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestCreateNotificationNotFoundReponse()
+    {
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        _mockINotificationService.Setup(x => x.SendNotifications(It.IsAny<NotificationDTO>())).Throws(new CannotFindItemInList(CannotFindItemInListMessage));
+
+        ObjectResult result = _notificationController.CreateNotification(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(CannotFindItemInListMessage, result.Value);
+    }
+    
+    [TestMethod]
+    public void TestCreateNotificationNotFoundStatusCode()
+    {
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        _mockINotificationService
+            .Setup(x => x.SendNotifications(It.IsAny<NotificationDTO>()))
+            .Throws(new CannotFindItemInList(CannotFindItemInListMessage));
+
+        ObjectResult result = _notificationController.CreateNotification(request) as NotFoundObjectResult;
+
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
     private void SetupNotificationController()
