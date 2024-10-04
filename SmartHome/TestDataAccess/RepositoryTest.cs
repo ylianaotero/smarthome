@@ -15,6 +15,8 @@ public class RepositoryTest
     private SqliteConnection _connection;
     private SmartHomeContext _context;
     private SqlRepository<Device> _devicesRepository;
+    private SqlRepository<Company> _companiesRepository;
+    private SqlRepository<User> _usersRepository;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
@@ -24,11 +26,16 @@ public class RepositoryTest
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
-    private const bool DeviceIsConnected = true;
     
     private const string CompanyName = "IoT Devices & Co.";
     private const string CompanyRUT = "123456789";
     private const string CompanyLogoURL = "https://example.com/logo.jpg";
+    
+    private const string OwnerName = "John";
+    private const string OwnerSurname = "Doe";
+    private const string OwnerEmail = "johndoe@gmail.com";
+    private const string OwnerPhoto = "https://example.com/photo.jpg";
+    private const string OwnerPassword = "Abcd1234%";
     
     [TestInitialize]
     public void TestInitialize()
@@ -41,6 +48,7 @@ public class RepositoryTest
     public void TestCleanup()
     {
         _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
     
     [TestMethod]
@@ -143,6 +151,8 @@ public class RepositoryTest
     [TestMethod]
     public void TestAddDevice()
     {
+        _usersRepository.Add(_defaultCompany.Owner);
+        _companiesRepository.Add(_defaultCompany);
         _devicesRepository.Add(_defaultCamera);
         
         List<Device> retrievedDevices = _devicesRepository.GetAll(PageData.Default);
@@ -288,17 +298,36 @@ public class RepositoryTest
         _context.Database.EnsureCreated();
 
         _devicesRepository = new SqlRepository<Device>(_context);
+        _companiesRepository = new SqlRepository<Company>(_context);
+        _usersRepository = new SqlRepository<User>(_context);
     }
     
     private void SetupDefaultObjects()
+    {
+        SetupDefaultCompany();
+        SetupDefaultDevices();
+    }
+
+    private void SetupDefaultCompany()
     {
         _defaultCompany = new Company
         {
             Name = CompanyName,
             RUT = CompanyRUT,
-            LogoURL = CompanyLogoURL
+            LogoURL = CompanyLogoURL,
+            Owner = new User
+            {
+                Name = OwnerName,
+                Surname = OwnerSurname,
+                Email = OwnerEmail,
+                Photo = OwnerPhoto,
+                Password = OwnerPassword
+            }
         };
-        
+    }
+
+    private void SetupDefaultDevices()
+    {
         _defaultCamera = new SecurityCamera
         {
             Name = CameraName,
@@ -320,6 +349,8 @@ public class RepositoryTest
     
     private void LoadContext(List<Device> devices)
     {
+        _context.Users.Add(_defaultCompany.Owner);
+        _context.Companies.Add(_defaultCompany);
         _context.Devices.AddRange(devices);
         _context.SaveChanges();
     }
