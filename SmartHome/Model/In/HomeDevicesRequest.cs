@@ -10,7 +10,15 @@ public class HomeDevicesRequest
     {
         List<DeviceUnit> deviceUnits = new List<DeviceUnit>();
 
-        
+        foreach (DeviceUnitRequest deviceUnitRequest in DeviceUnits)
+        {
+            //  Device device = 
+            deviceUnits.Add(new DeviceUnit()
+            {
+                //     DeviceId = deviceUnitRequest.DeviceId,
+                IsConnected = deviceUnitRequest.IsConnected
+            });
+        }
 
         return deviceUnits;
     }

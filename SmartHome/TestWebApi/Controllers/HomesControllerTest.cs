@@ -160,7 +160,6 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetHomeByIdOkResponse()
     {
-        
         _mockHomeService.Setup(service => service.GetHomeById(1)).Returns(_defaultHome);
         HomeResponse expectedResponse = DefaultHomeResponse();
 
@@ -260,7 +259,14 @@ public class HomesControllerTest
     {
         HomeDevicesRequest request = new HomeDevicesRequest()
         {
-            
+            DeviceUnits = new List<DeviceUnitRequest>
+            {
+                new DeviceUnitRequest()
+                {
+                    DeviceId = _defaultWindowSensor.Id,
+                    IsConnected = true
+                }
+            }
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_defaultHome);
         _mockHomeService
