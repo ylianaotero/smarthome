@@ -250,7 +250,7 @@ public class HomesControllerTest
         };
         
         _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
-            .Throws(new CannotAddItem("User is not a home owner"));
+            .Throws(new CannotAddItem("Member is not a home owner"));
         
         ObjectResult? result2 = (ObjectResult?)_homeController.PostHomes(request);
         

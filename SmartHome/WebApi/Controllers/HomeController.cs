@@ -19,7 +19,7 @@ public class HomeController : ControllerBase
     private const string UpdatedHomeMessage = "The home was updated successfully.";
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
-    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
+    private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
     private const string SourceAlreadyExistsMessage = "Source Already Exists";
     
     private const int PreconditionFailedStatusCode = 412;

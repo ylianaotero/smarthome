@@ -13,7 +13,7 @@ public class NotificationsRequest
     public Func<Notification,bool> ToFilter()
     {
         return notification => (HomeId == 0 || notification.Home.Id == HomeId) &&
-                               (UserId == 0 || notification.User.Id == UserId) &&
+                               (UserId == 0 || notification.Member.Id == UserId) &&
                                (CreatedAt == DateTime.MinValue || notification.CreatedAt == CreatedAt) &&
                                (Read == false || notification.Read == Read) &&
                                (string.IsNullOrEmpty(Kind) || notification.DeviceUnit.Device.Kind.ToLower() == Kind.ToLower());

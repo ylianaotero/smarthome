@@ -287,7 +287,7 @@ namespace DataAccess.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
+            modelBuilder.Entity("Domain.Member", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -385,7 +385,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Company", b =>
                 {
-                    b.HasOne("Domain.User", "Owner")
+                    b.HasOne("Domain.Member", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -424,7 +424,7 @@ namespace DataAccess.Migrations
                         .WithMany("Homes")
                         .HasForeignKey("HomeOwnerId");
 
-                    b.HasOne("Domain.User", "Owner")
+                    b.HasOne("Domain.Member", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -439,13 +439,13 @@ namespace DataAccess.Migrations
                         .WithMany("Members")
                         .HasForeignKey("HomeId");
 
-                    b.HasOne("Domain.User", "User")
+                    b.HasOne("Domain.Member", "Member")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Domain.Notification", b =>
@@ -466,7 +466,7 @@ namespace DataAccess.Migrations
                         .WithMany("Notifications")
                         .HasForeignKey("MemberId");
 
-                    b.HasOne("Domain.User", "User")
+                    b.HasOne("Domain.Member", "Member")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -476,25 +476,25 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Home");
 
-                    b.Navigation("User");
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
                 {
-                    b.HasOne("Domain.User", null)
+                    b.HasOne("Domain.Member", null)
                         .WithMany("Roles")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Session", b =>
                 {
-                    b.HasOne("Domain.User", "User")
+                    b.HasOne("Domain.Member", "Member")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Domain.CompanyOwner", b =>
@@ -520,7 +520,7 @@ namespace DataAccess.Migrations
                     b.Navigation("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
+            modelBuilder.Entity("Domain.Member", b =>
                 {
                     b.Navigation("Roles");
                 });

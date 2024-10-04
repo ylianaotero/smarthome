@@ -52,5 +52,9 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<Device>().HasOne<Company>(d=>d.Company);
         modelBuilder.Entity<Company>().Property(c => c.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Company>().HasOne<User>(c => c.Owner);
+        modelBuilder.Entity<Notification>()
+            .HasOne(n => n.Member)
+            .WithMany(u => u.Notifications)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

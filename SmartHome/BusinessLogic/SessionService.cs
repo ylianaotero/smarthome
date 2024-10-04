@@ -7,8 +7,8 @@ namespace BusinessLogic;
 
 public class SessionService : ISessionService
 {
-    private const string UserDoesNotExistExceptionMessage = "User not found";
-    private const string SessionDoesNotExistExceptionMessage = "User not found";
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
+    private const string SessionDoesNotExistExceptionMessage = "Member not found";
     
     private readonly IRepository<User> _userRepository;
     private readonly IRepository<Session> _sessionRepository;

@@ -12,6 +12,7 @@ public class NotificationTest
     private readonly DateTime _minValueDate = DateTime.MinValue;
     private DeviceUnit _deviceUnit;
     private User _user;
+    private Member _member;
     private Home _home;
 
     private Notification _notification; 
@@ -22,6 +23,7 @@ public class NotificationTest
         _notification = new Notification(Event);
         _deviceUnit = new DeviceUnit();
         _user = new User();
+        _member = new Member(_user);
         _home = new Home();
     }
     
@@ -31,7 +33,7 @@ public class NotificationTest
         Notification notification = new Notification(Event);
         notification.Id = Id; 
         notification.Home = _home;
-        notification.User = _user;
+        notification.Member = _member;
         notification.DeviceUnit = _deviceUnit;
 
         Assert.IsTrue(
@@ -39,7 +41,7 @@ public class NotificationTest
             Read == notification.Read &&
             _todayDate == notification.CreatedAt.Date &&
             _minValueDate == notification.ReadAt &&
-            Id == notification.Id && _home == notification.Home && _user == notification.User &&
+            Id == notification.Id && _home == notification.Home && _member == notification.Member &&
             _deviceUnit.Device == notification.DeviceUnit.Device
         );
 

@@ -13,8 +13,8 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class AdministratorControllerTest
 {
-    private const string ErrorMessageWhenUserAlreadyExists = "User already exists";
-    private const string ErrorMessageWhenUserNotFound = "User does not exists";
+    private const string ErrorMessageWhenUserAlreadyExists = "Member already exists";
+    private const string ErrorMessageWhenUserNotFound = "Member does not exists";
     
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
