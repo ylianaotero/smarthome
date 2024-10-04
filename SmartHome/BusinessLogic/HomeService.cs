@@ -36,7 +36,7 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         return home.Members;
     }
     
-    public List<Device> GetDevicesFromHome(int homeId)
+    public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
         var home = homeRepository.GetById(homeId);
         if (home == null)
@@ -86,6 +86,5 @@ public class HomeService (IRepository<Home> homeRepository) : IHomeService
         home.Devices = homeDevices;
         
         homeRepository.Update(home);
-        return home;
     }
 }

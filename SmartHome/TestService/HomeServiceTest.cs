@@ -11,6 +11,10 @@ public class HomeServiceTest
 {
     private Mock<IRepository<Home>> _mockHomeRepository;
     private Home _home;
+    private WindowSensor _windowSensor;
+    private SecurityCamera _securityCamera;
+    private DeviceUnit _windowSensorUnit;
+    private DeviceUnit _securityCameraUnit;
     
     private Home _defaultHome;
     private const string Street = "Calle del Sol";
@@ -25,23 +29,6 @@ public class HomeServiceTest
     {
         CreateMockHomeRepository();
         SetupDefaultObjects();
-    }
-
-    private void SetupDefaultObjects()
-    {
-        _defaultHome = new Home()
-        {
-            OwnerId = homeOwnerId,
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-    }
-
-    private void CreateMockHomeRepository()
-    {
-        _mockHomeRepository = new Mock<IRepository<Home>>();
     }
     
     [TestMethod]
@@ -115,42 +102,17 @@ public class HomeServiceTest
     [TestMethod]
     public void TestGetDevicesFromHome()
     {
-        List<Device> devices = new List<Device>
+        List<DeviceUnit> devices = new List<DeviceUnit>
         {
-            new SecurityCamera
-            {
-                Id = 1, 
-                Name = "Cámara de seguridad", 
-                Model = 123, 
-                Description = "Cámara para exteriores"
-            },
-            
-            new WindowSensor 
-            { 
-                Id = 2, 
-                Name = "Sensor de ventana", 
-                Model = 456, 
-                Description = "Sensor para ventanas"
-            }
+            _windowSensorUnit,
+            _securityCameraUnit
         };
     
-        _home = new Home()
-        {
-            OwnerId = homeOwnerId,
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude,
-        };
+        _defaultHome.Devices = devices;
         
-        foreach (Device device in devices)
-        {
-            _home.AddDevice(device);
-        }
-    
-        _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_home);
+        _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_defaultHome);
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
-        List<Device> retrievedDevices = homeService.GetDevicesFromHome(1);
+        List<DeviceUnit> retrievedDevices = homeService.GetDevicesFromHome(1);
         CollectionAssert.AreEqual(devices, retrievedDevices);
     }
     
@@ -285,37 +247,11 @@ public class HomeServiceTest
             Longitude = Longitude,
         };
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(home);
-        Device windowSensor = new WindowSensor
-        {
-            Id = 1, 
-            Name = "Sensor de ventana", 
-            Model = 456, 
-            Description = "Sensor para ventanas"
-        };
-        
-        Device securityCamera = new SecurityCamera
-        {
-            Id = 1, 
-            Name = "Cámara de seguridad", 
-            Model = 123, 
-            Description = "Cámara para exteriores"
-        };
-        
         
         List<DeviceUnit> homeDevices = new List<DeviceUnit>
         {
-            new DeviceUnit
-            {
-                Device = windowSensor,
-                HardwareId = new Guid(),
-                IsConnected = true
-            },
-            new DeviceUnit
-            {
-                Device = securityCamera,
-                HardwareId = new Guid(),
-                IsConnected = false
-            }
+            _windowSensorUnit,
+            _securityCameraUnit
         };
         
         homeService.PutDevicesInHome(1, homeDevices);
@@ -329,28 +265,73 @@ public class HomeServiceTest
         HomeService homeService = new HomeService(_mockHomeRepository.Object);
         _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
         
-        List<Device> homeDevices = new List<Device>
+        List<DeviceUnit> homeDevices = new List<DeviceUnit>
         {
-            new WindowSensor
-            {
-                Id = 1, 
-                Name = "Sensor de ventana", 
-                Model = 456, 
-                Description = "Sensor para ventanas", 
-                IsConnected = false ,
-            },
-            new SecurityCamera
-            {
-                Id = 1, 
-                Name = "Cámara de seguridad", 
-                Model = 123, 
-                Description = "Cámara para exteriores", 
-                IsConnected = true
-            }
+            _windowSensorUnit,
+            _securityCameraUnit
         };
         
         homeService.PutDevicesInHome(1, homeDevices);
     }
-
     
+    
+    private void SetupDefaultObjects()
+    {
+        SetUpDefaultHome();
+        SetUpDefaultDevices();
+        SetUpDefaultDeviceUnits();
+    }
+    
+    private void SetUpDefaultDevices()
+    {
+        _securityCamera = new SecurityCamera
+        {
+            Id = 1, 
+            Name = "Cámara de seguridad", 
+            Model = 123, 
+            Description = "Cámara para exteriores"
+        };
+        
+        _windowSensor = new WindowSensor
+        {
+            Id = 2, 
+            Name = "Sensor de ventana", 
+            Model = 456, 
+            Description = "Sensor para ventanas"
+        };
+    }
+    
+    private void SetUpDefaultDeviceUnits()
+    {
+        _windowSensorUnit = new DeviceUnit
+        {
+            Device = _windowSensor,
+            HardwareId = new Guid(),
+            IsConnected = true
+        };
+        
+        _securityCameraUnit = new DeviceUnit
+        {
+            Device = _securityCamera,
+            HardwareId = new Guid(),
+            IsConnected = false
+        };
+    }
+
+    private void SetUpDefaultHome()
+    {
+        _defaultHome = new Home()
+        {
+            OwnerId = homeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
+    }
+
+    private void CreateMockHomeRepository()
+    {
+        _mockHomeRepository = new Mock<IRepository<Home>>();
+    }
 }

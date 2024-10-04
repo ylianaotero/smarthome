@@ -15,6 +15,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b764cd96_002D392b_002D48d7_002D8e40_002D011c06dc6370/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="HomeTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.HomeTest&lt;/TestId&gt;
+    &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.HomeServiceTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	
