@@ -13,13 +13,15 @@ public class CompanyController : ControllerBase
 {
   
     private readonly ICompanyService _companyService;
+    private readonly IUserService _userService; 
     
     private const string RoleWithPermissions = "CompanyOwner";
     private const string CreatedMessage = "The resource was created successfully.";
 
-    public CompanyController(ICompanyService companyService)
+    public CompanyController(ICompanyService companyService,IUserService userService)
     {
         _companyService = companyService;
+        _userService = userService; 
     }
 
     /*
