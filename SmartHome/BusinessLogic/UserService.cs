@@ -61,6 +61,70 @@ public class UserService : IUserService
         bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
         return hasAdministrator; 
     }
+
+    private User GetUserById(long Id)
+    {
+        User user = _userRepository.GetById(Id); 
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
+    }
+    
+    public Company AddOwnerToCompany(long id, Company company)
+    {
+        User user = GetUserById(id);
+        if (!CompanyOwnerIsComplete(id))
+        {
+            company.Owner = user; 
+            List<CompanyOwner> companyOwnerRoles = GetCompanyOwnerRoles(user); 
+
+            CompanyOwner  role = SearchAnIncompleteCompanyOwnerRole(companyOwnerRoles);
+
+            role.Company = company;
+
+            return company; 
+        }
+        else
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+    }
+    
+    public bool CompanyOwnerIsComplete(long id)
+    {
+        User existingUser =  GetUserById(id);
+
+        List<CompanyOwner> companyOwnerRoles = GetCompanyOwnerRoles(existingUser); 
+
+        CompanyOwner  role = SearchAnIncompleteCompanyOwnerRole(companyOwnerRoles);
+
+        if (role == null)
+        {
+            return true; 
+        }
+
+        return false; 
+    }
+
+    private List<CompanyOwner> GetCompanyOwnerRoles(User user)
+    {
+        return user.Roles
+            .Where(role => role is CompanyOwner)
+            .Cast<CompanyOwner>()
+            .ToList();
+    }
+
+    private CompanyOwner SearchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
+    {
+        CompanyOwner incompleteRole = companyOwnerRoles
+            .FirstOrDefault(role => role.HasACompleteCompany == false);  
+
+        return incompleteRole;
+    }
     
     public void DeleteUser(long id)
     {
@@ -81,4 +145,5 @@ public class UserService : IUserService
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
     }
+    
 }

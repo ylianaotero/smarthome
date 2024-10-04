@@ -1,5 +1,4 @@
 using Domain;
-using IDataAccess;
 
 namespace IBusinessLogic;
 
@@ -8,9 +7,9 @@ public interface IHomeService
     void CreateHome(Home home);
     List<Home> GetAllHomes();
     List<Home> GetHomesByFilter(Func<Home, bool> filter);
+    List<DeviceUnit> GetDevicesFromHome(int homeId);
     List<Member> GetMembersFromHome(long homeId);
-    List<Device> GetDevicesFromHome(int homeId);
     void AddMemberToHome(int homeId, Member member);
     Home GetHomeById(long id);
-    Home PutDevicesInHome(long homeId, List<Device> devices);
+    void PutDevicesInHome(long homeId, List<DeviceUnitDTO> devices);
 }

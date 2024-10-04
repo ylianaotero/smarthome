@@ -57,8 +57,7 @@ public class RepositoryTest
                 Model = otherModel,
                 Description = DeviceDescription,
                 PhotoURLs = new List<string> { DevicePhotoUrl },
-                Company = _defaultCompany,
-                IsConnected = DeviceIsConnected,
+                Company = _defaultCompany
             },
         };
         LoadContext(devices);
@@ -99,8 +98,7 @@ public class RepositoryTest
                 Model = otherModel,
                 Description = DeviceDescription,
                 PhotoURLs = new List<string> { DevicePhotoUrl },
-                Company = _defaultCompany,
-                IsConnected = DeviceIsConnected,
+                Company = _defaultCompany
             },
         };
         LoadContext(devices);
@@ -223,7 +221,7 @@ public class RepositoryTest
     {
         List<CompanyOwner> companyOwners = new List<CompanyOwner>
         {
-            new CompanyOwner(_defaultCompany)
+            new CompanyOwner() {Company = _defaultCompany}
         };
         
         _context.CompanyOwners.AddRange(companyOwners);
@@ -307,8 +305,7 @@ public class RepositoryTest
             Model = DeviceModel,
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
-            Company = _defaultCompany,
-            IsConnected = DeviceIsConnected,
+            Company = _defaultCompany
         };
         
         _defaultWindowSensor = new WindowSensor
@@ -317,8 +314,7 @@ public class RepositoryTest
             Model = DeviceModel,
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
-            Company = _defaultCompany,
-            IsConnected = DeviceIsConnected,
+            Company = _defaultCompany
         };
     }
     

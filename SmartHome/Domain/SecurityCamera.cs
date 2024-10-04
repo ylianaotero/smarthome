@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-
 namespace Domain;
 
 public enum LocationType
@@ -41,6 +38,5 @@ public class SecurityCamera : Device
     public SecurityCamera()
     {
         Kind = GetType().Name;
-        IsConnected = false;
     }
 }

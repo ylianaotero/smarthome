@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Domain;
 
 public enum WindowSensorFunctionality
@@ -20,7 +18,6 @@ public class WindowSensor : Device
                Description == sensor.Description &&
                PhotoURLs.SequenceEqual(sensor.PhotoURLs) &&
                Company.Equals(sensor.Company) &&
-               IsConnected == sensor.IsConnected &&
                Functionalities.SequenceEqual(sensor.Functionalities) &&
                Id == sensor.Id;
     }
@@ -28,6 +25,5 @@ public class WindowSensor : Device
     public WindowSensor()
     {
         Kind = GetType().Name;
-        IsConnected = false;
     }
 }

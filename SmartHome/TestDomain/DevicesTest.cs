@@ -1,7 +1,6 @@
 using Domain;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-
 namespace TestDomain;
 
 [TestClass]
@@ -15,7 +14,6 @@ public class DevicesTest
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
-    private const bool DeviceIsConnected = true;
     
     private const string WindowSensorType = "WindowSensor";
     private const string SecurityCameraType = "SecurityCamera";
@@ -25,14 +23,6 @@ public class DevicesTest
     {
         _securityCamera = new SecurityCamera();
         _windowSensor = new WindowSensor();
-    }
-    
-    [TestMethod]
-    public void TestConnectSecurityCamera()
-    {
-        _securityCamera.IsConnected = DeviceIsConnected;
-        
-        Assert.IsTrue(_securityCamera.IsConnected);
     }
     
     [TestMethod]
@@ -174,8 +164,7 @@ public class DevicesTest
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
-            Company = company,
-            IsConnected = DeviceIsConnected
+            Company = company
         };
         
         WindowSensor windowSensor2 = new WindowSensor()
@@ -186,8 +175,7 @@ public class DevicesTest
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
-            Company = company,
-            IsConnected = DeviceIsConnected
+            Company = company
         };
         
         Assert.IsFalse(windowSensor1.Equals(windowSensor2));
@@ -208,8 +196,7 @@ public class DevicesTest
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
-            Company = company,
-            IsConnected = DeviceIsConnected
+            Company = company
         };
         
         SecurityCamera securityCamera2 = new SecurityCamera()
@@ -220,8 +207,7 @@ public class DevicesTest
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
             Functionalities = functionalities,
-            Company = company,
-            IsConnected = DeviceIsConnected
+            Company = company
         };
         
         Assert.IsFalse(securityCamera1.Equals(securityCamera2));

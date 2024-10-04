@@ -13,6 +13,8 @@ public class AdministratorController : ControllerBase
     private const string RoleWithPermissions = "Administrator";
 
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+
+    private const int StatusCodeInternalServerError = 500; 
     
     private readonly IUserService _userService;
 
@@ -22,6 +24,7 @@ public class AdministratorController : ControllerBase
     }
     
     [HttpPost]
+    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateUser([FromBody] CreateAdminRequest createAdminRequest)
     {
         try
@@ -36,7 +39,7 @@ public class AdministratorController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(500, new { message =  ErrorMessageUnexpectedException});
+            return StatusCode(StatusCodeInternalServerError, new { message =  ErrorMessageUnexpectedException});
         }
     }
     

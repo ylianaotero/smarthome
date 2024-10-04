@@ -15,12 +15,10 @@ public class UserController : ControllerBase
     private const string RoleWithPermissions = "Administrator";
     
     private readonly IUserService _userService;
-    private readonly ISessionService _sessionService;
 
-    public UserController(IUserService userService, ISessionService sessionService)
+    public UserController(IUserService userService)
     {
         _userService = userService;
-        _sessionService = sessionService; 
     }
     
     [HttpGet]

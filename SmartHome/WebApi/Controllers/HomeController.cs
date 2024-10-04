@@ -13,7 +13,6 @@ namespace WebApi.Controllers;
 public class HomeController : ControllerBase
 {
     private readonly IHomeService _homeService;
-    private readonly ISessionService _sessionService;
     
     private const string RoleWithPermissionToUpdateHome = "HomeOwner";
     private const string RoleWithPermissionToGetAllHomes = "Administrator";
@@ -36,7 +35,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)] // cambiar
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)] // COMO VINCULA EL USUARIO CON EL HOME ???
     public IActionResult PostHomes([FromBody] CreateHomeRequest request)
     {
         _homeService.CreateHome(request.ToEntity());
@@ -83,7 +82,7 @@ public class HomeController : ControllerBase
     [HttpPut]
     [Route("{id}/devices")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] HomeDevicesRequest request)
+    public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] PutHomeDevicesRequest request)
     {
         try
         {
@@ -92,7 +91,7 @@ public class HomeController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return BadRequest();
+            return NotFound(ResourceNotFoundMessage);
         }
     }
 }

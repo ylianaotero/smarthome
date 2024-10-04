@@ -22,7 +22,7 @@ public class HomeTest
 
     private Member _member; 
 
-    private Device _device; 
+    private DeviceUnit _deviceUnit; 
 
     private Home _home;
     
@@ -38,11 +38,27 @@ public class HomeTest
             Latitude = Latitude,
             Longitude = Longitude
         };
+        
+        _deviceUnit = new DeviceUnit()
+        {
+            HardwareId = new Guid(),
+            IsConnected = true,
+            Id = Id,
+            Device = new SecurityCamera()
+        };
+        
         _user.Email = Email1;
         _member = new Member(_user); 
-        _device = new SecurityCamera();
-        _device.Id = Id;
-        _homeOwnerId = Id2;
+        
+        _homeOwnerId = 000;
+    }
+    
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        _home = null;
+        _member = null;
+        _deviceUnit = null;
     }
     
     [TestMethod]
@@ -158,11 +174,11 @@ public class HomeTest
     [TestMethod]
     public void TestAddDevice()
     {
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
         
         Assert.AreEqual(1, _home.Devices.Count());
         
-        Device device = _home.Devices.FirstOrDefault(d => d.Id == Id);
+        DeviceUnit device = _home.Devices.FirstOrDefault(d => d.Id == Id);
         
         Assert.IsNotNull(device);
     }
@@ -172,18 +188,18 @@ public class HomeTest
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddExistingDevice()
     {
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
         
-        _home.AddDevice(_device); 
+        _home.AddDevice(_deviceUnit); 
     }
     
         
     [TestMethod]
     public void TestFindDevice()
     {
-        _home.AddDevice(_device);
+        _home.AddDevice(_deviceUnit);
 
-        Device result = _home.FindDevice(_device.Id); 
+        DeviceUnit result = _home.FindDevice(_deviceUnit.Id); 
         
         Assert.AreEqual(Id, result.Id);
     }
@@ -192,25 +208,24 @@ public class HomeTest
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestCannotFindDevice()
     {
-        _home.FindDevice(_device.Id); 
+        _home.FindDevice(_deviceUnit.Id); 
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestTryToDeleteDevice()
     {
-        _home.DeleteDevice(_device.Id); 
+        _home.DeleteDevice(_deviceUnit.Id); 
     }
     
     [TestMethod]
     public void TestDeleteDevice()
     {
-        _home.AddDevice(_device);
+        _home.AddDevice(_deviceUnit);
         
         _home.DeleteDevice(IdToDelete); 
         
         Assert.AreEqual(0, _home.Devices.Count());
-        
     }
     
 }

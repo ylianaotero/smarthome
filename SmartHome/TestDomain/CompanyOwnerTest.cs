@@ -10,7 +10,8 @@ public class CompanyOwnerTest
     public void TestAddCompanyToCompanyOwner()
     {
         Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner(company);
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.Company = company; 
         Assert.AreEqual(company,companyOwner.Company);
     }
     
@@ -19,7 +20,8 @@ public class CompanyOwnerTest
     public void TestCannotAddCompanyToCompanyOwner()
     {
         Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner(company);
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.Company = company; 
         Company company2 = new Company();
         companyOwner.Company = company2;
     }
@@ -35,7 +37,8 @@ public class CompanyOwnerTest
     public void TestValidateExistingCompany()
     {
         Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner(company);
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.Company = company; 
         Assert.IsTrue(companyOwner.HasACompleteCompany);
     }
     
@@ -51,7 +54,8 @@ public class CompanyOwnerTest
     public void TestValidateExistingCompanyException()
     {
         Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner(company);
+        CompanyOwner companyOwner = new CompanyOwner();
+        companyOwner.Company = company; 
         companyOwner.Company = new Company();
     }
     

@@ -12,6 +12,8 @@ public class CompanyServiceTest
     private Mock<IRepository<Company>> _mockCompanyRepository;
     private CompanyService _companyService;
     private Company _company;
+    private User _user; 
+    private const string NewEmail = "juan.perez@example.com";
     
     private const string CompanyName = "IoT Devices & Co.";
     private const string RUT = "123456789";
@@ -20,6 +22,7 @@ public class CompanyServiceTest
     [TestInitialize]
     public void TestInitialize()
     {
+        _user = new User() { Email = NewEmail }; 
         CreateMockCompanyRepository();
     }
 

@@ -8,12 +8,14 @@ namespace DataAccess;
 public class SmartHomeContext : DbContext
 {
     public DbSet<Device> Devices { get; set; }
+    public DbSet<DeviceUnit> DeviceUnits { get; set; }
     public DbSet<HomeOwner> HomeOwners { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
     public DbSet<CompanyOwner> CompanyOwners { get; set; }
     
     public DbSet<Session> Sessions { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Member> Members { get; set; }
     
     public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
     {

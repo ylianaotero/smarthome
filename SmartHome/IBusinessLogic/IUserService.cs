@@ -15,4 +15,8 @@ public interface IUserService
     
     void DeleteUser(long id);
     void UpdateUser(long id, User user);
+
+    bool CompanyOwnerIsComplete(long id);
+
+    Company AddOwnerToCompany(long id, Company company); 
 }

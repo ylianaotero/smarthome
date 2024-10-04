@@ -20,4 +20,5 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
     {
         companyRepository.Add(company);
     }
+    
 }
