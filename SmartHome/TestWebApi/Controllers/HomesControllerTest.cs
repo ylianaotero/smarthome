@@ -35,6 +35,7 @@ public class HomesControllerTest
     private const double Latitude2 = 34.0522;
     private const double Longitude = -118.4912;
     private const double Longitude2 = -118.2437;
+    private const int MaxHomeMembers = 5;
     private const long HomeOwnerId = 1;
     private const long HomeOwnerId2 = 2;
     private const int OKStatusCode = 200;
@@ -191,7 +192,7 @@ public class HomesControllerTest
             DoorNumber = DoorNumber,
             Latitude = Latitude,
             Longitude = Longitude,
-            MaximumMembers = 5
+            MaximumMembers = MaxHomeMembers
         };
         _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
         
