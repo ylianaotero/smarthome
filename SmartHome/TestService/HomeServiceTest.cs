@@ -423,6 +423,32 @@ public class HomeServiceTest
         Home homeWithOwner = homeService.AddOwnerToHome(homeOwner.Id, home);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestAddUserThatIsNotHomeOwnerToHome()
+    {
+        User user = new User()
+        {
+            Email = NewEmail,
+            Id = 1,
+        };
+        Home home = new Home()
+        {
+            Owner = null,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1
+        };
+        _mockUserRepository.Setup(m => m.GetById(user.Id)).Returns(user);
+        
+        HomeService homeService = new HomeService
+            (_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.AddOwnerToHome(user.Id, home);
+    }
+    
     private void SetupDefaultObjects()
     {
         SetUpDefaultHome();
