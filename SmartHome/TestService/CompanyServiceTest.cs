@@ -23,14 +23,8 @@ public class CompanyServiceTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _user = new User() { Email = NewEmail }; 
+        SetupDefaultObjects();
         CreateMockCompanyRepository();
-    }
-
-    private void CreateMockCompanyRepository()
-    {
-        _mockCompanyRepository = new Mock<IRepository<Company>>();
-        _companyService = new CompanyService(_mockCompanyRepository.Object);
     }
     
     [TestMethod]
@@ -91,8 +85,9 @@ public class CompanyServiceTest
         Assert.AreEqual(device.Company, _company);
     }
     
-    private void SetupDefaultCompany()
+    private void SetupDefaultObjects()
     {
+        _user = new User() { Email = NewEmail }; 
         _company = new Company()
         {
             Name = CompanyName,
@@ -100,5 +95,11 @@ public class CompanyServiceTest
             LogoURL = LogoUrl,
             Id = CompanyId
         };
+    }
+    
+    private void CreateMockCompanyRepository()
+    {
+        _mockCompanyRepository = new Mock<IRepository<Company>>();
+        _companyService = new CompanyService(_mockCompanyRepository.Object);
     }
 }
