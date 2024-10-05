@@ -70,7 +70,15 @@ public class DeviceController : ControllerBase
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
     {
-        _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        try
+        {
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        } 
+        catch (ElementNotFound)
+        {
+            return NotFound(NotFoundMessage);
+        }
+        
         return CreatedAtAction(nameof(PostWindowSensors), request);
     }
 

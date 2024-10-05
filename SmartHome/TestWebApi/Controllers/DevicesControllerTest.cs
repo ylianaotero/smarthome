@@ -297,7 +297,7 @@ public class DevicesControllerTest
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
             .Throws(new ElementNotFound("Company not found"));
         
-        NotFoundResult? result = _deviceController.PostWindowSensors(request) as NotFoundResult;
+        NotFoundObjectResult? result = _deviceController.PostWindowSensors(request) as NotFoundObjectResult;
         
         Assert.AreEqual(404, result!.StatusCode);
     }
