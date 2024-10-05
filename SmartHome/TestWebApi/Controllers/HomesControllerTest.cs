@@ -23,6 +23,8 @@ public class HomesControllerTest
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
+    private const string ElementAlreadyExistsMessage = "Element already exists";
+    private const string CannotAddItem = "Cannot Add Item";
     
     private const string Name = "John";
     private const string Name2 = "Jane";
@@ -39,11 +41,16 @@ public class HomesControllerTest
     private const int MaxHomeMembers = 5;
     private const long HomeOwnerId = 1;
     private const long HomeOwnerId2 = 2;
+    
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
 
     private const bool Permission = true; 
+    private const int ConflictStatusCode = 409;
+    private const int PreconditionFailedStatusCode = 412;
+    private const int ServerFailedStatusCode = 500;
+    
     
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
@@ -243,7 +250,7 @@ public class HomesControllerTest
         };
         
         _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
-            .Throws(new CannotAddItem("User is not a home owner"));
+            .Throws(new CannotAddItem("Member is not a home owner"));
         
         ObjectResult? result2 = (ObjectResult?)_homeController.PostHomes(request);
         
@@ -251,7 +258,7 @@ public class HomesControllerTest
     }
 
     [TestMethod]
-    public void TestGetMembersFromHomeOKResponse()
+    public void TestGetMembersFromHomeOkResponse()
     {
         List<Member> members = new List<Member>
         {
@@ -279,6 +286,93 @@ public class HomesControllerTest
     
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+    
+    [TestMethod]
+    public void TestPutMemberInHomeOkStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService.Setup(service => service.AddMemberToHome(_defaultHome.Id , memberRequest.ToEntity()));
+    
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as OkObjectResult;
+    
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPutMemberInHomeNotFoundStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+        
+    [TestMethod]
+    public void TestTryToPutMemberThatAlreadyExistsStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
+            .Throws(new ElementAlreadyExist(ElementAlreadyExistsMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
+    }
+    
+    public void TestTryToPutMemberInAFullHomeStatusCode()
+    {
+        MemberRequest memberRequest = new MemberRequest()
+        {
+            UserEmail = Email,
+            HasPermissionToAddADevice = Permission,
+            HasPermissionToListDevices = Permission,
+            ReceivesNotifications = Permission
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(_defaultHome.Id, It.IsAny<MemberDTO>()))
+            .Throws(new CannotAddItem(CannotAddItem));
+        
+        _homeController = new HomeController(_mockHomeService.Object); 
+        
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+    
+        Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
+    }
+
     
     [TestMethod]
     public void TestPutDevicesInHomeOkStatusCode()

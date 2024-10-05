@@ -11,7 +11,7 @@ public class Home
     private const string MessageDeviceNotFound = "Device not found";
     
     [Key]
-    public int Id { get; set; }
+    public long Id { get; set; }
     public User Owner { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
@@ -81,7 +81,7 @@ public class Home
 
     public void AddDevice(DeviceUnit device)
     {
-        if (!DeviceExist(device.Id))
+        if (!DeviceExist(device.HardwareId))
         {
             Devices.Add(device);
         }
@@ -92,9 +92,9 @@ public class Home
         
     }
     
-    private bool DeviceExist(long id)
+    private bool DeviceExist(Guid id)
     {
-        DeviceUnit device = Devices.FirstOrDefault(d => d.Id == id);
+        DeviceUnit device = Devices.FirstOrDefault(d => d.HardwareId == id);
         if (device == null)
         {
             return false; 
@@ -102,17 +102,17 @@ public class Home
         return true; 
     }
 
-    public DeviceUnit FindDevice(long id)
+    public DeviceUnit FindDevice(Guid id)
     {
         if (DeviceExist(id))
         {
-            return Devices.FirstOrDefault(d => d.Id == id); 
+            return Devices.FirstOrDefault(d => d.HardwareId == id); 
         }
         throw new CannotFindItemInList(MessageDeviceNotFound ); 
         
     }
 
-    public void DeleteDevice(long id)
+    public void DeleteDevice(Guid id)
     {
         Devices.Remove(FindDevice(id));
     }

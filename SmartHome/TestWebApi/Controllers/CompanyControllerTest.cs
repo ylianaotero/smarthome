@@ -21,7 +21,7 @@ public class CompanyControllerTest
     private Company _defaultCompany2;
     private User _defaultUser;
     
-    private const string UserDoesNotExistExceptionMessage = "User not found";
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
     
     private string Name = "Company 1";
     private string Name2 = "Company 2";

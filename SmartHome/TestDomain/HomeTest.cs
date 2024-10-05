@@ -13,9 +13,6 @@ public class HomeTest
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
     private const int Id = 11;
-    private const int Id2 = 000;
-    private const int IdToDelete = 11;
-    
     
     private long _homeOwnerId;
     
@@ -55,7 +52,6 @@ public class HomeTest
         {
             HardwareId = new Guid(),
             IsConnected = true,
-            Id = Id,
             Device = new SecurityCamera()
         };
         
@@ -190,7 +186,7 @@ public class HomeTest
         
         Assert.AreEqual(1, _home.Devices.Count());
         
-        DeviceUnit device = _home.Devices.FirstOrDefault(d => d.Id == Id);
+        DeviceUnit device = _home.Devices.FirstOrDefault(d => d.HardwareId == _deviceUnit.HardwareId);
         
         Assert.IsNotNull(device);
     }
@@ -211,23 +207,23 @@ public class HomeTest
     {
         _home.AddDevice(_deviceUnit);
 
-        DeviceUnit result = _home.FindDevice(_deviceUnit.Id); 
+        DeviceUnit result = _home.FindDevice(_deviceUnit.HardwareId); 
         
-        Assert.AreEqual(Id, result.Id);
+        Assert.AreEqual(_deviceUnit.HardwareId, result.HardwareId);
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestCannotFindDevice()
     {
-        _home.FindDevice(_deviceUnit.Id); 
+        _home.FindDevice(_deviceUnit.HardwareId); 
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestTryToDeleteDevice()
     {
-        _home.DeleteDevice(_deviceUnit.Id); 
+        _home.DeleteDevice(_deviceUnit.HardwareId); 
     }
     
     [TestMethod]
@@ -235,7 +231,7 @@ public class HomeTest
     {
         _home.AddDevice(_deviceUnit);
         
-        _home.DeleteDevice(IdToDelete); 
+        _home.DeleteDevice(_deviceUnit.HardwareId); 
         
         Assert.AreEqual(0, _home.Devices.Count());
     }

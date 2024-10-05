@@ -7,8 +7,8 @@ namespace BusinessLogic;
 
 public class UserService : IUserService
 {
-    private const string UserDoesNotExistExceptionMessage = "User not found";
-    private const string UserAlreadyExistExceptionMessage = "User already exists";
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
+    private const string UserAlreadyExistExceptionMessage = "Member already exists";
     
     private IRepository<User> _userRepository;
     private IUserService _userServiceImplementation;
@@ -21,7 +21,7 @@ public class UserService : IUserService
     {
         try
         {
-            GetBy(u => u.Email == user.Email, PageData.Default);
+            GetBy(u => u.Email == user.Email, null);
             
             throw new ElementAlreadyExist(UserAlreadyExistExceptionMessage);
         }
@@ -76,6 +76,7 @@ public class UserService : IUserService
     public Company AddOwnerToCompany(long id, Company company)
     {
         User user = GetUserById(id);
+        
         if (!CompanyOwnerIsComplete(id))
         {
             company.Owner = user; 
@@ -87,10 +88,8 @@ public class UserService : IUserService
 
             return company; 
         }
-        else
-        {
-            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
-        }
+        
+        throw new ElementNotFound(UserDoesNotExistExceptionMessage);
 
     }
     

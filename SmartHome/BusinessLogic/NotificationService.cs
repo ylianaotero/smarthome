@@ -84,7 +84,7 @@ public class NotificationService : INotificationService
             notification.Event = notificationData.Event;
             notification.Home = home;
             notification.DeviceUnit = device;
-            notification.User = member.User;
+            notification.Member = member;
             member.Notifications.Add(notification);
         }
     }

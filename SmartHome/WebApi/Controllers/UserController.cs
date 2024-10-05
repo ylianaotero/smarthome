@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/users")]
 [ApiController]
+[AllowAnonymous]
 public class UserController : ControllerBase
 {
     private const string NotFoundMessage = "The requested resource was not found.";
@@ -38,5 +40,22 @@ public class UserController : ControllerBase
         }
         
         return Ok(usersResponse);
+    }
+  
+    [HttpDelete]
+    [RolesWithPermissions(RoleWithPermissions)]
+    [Route("{id}")]
+    public IActionResult DeleteUser([FromRoute] long id)
+    {
+        try
+        {
+            _userService.DeleteUser(id);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound();
+        }
+
+        return Ok();
     }
 }

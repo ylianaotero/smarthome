@@ -12,7 +12,7 @@ public class ChangePermissionsRequest
     {
         return new MemberDTO
         {
-            MemberEmail = MemberEmail,
+            UserEmail = MemberEmail,
             ReceivesNotifications = ReceivesNotifications
         };
     }

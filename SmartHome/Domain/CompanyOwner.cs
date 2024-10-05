@@ -5,6 +5,8 @@ namespace Domain;
 public class CompanyOwner : Role
 {
     private const string MessageError = "The owner has an existing company."; 
+    
+    public override string Kind { get; set; }
     public bool HasACompleteCompany { get; set; }
     private Company _company ;
 
@@ -21,6 +23,7 @@ public class CompanyOwner : Role
     public CompanyOwner()
     {
         HasACompleteCompany = false;
+        Kind = GetType().Name;
     }
     
     private void ValidateExistingCompany()

@@ -15,6 +15,7 @@ public class DevicesControllerTest
 {
     private DeviceController _deviceController;
     private Mock<IDeviceService> _mockIDeviceService;
+    private Mock<ICompanyService> _mockICompanyService;
     private Mock<ISessionService> _mockISessionService;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
@@ -29,8 +30,10 @@ public class DevicesControllerTest
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
+    private const string CompanyNotFoundExceptionMessage = "Company not found";
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
+    private const int NotFoundStatusCode = 404;
     
     [TestInitialize]
     public void TestInitialize()
@@ -239,9 +242,12 @@ public class DevicesControllerTest
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
-            ((device as WindowSensor)!).Functionalities!.SequenceEqual(request.Functionalities!)
+            device.Company.Id == request.Company 
         )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultWindowSensor);
         
         ObjectResult? result = _deviceController.PostWindowSensors(request) as CreatedAtActionResult;
         
@@ -250,8 +256,7 @@ public class DevicesControllerTest
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
-            ((device as WindowSensor)!).Functionalities!.SequenceEqual(request.Functionalities!)
+            device.Company.Id == request.Company
         )), Times.Once);
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
@@ -261,29 +266,55 @@ public class DevicesControllerTest
     {
         SecurityCameraRequest request = DefaultSecurityCameraRequest();
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Company != null &&
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
-            ((device as SecurityCamera)!).LocationType == request.LocationType &&
-            ((device as SecurityCamera)!).Functionalities != null &&
-            ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
+            device.Company.Id == request.Company 
         )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultCamera);
         
         ObjectResult? result = _deviceController.PostSecurityCameras(request) as CreatedAtActionResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Company != null &&
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
-            ((device as SecurityCamera)!).LocationType == request.LocationType &&
-            ((device as SecurityCamera)!).Functionalities != null &&
-            ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
+            device.Company.Id == request.Company
         )), Times.Once);
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostWindowSensorsNotFoundStatusCode()
+    {
+        SecurityCameraRequest request = DefaultSecurityCameraRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostSecurityCameras(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostSecurityCamerasNotFoundStatusCode()
+    {
+        WindowSensorRequest request = DefaultWindowSensorRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostWindowSensors(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
     }
     
     private void SetupDefaultObjects()
@@ -293,7 +324,11 @@ public class DevicesControllerTest
             DevicePhotoUrl
         ];
         
-        _defaultCompany = new Company { Name = CompanyName };
+        _defaultCompany = new Company
+        {
+            Name = CompanyName,
+            Id = 1
+        };
 
         _defaultCamera = new SecurityCamera()
         {
@@ -317,19 +352,20 @@ public class DevicesControllerTest
     {
         _mockIDeviceService = new Mock<IDeviceService>();
         _mockISessionService = new Mock<ISessionService>();
-        _deviceController = new DeviceController(_mockIDeviceService.Object);
+        _mockICompanyService = new Mock<ICompanyService>();
+        _deviceController = new DeviceController(_mockIDeviceService.Object, _mockICompanyService.Object);
     }
     
     private WindowSensorRequest DefaultWindowSensorRequest()
     {
         return new WindowSensorRequest()
         {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = [DevicePhotoUrl],
-            Description = DeviceDescription,
-            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed },
-            Company = _defaultCompany,
+            Name = _defaultWindowSensor.Name,
+            Model = _defaultWindowSensor.Model,
+            PhotoUrls = _defaultWindowSensor.PhotoURLs,
+            Description = _defaultWindowSensor.Description,
+            Functionalities = _defaultWindowSensor.Functionalities,
+            Company = _defaultCompany.Id,
         };
     }
 
@@ -337,13 +373,13 @@ public class DevicesControllerTest
     {
         return new SecurityCameraRequest()
         {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = [DevicePhotoUrl],
-            Description = DeviceDescription,
-            Company = _defaultCompany,
-            LocationType = LocationType.Indoor,
-            Functionalities = [SecurityCameraFunctionality.MotionDetection],
+            Name = _defaultCamera.Name,
+            Model = _defaultCamera.Model,
+            PhotoUrls = _defaultCamera.PhotoURLs,
+            Description = _defaultCamera.Description,
+            Company = _defaultCompany.Id,
+            LocationType = _defaultCamera.LocationType,
+            Functionalities = _defaultCamera.Functionalities,
         };
     }
     

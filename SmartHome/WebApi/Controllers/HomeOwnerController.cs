@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -12,10 +13,10 @@ namespace WebApi.Controllers;
 public class HomeOwnerController : ControllerBase
 {
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    private const int StatusCodeInternalServerError = 500; 
+    private const string RoleWithPermissions = "HomeOwner";
     
     private readonly IUserService _userService;
-
-    private const int StatusCodeInternalServerError = 500; 
 
     public HomeOwnerController(IUserService userService)
     {
@@ -23,6 +24,7 @@ public class HomeOwnerController : ControllerBase
     }
     
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
     {
         try
@@ -47,7 +49,8 @@ public class HomeOwnerController : ControllerBase
     }
     
      [HttpPut]
-       [Route("{id}")]
+     [Route("{id}")]
+     [RolesWithPermissions(RoleWithPermissions)]
        public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] UpdateHomeOwnerRequest updateHomeOwnerRequest)
        {
            try
