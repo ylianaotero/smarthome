@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -20,5 +21,13 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
     {
         companyRepository.Add(company);
     }
-    
+
+    public Device AddCompanyToDevice(long companyId, Device device)
+    {
+        Company company = companyRepository.GetById(companyId);
+        
+        device.Company = company;
+        companyRepository.Update(company);
+        return device;
+    }
 }

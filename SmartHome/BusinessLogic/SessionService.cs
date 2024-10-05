@@ -96,7 +96,7 @@ public class SessionService : ISessionService
     
     private bool RoleIsAdequate(Role role, string roleWithPermissions)
     {
-        return role.GetType().Name == roleWithPermissions;
+        return role.Kind == roleWithPermissions;
     }
     
     private bool UserIsAuthenticated(Guid authorization)
