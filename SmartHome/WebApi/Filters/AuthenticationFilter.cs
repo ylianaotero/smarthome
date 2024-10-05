@@ -63,8 +63,8 @@ namespace WebApi.Filters
                 }
             }
 
-           // long homeId = context.HttpContext.Request.RouteValues["{id}"] as long? ?? -1;
-           long homeId = -1;
+            string homeIdStr = context.HttpContext.Request.RouteValues["id"].ToString() ?? "-1";
+            int homeId = int.Parse(homeIdStr);
             if (homeId != -1)
             {
                 RestrictToPrivilegedMembersAttribute? restrictToPrivilegedMembersAttribute = context.ActionDescriptor.EndpointMetadata

@@ -78,6 +78,16 @@ public class SmartHomeContext : DbContext
             .HasValue<CompanyOwner>("CompanyOwner");
         
         modelBuilder.Entity<User>().Navigation(r => r.Roles).AutoInclude();
+        modelBuilder.Entity<Home>().Navigation(h => h.Members).AutoInclude();
+        modelBuilder.Entity<Home>().Navigation(h => h.Devices).AutoInclude();
+        modelBuilder.Entity<Home>().Navigation(h => h.Owner).AutoInclude();
+        modelBuilder.Entity<Member>().Navigation(m => m.User).AutoInclude();
+        modelBuilder.Entity<Device>().Navigation(d => d.Company).AutoInclude();
+        modelBuilder.Entity<Member>().Navigation(m => m.Notifications).AutoInclude();
+        modelBuilder.Entity<Notification>().Navigation(n => n.Member).AutoInclude();
+        modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Device).AutoInclude();
+        modelBuilder.Entity<Device>().Navigation(d => d.Company).AutoInclude();
+        modelBuilder.Entity<CompanyOwner>().Navigation(co => co.Company).AutoInclude();
 
         modelBuilder.Entity<Home>().ToTable("Homes");
         modelBuilder.Entity<Home>().Property(h => h.Id).ValueGeneratedOnAdd();

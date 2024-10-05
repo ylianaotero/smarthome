@@ -11,7 +11,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/homes")]
 [ApiController]
-[AllowAnonymous]
+//[AllowAnonymous]
 public class HomeController : ControllerBase
 {
     private readonly IHomeService _homeService;
@@ -82,7 +82,8 @@ public class HomeController : ControllerBase
     
     [HttpGet]
     [Route("{id}")]
-   // [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
+ //   [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
+    [RestrictToPrivilegedMembers(true, true)]
     public IActionResult GetHomeById([FromRoute] long id)
     {
         HomeResponse homeResponse;
