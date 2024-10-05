@@ -16,6 +16,9 @@ public class SmartHomeContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Member> Members { get; set; }
     public DbSet<Company> Companies { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Home> Homes { get; set; }
     
     public SmartHomeContext(DbContextOptions<SmartHomeContext> options, bool useInMemoryDatabase) : base(options)
     {
@@ -45,10 +48,16 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<Device>().Property(d => d.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<SecurityCamera>().ToTable("Devices").HasBaseType<Device>();
         modelBuilder.Entity<WindowSensor>().ToTable("Devices").HasBaseType<Device>();
+        
+        modelBuilder.Entity<WindowSensor>().Property(ws => ws.Functionalities).HasColumnName("Functionalities");
+        modelBuilder.Entity<SecurityCamera>().Property(sc => sc.Functionalities).HasColumnName("Functionalities");
+            
         modelBuilder.Entity<Device>()
             .HasDiscriminator<string>("DeviceType")
             .HasValue<SecurityCamera>("SecurityCamera")
             .HasValue<WindowSensor>("WindowSensor");
+        modelBuilder.Entity<DeviceUnit>().HasOne<Device>(du => du.Device);
+        
         modelBuilder.Entity<Device>().HasOne<Company>(d=>d.Company);
         modelBuilder.Entity<Company>().Property(c => c.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Company>().HasOne<User>(c => c.Owner);
@@ -56,5 +65,18 @@ public class SmartHomeContext : DbContext
             .HasOne(n => n.Member)
             .WithMany(u => u.Notifications)
             .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<User>().HasMany<Role>();
+        
+        modelBuilder.Entity<Administrator>().ToTable("Roles").HasBaseType<Role>();
+        modelBuilder.Entity<HomeOwner>().ToTable("Roles").HasBaseType<Role>();
+        modelBuilder.Entity<CompanyOwner>().ToTable("Roles").HasBaseType<Role>();
+        modelBuilder.Entity<Role>().HasDiscriminator<string>("RoleType")
+            .HasValue<Administrator>("Administrator")
+            .HasValue<HomeOwner>("HomeOwner")
+            .HasValue<CompanyOwner>("CompanyOwner");
+        
+        modelBuilder.Entity<Role>().Property(r => r.Id).ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Home>().ToTable("Homes");
     }
 }

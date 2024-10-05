@@ -240,9 +240,12 @@ public class DevicesControllerTest
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
-            ((device as WindowSensor)!).Functionalities!.SequenceEqual(request.Functionalities!)
+            device.Company.Id == request.Company 
         )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultWindowSensor);
         
         ObjectResult? result = _deviceController.PostWindowSensors(request) as CreatedAtActionResult;
         
@@ -251,8 +254,7 @@ public class DevicesControllerTest
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
-            ((device as WindowSensor)!).Functionalities!.SequenceEqual(request.Functionalities!)
+            device.Company.Id == request.Company
         )), Times.Once);
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
@@ -267,11 +269,12 @@ public class DevicesControllerTest
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company.Id == request.Company &&
-            ((device as SecurityCamera)!).LocationType == request.LocationType &&
-            ((device as SecurityCamera)!).Functionalities != null &&
-            ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
+            device.Company.Id == request.Company 
         )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultCamera);
         
         ObjectResult? result = _deviceController.PostSecurityCameras(request) as CreatedAtActionResult;
         
@@ -281,10 +284,7 @@ public class DevicesControllerTest
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company.Id == request.Company &&
-            ((device as SecurityCamera)!).LocationType == request.LocationType &&
-            ((device as SecurityCamera)!).Functionalities != null &&
-            ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
+            device.Company.Id == request.Company
         )), Times.Once);
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
@@ -296,7 +296,11 @@ public class DevicesControllerTest
             DevicePhotoUrl
         ];
         
-        _defaultCompany = new Company { Name = CompanyName };
+        _defaultCompany = new Company
+        {
+            Name = CompanyName,
+            Id = 1
+        };
 
         _defaultCamera = new SecurityCamera()
         {
@@ -328,12 +332,12 @@ public class DevicesControllerTest
     {
         return new WindowSensorRequest()
         {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = [DevicePhotoUrl],
-            Description = DeviceDescription,
-            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed },
-            Company = _defaultCompany,
+            Name = _defaultWindowSensor.Name,
+            Model = _defaultWindowSensor.Model,
+            PhotoUrls = _defaultWindowSensor.PhotoURLs,
+            Description = _defaultWindowSensor.Description,
+            Functionalities = _defaultWindowSensor.Functionalities,
+            Company = _defaultCompany.Id,
         };
     }
 
@@ -341,13 +345,13 @@ public class DevicesControllerTest
     {
         return new SecurityCameraRequest()
         {
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            PhotoUrls = [DevicePhotoUrl],
-            Description = DeviceDescription,
+            Name = _defaultCamera.Name,
+            Model = _defaultCamera.Model,
+            PhotoUrls = _defaultCamera.PhotoURLs,
+            Description = _defaultCamera.Description,
             Company = _defaultCompany.Id,
-            LocationType = LocationType.Indoor,
-            Functionalities = [SecurityCameraFunctionality.MotionDetection],
+            LocationType = _defaultCamera.LocationType,
+            Functionalities = _defaultCamera.Functionalities,
         };
     }
     

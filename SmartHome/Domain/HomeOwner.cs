@@ -6,11 +6,14 @@ namespace Domain;
 public class HomeOwner : Role
 {
     private const string MessageHomeNotFound = "Home not found"; 
+    
+    public override string Kind { get; set; }
     public List<Home> Homes { get; set; }
 
     public HomeOwner()
     {
         Homes = new List<Home>();
+        Kind = GetType().Name;
     }
 
     public void AddHome(Home home)
@@ -32,4 +35,6 @@ public class HomeOwner : Role
         }
         throw new ElementNotFound(MessageHomeNotFound);
     }
+
+    
 }

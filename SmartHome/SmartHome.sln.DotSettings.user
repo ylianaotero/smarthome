@@ -12,18 +12,8 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=542f1b83_002D5d9a_002D41c1_002Da97d_002D6a9ae4d1766f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestGetNotificationByIdOkResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6c468d98_002D28ed_002D433b_002D86f0_002D09a6e7c2920d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestPostCompany" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Or&gt;
-    &lt;TestAncestor&gt;
-      &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.CompanyControllerTest.TestPostCompanyOkStatusCode&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.SessionServiceTest&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.NotificationTest&lt;/TestId&gt;
-    &lt;/TestAncestor&gt;
-    &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
-    &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
-  &lt;/Or&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6c468d98_002D28ed_002D433b_002D86f0_002D09a6e7c2920d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPostCompany" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=706417ba_002Da780_002D4757_002D9b8e_002Daa3c103fafeb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestDeleteMember" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
@@ -40,6 +30,11 @@
     &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
     &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;
   &lt;/Or&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e8bf59e2_002Ddf8a_002D4280_002D975d_002Dbdfbdecd331d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestPostSecurityCamerasCreatedStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.DevicesControllerTest&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	

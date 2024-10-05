@@ -13,17 +13,20 @@ namespace WebApi.Controllers;
 public class DeviceController : ControllerBase
 {
     private readonly IDeviceService _deviceService;
+    private readonly ICompanyService _companyService;
     
     private const string RoleWithPermissions = "CompanyOwner";
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string CreatedMessage = "The resource was created successfully.";
 
-    public DeviceController(IDeviceService deviceService)
+    public DeviceController(IDeviceService deviceService, ICompanyService companyService)
     {
         _deviceService = deviceService;
+        _companyService = companyService;
     }
     
     [HttpGet] 
+    [AllowAnonymous]
     public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         DevicesResponse devicesResponse = new DevicesResponse
@@ -52,6 +55,7 @@ public class DeviceController : ControllerBase
     
     [HttpGet]
     [Route("types")]
+    [AllowAnonymous]
     public IActionResult GetDeviceTypes()
     {
         List<string> deviceTypes = _deviceService.GetDeviceTypes();
@@ -66,8 +70,7 @@ public class DeviceController : ControllerBase
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
     {
-        _deviceService.CreateDevice(request.ToEntity());
-
+        _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         return CreatedAtAction(nameof(PostWindowSensors), request);
     }
 
@@ -76,7 +79,7 @@ public class DeviceController : ControllerBase
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest? request)
     {
-        _deviceService.CreateDevice(request.ToEntity());
+        _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
    
         return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
