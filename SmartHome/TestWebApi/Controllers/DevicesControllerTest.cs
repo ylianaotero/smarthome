@@ -294,6 +294,19 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostWindowSensorsNotFoundStatusCode()
     {
+        SecurityCameraRequest request = DefaultSecurityCameraRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostSecurityCameras(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostSecurityCamerasNotFoundStatusCode()
+    {
         WindowSensorRequest request = DefaultWindowSensorRequest();
         _mockICompanyService
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
