@@ -45,11 +45,11 @@ public class HomesControllerTest
     private const int OKStatusCode = 200;
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
+
+    private const bool Permission = true; 
     private const int ConflictStatusCode = 409;
     private const int PreconditionFailedStatusCode = 412;
     private const int ServerFailedStatusCode = 500;
-    
-    private const bool Permission = false; 
     
     
     private WindowSensor _defaultWindowSensor;
@@ -420,6 +420,42 @@ public class HomesControllerTest
         ObjectResult? result = _homeController.PutDevicesInHome(_defaultHome.Id,request) as OkObjectResult;
     
         Assert.IsNotNull(result);
+    }
+    
+    [TestMethod]
+    public void TestChangePermissionsToMemberOkResponse()
+    {
+        ChangePermissionsRequest request = new ChangePermissionsRequest()
+        {
+            MemberEmail = Email,
+            ReceivesNotifications = Permission
+            
+        };
+        _mockHomeService
+            .Setup(service => service
+                .ChangePermission(It.IsAny<MemberDTO>(), It.IsAny<long>()));
+    
+        ObjectResult? result = _homeController.ChangeNotificationPermission(_defaultHome.Id,request) as OkObjectResult;
+    
+        Assert.IsNotNull(result);
+    }
+    
+    [TestMethod]
+    public void TestChangePermissionsToMemberNotFoundResponse()
+    {
+        ChangePermissionsRequest request = new ChangePermissionsRequest()
+        {
+            MemberEmail = Email,
+            ReceivesNotifications = Permission
+            
+        };
+        _mockHomeService
+            .Setup(service => service
+                .ChangePermission(It.IsAny<MemberDTO>(), It.IsAny<long>())).Throws(new ElementNotFound(ElementNotFoundMessage));
+    
+        ObjectResult? result = _homeController.ChangeNotificationPermission(_defaultHome.Id,request) as ObjectResult;
+    
+        Assert.AreEqual(NotFoundStatusCode,result.StatusCode);
     }
     
     

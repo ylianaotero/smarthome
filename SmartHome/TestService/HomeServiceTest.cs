@@ -240,6 +240,65 @@ public class HomeServiceTest
     }
     
     [TestMethod]
+    public void TestChangePermission()
+    {
+        MemberDTO memberDto = new MemberDTO()
+        {
+            UserEmail = _user1.Email,
+            ReceivesNotifications = true
+        }; 
+        
+        _defaultHome.AddMember(_member1);
+        
+        _mockHomeRepository
+            .Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.ChangePermission(memberDto, _defaultHome.Id);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotChangePermissionBecauseHomeNotFound()
+    {
+        MemberDTO memberDto = new MemberDTO()
+        {
+            UserEmail = _user1.Email,
+            ReceivesNotifications = true
+        }; 
+        
+        _defaultHome.AddMember(_member1);
+        
+        _mockHomeRepository
+            .Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.ChangePermission(memberDto, _defaultHome.Id);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotChangePermissionBecauseMemberNotFound()
+    {
+        MemberDTO memberDto = new MemberDTO()
+        {
+            UserEmail = _user1.Email,
+            ReceivesNotifications = true
+        }; 
+        
+        _mockHomeRepository
+            .Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.ChangePermission(memberDto, _defaultHome.Id);
+    }
+        
+        
+    
+    [TestMethod]
     public void TestGetHomeById()
     {
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);

@@ -49,6 +49,21 @@ public class HomeService (
         Home home = GetHomeById(homeId);
         return home.Members;
     }
+    
+
+    public void ChangePermission(MemberDTO memberDto, long homeId)
+    {
+        List<Member> listOfMembers = GetMembersFromHome(homeId); 
+        
+        Member member = listOfMembers.FirstOrDefault(m => m.User.Email == memberDto.UserEmail);
+
+        if (member == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+
+        member.ReceivesNotifications = memberDto.ReceivesNotifications; 
+    }
 
     public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
