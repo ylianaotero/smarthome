@@ -1,4 +1,5 @@
 using BusinessLogic;
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -58,13 +59,6 @@ public class CompanyServiceTest
     [TestMethod]
     public void TestCreateCompany()
     {
-        _company = new Company()
-        {
-            Name = CompanyName,
-            RUT = RUT,
-            LogoURL = LogoUrl
-
-        };
         _mockCompanyRepository.Setup(x => x.Add(_company));
         _companyService.CreateCompany(_company);
         _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
@@ -83,6 +77,19 @@ public class CompanyServiceTest
         
         _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
         Assert.AreEqual(device.Company, _company);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddNonExistentCompanyToDevice()
+    {
+        Device device = new SecurityCamera()
+        {
+            Name = "Device 1",
+        };
+        
+        _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns((Company?)null);
+        _companyService.AddCompanyToDevice(CompanyId, device);
     }
     
     private void SetupDefaultObjects()
