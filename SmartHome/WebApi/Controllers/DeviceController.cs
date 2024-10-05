@@ -26,7 +26,9 @@ public class DeviceController : ControllerBase
     }
     
     [HttpGet] 
-    [AllowAnonymous]
+   // [AllowAnonymous]
+   // [RolesWithPermissions(RoleWithPermissions)]
+   [RolesWithPermissions("Administrator")]
     public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         DevicesResponse devicesResponse = new DevicesResponse
@@ -67,7 +69,8 @@ public class DeviceController : ControllerBase
     
     [HttpPost]
     [Route("window-sensors")]
-    [RolesWithPermissions(RoleWithPermissions)]
+    //[RolesWithPermissions(RoleWithPermissions)]
+    [AllowAnonymous]
     public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
     {
         try
@@ -84,7 +87,8 @@ public class DeviceController : ControllerBase
 
     [HttpPost]
     [Route("security-cameras")]
-    [RolesWithPermissions(RoleWithPermissions)]
+    //[RolesWithPermissions(RoleWithPermissions)]
+    [AllowAnonymous]
     public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
     {
         try

@@ -14,14 +14,16 @@ public class CreateHomeOwnerRequest
 
     public User ToEntity()
     {
+        HomeOwner homeOwner = new HomeOwner();
+        
         return new User
         {
             Name = Name,
             Email = Email,
             Password = Password,
             Surname = Surname,
-            Photo = Photo
-            
+            Photo = Photo,
+            Roles = new List<Role>{homeOwner}
         };
     }
 }

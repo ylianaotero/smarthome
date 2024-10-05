@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/companies")]
 [ApiController]
+[AllowAnonymous]
 public class CompanyController : ControllerBase
 {
     private readonly ICompanyService _companyService;
@@ -25,7 +27,7 @@ public class CompanyController : ControllerBase
     }
     
     [HttpGet]
-    [RolesWithPermissions(RoleWithPermissionsToGetCompanies)]
+   // [RolesWithPermissions(RoleWithPermissionsToGetCompanies)]
     public IActionResult GetCompanies([FromQuery] CompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         CompaniesResponse companiesResponse = new CompaniesResponse
@@ -36,7 +38,7 @@ public class CompanyController : ControllerBase
     
     
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
+  //  [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
     public IActionResult PostCompany([FromBody] CompanyRequest request)
     {
         try

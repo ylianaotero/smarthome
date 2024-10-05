@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/notifications")]
 [ApiController]
+[AllowAnonymous]
 public class NotificationsController : ControllerBase
 {
     private readonly INotificationService _notificationService;

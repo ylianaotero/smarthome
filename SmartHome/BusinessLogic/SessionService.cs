@@ -50,7 +50,7 @@ public class SessionService : ISessionService
 
     public User GetUser(Guid token)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == token, PageData.Default).FirstOrDefault();
+        Session session = _sessionRepository.GetByFilter(s => s.Id == token, null).FirstOrDefault();
 
         if (session == null)
         {

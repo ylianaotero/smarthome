@@ -26,7 +26,7 @@ public class HomeOwner : Role
         Homes.Remove(home);
     }
 
-    public Home SearchHome(int homeId)
+    public Home SearchHome(long homeId)
     {
         Home home = Homes.Find(h => h.Id == homeId);
         if (home != null)

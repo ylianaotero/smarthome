@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/users")]
 [ApiController]
+[AllowAnonymous]
 public class UserController : ControllerBase
 {
     private const string NotFoundMessage = "The requested resource was not found.";
@@ -22,7 +24,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    [RolesWithPermissions(RoleWithPermissions)]
+  //  [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult GetUsers([FromQuery] UsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         UsersResponse usersResponse;

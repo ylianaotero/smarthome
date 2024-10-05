@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -24,6 +25,7 @@ public class AdministratorController : ControllerBase
     }
     
     [HttpPost]
+    [AllowAnonymous]
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateUser([FromBody] CreateAdminRequest createAdminRequest)
     {

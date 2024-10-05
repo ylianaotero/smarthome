@@ -10,6 +10,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("/api/v1/login")]
 [AllowAnonymous]
+
 public class SessionController : ControllerBase
 {
     private readonly ISessionService _sessionService;

@@ -1,6 +1,7 @@
 using CustomExceptions;
 using Domain;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -10,6 +11,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/homes")]
 [ApiController]
+[AllowAnonymous]
 public class HomeController : ControllerBase
 {
     private readonly IHomeService _homeService;
@@ -30,7 +32,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet]
-    [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
+ //   [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
     public IActionResult GetHomes([FromQuery] HomeRequest request)
     {
         HomesResponse homesResponse = new HomesResponse(_homeService.GetHomesByFilter(request.ToFilter()));
@@ -39,7 +41,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+//    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult PostHomes([FromBody] CreateHomeRequest request)
     {
         try
@@ -65,7 +67,7 @@ public class HomeController : ControllerBase
     
     [HttpGet]
     [Route("{id}/members")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+  //  [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult GetMembersFromHome([FromRoute] long id)
     {
         try
@@ -80,7 +82,7 @@ public class HomeController : ControllerBase
     
     [HttpGet]
     [Route("{id}")]
-    [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
+   // [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
     public IActionResult GetHomeById([FromRoute] long id)
     {
         HomeResponse homeResponse;
@@ -99,7 +101,7 @@ public class HomeController : ControllerBase
 
     [HttpPut]
     [Route("{id}/devices")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+ //   [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] PutHomeDevicesRequest request)
     {
         try
@@ -115,7 +117,7 @@ public class HomeController : ControllerBase
     
     [HttpPut]
     [Route("{id}/members")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+  //  [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] MemberRequest request)
     {
         try

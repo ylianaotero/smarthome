@@ -53,7 +53,7 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<SecurityCamera>().Property(sc => sc.Functionalities).HasColumnName("Functionalities");
             
         modelBuilder.Entity<Device>()
-            .HasDiscriminator<string>("DeviceType")
+            .HasDiscriminator<string>("Kind")
             .HasValue<SecurityCamera>("SecurityCamera")
             .HasValue<WindowSensor>("WindowSensor");
         modelBuilder.Entity<DeviceUnit>().HasOne<Device>(du => du.Device);
@@ -65,18 +65,24 @@ public class SmartHomeContext : DbContext
             .HasOne(n => n.Member)
             .WithMany(u => u.Notifications)
             .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<User>().HasMany<Role>();
+        modelBuilder.Entity<User>().HasMany<Role>(u => u.Roles);
         
         modelBuilder.Entity<Administrator>().ToTable("Roles").HasBaseType<Role>();
         modelBuilder.Entity<HomeOwner>().ToTable("Roles").HasBaseType<Role>();
         modelBuilder.Entity<CompanyOwner>().ToTable("Roles").HasBaseType<Role>();
-        modelBuilder.Entity<Role>().HasDiscriminator<string>("RoleType")
+        
+        modelBuilder.Entity<Role>().Property(r => r.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Role>().HasDiscriminator<string>("Kind")
             .HasValue<Administrator>("Administrator")
             .HasValue<HomeOwner>("HomeOwner")
             .HasValue<CompanyOwner>("CompanyOwner");
         
-        modelBuilder.Entity<Role>().Property(r => r.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<User>().Navigation(r => r.Roles).AutoInclude();
 
         modelBuilder.Entity<Home>().ToTable("Homes");
+        modelBuilder.Entity<Home>().Property(h => h.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Home>().HasOne<User>(h => h.Owner);
+        modelBuilder.Entity<Home>().HasMany<Member>(h => h.Members);
+        modelBuilder.Entity<Home>().HasMany<DeviceUnit>(h => h.Devices);
     }
 }

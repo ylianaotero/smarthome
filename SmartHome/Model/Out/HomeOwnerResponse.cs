@@ -15,9 +15,7 @@ public class HomeOwnerResponse
 
     public HomeOwnerResponse(User user)
     {
-        HomeOwner homeOwner = new HomeOwner();
         List<Role> listOfRoles = user.Roles;
-        listOfRoles.Add(homeOwner);
         Name = user.Name;
         Email = user.Email;
         Surname = user.Surname;

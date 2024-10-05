@@ -9,6 +9,8 @@ public class CreateAdminRequest
     public string Password { get; set; }
     public string Surname { get; set; }
     
+    public string Photo { get; set; }
+    
     public User ToEntity()
     {
         Administrator admin = new Administrator();
@@ -19,7 +21,8 @@ public class CreateAdminRequest
             Email = Email,
             Password = Password,
             Surname = Surname,
-            Roles = new List<Role>{admin}
+            Roles = new List<Role>{admin},
+            Photo = Photo
         };
     }
 }
