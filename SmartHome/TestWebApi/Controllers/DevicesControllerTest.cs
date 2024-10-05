@@ -289,6 +289,19 @@ public class DevicesControllerTest
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostWindowSensorsNotFoundStatusCode()
+    {
+        WindowSensorRequest request = DefaultWindowSensorRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound("Company not found"));
+        
+        NotFoundResult? result = _deviceController.PostWindowSensors(request) as NotFoundResult;
+        
+        Assert.AreEqual(404, result!.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos =
