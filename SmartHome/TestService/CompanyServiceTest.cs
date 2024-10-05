@@ -18,6 +18,7 @@ public class CompanyServiceTest
     private const string CompanyName = "IoT Devices & Co.";
     private const string RUT = "123456789";
     private const string LogoUrl = "https://example.com/logo.jpg";
+    private const long CompanyId = 1;
 
     [TestInitialize]
     public void TestInitialize()
@@ -78,22 +79,26 @@ public class CompanyServiceTest
     [TestMethod]
     public void TestAddCompanyToDevice()
     {
-        _company = new Company()
-        {
-            Name = CompanyName,
-            RUT = RUT,
-            LogoURL = LogoUrl,
-            Id = 1
-        };
         Device device = new SecurityCamera()
         {
             Name = "Device 1",
         };
         
-        _mockCompanyRepository.Setup(x => x.GetById(1)).Returns(_company);
-        _companyService.AddCompanyToDevice(1, device);
+        _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns(_company);
+        _companyService.AddCompanyToDevice(CompanyId, device);
         
         _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
         Assert.AreEqual(device.Company, _company);
+    }
+    
+    private void SetupDefaultCompany()
+    {
+        _company = new Company()
+        {
+            Name = CompanyName,
+            RUT = RUT,
+            LogoURL = LogoUrl,
+            Id = CompanyId
+        };
     }
 }
