@@ -22,6 +22,7 @@ public class UserControllerTest
     private const int Page = 1;
     private const int PageSize = 10;
     private const string Role = "Administrator";
+    private const string CannotFinItemMessage = "Cannot find item in list";
     
     private List<Role> _listOfRoles;
     private Session _session; 
@@ -126,6 +127,17 @@ public class UserControllerTest
         _userServiceMock.Verify();
 
         Assert.AreEqual(expectedResponse, usersResponse);
+    }
+
+    [TestMethod]
+    public void CannotGetUsers()
+    {
+        
+        _userServiceMock
+            .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Throws(new CannotFindItemInList(CannotFinItemMessage));
+        
+        _userController.GetUsers(new UsersRequest(), DefaultPageDataRequest());
     }
     
     private PageDataRequest DefaultPageDataRequest()

@@ -38,7 +38,7 @@ public class HomeController : ControllerBase
     }
     
     [HttpPut]
-    [Route("{id}/members")]
+    [Route("{id}/members/notifications")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] ChangePermissionsRequest request)
     {

@@ -373,6 +373,15 @@ public class HomesControllerTest
         Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
     }
 
+    [TestMethod]
+    public void TestCannotAddMemberToHomePreconditionFailed()
+    {
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(It.IsAny<long>(), It.IsAny<MemberDTO>()))
+            .Throws(new CannotAddItem(CannotAddItem));
+        
+        _homeController.AddMemberToHome(1, new MemberRequest());
+    }
     
     [TestMethod]
     public void TestPutDevicesInHomeOkStatusCode()
