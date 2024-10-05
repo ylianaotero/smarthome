@@ -41,21 +41,4 @@ public class UserController : ControllerBase
         
         return Ok(usersResponse);
     }
-  
-    [HttpDelete]
-    [RolesWithPermissions(RoleWithPermissions)]
-    [Route("{id}")]
-    public IActionResult DeleteUser([FromRoute] long id)
-    {
-        try
-        {
-            _userService.DeleteUser(id);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound();
-        }
-
-        return Ok();
-    }
 }
