@@ -10,16 +10,13 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/home-owners")]
 [ApiController]
-[AllowAnonymous]
 public class HomeOwnerController : ControllerBase
 {
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
+    private const int StatusCodeInternalServerError = 500; 
+    private const string RoleWithPermissions = "HomeOwner";
     
     private readonly IUserService _userService;
-    
-    private const string RoleWithPermissions = "Administrator";
-
-    private const int StatusCodeInternalServerError = 500; 
 
     public HomeOwnerController(IUserService userService)
     {
@@ -27,6 +24,7 @@ public class HomeOwnerController : ControllerBase
     }
     
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
     {
         try
@@ -51,7 +49,8 @@ public class HomeOwnerController : ControllerBase
     }
     
      [HttpPut]
-       [Route("{id}")]
+     [Route("{id}")]
+     [RolesWithPermissions(RoleWithPermissions)]
        public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] UpdateHomeOwnerRequest updateHomeOwnerRequest)
        {
            try

@@ -12,9 +12,7 @@ namespace WebApi.Controllers;
 public class AdministratorController : ControllerBase
 {
     private const string RoleWithPermissions = "Administrator";
-
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
-
     private const int StatusCodeInternalServerError = 500; 
     
     private readonly IUserService _userService;
@@ -27,13 +25,14 @@ public class AdministratorController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult CreateUser([FromBody] CreateAdminRequest createAdminRequest)
+    public IActionResult CreateAdministrator([FromBody] CreateAdminRequest createAdminRequest)
     {
         try
         {
             _userService.CreateUser(createAdminRequest.ToEntity());
-            var userResponse = new AdminResponse(createAdminRequest.ToEntity());
-            return CreatedAtAction(nameof(CreateUser), userResponse);
+            AdminResponse userResponse = new AdminResponse(createAdminRequest.ToEntity());
+            
+            return CreatedAtAction(nameof(CreateAdministrator), userResponse);
         }
         catch (ElementAlreadyExist elementAlreadyExist)
         {
@@ -43,22 +42,5 @@ public class AdministratorController : ControllerBase
         {
             return StatusCode(StatusCodeInternalServerError, new { message =  ErrorMessageUnexpectedException});
         }
-    }
-    
-    [HttpDelete]
-    [RolesWithPermissions(RoleWithPermissions)]
-    [Route("{id}")]
-    public IActionResult DeleteUser([FromRoute] long id)
-    {
-        try
-        {
-            _userService.DeleteUser(id);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound();
-        }
-
-        return Ok();
     }
 }

@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-  //  [RolesWithPermissions(RoleWithPermissions)]
+    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult GetUsers([FromQuery] UsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         UsersResponse usersResponse;
@@ -40,5 +40,22 @@ public class UserController : ControllerBase
         }
         
         return Ok(usersResponse);
+    }
+  
+    [HttpDelete]
+    [RolesWithPermissions(RoleWithPermissions)]
+    [Route("{id}")]
+    public IActionResult DeleteUser([FromRoute] long id)
+    {
+        try
+        {
+            _userService.DeleteUser(id);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound();
+        }
+
+        return Ok();
     }
 }

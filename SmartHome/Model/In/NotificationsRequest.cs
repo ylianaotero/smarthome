@@ -4,11 +4,11 @@ namespace Model.In;
 
 public class NotificationsRequest
 {
-    public int HomeId { get; set; }
-    public int UserId { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public bool Read { get; set; }
-    public string Kind { get; set; }
+    public int? HomeId { get; set; }
+    public int? UserId { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public bool? Read { get; set; }
+    public string? Kind { get; set; }
     
     public Func<Notification,bool> ToFilter()
     {

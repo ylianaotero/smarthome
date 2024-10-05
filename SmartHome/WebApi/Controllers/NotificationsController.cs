@@ -10,7 +10,6 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/notifications")]
 [ApiController]
-[AllowAnonymous]
 public class NotificationsController : ControllerBase
 {
     private readonly INotificationService _notificationService;
@@ -52,5 +51,4 @@ public class NotificationsController : ControllerBase
 
         return Created("/notifications",CreatedMessage);
     }
-
 }

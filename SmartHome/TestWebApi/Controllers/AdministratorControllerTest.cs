@@ -14,7 +14,6 @@ namespace TestWebApi.Controllers;
 public class AdministratorControllerTest
 {
     private const string ErrorMessageWhenUserAlreadyExists = "Member already exists";
-    private const string ErrorMessageWhenUserNotFound = "Member does not exists";
     
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
@@ -23,8 +22,7 @@ public class AdministratorControllerTest
     private const int CreatedStatusCode = 201;
     private const int ConflictStatusCode = 409;
     private const int InternalServerErrorStatusCode = 500;
-    private const int NotFoundStatusCode = 404;
-    private const int OkStatusCode = 200;
+    
     private static readonly Guid Token = new Guid();
 
 
@@ -78,7 +76,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
 
-        var result = _administratorController.CreateUser(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
         var userResponse = result?.Value as AdminResponse;
 
         _userServiceMock.Verify();
@@ -98,7 +96,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateUser(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -114,39 +112,10 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateUser(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
         Assert.AreEqual(InternalServerErrorStatusCode, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void TestDeleteUserOkStatusCode()
-    {
-        _userServiceMock.Setup(service => service.DeleteUser(It.IsAny<long>()));
-        
-        _administratorController = new AdministratorController(_userServiceMock.Object);
-        
-        var result = _administratorController.DeleteUser(1) as OkResult;
-        
-        _userServiceMock.Verify();
-        
-        Assert.AreEqual(OkStatusCode, result.StatusCode);
-    }
-    
-    [TestMethod]
-    public void TestDeleteUserNotFoundStatusCode()
-    {
-        _userServiceMock.Setup(service => service.DeleteUser(It.IsAny<long>()))
-            .Throws(new ElementNotFound(ErrorMessageWhenUserNotFound));
-        
-        _administratorController = new AdministratorController(_userServiceMock.Object);
-        
-        var result = _administratorController.DeleteUser(1) as NotFoundResult;
-        
-        _userServiceMock.Verify();
-        
-        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 }
