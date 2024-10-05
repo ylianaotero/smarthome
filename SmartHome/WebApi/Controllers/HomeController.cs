@@ -38,7 +38,7 @@ public class HomeController : ControllerBase
     }
     
     [HttpPut]
-    [Route("{id}/members")]
+    [Route("{id}/members/notifications")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] ChangePermissionsRequest request)
     {
@@ -162,6 +162,22 @@ public class HomeController : ControllerBase
         {
             _homeService.UpdateDeviceConnectionStatus(id, request.ToEntity());
             return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    [HttpGet]
+    [Route("{id}/devices")]
+    public IActionResult GetDevicesFromHome([FromRoute] int id)
+    {
+        DevicesUnitResponse devicesUnitResponse;
+        try
+        {
+            devicesUnitResponse = new DevicesUnitResponse(_homeService.GetDevicesFromHome(id));
+            return Ok(devicesUnitResponse);
         }
         catch (ElementNotFound)
         {

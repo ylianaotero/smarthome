@@ -32,53 +32,12 @@
     &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e8bf59e2_002Ddf8a_002D4280_002D975d_002Dbdfbdecd331d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestPostSecurityCamerasCreatedStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e8bf59e2_002Ddf8a_002D4280_002D975d_002Dbdfbdecd331d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPostSecurityCamerasCreatedStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Or&gt;
-    &lt;And&gt;
-      &lt;Or&gt;
-        &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
-        &lt;ProjectFile&gt;C38AF2E5-7E1A-451B-9502-06795F4C7BBE/d:Controllers/f:HomeOwnerControllerTest.cs&lt;/ProjectFile&gt;
-        &lt;ProjectFile&gt;C38AF2E5-7E1A-451B-9502-06795F4C7BBE/d:Controllers/f:HomesControllerTest.cs&lt;/ProjectFile&gt;
-        &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
-        &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
-        &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestService" Presentation="&amp;lt;TestService&amp;gt;" /&gt;
-        &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestWebApi" Presentation="&amp;lt;TestWebApi&amp;gt;" /&gt;
-      &lt;/Or&gt;
-      &lt;Not&gt;
-        &lt;TestAncestor&gt;
-          &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest.TestUpdateUser&lt;/TestId&gt;
-        &lt;/TestAncestor&gt;
-      &lt;/Not&gt;
-    &lt;/And&gt;
-    &lt;TestAncestor&gt;
-      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyTests.TestCompaniesAreEqual&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestAddCompanyToCompanyOwner&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestValidateExistingCompany&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestValidateNotExistentCompanyException&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A::net8.0::TestDomain.CompanyOwnerTest.TestValidateExistingCompanyException&lt;/TestId&gt;
-      &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest.TestUpdateUser&lt;/TestId&gt;
-    &lt;/TestAncestor&gt;
-    &lt;ProjectFile&gt;C449D9F2-32E8-4EBA-B14E-858E5EEEAD6A/f:HomeOwnerTest.cs&lt;/ProjectFile&gt;
-    &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestDomain" Presentation="&amp;lt;TestDomain&amp;gt;" /&gt;
-    &lt;Project Location="\Users\mariabelen\Desktop\ORT\Diseño2\301178_231810_280070\SmartHome\TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;
-  &lt;/Or&gt;
-&lt;/SessionState&gt;</s:String>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	</wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -373,6 +373,15 @@ public class HomesControllerTest
         Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
     }
 
+    [TestMethod]
+    public void TestCannotAddMemberToHomePreconditionFailed()
+    {
+        _mockHomeService
+            .Setup(service => service.AddMemberToHome(It.IsAny<long>(), It.IsAny<MemberDTO>()))
+            .Throws(new CannotAddItem(CannotAddItem));
+        
+        _homeController.AddMemberToHome(1, new MemberRequest());
+    }
     
     [TestMethod]
     public void TestPutDevicesInHomeOkStatusCode()
@@ -471,6 +480,37 @@ public class HomesControllerTest
     
         IActionResult result = _homeController.PutDevicesInHome(-1,request);
     
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
+    [TestMethod]
+    public void TestGetDevicesUnitOkResponse()
+    {
+        List<DeviceUnit> devicesUnit = new List<DeviceUnit>
+        {
+            new DeviceUnit()
+            {
+                Device = _defaultWindowSensor,
+                IsConnected = true
+            }
+        };
+        _mockHomeService.Setup(service => service.GetDevicesFromHome(It.IsAny<int>())).Returns(devicesUnit);
+        DevicesUnitResponse expectedResponse = new DevicesUnitResponse(devicesUnit);
+        
+        ObjectResult? result = _homeController.GetDevicesFromHome(1) as OkObjectResult;
+        DevicesUnitResponse response = (result!.Value as DevicesUnitResponse)!;
+        
+        Assert.AreEqual(expectedResponse, response);
+    }
+    
+    [TestMethod]
+    public void TestGetDevicesUnitNotFoundStatusCode()
+    {
+        _mockHomeService.Setup(service => service.GetDevicesFromHome(It.IsAny<int>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        IActionResult result = _homeController.GetDevicesFromHome(1);
+        
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
 
