@@ -7,6 +7,8 @@ namespace BusinessLogic;
 
 public class CompanyService(IRepository<Company> companyRepository) : ICompanyService
 {
+    private const string CompanyNotFound = "Company not found";
+    
     public List<Company> GetAllCompanies(PageData pageData)
     {
         return companyRepository.GetAll(pageData);
@@ -28,11 +30,12 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
         
         if (company == null)
         {
-            throw new ElementNotFound("Company not found");
+            throw new ElementNotFound(CompanyNotFound);
         }
         
         device.Company = company;
         companyRepository.Update(company);
+        
         return device;
     }
 }
