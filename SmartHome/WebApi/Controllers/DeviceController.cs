@@ -85,10 +85,17 @@ public class DeviceController : ControllerBase
     [HttpPost]
     [Route("security-cameras")]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest? request)
+    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
     {
-        _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
-   
+        try
+        {
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(CompanyNotFoundMessage);
+        }
+        
         return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
     
