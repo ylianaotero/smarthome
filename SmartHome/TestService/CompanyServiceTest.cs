@@ -74,4 +74,26 @@ public class CompanyServiceTest
         _companyService.CreateCompany(_company);
         _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
     }
+    
+    [TestMethod]
+    public void TestAddCompanyToDevice()
+    {
+        _company = new Company()
+        {
+            Name = CompanyName,
+            RUT = RUT,
+            LogoURL = LogoUrl,
+            Id = 1
+        };
+        Device device = new SecurityCamera()
+        {
+            Name = "Device 1",
+        };
+        
+        _mockCompanyRepository.Setup(x => x.GetById(1)).Returns(_company);
+        _companyService.AddCompanyToDevice(1, device);
+        
+        _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
+        Assert.AreEqual(device.Company, _company);
+    }
 }
