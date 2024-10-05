@@ -153,6 +153,21 @@ public class HomeController : ControllerBase
         }
     }
     
+    [HttpPatch]
+    [Route("{id}/devices")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateDeviceConnectionStatus([FromRoute] long id, [FromBody] UpdateDeviceConnectionStatusRequest request)
+    {
+        try
+        {
+            _homeService.UpdateDeviceConnectionStatus(id, request.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
     
     [HttpGet]
     [Route("{id}/devices")]
