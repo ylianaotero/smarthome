@@ -14,6 +14,10 @@ namespace TestWebApi.Controllers;
 public class AdministratorControllerTest
 {
     private const string ErrorMessageWhenUserAlreadyExists = "Member already exists";
+    private const int NotFoundStatusCode = 404;
+    private const int OkStatusCode = 200;
+    private const string ErrorMessageWhenUserNotFound = "User does not exists";
+
     
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
@@ -117,5 +121,34 @@ public class AdministratorControllerTest
         _userServiceMock.Verify();
         
         Assert.AreEqual(InternalServerErrorStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestDeleteUserOkStatusCode()
+    {
+        _userServiceMock.Setup(service => service.DeleteUser(It.IsAny<long>()));
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object);
+        
+        var result = _administratorController.DeleteAdministrator(1) as OkResult;
+        
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(OkStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestDeleteUserNotFoundStatusCode()
+    {
+        _userServiceMock.Setup(service => service.DeleteUser(It.IsAny<long>()))
+            .Throws(new ElementNotFound(ErrorMessageWhenUserNotFound));
+        
+        _administratorController = new AdministratorController(_userServiceMock.Object);
+        
+        var result = _administratorController.DeleteAdministrator(1) as NotFoundResult;
+        
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 }
