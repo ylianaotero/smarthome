@@ -15,6 +15,7 @@ public class DevicesControllerTest
 {
     private DeviceController _deviceController;
     private Mock<IDeviceService> _mockIDeviceService;
+    private Mock<ICompanyService> _mockICompanyService;
     private Mock<ISessionService> _mockISessionService;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
@@ -261,11 +262,12 @@ public class DevicesControllerTest
     {
         SecurityCameraRequest request = DefaultSecurityCameraRequest();
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Company != null &&
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
+            device.Company.Id == request.Company &&
             ((device as SecurityCamera)!).LocationType == request.LocationType &&
             ((device as SecurityCamera)!).Functionalities != null &&
             ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
@@ -274,11 +276,12 @@ public class DevicesControllerTest
         ObjectResult? result = _deviceController.PostSecurityCameras(request) as CreatedAtActionResult;
         
         _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Company != null &&
             device.Name == request.Name &&
             device.Model == request.Model &&
             device.PhotoURLs == request.PhotoUrls &&
             device.Description == request.Description &&
-            device.Company == request.Company &&
+            device.Company.Id == request.Company &&
             ((device as SecurityCamera)!).LocationType == request.LocationType &&
             ((device as SecurityCamera)!).Functionalities != null &&
             ((device as SecurityCamera)!).Functionalities!.SequenceEqual(request.Functionalities)
@@ -317,7 +320,8 @@ public class DevicesControllerTest
     {
         _mockIDeviceService = new Mock<IDeviceService>();
         _mockISessionService = new Mock<ISessionService>();
-        _deviceController = new DeviceController(_mockIDeviceService.Object);
+        _mockICompanyService = new Mock<ICompanyService>();
+        _deviceController = new DeviceController(_mockIDeviceService.Object, _mockICompanyService.Object);
     }
     
     private WindowSensorRequest DefaultWindowSensorRequest()
@@ -341,7 +345,7 @@ public class DevicesControllerTest
             Model = DeviceModel,
             PhotoUrls = [DevicePhotoUrl],
             Description = DeviceDescription,
-            Company = _defaultCompany,
+            Company = _defaultCompany.Id,
             LocationType = LocationType.Indoor,
             Functionalities = [SecurityCameraFunctionality.MotionDetection],
         };
