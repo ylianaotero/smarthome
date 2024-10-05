@@ -43,4 +43,21 @@ public class AdministratorController : ControllerBase
             return StatusCode(StatusCodeInternalServerError, new { message =  ErrorMessageUnexpectedException});
         }
     }
+    
+    [HttpDelete]
+    [RolesWithPermissions(RoleWithPermissions)]
+    [Route("/api/v1/administrators/{id}")]
+    public IActionResult DeleteAdministrator([FromRoute] long id)
+    {
+        try
+        {
+            _userService.DeleteUser(id);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound();
+        }
+
+        return Ok();
+    }
 }

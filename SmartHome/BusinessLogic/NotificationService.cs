@@ -9,7 +9,8 @@ public class NotificationService : INotificationService
 {
     private readonly IRepository<Notification> _notificationRepository;
     private readonly IRepository<Home> _homeRepository;
-    private const string NotificationDoesNotExistExceptionMessage = "Notification not found";
+    private const string ElementDoesNotExistExceptionMessage = "Element not found";
+    private const string ElementAlreadyExistsExceptionMessage = "Element already exists";
     
     public NotificationService(IRepository<Notification> notificationRepository)
     {
@@ -26,7 +27,7 @@ public class NotificationService : INotificationService
         Notification notification = _notificationRepository.GetById(id);
         if(notification == null)
         {
-            throw new ElementNotFound("Notification not found");
+            throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
         return notification;
     }
@@ -38,11 +39,26 @@ public class NotificationService : INotificationService
         
         if (notification == null)
         {
-            throw new ElementNotFound(NotificationDoesNotExistExceptionMessage);
+            throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
         
 
         return notification; 
+    }
+    
+    public void CreateNotification(Notification notification)
+    {
+        try
+        {
+            GetBy(n => n.Event == notification.Event, PageData.Default);
+            
+            throw new ElementAlreadyExist(ElementAlreadyExistsExceptionMessage);
+        }
+        catch (ElementNotFound)
+        {
+            _notificationRepository.Add(notification);
+        }
+        
     }
 
     public void SendNotifications(NotificationDTO notificationData)
@@ -50,12 +66,12 @@ public class NotificationService : INotificationService
         Home home = _homeRepository.GetById(notificationData.HomeId);
         if(home == null)
         {
-            throw new ElementNotFound("Home not found");
+            throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
         List<DeviceUnit> devices = home.Devices;
         if(devices == null)
         {
-            throw new ElementNotFound("Devices not found");
+            throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
 
         DeviceUnit device = devices.FirstOrDefault(d => d.HardwareId.ToString() == notificationData.HardwareId.ToString());
