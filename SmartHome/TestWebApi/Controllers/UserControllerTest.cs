@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -21,7 +22,7 @@ public class UserControllerTest
     private const int Page = 1;
     private const int PageSize = 10;
     private const string Role = "Administrator";
-
+    
     private List<Role> _listOfRoles;
     private Session _session; 
     

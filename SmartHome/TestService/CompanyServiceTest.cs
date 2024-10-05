@@ -1,4 +1,5 @@
 using BusinessLogic;
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -18,18 +19,13 @@ public class CompanyServiceTest
     private const string CompanyName = "IoT Devices & Co.";
     private const string RUT = "123456789";
     private const string LogoUrl = "https://example.com/logo.jpg";
+    private const long CompanyId = 1;
 
     [TestInitialize]
     public void TestInitialize()
     {
-        _user = new User() { Email = NewEmail }; 
+        SetupDefaultObjects();
         CreateMockCompanyRepository();
-    }
-
-    private void CreateMockCompanyRepository()
-    {
-        _mockCompanyRepository = new Mock<IRepository<Company>>();
-        _companyService = new CompanyService(_mockCompanyRepository.Object);
     }
     
     [TestMethod]
@@ -63,15 +59,56 @@ public class CompanyServiceTest
     [TestMethod]
     public void TestCreateCompany()
     {
+        _mockCompanyRepository.Setup(x => x.Add(_company));
+        _companyService.CreateCompany(_company);
+        _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
+    }
+    
+    [TestMethod]
+    public void TestAddCompanyToDevice()
+    {
+        Device device = new SecurityCamera()
+        {
+            Name = "Device 1",
+        };
+        
+        _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns(_company);
+
+        _companyService = new CompanyService(_mockCompanyRepository.Object); 
+        _companyService.AddCompanyToDevice(CompanyId, device);
+        
+        _mockCompanyRepository.Verify(x => x.Update(_company), Times.Once);
+        Assert.AreEqual(device.Company, _company);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddNonExistentCompanyToDevice()
+    {
+        Device device = new SecurityCamera()
+        {
+            Name = "Device 1",
+        };
+        
+        _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns((Company?)null);
+        _companyService.AddCompanyToDevice(CompanyId, device);
+    }
+    
+    private void SetupDefaultObjects()
+    {
+        _user = new User() { Email = NewEmail }; 
         _company = new Company()
         {
             Name = CompanyName,
             RUT = RUT,
-            LogoURL = LogoUrl
-
+            LogoURL = LogoUrl,
+            Id = CompanyId
         };
-        _mockCompanyRepository.Setup(x => x.Add(_company));
-        _companyService.CreateCompany(_company);
-        _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
+    }
+    
+    private void CreateMockCompanyRepository()
+    {
+        _mockCompanyRepository = new Mock<IRepository<Company>>();
+        _companyService = new CompanyService(_mockCompanyRepository.Object);
     }
 }

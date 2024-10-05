@@ -16,7 +16,7 @@ public class UserServiceTest
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
     
-    private const string UserDoesNotExistExceptionMessage = "User not found";
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
     
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;

@@ -30,7 +30,7 @@ public class SessionController : ControllerBase
         }
         catch (CannotFindItemInList ex) 
         {
-            return StatusCode(404, ex.Message);
+            return NotFound(ex.Message);
         }
     }
 

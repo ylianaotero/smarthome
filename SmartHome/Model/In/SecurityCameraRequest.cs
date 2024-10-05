@@ -10,7 +10,7 @@ public class SecurityCameraRequest
     public List<string> PhotoUrls { get; set; }
     public LocationType? LocationType { get; set; }
     public List<SecurityCameraFunctionality> Functionalities { get; set; }
-    public Company? Company { get; set; }
+    public long Company { get; set; }
     
     public SecurityCamera ToEntity() 
     {
@@ -21,8 +21,7 @@ public class SecurityCameraRequest
             Description = this.Description,
             PhotoURLs = this.PhotoUrls,
             LocationType = this.LocationType,
-            Functionalities = this.Functionalities,
-            Company = this.Company
+            Functionalities = this.Functionalities
         };
     }
 }

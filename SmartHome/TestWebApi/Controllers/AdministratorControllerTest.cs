@@ -13,8 +13,11 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class AdministratorControllerTest
 {
-    private const string ErrorMessageWhenUserAlreadyExists = "User already exists";
+    private const string ErrorMessageWhenUserAlreadyExists = "Member already exists";
+    private const int NotFoundStatusCode = 404;
+    private const int OkStatusCode = 200;
     private const string ErrorMessageWhenUserNotFound = "User does not exists";
+
     
     private const string Name =  "John";
     private const string Email = "john.doe@example.com";
@@ -23,8 +26,7 @@ public class AdministratorControllerTest
     private const int CreatedStatusCode = 201;
     private const int ConflictStatusCode = 409;
     private const int InternalServerErrorStatusCode = 500;
-    private const int NotFoundStatusCode = 404;
-    private const int OkStatusCode = 200;
+    
     private static readonly Guid Token = new Guid();
 
 
@@ -78,7 +80,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
 
-        var result = _administratorController.CreateUser(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
         var userResponse = result?.Value as AdminResponse;
 
         _userServiceMock.Verify();
@@ -98,7 +100,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateUser(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -114,7 +116,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateUser(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -128,7 +130,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.DeleteUser(1) as OkResult;
+        var result = _administratorController.DeleteAdministrator(1) as OkResult;
         
         _userServiceMock.Verify();
         
@@ -143,7 +145,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.DeleteUser(1) as NotFoundResult;
+        var result = _administratorController.DeleteAdministrator(1) as NotFoundResult;
         
         _userServiceMock.Verify();
         

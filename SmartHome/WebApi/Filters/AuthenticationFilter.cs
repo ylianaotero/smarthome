@@ -1,3 +1,4 @@
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,56 +17,172 @@ namespace WebApi.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
-                .OfType<AllowAnonymousAttribute>()
-                .FirstOrDefault();
-
-            if (allowAnonymousAttribute != null)
+            if (HandleAnnonymousAttribute(context))
             {
                 return;
             }
             
+            (bool isValid, Guid uppercaseToken) = HandleAuthorizationToken(context);
+            if (!isValid)
+            {
+                return;
+            }
+
+            if (!HandleRolesWithPermissionsAttribute(context, uppercaseToken))
+            {
+                return;
+            }
+
+            if (!HandlePrivilegedMembersAttribute(context, uppercaseToken))
+            {
+                return;
+            }
+        }
+        
+        private bool HandleAnnonymousAttribute(AuthorizationFilterContext context)
+        {
+            AllowAnonymousAttribute? allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
+                .OfType<AllowAnonymousAttribute>()
+                .FirstOrDefault();
+
+            return allowAnonymousAttribute != null;
+        }
+
+        private (bool, Guid) HandleAuthorizationToken(AuthorizationFilterContext context)
+        {
             if (!context.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues token))
             {
                 SetUnauthorizedResult(context, MissingHeaderMessage);
-                return;
+                return (false, Guid.Empty);
             }
 
             if (!Guid.TryParse(token, out Guid parsedToken))
             {
                 SetBadRequestResult(context, InvalidTokenMessage);
-                return;
+                return (false, Guid.Empty);
             }
 
             ISessionService sessionService = GetSessionService(context);
-            
+
             Guid uppercaseToken = Guid.Parse(token.ToString().ToUpper());
 
             if (!sessionService.AuthorizationIsValid(uppercaseToken))
             {
                 SetUnauthorizedResult(context, TokenDoesNotCorrespondToUserMessage);
-                return;
+                return (false, Guid.Empty);
             }
-
-            var rolesWithPermissionsAttribute = context.ActionDescriptor.EndpointMetadata
+            
+            return (true, uppercaseToken);
+        }
+        
+        private bool HandleRolesWithPermissionsAttribute(AuthorizationFilterContext context, Guid uppercaseToken)
+        {
+            ISessionService sessionService = GetSessionService(context);
+            
+            RolesWithPermissionsAttribute? rolesWithPermissionsAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<RolesWithPermissionsAttribute>()
                 .FirstOrDefault();
 
             if (rolesWithPermissionsAttribute != null)
             {
-                bool correctUser = rolesWithPermissionsAttribute.RolesWithPermissions
-                    .Any(role => sessionService.UserHasPermissions(uppercaseToken, role));
+                return RestrictToRolesWithPermissions(context, rolesWithPermissionsAttribute, uppercaseToken);
+            }
+            
+            return true;
+        }
+        
+        private bool RestrictToRolesWithPermissions(AuthorizationFilterContext context, 
+            RolesWithPermissionsAttribute attribute, Guid token)
+        {
+            ISessionService sessionService = GetSessionService(context);
+            
+            bool correctUser = attribute.RolesWithPermissions
+                .Any(role => sessionService.UserHasCorrectRole(token, role));
 
-                if (!correctUser)
+            if (correctUser) return true;
+            
+            SetForbiddenResult(context, UserDoesNotHavePermissionsMessage);
+            return false;
+
+        }
+        
+        private bool HandlePrivilegedMembersAttribute(AuthorizationFilterContext context, Guid uppercaseToken)
+        {
+            string homeIdStr = context.HttpContext.Request.RouteValues["id"]?.ToString() ?? "-1";
+            int homeId = int.Parse(homeIdStr);
+            
+            if (homeId != -1)
+            {
+                RestrictToPrivilegedMembersAttribute? restrictToPrivilegedMembersAttribute = context.ActionDescriptor.EndpointMetadata
+                    .OfType<RestrictToPrivilegedMembersAttribute>()
+                    .FirstOrDefault();
+                
+                if (restrictToPrivilegedMembersAttribute != null)
+                {
+                    return RestrictToPrivilegedMembers(context, restrictToPrivilegedMembersAttribute, uppercaseToken, homeId);
+                }
+            }
+            
+            return true;
+        }
+
+        private bool RestrictToPrivilegedMembers(AuthorizationFilterContext context, 
+            RestrictToPrivilegedMembersAttribute attribute, Guid token, long homeId)
+        {
+            return RestrictToPrivilegedMembersWithAddDevicesPermission(context, attribute, token, homeId) &&
+                   RestrictToPrivilegedMembersWithListDevicesPermission(context, attribute, token, homeId);
+        }
+        
+        private bool RestrictToPrivilegedMembersWithAddDevicesPermission(AuthorizationFilterContext context, 
+            RestrictToPrivilegedMembersAttribute attribute, Guid token, long homeId)
+        {
+            IHomeService homeService = GetHomeService(context);
+            ISessionService sessionService = GetSessionService(context);
+
+            try
+            {
+                if (attribute.WithAddPermissions && 
+                    !sessionService.UserCanAddDevicesInHome(token, homeService.GetHomeById(homeId)))
                 {
                     SetForbiddenResult(context, UserDoesNotHavePermissionsMessage);
                 }
+            } catch (ElementNotFound)
+            {
+                return false;
             }
+            
+            return true;
+        }
+        
+        private bool RestrictToPrivilegedMembersWithListDevicesPermission(AuthorizationFilterContext context, 
+            RestrictToPrivilegedMembersAttribute attribute, Guid token, long homeId)
+        {
+            IHomeService homeService = GetHomeService(context);
+            ISessionService sessionService = GetSessionService(context);
+
+            try 
+            {
+                if (attribute.WithListPermissions && 
+                    !sessionService.UserCanListDevicesInHome(token, homeService.GetHomeById(homeId)))
+                {
+                    SetForbiddenResult(context, UserDoesNotHavePermissionsMessage);
+                }
+            } catch (ElementNotFound)
+            {
+                return false;
+            }
+            
+            return true;
         }
 
         private ISessionService GetSessionService(AuthorizationFilterContext context)
         {
             return context.HttpContext.RequestServices.GetService(typeof(ISessionService)) as ISessionService;
+        }
+        
+        private IHomeService GetHomeService(AuthorizationFilterContext context)
+        {
+            return context.HttpContext.RequestServices.GetService(typeof(IHomeService)) as IHomeService;
         }
 
         private void SetUnauthorizedResult(AuthorizationFilterContext context, string message)
