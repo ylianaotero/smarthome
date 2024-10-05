@@ -26,6 +26,11 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
     {
         Company company = companyRepository.GetById(companyId);
         
+        if (company == null)
+        {
+            throw new ElementNotFound("Company not found");
+        }
+        
         device.Company = company;
         companyRepository.Update(company);
         return device;
