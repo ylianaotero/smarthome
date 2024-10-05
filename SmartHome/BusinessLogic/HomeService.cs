@@ -196,4 +196,23 @@ public class HomeService (
 
         return (user, role as HomeOwner);
     }
+    
+    public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
+    {
+        Home home = homeRepository.GetById(id);
+        if(home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        DeviceUnit device = home.Devices.FirstOrDefault(d => d.HardwareId == deviceUnit.HardwareId);
+        
+        if (device == null)
+        {
+            throw new ElementNotFound(DeviceNotFoundMessage);
+        }
+        
+        device.IsConnected = deviceUnit.IsConnected;
+        
+        homeRepository.Update(home);
+    }
 }

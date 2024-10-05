@@ -473,6 +473,43 @@ public class HomesControllerTest
     
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+
+    [TestMethod]
+    public void TestUpdateDeviceStatusOkStatusCode()
+    {
+        UpdateDeviceConnectionStatusRequest request = new UpdateDeviceConnectionStatusRequest()
+        {
+            DeviceUnitId = new Guid(),
+            Status = true
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>())); 
+        _homeController = new HomeController(_mockHomeService.Object);
+        
+        ObjectResult? result = _homeController.UpdateDeviceConnectionStatus(_defaultHome.Id,request) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+        
+    }
+    
+    [TestMethod]
+    public void TestUpdateDeviceStatusNotFoundStatusCode()
+    {
+        UpdateDeviceConnectionStatusRequest request = new UpdateDeviceConnectionStatusRequest()
+        {
+            DeviceUnitId = new Guid(),
+            Status = true
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        _homeController = new HomeController(_mockHomeService.Object);
+        
+        ObjectResult? result = _homeController.UpdateDeviceConnectionStatus(_defaultHome.Id,request) as ObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+        
+    }
     
     private HomeResponse DefaultHomeResponse()
     {
