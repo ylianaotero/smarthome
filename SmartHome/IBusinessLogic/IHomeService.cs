@@ -13,4 +13,5 @@ public interface IHomeService
     Home AddOwnerToHome(long userId, Home home);
     Home GetHomeById(long id);
     void PutDevicesInHome(long homeId, List<DeviceUnitDTO> devices);
+    void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit);
 }

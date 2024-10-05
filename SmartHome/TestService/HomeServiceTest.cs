@@ -32,6 +32,7 @@ public class HomeServiceTest
     private const string NameWindowSensor = "Sensor de Ventana";
     private const string DescriptionWindowSensor = "Sensor para ventanas";
     private const string DescriptionSecurityCamera = "Cámara para exteriores";
+    private const string HomeNotFoundMessage = "Home not found";
     private const int ModelWindowSensor = 456;
     private const int ModelSecurityCamera = 123;
     private const int Id1 = 1;
@@ -484,6 +485,117 @@ public class HomeServiceTest
             (_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
         homeService.AddOwnerToHome(user.Id, home);
+    }
+    
+    [TestMethod]
+    public void TestUpdateDeviceConnectionStatus()
+    {
+        DeviceUnit device = new DeviceUnit()
+        {
+            Device = _securityCamera,
+            HardwareId = new Guid(),
+            IsConnected = IsConectedTrue
+        };
+        
+        DeviceUnit updatedDevice = new DeviceUnit()
+        {
+            Device = _securityCamera,
+            HardwareId = device.HardwareId,
+            IsConnected = IsConnectedFalse
+        };
+        
+        Home home = new Home()
+        {
+            Owner = _defaultOwner,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1,
+            Devices = new List<DeviceUnit>()
+            {
+                device
+            }
+        };
+        
+        _mockHomeRepository.Setup(m => m.GetById(home.Id)).Returns(home);
+        _mockDeviceRepository.Setup(m => m.GetById(device.Device.Id)).Returns(device.Device);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.UpdateDeviceConnectionStatus(home.Id, updatedDevice);
+        
+        _mockHomeRepository.Verify(m => m.Update(home), Times.Once);
+        
+        Assert.AreEqual(IsConnectedFalse, home.Devices[0].IsConnected);
+    }
+    
+    [TestMethod] 
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateDeviceStatusBecauseHomeNotFound()
+    {
+        DeviceUnit device = new DeviceUnit()
+        {
+            Device = _securityCamera,
+            HardwareId = new Guid(),
+            IsConnected = IsConectedTrue
+        };
+        
+        DeviceUnit updatedDevice = new DeviceUnit()
+        {
+            Device = _securityCamera,
+            HardwareId = new Guid(),
+            IsConnected = IsConnectedFalse
+        };
+        
+        Home home = new Home()
+        {
+            Owner = _defaultOwner,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1,
+            Devices = new List<DeviceUnit>()
+            {
+                device
+            }
+        };
+        
+        _mockHomeRepository.Setup(m => m.GetById(home.Id)).Returns((Home?)null);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.UpdateDeviceConnectionStatus(home.Id, updatedDevice);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateDeviceStatusBecauseDeviceNotFound()
+    {
+        DeviceUnit updatedDevice = new DeviceUnit()
+        {
+            Device = _securityCamera,
+            HardwareId = new Guid(),
+            IsConnected = IsConnectedFalse
+        };
+        
+        Home home = new Home()
+        {
+            Owner = _defaultOwner,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            Id = 1,
+        };
+        
+        _mockHomeRepository.Setup(m => m.GetById(home.Id)).Returns(home);
+        _mockDeviceRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns((Device?)null);
+        
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.UpdateDeviceConnectionStatus(home.Id, updatedDevice);
     }
     
     private void SetupDefaultObjects()
