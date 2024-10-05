@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain;
 using IBusinessLogic;
 using IDataAccess;
@@ -21,6 +22,9 @@ public class UserControllerTest
     private const int Page = 1;
     private const int PageSize = 10;
     private const string Role = "Administrator";
+    private const int NotFoundStatusCode = 404;
+    private const int OkStatusCode = 200;
+    private const string ErrorMessageWhenUserNotFound = "User does not exists";
 
     private List<Role> _listOfRoles;
     private Session _session; 
@@ -125,6 +129,35 @@ public class UserControllerTest
         _userServiceMock.Verify();
 
         Assert.AreEqual(expectedResponse, usersResponse);
+    }
+    
+    [TestMethod]
+    public void TestDeleteUserOkStatusCode()
+    {
+        _userServiceMock.Setup(service => service.DeleteUser(It.IsAny<long>()));
+        
+        _userController = new UserController(_userServiceMock.Object);
+        
+        var result = _userController.DeleteUser(1) as OkResult;
+        
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(OkStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestDeleteUserNotFoundStatusCode()
+    {
+        _userServiceMock.Setup(service => service.DeleteUser(It.IsAny<long>()))
+            .Throws(new ElementNotFound(ErrorMessageWhenUserNotFound));
+        
+        _userController = new UserController(_userServiceMock.Object);
+        
+        var result = _userController.DeleteUser(1) as NotFoundResult;
+        
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
     private PageDataRequest DefaultPageDataRequest()

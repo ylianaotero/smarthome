@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SmartHomeContext))]
-    [Migration("20241004032932_MigracionDeviceUnit")]
-    partial class MigracionDeviceUnit
+    [Migration("20241005184111_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Company");
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("Domain.Device", b =>
@@ -70,14 +70,10 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DeviceType")
+                    b.Property<string>("Kind")
                         .IsRequired()
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
-
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Model")
                         .HasColumnType("bigint");
@@ -96,32 +92,27 @@ namespace DataAccess.Migrations
 
                     b.ToTable("Devices");
 
-                    b.HasDiscriminator<string>("DeviceType").HasValue("Device");
+                    b.HasDiscriminator<string>("Kind").HasValue("Device");
 
                     b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Domain.DeviceUnit", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("HardwareId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("DeviceId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("HardwareId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("HomeId")
-                        .HasColumnType("int");
+                    b.Property<long?>("HomeId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsConnected")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("HardwareId");
 
                     b.HasIndex("DeviceId");
 
@@ -132,11 +123,11 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Home", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("DoorNumber")
                         .HasColumnType("int");
@@ -150,6 +141,9 @@ namespace DataAccess.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
+                    b.Property<int>("MaximumMembers")
+                        .HasColumnType("int");
+
                     b.Property<long>("OwnerId")
                         .HasColumnType("bigint");
 
@@ -161,7 +155,82 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("HomeOwnerId");
 
-                    b.ToTable("Home");
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Homes", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Member", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("HasPermissionToAddADevice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasPermissionToListDevices")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("HomeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("ReceivesNotifications")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("Domain.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DeviceUnitHardwareId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Event")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("HomeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MemberId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Read")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ReadAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceUnitHardwareId");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -172,7 +241,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("Kind")
                         .IsRequired()
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
@@ -184,9 +253,9 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
 
-                    b.HasDiscriminator().HasValue("Role");
+                    b.HasDiscriminator<string>("Kind").HasValue("Role");
 
                     b.UseTphMappingStrategy();
                 });
@@ -222,9 +291,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HomeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -243,8 +309,6 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HomeId");
-
                     b.ToTable("Users");
                 });
 
@@ -253,7 +317,9 @@ namespace DataAccess.Migrations
                     b.HasBaseType("Domain.Device");
 
                     b.Property<string>("Functionalities")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Functionalities");
 
                     b.Property<int?>("LocationType")
                         .HasColumnType("int");
@@ -268,13 +334,11 @@ namespace DataAccess.Migrations
                     b.HasBaseType("Domain.Device");
 
                     b.Property<string>("Functionalities")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Functionalities");
 
-                    b.ToTable("Devices", null, t =>
-                        {
-                            t.Property("Functionalities")
-                                .HasColumnName("WindowSensor_Functionalities");
-                        });
+                    b.ToTable("Devices", (string)null);
 
                     b.HasDiscriminator().HasValue("WindowSensor");
                 });
@@ -282,6 +346,8 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Domain.Administrator", b =>
                 {
                     b.HasBaseType("Domain.Role");
+
+                    b.ToTable("Roles", (string)null);
 
                     b.HasDiscriminator().HasValue("Administrator");
                 });
@@ -298,12 +364,16 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.ToTable("Roles", (string)null);
+
                     b.HasDiscriminator().HasValue("CompanyOwner");
                 });
 
             modelBuilder.Entity("Domain.HomeOwner", b =>
                 {
                     b.HasBaseType("Domain.Role");
+
+                    b.ToTable("Roles", (string)null);
 
                     b.HasDiscriminator().HasValue("HomeOwner");
                 });
@@ -348,6 +418,56 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.HomeOwner", null)
                         .WithMany("Homes")
                         .HasForeignKey("HomeOwnerId");
+
+                    b.HasOne("Domain.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Domain.Member", b =>
+                {
+                    b.HasOne("Domain.Home", null)
+                        .WithMany("Members")
+                        .HasForeignKey("HomeId");
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Notification", b =>
+                {
+                    b.HasOne("Domain.DeviceUnit", "DeviceUnit")
+                        .WithMany()
+                        .HasForeignKey("DeviceUnitHardwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Home", "Home")
+                        .WithMany()
+                        .HasForeignKey("HomeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Member", "Member")
+                        .WithMany("Notifications")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DeviceUnit");
+
+                    b.Navigation("Home");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -368,13 +488,6 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
-                {
-                    b.HasOne("Domain.Home", null)
-                        .WithMany("Members")
-                        .HasForeignKey("HomeId");
-                });
-
             modelBuilder.Entity("Domain.CompanyOwner", b =>
                 {
                     b.HasOne("Domain.Company", "Company")
@@ -391,6 +504,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Devices");
 
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("Domain.Member", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

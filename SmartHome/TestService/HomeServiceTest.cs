@@ -43,8 +43,12 @@ public class HomeServiceTest
     private User _user1;
     private User _user2;
 
+    private MemberDTO _memberDTO2;
+    private MemberDTO _memberDTO1; 
+    
     private Member _member2;
     private Member _member1; 
+
     
     [TestInitialize]
     public void TestInitialize()
@@ -164,14 +168,16 @@ public class HomeServiceTest
             MaximumMembers = MaxMembers,
         };
         _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
+        _mockUserRepository
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<User>() {_user1});
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
-        homeService.AddMemberToHome(_home.Id, _member1);
+        homeService.AddMemberToHome(_home.Id, _memberDTO1);
         
         _mockHomeRepository.Verify(m => m.Update(_home), Times.Once);
-        
-        Assert.IsTrue(_home.Members.Contains(_member1));
     }
     
     [TestMethod]
@@ -192,7 +198,7 @@ public class HomeServiceTest
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
-        homeService.AddMemberToHome(_home.Id, _member1);
+        homeService.AddMemberToHome(_home.Id, _memberDTO1);
     }
 
     [TestMethod]
@@ -205,7 +211,7 @@ public class HomeServiceTest
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
 
-        homeService.AddMemberToHome(nonExistentHomeId, _member1);
+        homeService.AddMemberToHome(nonExistentHomeId, _memberDTO1);
     }
 
     [TestMethod]
@@ -348,11 +354,42 @@ public class HomeServiceTest
             MaximumMembers = 1,
         };
         _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<User>() {_user1, _user2});
 
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
-        homeService.AddMemberToHome(_home.Id, _member1);
-        homeService.AddMemberToHome(_home.Id, _member2);
+        homeService.AddMemberToHome(_home.Id, _memberDTO1);
+        homeService.AddMemberToHome(_home.Id, _memberDTO2);
+    }
+    
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddMemberToHomeFailsIfUserNotFound()
+    {
+        _home = new Home()
+        {
+            Owner = _defaultOwner,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = 1,
+        };
+        _mockHomeRepository.Setup(m => m.GetById(_home.Id)).Returns(_home);
+        
+        _mockUserRepository
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<User>());
+
+        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
+        
+        homeService.AddMemberToHome(_home.Id, _memberDTO1);
     }
     
     [TestMethod]
@@ -520,7 +557,9 @@ public class HomeServiceTest
         _user1 = new User() {Email = NewEmail};
         _user2 = new User() {Email = NewEmail2};
         _member1 = new Member(_user1);
-        _member2 = new Member(_user2); 
+        _member2 = new Member(_user2);
+        _memberDTO1 = new MemberDTO() { UserEmail = NewEmail };
+        _memberDTO2 = new MemberDTO() { UserEmail = NewEmail2 }; 
     }
 
     private void CreateRepositoryMocks()

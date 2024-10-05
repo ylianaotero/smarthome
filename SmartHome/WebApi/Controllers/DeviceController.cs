@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -12,17 +13,19 @@ namespace WebApi.Controllers;
 public class DeviceController : ControllerBase
 {
     private readonly IDeviceService _deviceService;
+    private readonly ICompanyService _companyService;
     
     private const string RoleWithPermissions = "CompanyOwner";
     private const string NotFoundMessage = "The requested resource was not found.";
-    private const string CreatedMessage = "The resource was created successfully.";
+    private const string CompanyNotFoundMessage = "The company was not found.";
 
-    public DeviceController(IDeviceService deviceService)
+    public DeviceController(IDeviceService deviceService, ICompanyService companyService)
     {
         _deviceService = deviceService;
+        _companyService = companyService;
     }
     
-    [HttpGet]
+    [HttpGet] 
     public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         DevicesResponse devicesResponse = new DevicesResponse
@@ -63,20 +66,36 @@ public class DeviceController : ControllerBase
     [HttpPost]
     [Route("window-sensors")]
     [RolesWithPermissions(RoleWithPermissions)]
+    [AllowAnonymous]
     public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
     {
-        _deviceService.CreateDevice(request.ToEntity());
-
+        try
+        {
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        } 
+        catch (ElementNotFound)
+        {
+            return NotFound(CompanyNotFoundMessage);
+        } 
+        
         return CreatedAtAction(nameof(PostWindowSensors), request);
     }
 
     [HttpPost]
     [Route("security-cameras")]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest? request)
+    [AllowAnonymous]
+    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
     {
-        _deviceService.CreateDevice(request.ToEntity());
-   
+        try
+        {
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(CompanyNotFoundMessage);
+        }
+        
         return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
     

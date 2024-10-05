@@ -9,7 +9,7 @@ public class WindowSensorRequest
     public List<string> PhotoUrls { get; set; }
     public string Description { get; set; }
     public List<WindowSensorFunctionality>? Functionalities { get; set; }
-    public Company? Company { get; set; }
+    public long Company { get; set; }
     
     public WindowSensor ToEntity() 
     {
@@ -20,7 +20,6 @@ public class WindowSensorRequest
             PhotoURLs = this.PhotoUrls,
             Description = this.Description,
             Functionalities = this.Functionalities,
-            Company = this.Company
         };
     }
 }

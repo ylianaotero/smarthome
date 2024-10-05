@@ -13,11 +13,12 @@ public class HomeService (
     private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
-    private const string UserNotFoundMessage = "User not found";
-    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
+    private const string UserNotFoundMessage = "Member not found";
+    private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
     private const string HomeIsFullMessage = "The home is full";
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
 
     public void CreateHome(Home home)
     {
@@ -55,10 +56,10 @@ public class HomeService (
         return home.Devices;
     }
 
-    public void AddMemberToHome(long homeId, Member member)
+    public void AddMemberToHome(long homeId, MemberDTO memberDTO)
     {
         Home home = GetHomeById(homeId);
-        if (home.Members.Any(m => m.User.Email == member.User.Email))
+        if (home.Members.Any(m => m.User.Email == memberDTO.UserEmail))
         {
             throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
         }
@@ -68,8 +69,31 @@ public class HomeService (
             throw new CannotAddItem(HomeIsFullMessage);
         }
         
+        User user = GetBy(u => u.Email == memberDTO.UserEmail, PageData.Default);
+
+        Member member = new Member()
+        {
+            User = user,
+            Notifications = new List<Notification>(),
+            HasPermissionToAddADevice = memberDTO.HasPermissionToAddADevice,
+            HasPermissionToListDevices = memberDTO.HasPermissionToListDevices,
+            ReceivesNotifications = memberDTO.ReceivesNotifications
+        }; 
+        
         home.AddMember(member);
         homeRepository.Update(home);
+    }
+    
+    private User GetBy(Func<User, bool> predicate, PageData pageData)
+    {
+        User user = userRepository.GetByFilter(predicate, pageData).FirstOrDefault(); 
+        
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
     }
 
     public Home AddOwnerToHome(long userId, Home home)

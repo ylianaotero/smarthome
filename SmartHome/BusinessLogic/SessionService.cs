@@ -7,8 +7,8 @@ namespace BusinessLogic;
 
 public class SessionService : ISessionService
 {
-    private const string UserDoesNotExistExceptionMessage = "User not found";
-    private const string SessionDoesNotExistExceptionMessage = "User not found";
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
+    private const string SessionDoesNotExistExceptionMessage = "Member not found";
     
     private readonly IRepository<User> _userRepository;
     private readonly IRepository<Session> _sessionRepository;
@@ -50,7 +50,7 @@ public class SessionService : ISessionService
 
     public User GetUser(Guid token)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == token, PageData.Default).FirstOrDefault();
+        Session session = _sessionRepository.GetByFilter(s => s.Id == token, null).FirstOrDefault();
 
         if (session == null)
         {
@@ -60,7 +60,7 @@ public class SessionService : ISessionService
         return session.User; 
     }
     
-    public bool UserHasPermissions(Guid? authorization, string roleWithPermissions)
+    public bool UserHasCorrectRole(Guid? authorization, string roleWithPermissions)
     {
         return GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r, roleWithPermissions));
     }
@@ -68,11 +68,35 @@ public class SessionService : ISessionService
     public bool AuthorizationIsValid(Guid? authorization)
     {
         return authorization != null && UserIsAuthenticated(authorization.Value);
-    } 
+    }
+
+    public bool UserCanListDevicesInHome(Guid token, Home home)
+    {
+        return UserHasPermissionOrIsOwner(token, home, m => m.HasPermissionToListDevices);
+    }
+
+    public bool UserCanAddDevicesInHome(Guid token, Home home)
+    {
+        return UserHasPermissionOrIsOwner(token, home, m => m.HasPermissionToAddADevice);
+    }
+    
+    private bool UserHasPermissionOrIsOwner(Guid token, Home home, Func<Member, bool> permissionCheck)
+    {
+        User user = GetUser(token);
+        bool isOwner = home.Owner == user;
+        if (isOwner)
+        {
+            return true;
+        }
+
+        bool hasPermission = home.Members.Exists(m => m.User == user && permissionCheck(m));
+
+        return hasPermission;
+    }
     
     private bool RoleIsAdequate(Role role, string roleWithPermissions)
     {
-        return role.GetType().Name == roleWithPermissions;
+        return role.Kind == roleWithPermissions;
     }
     
     private bool UserIsAuthenticated(Guid authorization)

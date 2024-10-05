@@ -44,21 +44,6 @@ public class NotificationService : INotificationService
 
         return notification; 
     }
-    
-    public void CreateNotification(Notification notification)
-    {
-        try
-        {
-            GetBy(n => n.Event == notification.Event, PageData.Default);
-            
-            throw new ElementAlreadyExist("Notification already exists");
-        }
-        catch (ElementNotFound)
-        {
-            _notificationRepository.Add(notification);
-        }
-        
-    }
 
     public void SendNotifications(NotificationDTO notificationData)
     {
@@ -83,7 +68,7 @@ public class NotificationService : INotificationService
             notification.Event = notificationData.Event;
             notification.Home = home;
             notification.DeviceUnit = device;
-            notification.User = member.User;
+            notification.Member = member;
             member.Notifications.Add(notification);
         }
     }

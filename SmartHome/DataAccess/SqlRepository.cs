@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Linq.Expressions;
 using System.Reflection;
 using CustomExceptions;
 using IDataAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace DataAccess;
 
@@ -128,5 +130,24 @@ public class SqlRepository<T> : IRepository<T> where T : class
         {
             _database.Entry(element).Reference(property.Name).Load();
         }
+    }
+    
+    public List<T> GetFilteredAndIncludedRelatedEntities<T>(
+        Expression<Func<T, bool>> filterExpression,
+        Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : class
+    {
+        IQueryable<T> query = (IQueryable<T>)_entities;
+
+        if (include != null)
+        {
+            query = include(query);
+        }
+        
+        if (filterExpression != null)
+        {
+            query = query.Where(filterExpression);
+        }
+        
+        return query.ToList();
     }
 }

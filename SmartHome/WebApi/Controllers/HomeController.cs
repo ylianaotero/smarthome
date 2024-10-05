@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -19,7 +18,10 @@ public class HomeController : ControllerBase
     private const string UpdatedHomeMessage = "The home was updated successfully.";
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
-    private const string UserIsNotHomeOwnerMessage = "User is not a home owner";
+    private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
+    private const string SourceAlreadyExistsMessage = "Source Already Exists";
+    
+    private const int PreconditionFailedStatusCode = 412;
     
     public HomeController(IHomeService homeService)
     {
@@ -96,7 +98,7 @@ public class HomeController : ControllerBase
 
     [HttpPut]
     [Route("{id}/devices")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    [RestrictToPrivilegedMembers(false, true)]
     public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] PutHomeDevicesRequest request)
     {
         try
@@ -109,4 +111,29 @@ public class HomeController : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
+    
+    [HttpPut]
+    [Route("{id}/members")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] MemberRequest request)
+    {
+        try
+        {
+            _homeService.AddMemberToHome(id, request.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+        catch (ElementAlreadyExist)
+        {
+            return Conflict(SourceAlreadyExistsMessage);
+        }
+        catch (CannotAddItem e)
+        {
+            return StatusCode(PreconditionFailedStatusCode, e.Message);
+        }
+    }
+    
 }
