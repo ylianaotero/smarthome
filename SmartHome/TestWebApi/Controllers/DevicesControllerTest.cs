@@ -30,8 +30,10 @@ public class DevicesControllerTest
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
+    private const string CompanyNotFoundExceptionMessage = "Company not found";
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
+    private const int NotFoundStatusCode = 404;
     
     [TestInitialize]
     public void TestInitialize()
@@ -295,11 +297,11 @@ public class DevicesControllerTest
         WindowSensorRequest request = DefaultWindowSensorRequest();
         _mockICompanyService
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
-            .Throws(new ElementNotFound("Company not found"));
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
         
         NotFoundObjectResult? result = _deviceController.PostWindowSensors(request) as NotFoundObjectResult;
         
-        Assert.AreEqual(404, result!.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
     }
     
     private void SetupDefaultObjects()

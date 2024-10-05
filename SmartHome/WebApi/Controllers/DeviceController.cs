@@ -17,7 +17,7 @@ public class DeviceController : ControllerBase
     
     private const string RoleWithPermissions = "CompanyOwner";
     private const string NotFoundMessage = "The requested resource was not found.";
-    private const string CreatedMessage = "The resource was created successfully.";
+    private const string CompanyNotFoundMessage = "The company was not found.";
 
     public DeviceController(IDeviceService deviceService, ICompanyService companyService)
     {
@@ -76,8 +76,8 @@ public class DeviceController : ControllerBase
         } 
         catch (ElementNotFound)
         {
-            return NotFound(NotFoundMessage);
-        }
+            return NotFound(CompanyNotFoundMessage);
+        } 
         
         return CreatedAtAction(nameof(PostWindowSensors), request);
     }
