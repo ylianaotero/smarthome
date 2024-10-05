@@ -73,9 +73,11 @@ public class CompanyServiceTest
         };
         
         _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns(_company);
+
+        _companyService = new CompanyService(_mockCompanyRepository.Object); 
         _companyService.AddCompanyToDevice(CompanyId, device);
         
-        _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
+        _mockCompanyRepository.Verify(x => x.Update(_company), Times.Once);
         Assert.AreEqual(device.Company, _company);
     }
     
