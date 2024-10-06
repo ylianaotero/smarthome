@@ -10,7 +10,8 @@ namespace BusinessLogic;
 public class HomeService (
     IRepository<Home> homeRepository, 
     IRepository<Device> deviceRepository, 
-    IRepository<User> userRepository) : IHomeService
+    IRepository<User> userRepository, 
+    IRepository<Member> memberRepository) : IHomeService
 {
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
@@ -118,6 +119,7 @@ public class HomeService (
         }
 
         member.ReceivesNotifications = memberDto.ReceivesNotifications; 
+        memberRepository.Update(member);
     }
     
     public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
