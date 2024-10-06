@@ -5,23 +5,15 @@ using IDataAccess;
 
 namespace BusinessLogic;
 
-public class SessionService : ISessionService
+public class SessionService(IRepository<User> userRepository, IRepository<Session> sessionRepository)
+    : ISessionService
 {
     private const string UserDoesNotExistExceptionMessage = "Member not found";
     private const string SessionDoesNotExistExceptionMessage = "Member not found";
-    
-    private readonly IRepository<User> _userRepository;
-    private readonly IRepository<Session> _sessionRepository;
-    
-    public SessionService(IRepository<User> userRepository, IRepository<Session> sessionRepository)
-    {
-        _userRepository = userRepository;
-        _sessionRepository = sessionRepository;
-    }
-    
+
     public Session LogIn(string email, string password)
     {
-        User user = _userRepository
+        User user = userRepository
             .GetByFilter(u => u.Email == email && u.Password == password, PageData.Default)
             .FirstOrDefault();
         
@@ -32,25 +24,27 @@ public class SessionService : ISessionService
 
         Session newSession = new Session();
         newSession.User = user; 
-        _sessionRepository.Add(newSession);
+        
+        sessionRepository.Add(newSession);
+        
         return newSession; 
     }
 
     public void LogOut(Guid token)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == token, PageData.Default).FirstOrDefault();
+        Session session = sessionRepository.GetByFilter(s => s.Id == token, PageData.Default).FirstOrDefault();
 
         if (session == null)
         {
             throw new CannotFindItemInList(SessionDoesNotExistExceptionMessage); 
         }
 
-        _sessionRepository.Delete(session);
+        sessionRepository.Delete(session);
     }
 
     public User GetUser(Guid token)
     {
-        Session session = _sessionRepository.GetByFilter(s => s.Id == token, null).FirstOrDefault();
+        Session session = sessionRepository.GetByFilter(s => s.Id == token, null).FirstOrDefault();
 
         if (session == null)
         {
@@ -101,7 +95,7 @@ public class SessionService : ISessionService
     
     private bool UserIsAuthenticated(Guid authorization)
     {
-        Session session = _sessionRepository
+        Session session = sessionRepository
             .GetByFilter(s => s.Id == authorization, PageData.Default)
             .FirstOrDefault();
         

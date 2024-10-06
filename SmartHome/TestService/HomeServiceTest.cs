@@ -355,7 +355,7 @@ public class HomeServiceTest
             }
         };
         
-        homeService.PutDevicesInHome(1, homeDevicesDTO);
+        homeService.AddDevicesToHome(1, homeDevicesDTO);
        
         CollectionAssert.AreEqual(home.Devices,homeDevices);
     }
@@ -369,7 +369,7 @@ public class HomeServiceTest
        
         List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO> {};
         
-        homeService.PutDevicesInHome(1, homeDevicesDTO);
+        homeService.AddDevicesToHome(1, homeDevicesDTO);
     }
     
     [TestMethod]
@@ -397,7 +397,7 @@ public class HomeServiceTest
             }
         };
         
-        homeService.PutDevicesInHome(1, homeDevicesDTO);
+        homeService.AddDevicesToHome(1, homeDevicesDTO);
     }
     
     [TestMethod]

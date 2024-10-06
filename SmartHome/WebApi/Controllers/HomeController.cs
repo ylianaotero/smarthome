@@ -120,7 +120,7 @@ public class HomeController : ControllerBase
     {
         try
         {
-            _homeService.PutDevicesInHome(id, request.ToEntity());
+            _homeService.AddDevicesToHome(id, request.ToEntity());
             return Ok(UpdatedHomeMessage);
         }
         catch (ElementNotFound)

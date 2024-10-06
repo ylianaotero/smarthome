@@ -10,7 +10,6 @@ public class HomeService (
     IRepository<Device> deviceRepository, 
     IRepository<User> userRepository) : IHomeService
 {
-    private IHomeService _homeServiceImplementation;
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
     private const string UserNotFoundMessage = "Member not found";
@@ -50,7 +49,6 @@ public class HomeService (
         return home.Members;
     }
     
-
     public void ChangePermission(MemberDTO memberDto, long homeId)
     {
         List<Member> listOfMembers = GetMembersFromHome(homeId); 
@@ -137,7 +135,7 @@ public class HomeService (
         return home;
     }
 
-    public void PutDevicesInHome(long homeId, List<DeviceUnitDTO> homeDevices)
+    public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
     {
         Home home = homeRepository.GetById(homeId);
         if (home == null)
@@ -150,6 +148,25 @@ public class HomeService (
         MapDevices(homeDevices, devices);
         
         home.Devices = devices;
+        
+        homeRepository.Update(home);
+    }
+    
+    public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
+    {
+        Home home = homeRepository.GetById(id);
+        if(home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        DeviceUnit device = home.Devices.FirstOrDefault(d => d.HardwareId == deviceUnit.HardwareId);
+        
+        if (device == null)
+        {
+            throw new ElementNotFound(DeviceNotFoundMessage);
+        }
+        
+        device.IsConnected = deviceUnit.IsConnected;
         
         homeRepository.Update(home);
     }
@@ -195,24 +212,5 @@ public class HomeService (
         }
 
         return (user, role as HomeOwner);
-    }
-    
-    public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
-    {
-        Home home = homeRepository.GetById(id);
-        if(home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
-        DeviceUnit device = home.Devices.FirstOrDefault(d => d.HardwareId == deviceUnit.HardwareId);
-        
-        if (device == null)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-        
-        device.IsConnected = deviceUnit.IsConnected;
-        
-        homeRepository.Update(home);
     }
 }

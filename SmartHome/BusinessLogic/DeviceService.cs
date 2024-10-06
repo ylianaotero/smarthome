@@ -38,7 +38,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
     
     public List<string> GetDeviceTypes()
     {
-        var deviceTypes = typeof(Device).Assembly.GetTypes()
+        List<string> deviceTypes = typeof(Device).Assembly.GetTypes()
             .Where(t => t.IsSubclassOf(typeof(Device)) && !t.IsAbstract)
             .Select(t => t.Name)
             .ToList();
