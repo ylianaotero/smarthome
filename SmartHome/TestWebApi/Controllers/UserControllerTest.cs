@@ -14,16 +14,17 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class UserControllerTest
 {
-    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    private const int Page = 1;
+    private const int PageSize = 10;
     private const string Name =  "John";
+    private const string Surname = "Doe";
     private const string Email1 = "john.doe@example.com";
     private const string Email2 = "john.lopez@example.com";
     private const string Password = "Securepassword1@";
-    private const string Surname = "Doe";
-    private const int Page = 1;
-    private const int PageSize = 10;
-    private const string Role = "Administrator";
     private const string CannotFinItemMessage = "Cannot find item in list";
+    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+
+    private const string Role = "Administrator";
     
     private List<Role> _listOfRoles;
     private Session _session; 
@@ -97,7 +98,7 @@ public class UserControllerTest
         GetUsersRequest request = new GetUsersRequest();
         GetUsersResponse expectedResponse = new GetUsersResponse(_listOfUsers);
         
-        var result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
+        ObjectResult result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
         GetUsersResponse getUserResponse = result.Value as GetUsersResponse;
 
         _userServiceMock.Verify();
@@ -122,7 +123,7 @@ public class UserControllerTest
             .Returns(listOfUsers); 
         GetUsersResponse expectedResponse = new GetUsersResponse(listOfUsers);
         
-        var result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
+        ObjectResult result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
         GetUsersResponse getUsersResponse = result.Value as GetUsersResponse;
 
         _userServiceMock.Verify();
@@ -133,7 +134,6 @@ public class UserControllerTest
     [TestMethod]
     public void CannotGetUsers()
     {
-        
         _userServiceMock
             .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Throws(new CannotFindItemInList(CannotFinItemMessage));

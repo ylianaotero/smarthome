@@ -14,24 +14,27 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class DevicesControllerTest
 {
+    private Company _defaultCompany;
+    private SecurityCamera _defaultCamera;
+    private WindowSensor _defaultWindowSensor;
     private DeviceController _deviceController;
     private Mock<IDeviceService> _mockIDeviceService;
     private Mock<ICompanyService> _mockICompanyService;
     private Mock<ISessionService> _mockISessionService;
-    private SecurityCamera _defaultCamera;
-    private WindowSensor _defaultWindowSensor;
-    private Company _defaultCompany;
     
+    private const long DeviceModel = 1345354616346;
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
-    private const string DeviceDescription = "This is a device";
     private const string CompanyName = "IoT DeviceUnits & Co.";
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
     private const string CompanyNotFoundExceptionMessage = "Company not found";
+    
+    private List<Device> _devices;
+    private List<string> _deviceTypes;
+    
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
@@ -46,15 +49,10 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetAllDevicesOkStatusCode()
     {
-        List<Device> devices =
-        [
-            _defaultCamera,
-            _defaultWindowSensor
-        ];
         _mockIDeviceService
             .Setup(service => service
                 .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
-            .Returns(devices);
+            .Returns(_devices);
         
         GetDeviceRequest request = new GetDeviceRequest();
         
@@ -83,15 +81,10 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetAllDevicesOkResponse()
     {
-        List<Device> devices =
-        [
-            _defaultCamera,
-            _defaultWindowSensor
-        ];
         _mockIDeviceService
             .Setup(service => service
                 .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
-            .Returns(devices);
+            .Returns(_devices);
         GetDevicesResponse expectedResponse = DefaultDevicesResponse();
 
         GetDeviceRequest request = new GetDeviceRequest();
@@ -142,12 +135,7 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetDeviceTypesOkStatusCode()
     {
-        List<string> deviceTypes =
-        [
-            SecurityCameraType,
-            WindowSensorType
-        ];
-        _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(deviceTypes);
+        _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(_deviceTypes);
         
         ObjectResult? result = _deviceController.GetDeviceTypes() as OkObjectResult;
         
@@ -157,15 +145,10 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetDeviceTypesOkResponse()
     {
-        List<string> deviceTypes =
-        [
-            SecurityCameraType,
-            WindowSensorType
-        ];
-        _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(deviceTypes);
+        _mockIDeviceService.Setup(service => service.GetDeviceTypes()).Returns(_deviceTypes);
         GetDeviceTypesResponse expectedResponse = new GetDeviceTypesResponse()
         {
-            DeviceTypes = deviceTypes,
+            DeviceTypes = _deviceTypes,
         };
         
         ObjectResult? result = _deviceController.GetDeviceTypes() as OkObjectResult;
@@ -347,6 +330,18 @@ public class DevicesControllerTest
             Company = _defaultCompany, 
             Kind = WindowSensorType
         };
+        
+        _devices =
+        [
+            _defaultCamera,
+            _defaultWindowSensor
+        ];
+        
+        _deviceTypes =
+        [
+            SecurityCameraType,
+            WindowSensorType
+        ];
     }
 
     private void SetupDeviceController()
