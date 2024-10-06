@@ -101,7 +101,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
+        ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -117,7 +117,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
+        ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -131,7 +131,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.DeleteAdministrator(1) as OkResult;
+        OkResult result = _administratorController.DeleteAdministrator(1) as OkResult;
         
         _userServiceMock.Verify();
         
@@ -146,7 +146,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.DeleteAdministrator(1) as NotFoundResult;
+        NotFoundResult result = _administratorController.DeleteAdministrator(1) as NotFoundResult;
         
         _userServiceMock.Verify();
         

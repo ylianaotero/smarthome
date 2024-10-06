@@ -6,77 +6,59 @@ namespace TestDomain;
 [TestClass]
 public class HomeOwnerTest
 {
+    private Home _home;
+    private HomeOwner _homeOwner;
+    
     private const int DoorNumber = 1223;
     private const string Street = "malibu";
     private const int Latitude = 1333;
     private const int Longitude = 1333;
     
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _homeOwner = new HomeOwner();
+        _home = new Home()
+        {
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude
+        };
+    }
+    
     [TestMethod]
     public void TestAddNewHomeOwner()
     {
-        HomeOwner homeOwner = new HomeOwner();
-        
-        Assert.AreEqual(0 , homeOwner.Homes.Count());
+        Assert.AreEqual(0 , _homeOwner.Homes.Count());
     }
 
     [TestMethod]
     public void TestAddNewHomeToHomeOwner()
     {
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home()
-        {
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-        homeOwner.AddHome(home);
-        Assert.AreEqual(1, homeOwner.Homes.Count());
+        _homeOwner.AddHome(_home);
+        Assert.AreEqual(1, _homeOwner.Homes.Count());
     }
     
     [TestMethod]
     public void TestDeleteHomeFromHomeOwner()
     {
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home()
-        {
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-        homeOwner.AddHome(home);
-        homeOwner.RemoveHome(home);
-        Assert.AreEqual(0, homeOwner.Homes.Count());
+        _homeOwner.AddHome(_home);
+        _homeOwner.RemoveHome(_home);
+        Assert.AreEqual(0, _homeOwner.Homes.Count());
     }
 
     [TestMethod]
     public void TestSearchHomeFromHomeOwner()
     {
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home()
-        {
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-        homeOwner.AddHome(home);
-        Assert.AreEqual(home,homeOwner.SearchHome(home.Id));
+        _homeOwner.AddHome(_home);
+        Assert.AreEqual(_home,_homeOwner.SearchHome(_home.Id));
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotFindHomeFromHomeOwner()
     {
-        HomeOwner homeOwner = new HomeOwner();
-        Home home = new Home()
-        {
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-        homeOwner.SearchHome(home.Id);
+        _homeOwner.SearchHome(_home.Id);
     }
 }

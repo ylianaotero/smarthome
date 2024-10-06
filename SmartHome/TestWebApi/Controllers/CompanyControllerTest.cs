@@ -184,6 +184,8 @@ public class CompanyControllerTest
             Surname = UserSurname,
             Roles = new List<Role>() { _companyOwner }
         };
+        
+        
     }
 
     private void SetupDefaultCompanies()

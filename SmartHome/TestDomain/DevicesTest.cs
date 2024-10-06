@@ -7,7 +7,14 @@ namespace TestDomain;
 public class DevicesTest
 {
     private SecurityCamera _securityCamera;
+    private SecurityCamera _securityCamera1;
+    private SecurityCamera _securityCamera2;
     private WindowSensor _windowSensor;
+    private WindowSensor _windowSensor1;
+    private WindowSensor _windowSensor2;
+    private Company _company;
+    private List<SecurityCameraFunctionality> _cameraFunctionalities;
+    private List<WindowSensorFunctionality> _windowSensorfunctionalities;
     
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
@@ -21,8 +28,58 @@ public class DevicesTest
     [TestInitialize]
     public void TestInitialize()
     {
+        _company = new Company();
+        _windowSensorfunctionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
+        _cameraFunctionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
+
+        InitializeDevices();
+    }
+
+    private void InitializeDevices()
+    {
         _securityCamera = new SecurityCamera();
         _windowSensor = new WindowSensor();
+        _windowSensor1 = new WindowSensor()
+        {
+            Id = 1,
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _windowSensorfunctionalities,
+            Company = _company
+        };
+        _windowSensor2 = new WindowSensor()
+        {
+            Id = 2,
+            Name = WindowSensorName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _windowSensorfunctionalities,
+            Company = _company
+        };
+        
+        _securityCamera1 = new SecurityCamera()
+        {
+            Id = 1,
+            Name = CameraName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _cameraFunctionalities,
+            Company = _company
+        };
+        _securityCamera2 = new SecurityCamera()
+        {
+            Id = 2,
+            Name = CameraName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _cameraFunctionalities,
+            Company = _company
+        };
     }
     
     [TestMethod]
@@ -152,64 +209,12 @@ public class DevicesTest
     [TestMethod]
     public void TestDifferentiationOfWindowSensorsViaHardwardId()
     {
-        Company company = new Company(){};
-        
-        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
-        
-        WindowSensor windowSensor1 = new WindowSensor()
-        {
-            Id = 1,
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl },
-            Functionalities = functionalities,
-            Company = company
-        };
-        
-        WindowSensor windowSensor2 = new WindowSensor()
-        {
-            Id = 2,
-            Name = WindowSensorName,
-            Model = DeviceModel,
-            Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl },
-            Functionalities = functionalities,
-            Company = company
-        };
-        
-        Assert.IsFalse(windowSensor1.Equals(windowSensor2));
+        Assert.IsFalse(_windowSensor1.Equals(_windowSensor2));
     }
     
     [TestMethod]
     public void TestDifferentiationOfSecurityCamerasViaHardwardId()
     {
-        Company company = new Company(){};
-        
-        List<SecurityCameraFunctionality> functionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
-        
-        SecurityCamera securityCamera1 = new SecurityCamera()
-        {
-            Id = 1,
-            Name = CameraName,
-            Model = DeviceModel,
-            Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl },
-            Functionalities = functionalities,
-            Company = company
-        };
-        
-        SecurityCamera securityCamera2 = new SecurityCamera()
-        {
-            Id = 2,
-            Name = CameraName,
-            Model = DeviceModel,
-            Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl },
-            Functionalities = functionalities,
-            Company = company
-        };
-        
-        Assert.IsFalse(securityCamera1.Equals(securityCamera2));
+        Assert.IsFalse(_securityCamera1.Equals(_securityCamera2));
     }
 }
