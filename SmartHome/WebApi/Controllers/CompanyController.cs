@@ -17,18 +17,18 @@ public class CompanyController(ICompanyService companyService, IUserService user
 
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissionsToGetCompanies)]
-    public IActionResult GetCompanies([FromQuery] CompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetCompanies([FromQuery] GetCompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        CompaniesResponse companiesResponse = new CompaniesResponse
+        GetCompaniesResponse getCompaniesResponse = new GetCompaniesResponse
             (companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         
-        return Ok(companiesResponse);
+        return Ok(getCompaniesResponse);
     }
     
     
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
-    public IActionResult PostCompany([FromBody] CompanyRequest request)
+    public IActionResult PostCompany([FromBody] PostCompanyRequest request)
     {
         try
         {

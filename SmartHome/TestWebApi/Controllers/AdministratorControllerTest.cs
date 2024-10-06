@@ -36,7 +36,7 @@ public class AdministratorControllerTest
     
     private Mock<IUserService> _userServiceMock;
     private AdministratorController _administratorController;
-    private CreateAdminRequest _createAdminRequest;
+    private PostAdministratorRequest _postAdministratorRequest;
     private User _user; 
     
     [TestInitialize]
@@ -50,7 +50,7 @@ public class AdministratorControllerTest
 
         _listOfRoles.Add(_administrator); 
         
-        _createAdminRequest = new CreateAdminRequest
+        _postAdministratorRequest = new PostAdministratorRequest
         {
             Name = Name,
             Email = Email,
@@ -60,10 +60,10 @@ public class AdministratorControllerTest
 
         _user = new User
         {
-            Name = _createAdminRequest.Name,
-            Email = _createAdminRequest.Email,
-            Password = _createAdminRequest.Password,
-            Surname = _createAdminRequest.Surname,
+            Name = _postAdministratorRequest.Name,
+            Email = _postAdministratorRequest.Email,
+            Password = _postAdministratorRequest.Password,
+            Surname = _postAdministratorRequest.Surname,
             Roles = _listOfRoles
         };
     }
@@ -81,12 +81,12 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
 
-        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
-        var userResponse = result?.Value as AdminResponse;
+        var result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
+        var userResponse = result?.Value as PostAdministratorResponse;
 
         _userServiceMock.Verify();
         
-        AdminResponse expectedResponse = new AdminResponse(_user);
+        PostAdministratorResponse expectedResponse = new PostAdministratorResponse(_user);
 
         Assert.AreEqual(userResponse, expectedResponse);
         Assert.AreEqual(CreatedStatusCode, result.StatusCode);
@@ -101,7 +101,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -117,7 +117,7 @@ public class AdministratorControllerTest
         
         _administratorController = new AdministratorController(_userServiceMock.Object);
         
-        var result = _administratorController.CreateAdministrator(_createAdminRequest) as ObjectResult;
+        var result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         

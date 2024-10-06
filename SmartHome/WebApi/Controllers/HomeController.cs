@@ -23,17 +23,17 @@ public class HomeController(IHomeService homeService) : ControllerBase
 
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
-    public IActionResult GetHomes([FromQuery] HomeRequest request)
+    public IActionResult GetHomes([FromQuery] GetHomeRequest request)
     {
-        HomesResponse homesResponse = new HomesResponse(homeService.GetHomesByFilter(request.ToFilter()));
+        GetHomesResponse getHomesResponse = new GetHomesResponse(homeService.GetHomesByFilter(request.ToFilter()));
         
-        return Ok(homesResponse);
+        return Ok(getHomesResponse);
     }
     
     [HttpPatch]
     [Route("{id}/members")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] ChangePermissionsRequest request)
+    public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] PatchHomeMemberRequest request)
     {
         try
         {
@@ -48,7 +48,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
 
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult PostHomes([FromBody] CreateHomeRequest request)
+    public IActionResult PostHomes([FromBody] PostHomeRequest request)
     {
         try
         {
@@ -66,9 +66,9 @@ public class HomeController(IHomeService homeService) : ControllerBase
             }
         }
         
-        HomeResponse homeResponse = new HomeResponse(request.ToEntity());
+        GetHomeResponse getHomeResponse = new GetHomeResponse(request.ToEntity());
         
-        return CreatedAtAction(nameof(PostHomes), homeResponse);
+        return CreatedAtAction(nameof(PostHomes), getHomeResponse);
     }
     
     [HttpGet]
@@ -78,7 +78,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
     {
         try
         {
-            return Ok(new MembersResponse(homeService.GetMembersFromHome(id)));
+            return Ok(new GetMembersResponse(homeService.GetMembersFromHome(id)));
         }
         catch (ElementNotFound)
         {
@@ -91,18 +91,18 @@ public class HomeController(IHomeService homeService) : ControllerBase
     [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
     public IActionResult GetHomeById([FromRoute] long id)
     {
-        HomeResponse homeResponse;
+        GetHomeResponse getHomeResponse;
         
         try
         {
-            homeResponse = new HomeResponse(homeService.GetHomeById(id));
+            getHomeResponse = new GetHomeResponse(homeService.GetHomeById(id));
         }
         catch (ElementNotFound)
         {
             return NotFound(ResourceNotFoundMessage);
         }
         
-        return Ok(homeResponse);
+        return Ok(getHomeResponse);
     }
 
     [HttpPut]
@@ -124,7 +124,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
     [HttpPut]
     [Route("{id}/members")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] MemberRequest request)
+    public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] PutHomeMemberRequest request)
     {
         try
         {
@@ -149,7 +149,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
     [Route("{id}/devices")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult UpdateDeviceConnectionStatus([FromRoute] long id, 
-        [FromBody] UpdateDeviceConnectionStatusRequest request)
+        [FromBody] PatchDeviceRequest request)
     {
         try
         {
@@ -166,11 +166,11 @@ public class HomeController(IHomeService homeService) : ControllerBase
     [Route("{id}/devices")]
     public IActionResult GetDevicesFromHome([FromRoute] int id)
     {
-        DevicesUnitResponse devicesUnitResponse;
+        GetDeviceUnitsResponse getDeviceUnitsResponse;
         try
         {
-            devicesUnitResponse = new DevicesUnitResponse(homeService.GetDevicesFromHome(id));
-            return Ok(devicesUnitResponse);
+            getDeviceUnitsResponse = new GetDeviceUnitsResponse(homeService.GetDevicesFromHome(id));
+            return Ok(getDeviceUnitsResponse);
         }
         catch (ElementNotFound)
         {

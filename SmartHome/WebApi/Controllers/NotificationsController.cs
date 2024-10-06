@@ -13,12 +13,12 @@ public class NotificationsController(INotificationService notificationService) :
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
 
     [HttpGet]
-    public IActionResult GetNotifications([FromQuery] NotificationsRequest request)
+    public IActionResult GetNotifications([FromQuery] GetNotificationsRequest request)
     {
-        NotificationsResponse notificationsResponse;
+        GetNotificationsResponse getNotificationsResponse;
         try
         {
-            notificationsResponse = new NotificationsResponse
+            getNotificationsResponse = new GetNotificationsResponse
                 (notificationService.GetNotificationsByFilter(request.ToFilter(), null));
         }
         catch (CannotFindItemInList)
@@ -26,11 +26,11 @@ public class NotificationsController(INotificationService notificationService) :
             return NotFound(ResourceNotFoundMessage);
         }
 
-        return Ok(notificationsResponse);
+        return Ok(getNotificationsResponse);
     }
     
     [HttpPost]
-    public IActionResult CreateNotification(CreateNotificationRequest request)
+    public IActionResult CreateNotification(PostNotificationRequest request)
     {
         try
         {

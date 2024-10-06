@@ -94,21 +94,21 @@ public class UserControllerTest
         _userServiceMock
             .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers); 
-        UsersRequest request = new UsersRequest();
-        UsersResponse expectedResponse = new UsersResponse(_listOfUsers);
+        GetUsersRequest request = new GetUsersRequest();
+        GetUsersResponse expectedResponse = new GetUsersResponse(_listOfUsers);
         
         var result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
-        UsersResponse userResponse = result.Value as UsersResponse;
+        GetUsersResponse getUserResponse = result.Value as GetUsersResponse;
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(expectedResponse, userResponse);
+        Assert.AreEqual(expectedResponse, getUserResponse);
     }
     
     [TestMethod]
     public void GetUsersByFullNameAndRole()
     {
-        UsersRequest request = new UsersRequest
+        GetUsersRequest request = new GetUsersRequest
         {
             FullName = _fullName,
             Role = Role
@@ -120,14 +120,14 @@ public class UserControllerTest
         _userServiceMock
             .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(listOfUsers); 
-        UsersResponse expectedResponse = new UsersResponse(listOfUsers);
+        GetUsersResponse expectedResponse = new GetUsersResponse(listOfUsers);
         
         var result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
-        UsersResponse usersResponse = result.Value as UsersResponse;
+        GetUsersResponse getUsersResponse = result.Value as GetUsersResponse;
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(expectedResponse, usersResponse);
+        Assert.AreEqual(expectedResponse, getUsersResponse);
     }
 
     [TestMethod]
@@ -138,7 +138,7 @@ public class UserControllerTest
             .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Throws(new CannotFindItemInList(CannotFinItemMessage));
         
-        _userController.GetUsers(new UsersRequest(), DefaultPageDataRequest());
+        _userController.GetUsers(new GetUsersRequest(), DefaultPageDataRequest());
     }
     
     private PageDataRequest DefaultPageDataRequest()

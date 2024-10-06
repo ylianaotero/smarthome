@@ -18,12 +18,12 @@ public class HomeOwnerController(IUserService userService) : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
-    public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
+    public IActionResult CreateHomeOwner([FromBody] PostHomeOwnerRequest postHomeOwnerRequest)
     {
         try
         {
-            userService.CreateUser(createHomeOwnerRequest.ToEntity());
-            HomeOwnerResponse response = new HomeOwnerResponse(createHomeOwnerRequest.ToEntity());
+            userService.CreateUser(postHomeOwnerRequest.ToEntity());
+            PostHomeOwnerResponse response = new PostHomeOwnerResponse(postHomeOwnerRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateHomeOwner), response);
         }
@@ -44,12 +44,12 @@ public class HomeOwnerController(IUserService userService) : ControllerBase
      [HttpPut]
      [Route("{id}")]
      [RolesWithPermissions(RoleWithPermissions)]
-     public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] UpdateHomeOwnerRequest updateHomeOwnerRequest)
+     public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] PutHomeOwnerRequest putHomeOwnerRequest)
      { 
          try 
          {
-               userService.UpdateUser(id, updateHomeOwnerRequest.ToEntity());
-               HomeOwnerResponse response = new HomeOwnerResponse(updateHomeOwnerRequest.ToEntity());
+               userService.UpdateUser(id, putHomeOwnerRequest.ToEntity());
+               PostHomeOwnerResponse response = new PostHomeOwnerResponse(putHomeOwnerRequest.ToEntity());
                
                return Ok(response);
          }

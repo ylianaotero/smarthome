@@ -16,13 +16,13 @@ public class UserController(IUserService userService) : ControllerBase
 
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult GetUsers([FromQuery] UsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetUsers([FromQuery] GetUsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        UsersResponse usersResponse;
+        GetUsersResponse getUsersResponse;
 
         try
         {
-            usersResponse = new UsersResponse
+            getUsersResponse = new GetUsersResponse
                 (userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         }
         catch (CannotFindItemInList)
@@ -30,6 +30,6 @@ public class UserController(IUserService userService) : ControllerBase
             return NotFound(NotFoundMessage);
         }
         
-        return Ok(usersResponse);
+        return Ok(getUsersResponse);
     }
 }

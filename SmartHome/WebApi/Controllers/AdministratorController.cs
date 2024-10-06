@@ -16,12 +16,12 @@ public class AdministratorController(IUserService userService) : ControllerBase
 
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult CreateAdministrator([FromBody] CreateAdminRequest createAdminRequest)
+    public IActionResult CreateAdministrator([FromBody] PostAdministratorRequest postAdministratorRequest)
     {
         try
         {
-            userService.CreateUser(createAdminRequest.ToEntity());
-            AdminResponse userResponse = new AdminResponse(createAdminRequest.ToEntity());
+            userService.CreateUser(postAdministratorRequest.ToEntity());
+            PostAdministratorResponse userResponse = new PostAdministratorResponse(postAdministratorRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateAdministrator), userResponse);
         }

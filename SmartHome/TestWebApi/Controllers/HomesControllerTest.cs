@@ -94,7 +94,7 @@ public class HomesControllerTest
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
             .Returns(homes);
 
-        HomeRequest request = new HomeRequest();
+        GetHomeRequest request = new GetHomeRequest();
 
         ObjectResult? result = _homeController.GetHomes(request) as OkObjectResult;
         
@@ -109,7 +109,7 @@ public class HomesControllerTest
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
             .Returns(homes);
 
-        HomeRequest request = new HomeRequest();
+        GetHomeRequest request = new GetHomeRequest();
         
         ObjectResult? result = _homeController.GetHomes(request) as OkObjectResult;
         
@@ -141,12 +141,12 @@ public class HomesControllerTest
         _mockHomeService
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
             .Returns(homes);
-        HomesResponse expectedResponse = DefaultHomesResponse();
+        GetHomesResponse expectedResponse = DefaultHomesResponse();
         
-        HomeRequest request = new HomeRequest();
+        GetHomeRequest request = new GetHomeRequest();
         
         ObjectResult? result = _homeController.GetHomes(request) as OkObjectResult;
-        HomesResponse response = (result!.Value as HomesResponse);
+        GetHomesResponse response = (result!.Value as GetHomesResponse);
         
         Assert.AreEqual(expectedResponse,response);
     }
@@ -175,10 +175,10 @@ public class HomesControllerTest
     public void TestGetHomeByIdOkResponse()
     {
         _mockHomeService.Setup(service => service.GetHomeById(1)).Returns(_defaultHome);
-        HomeResponse expectedResponse = DefaultHomeResponse();
+        GetHomeResponse expectedResponse = DefaultHomeResponse();
 
         ObjectResult? result = _homeController.GetHomeById(1) as OkObjectResult;
-        HomeResponse response = (result!.Value as HomeResponse)!;
+        GetHomeResponse response = (result!.Value as GetHomeResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
     }
@@ -199,7 +199,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPostHomeOkStatusCode()
     {
-        CreateHomeRequest request = new CreateHomeRequest()
+        PostHomeRequest request = new PostHomeRequest()
         {
             OwnerId = HomeOwnerId,
             Street = Street,
@@ -220,7 +220,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPostHomeNotFoundStatusCode()
     {
-        CreateHomeRequest request = new CreateHomeRequest()
+        PostHomeRequest request = new PostHomeRequest()
         {
             OwnerId = HomeOwnerId,
             Street = Street,
@@ -241,7 +241,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPostHomePreconditionFailedStatusCode()
     {
-        CreateHomeRequest request = new CreateHomeRequest()
+        PostHomeRequest request = new PostHomeRequest()
         {
             OwnerId = HomeOwnerId,
             Street = Street,
@@ -268,12 +268,12 @@ public class HomesControllerTest
         };
     
         _mockHomeService.Setup(service => service.GetMembersFromHome(It.IsAny<long>())).Returns(members);
-        MembersResponse expectedResponse = new MembersResponse(members);
+        GetMembersResponse expectedResponse = new GetMembersResponse(members);
 
         ObjectResult? result = _homeController.GetMembersFromHome(HomeOwnerId) as OkObjectResult;
     
         Assert.IsNotNull(result);
-        MembersResponse actualResponse = result.Value as MembersResponse;
+        GetMembersResponse actualResponse = result.Value as GetMembersResponse;
     
         Assert.AreEqual(expectedResponse, actualResponse);
     }
@@ -292,7 +292,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutMemberInHomeOkStatusCode()
     {
-        MemberRequest memberRequest = new MemberRequest()
+        PutHomeMemberRequest putHomeMemberRequest = new PutHomeMemberRequest()
         {
             UserEmail = Email,
             HasPermissionToAddADevice = Permission,
@@ -300,11 +300,11 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
         };
         
-        _mockHomeService.Setup(service => service.AddMemberToHome(_defaultHome.Id , memberRequest.ToEntity()));
+        _mockHomeService.Setup(service => service.AddMemberToHome(_defaultHome.Id , putHomeMemberRequest.ToEntity()));
     
         _homeController = new HomeController(_mockHomeService.Object); 
         
-        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as OkObjectResult;
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, putHomeMemberRequest) as OkObjectResult;
     
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
@@ -312,7 +312,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestPutMemberInHomeNotFoundStatusCode()
     {
-        MemberRequest memberRequest = new MemberRequest()
+        PutHomeMemberRequest putHomeMemberRequest = new PutHomeMemberRequest()
         {
             UserEmail = Email,
             HasPermissionToAddADevice = Permission,
@@ -326,7 +326,7 @@ public class HomesControllerTest
         
         _homeController = new HomeController(_mockHomeService.Object); 
         
-        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, putHomeMemberRequest) as ObjectResult;
     
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
@@ -335,7 +335,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestTryToPutMemberThatAlreadyExistsStatusCode()
     {
-        MemberRequest memberRequest = new MemberRequest()
+        PutHomeMemberRequest putHomeMemberRequest = new PutHomeMemberRequest()
         {
             UserEmail = Email,
             HasPermissionToAddADevice = Permission,
@@ -349,14 +349,14 @@ public class HomesControllerTest
         
         _homeController = new HomeController(_mockHomeService.Object); 
         
-        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, putHomeMemberRequest) as ObjectResult;
     
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
     
     public void TestTryToPutMemberInAFullHomeStatusCode()
     {
-        MemberRequest memberRequest = new MemberRequest()
+        PutHomeMemberRequest putHomeMemberRequest = new PutHomeMemberRequest()
         {
             UserEmail = Email,
             HasPermissionToAddADevice = Permission,
@@ -370,7 +370,7 @@ public class HomesControllerTest
         
         _homeController = new HomeController(_mockHomeService.Object); 
         
-        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, memberRequest) as ObjectResult;
+        ObjectResult? result = _homeController.AddMemberToHome(_defaultHome.Id, putHomeMemberRequest) as ObjectResult;
     
         Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
     }
@@ -382,7 +382,7 @@ public class HomesControllerTest
             .Setup(service => service.AddMemberToHome(It.IsAny<long>(), It.IsAny<MemberDTO>()))
             .Throws(new CannotAddItem(CannotAddItem));
         
-        _homeController.AddMemberToHome(1, new MemberRequest());
+        _homeController.AddMemberToHome(1, new PutHomeMemberRequest());
     }
     
     [TestMethod]
@@ -436,7 +436,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestChangePermissionsToMemberOkResponse()
     {
-        ChangePermissionsRequest request = new ChangePermissionsRequest()
+        PatchHomeMemberRequest request = new PatchHomeMemberRequest()
         {
             MemberEmail = Email,
             ReceivesNotifications = Permission
@@ -454,7 +454,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestChangePermissionsToMemberNotFoundResponse()
     {
-        ChangePermissionsRequest request = new ChangePermissionsRequest()
+        PatchHomeMemberRequest request = new PatchHomeMemberRequest()
         {
             MemberEmail = Email,
             ReceivesNotifications = Permission
@@ -497,10 +497,10 @@ public class HomesControllerTest
             }
         };
         _mockHomeService.Setup(service => service.GetDevicesFromHome(It.IsAny<int>())).Returns(devicesUnit);
-        DevicesUnitResponse expectedResponse = new DevicesUnitResponse(devicesUnit);
+        GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
         
         ObjectResult? result = _homeController.GetDevicesFromHome(1) as OkObjectResult;
-        DevicesUnitResponse response = (result!.Value as DevicesUnitResponse)!;
+        GetDeviceUnitsResponse response = (result!.Value as GetDeviceUnitsResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
     }
@@ -519,7 +519,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestUpdateDeviceStatusOkStatusCode()
     {
-        UpdateDeviceConnectionStatusRequest request = new UpdateDeviceConnectionStatusRequest()
+        PatchDeviceRequest request = new PatchDeviceRequest()
         {
             DeviceUnitId = new Guid(),
             Status = true
@@ -537,7 +537,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestUpdateDeviceStatusNotFoundStatusCode()
     {
-        UpdateDeviceConnectionStatusRequest request = new UpdateDeviceConnectionStatusRequest()
+        PatchDeviceRequest request = new PatchDeviceRequest()
         {
             DeviceUnitId = new Guid(),
             Status = true
@@ -553,12 +553,12 @@ public class HomesControllerTest
         
     }
     
-    private HomeResponse DefaultHomeResponse()
+    private GetHomeResponse DefaultHomeResponse()
     {
-        return new HomeResponse(_defaultHome);
+        return new GetHomeResponse(_defaultHome);
     }
 
-    private HomesResponse DefaultHomesResponse()
+    private GetHomesResponse DefaultHomesResponse()
     {
         List<Home> homes = new List<Home>
         {
@@ -579,7 +579,7 @@ public class HomesControllerTest
                 Longitude = Longitude2
             }
         };
-        return new HomesResponse(homes);
+        return new GetHomesResponse(homes);
     }
     
     private void SetupDefaultObjects()
