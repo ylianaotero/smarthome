@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class Member
 {
@@ -8,11 +8,8 @@ public class Member
     public long Id { get; set; }
     public User User { get; set; }
     public List<Notification> Notifications { get; set; }
-    
     public bool HasPermissionToListDevices { get; set; }
-    
     public bool HasPermissionToAddADevice { get; set; }
-    
     public bool ReceivesNotifications { get; set; }
     
     public Member(User user)

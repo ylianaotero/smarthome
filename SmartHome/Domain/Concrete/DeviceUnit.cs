@@ -1,7 +1,8 @@
 
 using System.ComponentModel.DataAnnotations;
+using Domain.Abstract;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class DeviceUnit
 {

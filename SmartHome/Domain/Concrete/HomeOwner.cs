@@ -1,7 +1,8 @@
 
 using CustomExceptions;
+using Domain.Abstract;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class HomeOwner : Role
 {
@@ -29,12 +30,12 @@ public class HomeOwner : Role
     public Home SearchHome(long homeId)
     {
         Home home = Homes.Find(h => h.Id == homeId);
+        
         if (home != null)
         {
             return home;
         }
+        
         throw new ElementNotFound(MessageHomeNotFound);
     }
-
-    
 }

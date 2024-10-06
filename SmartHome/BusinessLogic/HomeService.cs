@@ -1,5 +1,8 @@
 using CustomExceptions;
 using Domain;
+using Domain.Abstract;
+using Domain.Concrete;
+using Domain.DTO;
 using IBusinessLogic;
 using IDataAccess;
 

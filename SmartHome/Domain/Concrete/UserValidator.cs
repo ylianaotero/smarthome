@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
+using Domain.Abstract;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class UserValidator : IUserValidator
 {
@@ -23,6 +24,7 @@ public class UserValidator : IUserValidator
         {
             return false;
         }
+        
         return true;
     }
 
@@ -32,10 +34,12 @@ public class UserValidator : IUserValidator
         {
             return false;
         }
+        
         if (!Regex.IsMatch(password, PasswordPattern))
         {
             return false;
         }
+        
         return true;
     }
 

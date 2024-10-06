@@ -1,4 +1,6 @@
 using Domain;
+using Domain.Abstract;
+using Domain.Concrete;
 
 namespace Model.In;
 

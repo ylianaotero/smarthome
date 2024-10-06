@@ -1,6 +1,7 @@
 using CustomExceptions;
+using Domain.Abstract;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class CompanyOwner : Role
 {
@@ -8,6 +9,7 @@ public class CompanyOwner : Role
     
     public override string Kind { get; set; }
     public bool HasACompleteCompany { get; set; }
+    
     private Company _company ;
 
     public Company Company
@@ -20,6 +22,7 @@ public class CompanyOwner : Role
             HasACompleteCompany = true;
         }
     }
+    
     public CompanyOwner()
     {
         HasACompleteCompany = false;

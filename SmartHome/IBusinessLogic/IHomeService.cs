@@ -1,4 +1,6 @@
 using Domain;
+using Domain.Concrete;
+using Domain.DTO;
 
 namespace IBusinessLogic;
 

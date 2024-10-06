@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Abstract;
 
 namespace Model.Out;
 

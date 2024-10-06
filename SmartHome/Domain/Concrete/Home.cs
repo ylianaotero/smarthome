@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using CustomExceptions;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class Home
 {
@@ -22,9 +22,6 @@ public class Home
     public List<DeviceUnit> Devices { get; set; }
     public List<Member> Members { get; set; }
 
-    
-    // cantidad de miembros
-
     public Home()
     {
         Members = new List<Member>();
@@ -40,14 +37,15 @@ public class Home
         Members.Add(member);
     }
     
-
     public bool MemberExist(string email)
     {
         Member member = Members.FirstOrDefault(m => m.User.Email == email);
+        
         if (member == null)
         {
             return false; 
         }
+        
         return true; 
     }
     
@@ -57,14 +55,15 @@ public class Home
         {
             throw new CannotFindItemInList(MessageMemberNotFound ); 
         }
+        
         return Members.FirstOrDefault(m => m.User.Email == email); 
     }
     
     public bool MemberCanReceiveNotifications(string email)
     {
         Member member = FindMember(email);
+        
         return member.ReceivesNotifications; 
-
     }
 
     public void DeleteMember(string email)
@@ -89,16 +88,17 @@ public class Home
         {
             throw new CannotAddItem(MessageDeviceAlreadyExists); 
         }
-        
     }
     
     private bool DeviceExist(Guid id)
     {
         DeviceUnit device = Devices.FirstOrDefault(d => d.HardwareId == id);
+        
         if (device == null)
         {
             return false; 
         }
+        
         return true; 
     }
 
@@ -108,8 +108,8 @@ public class Home
         {
             return Devices.FirstOrDefault(d => d.HardwareId == id); 
         }
-        throw new CannotFindItemInList(MessageDeviceNotFound ); 
         
+        throw new CannotFindItemInList(MessageDeviceNotFound ); 
     }
 
     public void DeleteDevice(Guid id)

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class Session
 {

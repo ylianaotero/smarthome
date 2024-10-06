@@ -1,5 +1,7 @@
 using CustomExceptions;
 using Domain;
+using Domain.Concrete;
+using Domain.DTO;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;

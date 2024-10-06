@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Concrete;
 using IDataAccess;
 
 namespace IBusinessLogic;

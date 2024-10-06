@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Concrete;
 
 public class Notification
 {
@@ -7,9 +7,9 @@ public class Notification
     public Member Member { get; set; }
     public DeviceUnit DeviceUnit { get; set; }
     public string Event { get; set; }
-    public DateTime CreatedAt { get; private set; }
-    public bool Read { get; private set; }
-    public DateTime ReadAt { get; private set; }
+    public DateTime CreatedAt { get; set; }
+    public bool Read { get; set; }
+    public DateTime ReadAt { get; set; }
     
     public Notification(string newEvent)
     {

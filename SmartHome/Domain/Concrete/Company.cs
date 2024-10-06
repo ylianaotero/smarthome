@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class Company
 {
     [Key]
     public long Id { get; set; }
-    
     public User Owner { get; set; }
     public string Name { get; set; }
     public string RUT { get; set; }

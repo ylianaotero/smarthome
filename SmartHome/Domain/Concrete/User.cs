@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using CustomExceptions;
+using Domain.Abstract;
 
-namespace Domain;
+namespace Domain.Concrete;
 
 public class User
 {
     private const string MessageInvalidInput = "Input no valido"; 
     private const string MessageRoleNotFound = "The role does not exist"; 
+    
     [Key]
     public long Id { get; set; }
     private string _email { get; set; }
@@ -33,7 +35,6 @@ public class User
             {
                 throw new InputNotValid(MessageInvalidInput );
             }
-            
         } 
     }
     
@@ -87,11 +88,8 @@ public class User
             
         } 
     }
-
     
-    public User() : this(new UserValidator())
-    {
-    }
+    public User() : this(new UserValidator()) {}
 
     public User(IUserValidator userValidator)
     {
@@ -114,10 +112,8 @@ public class User
         else
         {
             throw new ElementNotFound(MessageRoleNotFound);
-
         }
     }
-    
 
     public void Update(User user)
     {
