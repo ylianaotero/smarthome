@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DTO;
@@ -445,7 +444,7 @@ public class HomesControllerTest
         };
         _mockHomeService
             .Setup(service => service
-                .ChangePermission(It.IsAny<MemberDTO>(), It.IsAny<long>()));
+                .UpdateMemberNotificationPermission(It.IsAny<MemberDTO>(), It.IsAny<long>()));
     
         ObjectResult? result = _homeController.ChangeNotificationPermission(_defaultHome.Id,request) as OkObjectResult;
     
@@ -463,7 +462,7 @@ public class HomesControllerTest
         };
         _mockHomeService
             .Setup(service => service
-                .ChangePermission(It.IsAny<MemberDTO>(), It.IsAny<long>())).Throws(new ElementNotFound(ElementNotFoundMessage));
+                .UpdateMemberNotificationPermission(It.IsAny<MemberDTO>(), It.IsAny<long>())).Throws(new ElementNotFound(ElementNotFoundMessage));
     
         ObjectResult? result = _homeController.ChangeNotificationPermission(_defaultHome.Id,request) as ObjectResult;
     

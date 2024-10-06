@@ -37,7 +37,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
     {
         try
         {
-            homeService.ChangePermission(request.ToEntity(),id);
+            homeService.UpdateMemberNotificationPermission(request.ToEntity(), id);
             return Ok(UpdatedHomeMessage);
         }
         catch (ElementNotFound)

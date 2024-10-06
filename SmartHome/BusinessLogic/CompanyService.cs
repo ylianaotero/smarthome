@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using IBusinessLogic;
@@ -11,19 +10,14 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
 {
     private const string CompanyNotFound = "Company not found";
     
-    public List<Company> GetAllCompanies(PageData pageData)
+    public void CreateCompany(Company company)
     {
-        return companyRepository.GetAll(pageData);
+        companyRepository.Add(company);
     }
 
     public List<Company> GetCompaniesByFilter(Func<Company, bool> filter, PageData pageData)
     {
         return companyRepository.GetByFilter(filter, pageData);
-    }
-
-    public void CreateCompany(Company company)
-    {
-        companyRepository.Add(company);
     }
 
     public Device AddCompanyToDevice(long companyId, Device device)

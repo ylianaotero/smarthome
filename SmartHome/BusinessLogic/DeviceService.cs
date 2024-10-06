@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using Domain.Abstract;
 using IBusinessLogic;
 using IDataAccess;
@@ -25,11 +24,6 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         }
         
         return device;
-    }
-    
-    public List<Device> GetAllDevices(PageData pageData)
-    {
-        return deviceRepository.GetAll(pageData);
     }
     
     public List<Device> GetDevicesByFilter(Func<Device, bool> filter, PageData pageData)

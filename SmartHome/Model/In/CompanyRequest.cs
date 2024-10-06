@@ -1,6 +1,4 @@
-using Domain;
 using Domain.Concrete;
-using IDataAccess;
 
 namespace Model.In;
 

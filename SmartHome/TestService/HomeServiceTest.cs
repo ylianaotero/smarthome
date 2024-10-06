@@ -1,6 +1,5 @@
 using BusinessLogic;
 using CustomExceptions;
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DTO;
@@ -59,24 +58,6 @@ public class HomeServiceTest
     {
         CreateRepositoryMocks();
         SetupDefaultObjects();
-    }
-    
-    [TestMethod]
-    public void TestGetAllHomes()
-    {
-        List<Home> homes = new List<Home>();
-        Home newHome = new Home()
-        {
-            Street = Street,
-            DoorNumber = DoorNumber,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
-        homes.Add(newHome);
-        _mockHomeRepository.Setup(m => m.GetAll(It.IsAny<PageData>())).Returns(homes);
-        HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
-        List<Home> retrievedHomes = homeService.GetAllHomes();
-        Assert.AreEqual(homes, retrievedHomes); 
     }
     
     [TestMethod]
@@ -259,7 +240,7 @@ public class HomeServiceTest
         
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
-        homeService.ChangePermission(memberDto, _defaultHome.Id);
+        homeService.UpdateMemberNotificationPermission(memberDto, _defaultHome.Id);
     }
     
     [TestMethod]
@@ -279,7 +260,7 @@ public class HomeServiceTest
         
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
-        homeService.ChangePermission(memberDto, _defaultHome.Id);
+        homeService.UpdateMemberNotificationPermission(memberDto, _defaultHome.Id);
     }
     
     [TestMethod]
@@ -297,7 +278,7 @@ public class HomeServiceTest
         
         HomeService homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object, _mockUserRepository.Object);
         
-        homeService.ChangePermission(memberDto, _defaultHome.Id);
+        homeService.UpdateMemberNotificationPermission(memberDto, _defaultHome.Id);
     }
         
         

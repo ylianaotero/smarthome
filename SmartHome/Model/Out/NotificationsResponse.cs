@@ -1,6 +1,4 @@
-using Domain;
 using Domain.Concrete;
-using Model.In;
 
 namespace Model.Out;
 

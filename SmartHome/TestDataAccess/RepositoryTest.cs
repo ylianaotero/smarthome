@@ -1,6 +1,5 @@
 using CustomExceptions;
 using DataAccess;
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using IDataAccess;

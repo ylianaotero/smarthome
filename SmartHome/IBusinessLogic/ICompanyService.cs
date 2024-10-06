@@ -1,4 +1,3 @@
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using IDataAccess;
@@ -7,8 +6,7 @@ namespace IBusinessLogic;
 
 public interface ICompanyService
 {
-    public List<Company> GetAllCompanies(PageData pageData);
-    public List<Company> GetCompaniesByFilter(Func<Company, bool> filter, PageData pageData);
     public void CreateCompany(Company company);
+    public List<Company> GetCompaniesByFilter(Func<Company, bool> filter, PageData pageData);
     Device AddCompanyToDevice(long companyId, Device device);
 }

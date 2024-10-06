@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using IBusinessLogic;
@@ -68,15 +67,15 @@ public class SessionService(IRepository<User> userRepository, IRepository<Sessio
 
     public bool UserCanListDevicesInHome(Guid token, Home home)
     {
-        return UserHasPermissionOrIsOwner(token, home, m => m.HasPermissionToListDevices);
+        return UserHasPermissionInHomeOrIsOwner(token, home, m => m.HasPermissionToListDevices);
     }
 
     public bool UserCanAddDevicesInHome(Guid token, Home home)
     {
-        return UserHasPermissionOrIsOwner(token, home, m => m.HasPermissionToAddADevice);
+        return UserHasPermissionInHomeOrIsOwner(token, home, m => m.HasPermissionToAddADevice);
     }
     
-    private bool UserHasPermissionOrIsOwner(Guid token, Home home, Func<Member, bool> permissionCheck)
+    private bool UserHasPermissionInHomeOrIsOwner(Guid token, Home home, Func<Member, bool> permissionCheck)
     {
         User user = GetUser(token);
         bool isOwner = home.Owner == user;

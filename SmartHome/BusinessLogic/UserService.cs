@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
@@ -27,24 +26,6 @@ public class UserService(IRepository<User> userRepository) : IUserService
         }
     }
 
-    private User GetBy(Func<User, bool> predicate, PageData pageData)
-    {
-        List<User> listOfuser = userRepository.GetByFilter(predicate, pageData); 
-        User user = listOfuser.FirstOrDefault();
-        
-        if (user == null)
-        {
-            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
-        }
-
-        return user; 
-    }
-
-    public List<User> GetAllUsers(PageData pageData)
-    {
-        return userRepository.GetAll(pageData);
-    }
-
     public List<User> GetUsersByFilter(Func<User, bool> filter, PageData pageData)
     {
         return userRepository.GetByFilter(filter, pageData);
@@ -57,16 +38,25 @@ public class UserService(IRepository<User> userRepository) : IUserService
         
         return hasAdministrator; 
     }
-
-    private User GetUserById(long Id)
+    
+    public void DeleteUser(long id)
     {
-        User user = userRepository.GetById(Id); 
-        if (user == null)
+        User user = GetBy(u => u.Id == id, PageData.Default);
+        userRepository.Delete(user);
+    }
+    
+    public void UpdateUser(long id, User user)
+    {
+        try
+        {
+            User existingUser = GetBy(u => u.Id == id, PageData.Default);
+            existingUser.Update(user);
+            userRepository.Update(existingUser);
+        }
+        catch (Exception e)
         {
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
-
-        return user; 
     }
     
     public Company AddOwnerToCompany(long id, Company company)
@@ -104,24 +94,28 @@ public class UserService(IRepository<User> userRepository) : IUserService
         return false; 
     }
     
-    public void DeleteUser(long id)
+    private User GetBy(Func<User, bool> predicate, PageData pageData)
     {
-        User user = GetBy(u => u.Id == id, PageData.Default);
-        userRepository.Delete(user);
-    }
-    
-    public void UpdateUser(long id, User user)
-    {
-        try
-        {
-            User existingUser = GetBy(u => u.Id == id, PageData.Default);
-            existingUser.Update(user);
-            userRepository.Update(existingUser);
-        }
-        catch (Exception e)
+        List<User> listOfuser = userRepository.GetByFilter(predicate, pageData); 
+        User user = listOfuser.FirstOrDefault();
+        
+        if (user == null)
         {
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
+
+        return user; 
+    }
+    
+    private User GetUserById(long Id)
+    {
+        User user = userRepository.GetById(Id); 
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
     }
     
     private List<CompanyOwner> GetCompanyOwnerRoles(User user)

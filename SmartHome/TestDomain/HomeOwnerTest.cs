@@ -1,5 +1,4 @@
 using CustomExceptions;
-using Domain;
 using Domain.Concrete;
 
 namespace TestDomain;

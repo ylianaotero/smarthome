@@ -1,6 +1,5 @@
 using BusinessLogic;
 using CustomExceptions;
-using Domain;
 using Domain.Abstract;
 using Domain.Concrete;
 using IDataAccess;
@@ -30,21 +29,6 @@ public class DeviceServiceTest
     {
         CreateMockAndService();
         SetupDefaultObjects();
-    }
-
-    [TestMethod]
-    public void TestGetAllDevices()
-    {
-        List<Device> devices = new List<Device>();
-        devices.Add(_defaultCamera);
-        devices.Add(_defaultWindowSensor);
-        _mockDeviceRepository
-            .Setup(x => x.GetAll(null))
-            .Returns(devices);
-        
-        List<Device> retrievedDevices =  _deviceService.GetAllDevices(null);
-        
-        Assert.AreEqual(devices, retrievedDevices);
     }
     
     [TestMethod]
