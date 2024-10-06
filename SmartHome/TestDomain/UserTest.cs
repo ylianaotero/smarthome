@@ -8,134 +8,140 @@ namespace TestDomain;
 [TestClass]
 public class UserTest
 {
-    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    private User _user;
+    private User _user2;
+    private User _updatedUser;
+    private Role _administratorRole;
+    private Mock<IUserValidator> _userValidatorMock;
+
+    
+    private const int ValidId = 1234;
+    private const string InvalidName = " ";
     private const string ValidName = "Juan";
     private const string ValidSurname = "Lopez";
     private const string ValidSurname2 = "Perez";
-    private const string ValidEmail = "juanlopez@gmail.com";
-    private const string ValidPassword = "juanLop1@";
-    private const int ValidId = 1234;
-    private const string InvalidName = " ";
     private const string InvalidEmail = "juanperez";
+    private const string ValidPassword = "juanLop1@";
     private const string InvalidPassword = "juanPerez";
+    private const string ValidEmail = "juanlopez@gmail.com";
+    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _user = new User();
+        _user2 = new User()
+        {
+            Name = ValidName,
+            Surname = ValidSurname,
+            Email = ValidEmail,
+            Password = ValidPassword
+        };
+        _updatedUser = new User()
+        {
+            Name = ValidName,
+            Surname = ValidSurname2,
+            Email = ValidEmail,
+            Password = ValidPassword
+        };
+        _administratorRole = new Administrator();
+        _userValidatorMock = new Mock<IUserValidator>();
+    }
+
 
     [TestMethod]
     public void TestAddNameToUser()
     {
-        User user = new User();
+        _user.Name = ValidName;
         
-        user.Name = ValidName;
-        
-        Assert.AreEqual(ValidName, user.Name);
+        Assert.AreEqual(ValidName, _user.Name);
     }
     
     [TestMethod]
     public void TestAddSurnameToUser()
     {
-        User user = new User();
+        _user.Surname = ValidSurname;
         
-        user.Surname = ValidSurname;
-        
-        Assert.AreEqual(ValidSurname, user.Surname);
+        Assert.AreEqual(ValidSurname, _user.Surname);
     }
     
     [TestMethod]
     public void TestAddPhotoToUser()
     {
-        User user = new User();
+        _user.Photo = ProfilePictureUrl;
         
-        user.Photo = ProfilePictureUrl;
-        
-        Assert.AreEqual(ProfilePictureUrl, user.Photo);
+        Assert.AreEqual(ProfilePictureUrl, _user.Photo);
     }
     
     [TestMethod]
     public void TestAddEmailToUser()
     {
-        User user = new User();
-        
-        user.Email = ValidEmail;
+        _user.Email = ValidEmail;
 
-        Assert.AreEqual(ValidEmail, user.Email);
+        Assert.AreEqual(ValidEmail, _user.Email);
     }
     
     [TestMethod]
     public void TestAddPasswordToUser()
     {
-        User user = new User();
+        _user.Password = ValidPassword;
         
-        user.Password = ValidPassword;
-        
-        Assert.AreEqual(ValidPassword, user.Password);
+        Assert.AreEqual(ValidPassword, _user.Password);
     }
     
     [TestMethod]
     public void TestAddIdToUser()
     {
-        User user = new User();
+        _user.Id = ValidId;
         
-        user.Id = ValidId;
-        
-        Assert.AreEqual(ValidId, user.Id);
+        Assert.AreEqual(ValidId, _user.Id);
     }
     
     [TestMethod]
     public void TestCreatedAtUser()
     {
-        User user = new User();
-        
-        Assert.AreEqual(DateTime.Now.Date, user.CreatedAt.Date);
+        Assert.AreEqual(DateTime.Now.Date, _user.CreatedAt.Date);
     }
     
     [TestMethod]
     public void TestAddNewRoleToUser()
     {
-        User user = new User();
-        
-        Assert.AreEqual(0, user.Roles.Count());
+        Assert.AreEqual(0, _user.Roles.Count());
     }
     
     [TestMethod]
     public void TestAddRoleToUser()
     {
-        User user = new User();
-        Role role = new Administrator();
-        user.AddRole(role);
-        Assert.AreEqual(1, user.Roles.Count());
+        _user.AddRole(_administratorRole);
+        Assert.AreEqual(1, _user.Roles.Count());
     }
     
     [TestMethod]
     public void TestDeleteRoleToUser()
     {
-        User user = new User();
-        Role role = new Administrator();
-        user.AddRole(role);
-        user.DeleteRole(role);
-        Assert.AreEqual(0, user.Roles.Count());
+        _user.AddRole(_administratorRole);
+        _user.DeleteRole(_administratorRole);
+        Assert.AreEqual(0, _user.Roles.Count());
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotDeleteRoleToUser()
     {
-        User user = new User();
-        Role role = new Administrator();
-        user.DeleteRole(role);
+        _user.DeleteRole(_administratorRole);
     }
     
     [TestMethod]
     public void TestValidName()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidateName(ValidName)).Returns(true);
         
-        var user = new User(userValidatorMock.Object);
+        User user = new User(_userValidatorMock.Object);
 
         user.Name = ValidName; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
         
         Assert.AreEqual(ValidName, user.Name);
     }
@@ -144,65 +150,56 @@ public class UserTest
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidName()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidateName(InvalidName)).Returns(false);
         
-        var user = new User(userValidatorMock.Object);
+        User user = new User(_userValidatorMock.Object);
 
         user.Name = InvalidName; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
     }
     
     [TestMethod]
     public void TestValidSurname()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidateSurname(ValidSurname)).Returns(true);
         
-        var user = new User(userValidatorMock.Object);
+        User user = new User(_userValidatorMock.Object);
 
         user.Surname = ValidSurname; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
         
         Assert.AreEqual(ValidSurname, user.Surname);
-        
     }
     
     [TestMethod]
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidSurName()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidateSurname(InvalidName)).Returns(false);
         
-        var user = new User(userValidatorMock.Object);
+        User user = new User(_userValidatorMock.Object);
 
         user.Surname = InvalidName; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
     }
     
     [TestMethod]
     public void TestValidEmail()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidateEmail(ValidEmail)).Returns(true);
         
-        var user = new User(userValidatorMock.Object);
+        User user = new User(_userValidatorMock.Object);
 
         user.Email = ValidEmail; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
         
         Assert.AreEqual(ValidEmail, user.Email);
     }
@@ -211,31 +208,27 @@ public class UserTest
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidEmail()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidateEmail(InvalidEmail)).Returns(false);
         
-        var user = new User(userValidatorMock.Object);
+        var user = new User(_userValidatorMock.Object);
 
         user.Email = InvalidEmail; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
     }
     
     [TestMethod]
     public void TestValidPassword()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidatePassword(ValidPassword)).Returns(true);
         
-        var user = new User(userValidatorMock.Object);
+        var user = new User(_userValidatorMock.Object);
 
         user.Password = ValidPassword; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
         
         Assert.AreEqual(ValidPassword, user.Password);
     }
@@ -244,16 +237,14 @@ public class UserTest
     [ExpectedException(typeof(InputNotValid))]
     public void TestInvalidPassword()
     {
-        var userValidatorMock = new Mock<IUserValidator>();
-        
-        userValidatorMock
+        _userValidatorMock
             .Setup(v => v.ValidatePassword(InvalidPassword)).Returns(false);
         
-        var user = new User(userValidatorMock.Object);
+        var user = new User(_userValidatorMock.Object);
 
         user.Password = InvalidPassword; 
         
-        userValidatorMock.VerifyAll();
+        _userValidatorMock.VerifyAll();
         
         Assert.AreEqual(InvalidPassword, user.Password);
     }
@@ -261,19 +252,7 @@ public class UserTest
     [TestMethod]
     public void TestUpdateUser()
     {
-        User user = new User()
-        {
-            Name = ValidName,
-            Surname = ValidSurname,
-            Email = ValidEmail,
-            Password = ValidPassword
-        };
-        User userUpdated = new User();
-        userUpdated.Name = ValidName;
-        userUpdated.Surname = ValidSurname2;
-        userUpdated.Email = ValidEmail;
-        userUpdated.Password = ValidPassword;
-        user.Update(userUpdated);
-        Assert.AreEqual(user.Email,userUpdated.Email);
+        _user2.Update(_updatedUser);
+        Assert.AreEqual(_user2.Email,_updatedUser.Email);
     }
 }

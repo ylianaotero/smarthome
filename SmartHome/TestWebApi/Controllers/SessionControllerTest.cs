@@ -36,7 +36,7 @@ public class SessionControllerTest
     private Session _session; 
     
     [TestInitialize]
-    public void SetUp()
+    public void TestInitialize()
     {
         _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
 
@@ -78,8 +78,8 @@ public class SessionControllerTest
             .Setup(s => s.LogIn(Email, Password))
             .Returns(_session);
 
-        var result = _sessionController.LogIn(_createLoginRequest) as OkObjectResult;
-        var response = result?.Value as LoginResponse;
+        OkObjectResult result = _sessionController.LogIn(_createLoginRequest) as OkObjectResult;
+        LoginResponse response = result?.Value as LoginResponse;
         
         _sessionServiceMock.Verify();
         
@@ -99,7 +99,7 @@ public class SessionControllerTest
             .Setup(s => s.LogIn(Email, Password))
             .Throws(new CannotFindItemInList(ErrorMessageWhenCannotFindElement));
         
-        var result = _sessionController.LogIn(_createLoginRequest) as ObjectResult;
+        ObjectResult result = _sessionController.LogIn(_createLoginRequest) as ObjectResult;
         
         _sessionServiceMock.Verify();
         

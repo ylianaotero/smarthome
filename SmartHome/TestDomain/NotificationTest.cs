@@ -5,17 +5,18 @@ namespace TestDomain;
 [TestClass]
 public class NotificationTest
 {
-    private const string Event = "Door Opened";
-    private const int Id = 1;
-    private readonly DateTime _todayDate = DateTime.Today.Date;
-    private const bool Read = false;
-    private readonly DateTime _minValueDate = DateTime.MinValue;
-    private DeviceUnit _deviceUnit;
     private User _user;
-    private Member _member;
     private Home _home;
-
+    private Member _member;
+    private DeviceUnit _deviceUnit;
     private Notification _notification; 
+
+    
+    private const int Id = 1;
+    private const bool Read = false;
+    private const string Event = "Door Opened";
+    private readonly DateTime _todayDate = DateTime.Today.Date;
+    private readonly DateTime _minValueDate = DateTime.MinValue;
     
     [TestInitialize]
     public void TestInitialize()
@@ -30,19 +31,18 @@ public class NotificationTest
     [TestMethod]
     public void CreateNewNotification()
     {
-        Notification notification = new Notification(Event);
-        notification.Id = Id; 
-        notification.Home = _home;
-        notification.Member = _member;
-        notification.DeviceUnit = _deviceUnit;
+        _notification.Id = Id; 
+        _notification.Home = _home;
+        _notification.Member = _member;
+        _notification.DeviceUnit = _deviceUnit;
 
         Assert.IsTrue(
-            Event == notification.Event &&
-            Read == notification.Read &&
-            _todayDate == notification.CreatedAt.Date &&
-            _minValueDate == notification.ReadAt &&
-            Id == notification.Id && _home == notification.Home && _member == notification.Member &&
-            _deviceUnit.Device == notification.DeviceUnit.Device
+            Event == _notification.Event &&
+            Read == _notification.Read &&
+            _todayDate == _notification.CreatedAt.Date &&
+            _minValueDate == _notification.ReadAt &&
+            Id == _notification.Id && _home == _notification.Home && _member == _notification.Member &&
+            _deviceUnit.Device == _notification.DeviceUnit.Device
         );
 
     }

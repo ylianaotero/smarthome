@@ -6,57 +6,58 @@ namespace TestDomain;
 [TestClass]
 public class CompanyOwnerTest
 {
+    Company _company;
+    Company _company2;
+    CompanyOwner _companyOwner;
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _company = new Company();
+        _company2 = new Company();
+        _companyOwner = new CompanyOwner();
+    }
+    
     [TestMethod]
     public void TestAddCompanyToCompanyOwner()
     {
-        Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.Company = company; 
-        Assert.AreEqual(company,companyOwner.Company);
+        _companyOwner.Company = _company; 
+        Assert.AreEqual(_company,_companyOwner.Company);
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementAlreadyExist))]
     public void TestCannotAddCompanyToCompanyOwner()
     {
-        Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.Company = company; 
-        Company company2 = new Company();
-        companyOwner.Company = company2;
+        _companyOwner.Company = _company; 
+        _companyOwner.Company = _company2;
     }
     
     [TestMethod]
     public void TestAddIncompleteCompany()
     {
-        CompanyOwner companyOwner = new CompanyOwner();
-        Assert.IsFalse(companyOwner.HasACompleteCompany);
+        Assert.IsFalse(_companyOwner.HasACompleteCompany);
     }
     
     [TestMethod]
     public void TestValidateExistingCompany()
     {
-        Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.Company = company; 
-        Assert.IsTrue(companyOwner.HasACompleteCompany);
+        _companyOwner.Company = _company; 
+        Assert.IsTrue(_companyOwner.HasACompleteCompany);
     }
     
     [TestMethod]
     public void TestValidateNotExistentCompanyException()
     {
-        CompanyOwner companyOwner = new CompanyOwner();
-        Assert.IsFalse(companyOwner.HasACompleteCompany);
+        Assert.IsFalse(_companyOwner.HasACompleteCompany);
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementAlreadyExist))]
     public void TestValidateExistingCompanyException()
     {
-        Company company = new Company();
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.Company = company; 
-        companyOwner.Company = new Company();
+        _companyOwner.Company = _company; 
+        _companyOwner.Company = new Company();
     }
     
 }

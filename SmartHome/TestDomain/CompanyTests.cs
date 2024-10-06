@@ -6,7 +6,10 @@ namespace TestDomain;
 [TestClass]
 public class CompanyTests
 {
+    private User _owner;
     private Company _company;
+    private Company _company1;
+    private Company _company2;
     
     private const string CompanyName = "SecurityCameras & Co.";
     private const string CompanyRut = "123456789";
@@ -15,7 +18,24 @@ public class CompanyTests
     [TestInitialize]
     public void TestInitialize()
     {
+        _owner = new User();
         _company = new Company();
+        
+        _company1 = new Company()
+        {
+            Id = 1,
+            Name = CompanyName,
+            RUT = CompanyRut,
+            LogoURL = CompanyLogoUrl
+        };
+        
+        _company2 = new Company()
+        {
+            Id = 2,
+            Name = CompanyName,
+            RUT = CompanyRut,
+            LogoURL = CompanyLogoUrl
+        };
     }
     
     [TestMethod]
@@ -45,54 +65,22 @@ public class CompanyTests
     [TestMethod]
     public void TestDifferentiationOfCompaniesViaId()
     {
-        Company company1 = new Company()
-        {
-            Id = 1,
-            Name = CompanyName,
-            RUT = CompanyRut,
-            LogoURL = CompanyLogoUrl
-        };
-        
-        Company company2 = new Company()
-        {
-            Id = 2,
-            Name = CompanyName,
-            RUT = CompanyRut,
-            LogoURL = CompanyLogoUrl
-        };
-        
-        Assert.AreNotEqual(company1, company2);
+        Assert.AreNotEqual(_company1, _company2);
     }
 
     [TestMethod]
     public void TestCompaniesAreEqual()
     {
-        Company company1 = new Company()
-        {
-            Id = 1,
-            Name = CompanyName,
-            RUT = CompanyRut,
-            LogoURL = CompanyLogoUrl
-        };
-        
-        Company company2 = new Company()
-        {
-            Id = 1,
-            Name = CompanyName,
-            RUT = CompanyRut,
-            LogoURL = CompanyLogoUrl
-        };
-        
-        Assert.AreEqual(company1, company2);
+        _company1.Id = _company2.Id;
+        Assert.AreEqual(_company1, _company2);
     }
     
     [TestMethod]
     public void TestAddOwnerToCompany()
     {
-        User owner = new User();
-        _company.Owner = owner;
-        owner.AddRole(new CompanyOwner());
+        _company.Owner = _owner;
+        _owner.AddRole(new CompanyOwner());
         
-        Assert.AreEqual(owner, _company.Owner);
+        Assert.AreEqual(_owner, _company.Owner);
     }
 }

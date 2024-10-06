@@ -10,16 +10,17 @@ namespace TestService;
 [TestClass]
 public class DeviceServiceTest
 {
-    private Mock<IRepository<Device>> _mockDeviceRepository;
+    private List<Device> _devices;
+    private Company _defaultCompany;
     private DeviceService _deviceService;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
-    private Company _defaultCompany;
+    private Mock<IRepository<Device>> _mockDeviceRepository;
     
+    private const long DeviceModel = 1345354616346;
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string CompanyName = "IoT Devices & Co.";
@@ -34,8 +35,7 @@ public class DeviceServiceTest
     [TestMethod]
     public void TestGetDevicesWithFilter()
     {
-        List<Device> devices = new List<Device>();
-        devices.Add(_defaultCamera);
+        _devices.Add(_defaultCamera);
         Func<Device, bool> filter = d => d.Model == DeviceModel && d.Name == CameraName 
                                                                 && d.Kind == SecurityCameraType 
                                                                 && d.PhotoURLs.First() == DevicePhotoUrl 
@@ -43,11 +43,11 @@ public class DeviceServiceTest
         
         _mockDeviceRepository
             .Setup(x => x.GetByFilter(filter, null))
-            .Returns(devices);
+            .Returns(_devices);
         
         List<Device> retrievedDevices =  _deviceService.GetDevicesByFilter(filter, null);
         
-        Assert.AreEqual(devices, retrievedDevices);
+        Assert.AreEqual(_devices, retrievedDevices);
     }
     
     [TestMethod]
@@ -93,12 +93,14 @@ public class DeviceServiceTest
     
     private void SetupDefaultObjects()
     {
+        _devices = new List<Device>();
+        
+        _defaultCompany = new Company { Name = CompanyName };
+        
         List<string> photos = new List<string>()
         {
             DevicePhotoUrl,
         };
-        
-        _defaultCompany = new Company { Name = CompanyName };
 
         _defaultCamera = new SecurityCamera()
             { 

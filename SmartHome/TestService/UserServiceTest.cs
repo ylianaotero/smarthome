@@ -13,7 +13,6 @@ public class UserServiceTest
 {
     private const string NewName = "Juan Pérez";
     private const string NewEmail = "juan.perez@example.com";
-    private const string NewEmail2 = "juan.lopez@example.com";
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
     
@@ -21,13 +20,18 @@ public class UserServiceTest
     private IUserService _userService;
 
     private User _user;
+    private HomeOwner _homeOwner;
+    private Company _company;
+    private CompanyOwner _companyOwner;
+    private Administrator _administrator;
     private List<User> _listOfUsers; 
     
     
     [TestInitialize]
-    public void Setup()
+    public void TestInitialize()
     {
         _mockUserRepository = new Mock<IRepository<User>>();
+        _userService = new UserService(_mockUserRepository.Object);
         
         _user = new User
         {
@@ -37,8 +41,11 @@ public class UserServiceTest
             Surname = NewSurname
         };
         
+        _company = new Company();
+        _homeOwner = new HomeOwner();
         _listOfUsers = new List<User>();
-        _listOfUsers.Add(_user);
+        _companyOwner = new CompanyOwner();
+        _administrator = new Administrator();
     }
     
     [TestMethod]
@@ -48,9 +55,6 @@ public class UserServiceTest
             .Setup(repo => repo
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(new List<User>());
-        
-        
-        _userService = new UserService(_mockUserRepository.Object);
         
         _userService.CreateUser(_user);
         
@@ -63,14 +67,12 @@ public class UserServiceTest
     [ExpectedException(typeof(ElementAlreadyExist))]
     public void CreateUserThatAlreadyExists()
     {
-        
+        _listOfUsers.Add(_user);
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers);
         
-        _userService = new UserService(_mockUserRepository.Object);
-
         _userService.CreateUser(_user);
         
         _userService.CreateUser(_user);
@@ -81,57 +83,34 @@ public class UserServiceTest
     [TestMethod]
     public void GetUsersWithFilter()
     {
-        List<User> users = new List<User>();
-        User user1 = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
-        users.Add(user1);
+        _listOfUsers.Add(_user);
         Func<User, bool> filter = u => u.Email == NewEmail && 
                                        u.Name == NewName && 
                                        u.Surname == NewSurname 
                                        && u.Password == NewPassword;
         
         _mockUserRepository
-            .Setup(v => v.GetByFilter(filter, It.IsAny<PageData>())).Returns(users);
-        
-        _userService = new UserService(_mockUserRepository.Object);
+            .Setup(v => v.GetByFilter(filter, It.IsAny<PageData>())).Returns(_listOfUsers);
         
         List<User> responseList = _userService.GetUsersByFilter(filter, PageData.Default);
         
         _mockUserRepository.Verify();
         
-        Assert.AreEqual(users, responseList);
+        Assert.AreEqual(_listOfUsers, responseList);
 
     }
     
     [TestMethod]
     public void UserIsAdmin()
     {
-        HomeOwner homeOwner = new HomeOwner(); 
-        Administrator admin = new Administrator(); 
-        var newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>{admin,homeOwner}
-        };
+       _user.Roles = new List<Role>{_administrator,_homeOwner};
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Returns(listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
-        
+            .Returns(_listOfUsers);
         
         bool response = _userService.IsAdmin(NewEmail);
         
@@ -144,28 +123,16 @@ public class UserServiceTest
     [TestMethod]
     public void UserIsIncompleteCompanyOwner()
     {
-        CompanyOwner companyOwner = new CompanyOwner(); 
-        Administrator admin = new Administrator(); 
-        var newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>{admin,companyOwner}
-        };
+        _user.Roles = new List<Role>{_administrator,_companyOwner};
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
-                .GetById(newUser.Id))
-            .Returns(newUser);
+                .GetById(_user.Id))
+            .Returns(_user);
         
-        _userService = new UserService(_mockUserRepository.Object);
-        
-        bool response = _userService.CompanyOwnerIsComplete(newUser.Id);
+        bool response = _userService.CompanyOwnerIsComplete(_user.Id);
         
         _mockUserRepository.Verify();
         
@@ -176,29 +143,17 @@ public class UserServiceTest
     [TestMethod]
     public void UserIsCompleteCompanyOwner()
     {
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.HasACompleteCompany = true; 
-        Administrator admin = new Administrator(); 
-        var newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>{admin,companyOwner}
-        };
+        _companyOwner.HasACompleteCompany = true; 
+        _user.Roles = new List<Role>{_administrator,_companyOwner};
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
-                .GetById(newUser.Id))
-            .Returns(newUser);
+                .GetById(_user.Id))
+            .Returns(_user);
         
-        _userService = new UserService(_mockUserRepository.Object);
-        
-        bool response = _userService.CompanyOwnerIsComplete(newUser.Id);
+        bool response = _userService.CompanyOwnerIsComplete(_user.Id);
         
         _mockUserRepository.Verify();
         
@@ -209,35 +164,21 @@ public class UserServiceTest
     [TestMethod]
     public void TestAddCompanyToOwner()
     {
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.HasACompleteCompany = false; 
-        Administrator admin = new Administrator(); 
-        User newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>{admin,companyOwner}
-        };
-
-        Company company = new Company(); 
+        _companyOwner.HasACompleteCompany = false; 
+        _user.Roles = new List<Role>{_administrator,_companyOwner};
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
-                .GetById(newUser.Id))
-            .Returns(newUser);
+                .GetById(_user.Id))
+            .Returns(_user);
         
-        _userService = new UserService(_mockUserRepository.Object);
-        
-        Company response = _userService.AddOwnerToCompany(newUser.Id, company);
+        Company response = _userService.AddOwnerToCompany(_user.Id, _company);
         
         _mockUserRepository.Verify();
         
-        Assert.IsTrue(response.Id == company.Id && response.Owner.Email == newUser.Email);
+        Assert.IsTrue(response.Id == _company.Id && response.Owner.Email == _user.Email);
         
     }
     
@@ -245,62 +186,33 @@ public class UserServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestAddCompanyToOwnerThatIsComplete()
     {
-        CompanyOwner companyOwner = new CompanyOwner();
-        companyOwner.HasACompleteCompany = true; 
-        Administrator admin = new Administrator(); 
-        User newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>{admin,companyOwner}
-        };
-
-        Company company = new Company(); 
+        _companyOwner.HasACompleteCompany = true; 
+        _user.Roles = new List<Role>{_administrator,_companyOwner};
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
-                .GetById(newUser.Id))
-            .Returns(newUser);
+                .GetById(_user.Id))
+            .Returns(_user);
         
-        _userService = new UserService(_mockUserRepository.Object);
-        
-        _userService.AddOwnerToCompany(newUser.Id, company);
+        _userService.AddOwnerToCompany(_user.Id, _company);
         
         _mockUserRepository.Verify();
-        
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestAddCompanyToNotFoundOwner()
     {
-        Administrator admin = new Administrator(); 
-        User newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
-
-        Company company = new Company(); 
-        
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
-                .GetById(newUser.Id))
+                .GetById(_user.Id))
             .Returns((User?)null);
         
-        _userService = new UserService(_mockUserRepository.Object);
-        
-        _userService.AddOwnerToCompany(newUser.Id, company);
+        _userService.AddOwnerToCompany(_user.Id, _company);
         
         _mockUserRepository.Verify();
         
@@ -309,26 +221,14 @@ public class UserServiceTest
     [TestMethod]
     public void UserIsNotAdmin()
     {
-        HomeOwner homeOwner = new HomeOwner(); 
-        var newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>{homeOwner}
-        };
+        _user.Roles = new List<Role>{_homeOwner};
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Returns(listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
-        
+            .Returns(_listOfUsers);
         
         bool response = _userService.IsAdmin(NewEmail);
         
@@ -342,43 +242,27 @@ public class UserServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void UserIsAdminUserNotFound()
     {
-        List<User> listOfUsers = new List<User>();
-        
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Returns(listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
+            .Returns(_listOfUsers);
         
         _userService.IsAdmin(NewEmail);
         
         _mockUserRepository.Verify();
-        
     }
     
     [TestMethod]
     public void UserWithoutRolesIsNotAdmin()
     {
-        var newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname,
-            Roles = new List<Role>()
-        };
+        _user.Roles = new List<Role>();
         
-        List<User> listOfUsers = new List<User>();
-        listOfUsers.Add(newUser);
+        _listOfUsers.Add(_user);
         
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Returns(listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
-        
+            .Returns(_listOfUsers);
         
         bool response = _userService.IsAdmin(NewEmail);
         
@@ -391,12 +275,12 @@ public class UserServiceTest
     [TestMethod]
     public void TestDeleteUser()
     {
+        _listOfUsers.Add(_user);
+
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
         
         _userService.DeleteUser(1);
         
@@ -409,14 +293,10 @@ public class UserServiceTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestDeleteUserNotFound()
     {
-        List<User> listOfUsers = new List<User>();
-        
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Returns(listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
+            .Returns(_listOfUsers);
         
         _userService.DeleteUser(1);
         
@@ -426,39 +306,28 @@ public class UserServiceTest
     [TestMethod]
     public void TestUpdateUser()
     {
+        _listOfUsers.Add(_user);
+
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers);
-        _userService = new UserService(_mockUserRepository.Object);
         
-        User newUser = new User
-        {
-            Name = NewName,
-            Email = NewEmail,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
-        
-        _userService.UpdateUser(_user.Id, newUser);
+        _userService.UpdateUser(_user.Id, _user);
 
         _mockUserRepository
             .Verify(repo => repo
                 .Update(It.Is<User>(u => u.Id == _user.Id)), Times.Once);
-        Assert.AreEqual(_user.Email,newUser.Email);
+        Assert.AreEqual(_user.Email,_user.Email);
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestUpdateUserNotFound()
     {
-        List<User> listOfUsers = new List<User>();
-        
         _mockUserRepository
             .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>(), PageData.Default))
-            .Returns(listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
+            .Returns(_listOfUsers);
         
         _userService.UpdateUser(1, _user);
         

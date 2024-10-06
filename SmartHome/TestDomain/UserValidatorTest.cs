@@ -5,6 +5,8 @@ namespace TestDomain;
 [TestClass]
 public class UserValidatorTest
 {
+    private UserValidator _userValidator;
+    
     private const string ValidName = "Juan";
     private const string ValidSurname = "Lopez";
     private const string ValidEmail = "juanLopez@gmail.com";
@@ -13,68 +15,66 @@ public class UserValidatorTest
     private const string ValidPassword = "Password1@.";
     private const string InvalidPasswordEmpty = "";
     private const string InvalidPasswordNoSpecialChar = "password1";
+    
+    [TestInitialize]
+    public void Initialize()
+    {
+        _userValidator = new UserValidator();
+    }
 
     [TestMethod]
     public void TestValidateName()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidateName(ValidName);
+        bool validated = _userValidator.ValidateName(ValidName);
         Assert.IsTrue(validated);
     }
     
     [TestMethod]
     public void TestValidateSurname()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidateSurname(ValidSurname);
+        bool validated = _userValidator.ValidateSurname(ValidSurname);
         Assert.IsTrue(validated);
     }
     
     [TestMethod]
     public void TestValidateEmail()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidateEmail(ValidEmail);
+        bool validated = _userValidator.ValidateEmail(ValidEmail);
         Assert.IsTrue(validated);
     }
     
     [TestMethod]
     public void TestCannotValidateEmailBecauseOfStructure()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidateEmail(InvalidEmailNoAtSymbol);
+        bool validated = _userValidator.ValidateEmail(InvalidEmailNoAtSymbol);
         Assert.IsFalse(validated);
     }
     
     [TestMethod]
     public void TestCannotValidateEmailBecauseItIsEmpty()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidateEmail(InvalidEmailEmpty);
+        bool validated = _userValidator.ValidateEmail(InvalidEmailEmpty);
         Assert.IsFalse(validated);
     }
     
     [TestMethod]
     public void TestValidatePassword()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidatePassword(ValidPassword);
+        bool validated = _userValidator.ValidatePassword(ValidPassword);
         Assert.IsTrue(validated);
     }
     
     [TestMethod]
     public void TestCannotValidatePasswordBecauseItIsEmpty()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidatePassword(InvalidPasswordEmpty);
+        bool validated = _userValidator.ValidatePassword(InvalidPasswordEmpty);
         Assert.IsFalse(validated);
     }
     
     [TestMethod]
     public void TestCannotValidatePasswordBecauseItHasCharactersThatCannotBeUsed()
     {
-        UserValidator validator = new UserValidator();
-        bool validated = validator.ValidatePassword(InvalidPasswordNoSpecialChar);
+        bool validated = _userValidator.ValidatePassword(InvalidPasswordNoSpecialChar);
         Assert.IsFalse(validated);
     }
 }
