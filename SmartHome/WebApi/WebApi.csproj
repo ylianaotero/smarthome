@@ -21,8 +21,4 @@
         <ProjectReference Include="..\ServiceFactory\ServiceFactory.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
 </Project>

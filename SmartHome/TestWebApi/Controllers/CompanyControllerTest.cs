@@ -1,5 +1,6 @@
 using CustomExceptions;
-using Domain;
+using Domain.Abstract;
+using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ public class CompanyControllerTest
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
 
-        CompaniesRequest request = new CompaniesRequest()
+        GetCompaniesRequest request = new GetCompaniesRequest()
         {
             Company = Name,
             Owner = _defaultUser.Name + " " + _defaultUser.Surname
@@ -83,16 +84,16 @@ public class CompanyControllerTest
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
 
-        CompaniesRequest request = new CompaniesRequest()
+        GetCompaniesRequest request = new GetCompaniesRequest()
         {
             Company = Name,
             Owner = _defaultUser.Name + " " + _defaultUser.Surname
         };
         
-        CompaniesResponse expectedResponse = DefaultCompaniesResponse();
+        GetCompaniesResponse expectedResponse = DefaultCompaniesResponse();
         
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
-        CompaniesResponse response = result?.Value as CompaniesResponse;
+        GetCompaniesResponse response = result?.Value as GetCompaniesResponse;
         
         Assert.AreEqual(expectedResponse, response);
     }
@@ -111,7 +112,7 @@ public class CompanyControllerTest
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
             .Returns(companies);
         
-        CompaniesRequest request = new CompaniesRequest();
+        GetCompaniesRequest request = new GetCompaniesRequest();
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
         Assert.AreEqual(OkStatusCode, result?.StatusCode);
@@ -120,7 +121,7 @@ public class CompanyControllerTest
     [TestMethod]
     public void TestPostCompanyOkStatusCode()
     {
-        CompanyRequest request = new CompanyRequest()
+        PostCompanyRequest request = new PostCompanyRequest()
         {
             Name = Name,
             RUT = RUT,
@@ -141,7 +142,7 @@ public class CompanyControllerTest
     [TestMethod]
     public void TestPostCompanyNotFoundStatusCode()
     {
-        CompanyRequest request = new CompanyRequest()
+        PostCompanyRequest request = new PostCompanyRequest()
         {
             Name = Name,
             RUT = RUT,
@@ -216,7 +217,7 @@ public class CompanyControllerTest
         return request;
     }
     
-    private CompaniesResponse DefaultCompaniesResponse()
+    private GetCompaniesResponse DefaultCompaniesResponse()
     {
         List<Company> companies = new List<Company>
         {
@@ -224,6 +225,6 @@ public class CompanyControllerTest
             _defaultCompany2
         };
         
-        return new CompaniesResponse(companies);
+        return new GetCompaniesResponse(companies);
     }
 }

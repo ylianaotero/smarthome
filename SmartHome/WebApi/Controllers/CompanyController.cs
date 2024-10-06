@@ -1,6 +1,5 @@
 using CustomExceptions;
 using IBusinessLogic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -10,39 +9,30 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/companies")]
 [ApiController]
-public class CompanyController : ControllerBase
+public class CompanyController(ICompanyService companyService, IUserService userService) : ControllerBase
 {
-    private readonly ICompanyService _companyService;
-    private readonly IUserService _userService; 
-    
     private const string RoleWithPermissionsToGetCompanies = "Administrator";
     private const string RoleWithPermissionsToPostCompany = "CompanyOwner";
     private const string CompanyOwnerNotFound = "CompanyOwner was not found.";
 
-    public CompanyController(ICompanyService companyService,IUserService userService)
-    {
-        _companyService = companyService;
-        _userService = userService; 
-    }
-    
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissionsToGetCompanies)]
-    public IActionResult GetCompanies([FromQuery] CompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetCompanies([FromQuery] GetCompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        CompaniesResponse companiesResponse = new CompaniesResponse
-            (_companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+        GetCompaniesResponse getCompaniesResponse = new GetCompaniesResponse
+            (companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         
-        return Ok(companiesResponse);
+        return Ok(getCompaniesResponse);
     }
     
     
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
-    public IActionResult PostCompany([FromBody] CompanyRequest request)
+    public IActionResult PostCompany([FromBody] PostCompanyRequest request)
     {
         try
         {
-            _companyService.CreateCompany(_userService.AddOwnerToCompany(request.OwnerId,request.ToEntity()));
+            companyService.CreateCompany(userService.AddOwnerToCompany(request.OwnerId,request.ToEntity()));
             
             return CreatedAtAction(nameof(PostCompany), request);
         }

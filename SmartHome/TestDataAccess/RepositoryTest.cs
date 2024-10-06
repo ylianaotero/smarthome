@@ -1,6 +1,7 @@
 using CustomExceptions;
 using DataAccess;
-using Domain;
+using Domain.Abstract;
+using Domain.Concrete;
 using IDataAccess;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using Microsoft.Data.Sqlite;

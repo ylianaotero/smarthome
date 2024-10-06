@@ -1,7 +1,7 @@
 using CustomExceptions;
-using Domain;
+using Domain.Abstract;
+using Domain.Concrete;
 using IBusinessLogic;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -36,8 +36,8 @@ public class HomeOwnerControllerTest
     
     private Mock<IUserService> _userServiceMock;
     private HomeOwnerController _homeOwnerController;
-    private CreateHomeOwnerRequest _createHomeOwnerRequest;
-    private UpdateHomeOwnerRequest _updateHomeOwnerRequest;
+    private PostHomeOwnerRequest _postHomeOwnerRequest;
+    private PutHomeOwnerRequest _putHomeOwnerRequest;
     private User _user; 
     
     [TestInitialize]
@@ -53,7 +53,7 @@ public class HomeOwnerControllerTest
 
         _listOfRoles.Add(_homeOwner); 
         
-        _createHomeOwnerRequest = new CreateHomeOwnerRequest
+        _postHomeOwnerRequest = new PostHomeOwnerRequest
         {
             Name = Name,
             Email = Email,
@@ -62,7 +62,7 @@ public class HomeOwnerControllerTest
             Photo = ProfilePictureUrl
         };
         
-        _updateHomeOwnerRequest = new UpdateHomeOwnerRequest
+        _putHomeOwnerRequest = new PutHomeOwnerRequest
         {
             Name = Name,
             Email = Email,
@@ -73,11 +73,11 @@ public class HomeOwnerControllerTest
         
         _user = new User
         {
-            Name = _createHomeOwnerRequest.Name,
-            Email = _createHomeOwnerRequest.Email,
-            Password = _createHomeOwnerRequest.Password,
-            Surname = _createHomeOwnerRequest.Surname,
-            Photo = _createHomeOwnerRequest.Photo,
+            Name = _postHomeOwnerRequest.Name,
+            Email = _postHomeOwnerRequest.Email,
+            Password = _postHomeOwnerRequest.Password,
+            Surname = _postHomeOwnerRequest.Surname,
+            Photo = _postHomeOwnerRequest.Photo,
             Roles = _listOfRoles
         };
     }
@@ -94,8 +94,8 @@ public class HomeOwnerControllerTest
             u.Photo == _user.Photo
         )));
 
-        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
-        var userResponse = result?.Value as HomeOwnerResponse;
+        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
+        var userResponse = result?.Value as PostHomeOwnerResponse;
 
         _userServiceMock.Verify();
         
@@ -103,10 +103,10 @@ public class HomeOwnerControllerTest
             result != null &&
             userResponse != null &&
             result.StatusCode == CreatedStatusCode &&
-            _createHomeOwnerRequest.Name == userResponse.Name &&
-            _createHomeOwnerRequest.Email == userResponse.Email &&
-            _createHomeOwnerRequest.Surname == userResponse.Surname &&
-            _createHomeOwnerRequest.Photo == userResponse.Photo &&
+            _postHomeOwnerRequest.Name == userResponse.Name &&
+            _postHomeOwnerRequest.Email == userResponse.Email &&
+            _postHomeOwnerRequest.Surname == userResponse.Surname &&
+            _postHomeOwnerRequest.Photo == userResponse.Photo &&
             userResponse.Roles.Count == 1
         );
     }
@@ -118,7 +118,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
         
-        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -132,7 +132,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception());
 
-        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -146,7 +146,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new ElementAlreadyExist(ErrorMessageWhenElementAlreadyExists));
 
-        var result = _homeOwnerController.CreateHomeOwner(_createHomeOwnerRequest) as ObjectResult;
+        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -157,23 +157,23 @@ public class HomeOwnerControllerTest
     public void TestUpdateHomeOwnerOkResponse()
     {
         _userServiceMock.Setup(service => service.UpdateUser(It.IsAny<long>(), It.Is<User>(u =>
-            u.Name == _updateHomeOwnerRequest.Name &&
-            u.Email == _updateHomeOwnerRequest.Email &&
-            u.Password == _updateHomeOwnerRequest.Password &&
-            u.Surname == _updateHomeOwnerRequest.Surname &&
-            u.Photo == _updateHomeOwnerRequest.Photo
+            u.Name == _putHomeOwnerRequest.Name &&
+            u.Email == _putHomeOwnerRequest.Email &&
+            u.Password == _putHomeOwnerRequest.Password &&
+            u.Surname == _putHomeOwnerRequest.Surname &&
+            u.Photo == _putHomeOwnerRequest.Photo
         ))).Verifiable();
 
-        var result = _homeOwnerController.UpdateHomeOwner(1, _updateHomeOwnerRequest) as ObjectResult;
-        var userResponse = result?.Value as HomeOwnerResponse;
+        var result = _homeOwnerController.UpdateHomeOwner(1, _putHomeOwnerRequest) as ObjectResult;
+        var userResponse = result?.Value as PostHomeOwnerResponse;
         Assert.IsTrue(
             result != null && 
             userResponse != null && 
             result.StatusCode == OkStatusCode &&
-            userResponse.Name == _updateHomeOwnerRequest.Name && 
-            userResponse.Email == _updateHomeOwnerRequest.Email &&
-            userResponse.Surname == _updateHomeOwnerRequest.Surname &&
-            userResponse.Photo == _updateHomeOwnerRequest.Photo
+            userResponse.Name == _putHomeOwnerRequest.Name && 
+            userResponse.Email == _putHomeOwnerRequest.Email &&
+            userResponse.Surname == _putHomeOwnerRequest.Surname &&
+            userResponse.Photo == _putHomeOwnerRequest.Photo
         );
 
         _userServiceMock.Verify();
@@ -182,7 +182,7 @@ public class HomeOwnerControllerTest
     [TestMethod]
     public void UpdateHomeOwnerInvalidRequest()
     {
-        var updateHomeOwnerRequest = new UpdateHomeOwnerRequest
+        var updateHomeOwnerRequest = new PutHomeOwnerRequest
         {
             Name = Name,
             Email = InvalidEmail,
@@ -207,7 +207,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.UpdateUser(It.IsAny<long>(), It.IsAny<User>()))
             .Throws(new ElementNotFound(ErrorMessageWhenElementNotFound));
 
-        var result = _homeOwnerController.UpdateHomeOwner(HomeOwnerId, _updateHomeOwnerRequest) as ObjectResult;
+        var result = _homeOwnerController.UpdateHomeOwner(HomeOwnerId, _putHomeOwnerRequest) as ObjectResult;
 
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }

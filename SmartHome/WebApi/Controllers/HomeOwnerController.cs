@@ -10,27 +10,20 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/home-owners")]
 [ApiController]
-public class HomeOwnerController : ControllerBase
+public class HomeOwnerController(IUserService userService) : ControllerBase
 {
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
     private const int StatusCodeInternalServerError = 500; 
     private const string RoleWithPermissions = "HomeOwner";
-    
-    private readonly IUserService _userService;
 
-    public HomeOwnerController(IUserService userService)
-    {
-        _userService = userService;
-    }
-    
     [HttpPost]
     [AllowAnonymous]
-    public IActionResult CreateHomeOwner([FromBody] CreateHomeOwnerRequest createHomeOwnerRequest)
+    public IActionResult CreateHomeOwner([FromBody] PostHomeOwnerRequest postHomeOwnerRequest)
     {
         try
         {
-            _userService.CreateUser(createHomeOwnerRequest.ToEntity());
-            HomeOwnerResponse response = new HomeOwnerResponse(createHomeOwnerRequest.ToEntity());
+            userService.CreateUser(postHomeOwnerRequest.ToEntity());
+            PostHomeOwnerResponse response = new PostHomeOwnerResponse(postHomeOwnerRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateHomeOwner), response);
         }
@@ -47,23 +40,22 @@ public class HomeOwnerController : ControllerBase
      [HttpPut]
      [Route("{id}")]
      [RolesWithPermissions(RoleWithPermissions)]
-       public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] UpdateHomeOwnerRequest updateHomeOwnerRequest)
-       {
-           try
-           {
-               _userService.UpdateUser(id, updateHomeOwnerRequest.ToEntity());
-               HomeOwnerResponse response = new HomeOwnerResponse(updateHomeOwnerRequest.ToEntity());
+     public IActionResult UpdateHomeOwner([FromRoute] long id, [FromBody] PutHomeOwnerRequest putHomeOwnerRequest)
+     { 
+         try 
+         {
+               userService.UpdateUser(id, putHomeOwnerRequest.ToEntity());
+               PostHomeOwnerResponse response = new PostHomeOwnerResponse(putHomeOwnerRequest.ToEntity());
                
                return Ok(response);
-           }
-           catch (InputNotValid inputNotValid)
-           {
-               return BadRequest(new { message = inputNotValid.Message });
-           }
-           catch (ElementNotFound elementNotFound)
-           {
-               return NotFound(new { message = elementNotFound.Message });
-           }
-       }
-    
+         }
+         catch (InputNotValid inputNotValid)
+         {
+             return BadRequest(new { message = inputNotValid.Message });
+         }
+         catch (ElementNotFound elementNotFound)
+         {
+             return NotFound(new { message = elementNotFound.Message });
+         }
+     }
 }

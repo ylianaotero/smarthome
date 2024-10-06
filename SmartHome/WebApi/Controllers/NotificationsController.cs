@@ -1,54 +1,46 @@
 using CustomExceptions;
 using IBusinessLogic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
 
 namespace WebApi.Controllers;
 
-
 [Route("api/v1/notifications")]
 [ApiController]
-public class NotificationsController : ControllerBase
+public class NotificationsController(INotificationService notificationService) : ControllerBase
 {
-    private readonly INotificationService _notificationService;
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
-    private const string CreatedMessage = "The resource was created successfully.";
-    
-    public NotificationsController(INotificationService notificationService)
-    {
-        _notificationService = notificationService;
-    }
-    
+
     [HttpGet]
-    public IActionResult GetNotifications([FromQuery] NotificationsRequest request)
+    public IActionResult GetNotifications([FromQuery] GetNotificationsRequest request)
     {
-        NotificationsResponse notificationsResponse;
+        GetNotificationsResponse getNotificationsResponse;
         try
         {
-            notificationsResponse = new NotificationsResponse(_notificationService.GetNotificationsByFilter(request.ToFilter(), null));
+            getNotificationsResponse = new GetNotificationsResponse
+                (notificationService.GetNotificationsByFilter(request.ToFilter(), null));
         }
         catch (CannotFindItemInList)
         {
             return NotFound(ResourceNotFoundMessage);
         }
 
-        return Ok(notificationsResponse);
+        return Ok(getNotificationsResponse);
     }
     
     [HttpPost]
-    public IActionResult CreateNotification(CreateNotificationRequest request)
+    public IActionResult CreateNotification(PostNotificationRequest request)
     {
         try
         {
-            _notificationService.SendNotifications(request.ToEntity());
+            notificationService.SendNotifications(request.ToEntity());
         }
         catch (CannotFindItemInList)
         {
             return NotFound(ResourceNotFoundMessage);
         }
 
-        return Created("/notifications",CreatedMessage);
+        return CreatedAtAction(nameof(CreateNotification), request);
     }
 }

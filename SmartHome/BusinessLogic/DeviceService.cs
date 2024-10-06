@@ -1,5 +1,5 @@
 using CustomExceptions;
-using Domain;
+using Domain.Abstract;
 using IBusinessLogic;
 using IDataAccess;
 
@@ -26,11 +26,6 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         return device;
     }
     
-    public List<Device> GetAllDevices(PageData pageData)
-    {
-        return deviceRepository.GetAll(pageData);
-    }
-    
     public List<Device> GetDevicesByFilter(Func<Device, bool> filter, PageData pageData)
     {
         return deviceRepository.GetByFilter(filter, pageData);
@@ -38,7 +33,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
     
     public List<string> GetDeviceTypes()
     {
-        var deviceTypes = typeof(Device).Assembly.GetTypes()
+        List<string> deviceTypes = typeof(Device).Assembly.GetTypes()
             .Where(t => t.IsSubclassOf(typeof(Device)) && !t.IsAbstract)
             .Select(t => t.Name)
             .ToList();

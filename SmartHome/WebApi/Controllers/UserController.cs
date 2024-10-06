@@ -1,6 +1,5 @@
 using CustomExceptions;
 using IBusinessLogic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -10,35 +9,27 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/users")]
 [ApiController]
-[AllowAnonymous]
-public class UserController : ControllerBase
+public class UserController(IUserService userService) : ControllerBase
 {
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string RoleWithPermissions = "Administrator";
-    
-    private readonly IUserService _userService;
 
-    public UserController(IUserService userService)
-    {
-        _userService = userService;
-    }
-    
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult GetUsers([FromQuery] UsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetUsers([FromQuery] GetUsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        UsersResponse usersResponse;
+        GetUsersResponse getUsersResponse;
 
         try
         {
-            usersResponse = new UsersResponse
-                (_userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+            getUsersResponse = new GetUsersResponse
+                (userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         }
         catch (CannotFindItemInList)
         {
             return NotFound(NotFoundMessage);
         }
         
-        return Ok(usersResponse);
+        return Ok(getUsersResponse);
     }
 }

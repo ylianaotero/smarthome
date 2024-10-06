@@ -1,7 +1,7 @@
 using BusinessLogic;
 using CustomExceptions;
-using Domain;
-using IBusinessLogic;
+using Domain.Abstract;
+using Domain.Concrete;
 using IDataAccess;
 using Moq;
 
@@ -26,18 +26,6 @@ public class CompanyServiceTest
     {
         SetupDefaultObjects();
         CreateMockCompanyRepository();
-    }
-    
-    [TestMethod]
-    public void TestGetAllCompanies()
-    {
-        List<Company> companies = new List<Company>();
-        companies.Add(_company);
-        _mockCompanyRepository.Setup(x => x.GetAll(It.IsAny<PageData>())).Returns(companies);
-        
-        List<Company> retrievedCompanies =  _companyService.GetAllCompanies(PageData.Default);
-        
-        Assert.AreEqual(companies, retrievedCompanies);
     }
     
     [TestMethod]

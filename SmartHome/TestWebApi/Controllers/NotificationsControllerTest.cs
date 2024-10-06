@@ -1,5 +1,6 @@
 using CustomExceptions;
-using Domain;
+using Domain.Concrete;
+using Domain.DTO;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -33,22 +34,22 @@ public class NotificationsControllerTest
     public void TestGetNotification()
     {
         _mockINotificationService.Setup(x => x.GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null)).Returns(_listOfNotifications);
-        NotificationsRequest request = new NotificationsRequest();
-        NotificationsResponse notificationResponse = new NotificationsResponse(_listOfNotifications);
+        GetNotificationsRequest request = new GetNotificationsRequest();
+        GetNotificationsResponse getNotificationResponse = new GetNotificationsResponse(_listOfNotifications);
         
         ObjectResult result = _notificationController.GetNotifications(request) as OkObjectResult;
-        NotificationsResponse response = result.Value as NotificationsResponse;
+        GetNotificationsResponse response = result.Value as GetNotificationsResponse;
         
         _mockINotificationService.Verify();
         
-        Assert.AreEqual(notificationResponse, response);
+        Assert.AreEqual(getNotificationResponse, response);
     }
 
     [TestMethod]
     public void TestGetNotificationNotFound()
     {
         _mockINotificationService.Setup(x => x.GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null)).Throws(new CannotFindItemInList(CannotFindItemInListMessage));
-        NotificationsRequest request = new NotificationsRequest();
+        GetNotificationsRequest request = new GetNotificationsRequest();
         
         ObjectResult result = _notificationController.GetNotifications(request) as NotFoundObjectResult;
         
@@ -60,25 +61,25 @@ public class NotificationsControllerTest
     [TestMethod]
     public void TestCreateNotification()
     {
-        CreateNotificationRequest request = new CreateNotificationRequest();
+        PostNotificationRequest request = new PostNotificationRequest();
         NotificationDTO notification = new NotificationDTO();
         _mockINotificationService.Setup(x => x.SendNotifications(notification));
         
-        ObjectResult result = _notificationController.CreateNotification(request) as CreatedResult;
+        CreatedAtActionResult result = _notificationController.CreateNotification(request) as CreatedAtActionResult;
         
         _mockINotificationService.Verify();
         
-        Assert.AreEqual(CreatedMessage, result.Value);
+        Assert.AreEqual(nameof(NotificationsController.CreateNotification), result.ActionName);
     }
     
     [TestMethod]
     public void TestCreateNotificationStatusCode()
     {
-        CreateNotificationRequest request = new CreateNotificationRequest();
+        PostNotificationRequest request = new PostNotificationRequest();
         NotificationDTO notification = new NotificationDTO();
         _mockINotificationService.Setup(x => x.SendNotifications(notification));
         
-        ObjectResult result = _notificationController.CreateNotification(request) as CreatedResult;
+        ObjectResult result = _notificationController.CreateNotification(request) as CreatedAtActionResult;
         
         Assert.AreEqual(CreatedStatusCode, result.StatusCode);
     }
@@ -86,7 +87,7 @@ public class NotificationsControllerTest
     [TestMethod]
     public void TestCreateNotificationNotFoundReponse()
     {
-        CreateNotificationRequest request = new CreateNotificationRequest();
+        PostNotificationRequest request = new PostNotificationRequest();
         _mockINotificationService.Setup(x => x.SendNotifications(It.IsAny<NotificationDTO>())).Throws(new CannotFindItemInList(CannotFindItemInListMessage));
 
         ObjectResult result = _notificationController.CreateNotification(request) as NotFoundObjectResult;
@@ -97,7 +98,7 @@ public class NotificationsControllerTest
     [TestMethod]
     public void TestCreateNotificationNotFoundStatusCode()
     {
-        CreateNotificationRequest request = new CreateNotificationRequest();
+        PostNotificationRequest request = new PostNotificationRequest();
         _mockINotificationService
             .Setup(x => x.SendNotifications(It.IsAny<NotificationDTO>()))
             .Throws(new CannotFindItemInList(CannotFindItemInListMessage));

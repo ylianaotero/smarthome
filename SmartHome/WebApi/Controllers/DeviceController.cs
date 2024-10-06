@@ -10,46 +10,38 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/devices")]
 [ApiController]
-public class DeviceController : ControllerBase
+public class DeviceController(IDeviceService deviceService, ICompanyService companyService)
+    : ControllerBase
 {
-    private readonly IDeviceService _deviceService;
-    private readonly ICompanyService _companyService;
-    
     private const string RoleWithPermissions = "CompanyOwner";
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string CompanyNotFoundMessage = "The company was not found.";
 
-    public DeviceController(IDeviceService deviceService, ICompanyService companyService)
-    {
-        _deviceService = deviceService;
-        _companyService = companyService;
-    }
-    
     [HttpGet] 
-    public IActionResult GetDevices([FromQuery] DeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
+    public IActionResult GetDevices([FromQuery] GetDeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        DevicesResponse devicesResponse = new DevicesResponse
-            (_deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+        GetDevicesResponse getDevicesResponse = new GetDevicesResponse
+            (deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
         
-        return Ok(devicesResponse);
+        return Ok(getDevicesResponse);
     }
     
     [HttpGet]
     [Route("{id}")]
     public IActionResult GetDeviceById([FromRoute] long id)
     {
-        DeviceResponse deviceResponse;
+        GetDeviceResponse getDeviceResponse;
         
         try
         {
-            deviceResponse = new DeviceResponse(_deviceService.GetDeviceById(id));
+            getDeviceResponse = new GetDeviceResponse(deviceService.GetDeviceById(id));
         }
         catch (ElementNotFound)
         {
             return NotFound(NotFoundMessage);
         }
         
-        return Ok(deviceResponse);
+        return Ok(getDeviceResponse);
     }
     
     [HttpGet]
@@ -57,22 +49,22 @@ public class DeviceController : ControllerBase
     [Route("types")]
     public IActionResult GetDeviceTypes()
     {
-        List<string> deviceTypes = _deviceService.GetDeviceTypes();
+        List<string> deviceTypes = deviceService.GetDeviceTypes();
         
-        DeviceTypesResponse deviceTypesResponse = GetDeviceTypesResponse(deviceTypes);
+        GetDeviceTypesResponse getDeviceTypesResponse = GetDeviceTypesResponse(deviceTypes);
         
-        return Ok(deviceTypesResponse);
+        return Ok(getDeviceTypesResponse);
     }
     
     [HttpPost]
     [Route("window-sensors")]
     [RolesWithPermissions(RoleWithPermissions)]
     [AllowAnonymous]
-    public IActionResult PostWindowSensors([FromBody] WindowSensorRequest request)
+    public IActionResult PostWindowSensors([FromBody] PostWindowSensorRequest request)
     {
         try
         {
-            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         } 
         catch (ElementNotFound)
         {
@@ -86,11 +78,11 @@ public class DeviceController : ControllerBase
     [Route("security-cameras")]
     [RolesWithPermissions(RoleWithPermissions)]
     [AllowAnonymous]
-    public IActionResult PostSecurityCameras([FromBody] SecurityCameraRequest request)
+    public IActionResult PostSecurityCameras([FromBody] PostSecurityCameraRequest request)
     {
         try
         {
-            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         }
         catch (ElementNotFound)
         {
@@ -100,13 +92,13 @@ public class DeviceController : ControllerBase
         return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
     
-    private DeviceTypesResponse GetDeviceTypesResponse(List<string> deviceTypes)
+    private GetDeviceTypesResponse GetDeviceTypesResponse(List<string> deviceTypes)
     {
-        DeviceTypesResponse deviceTypesResponse = new DeviceTypesResponse()
+        GetDeviceTypesResponse getDeviceTypesResponse = new GetDeviceTypesResponse()
         {
             DeviceTypes = deviceTypes
         };
         
-        return deviceTypesResponse;
+        return getDeviceTypesResponse;
     }
 }

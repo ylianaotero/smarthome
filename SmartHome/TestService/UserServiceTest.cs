@@ -1,6 +1,7 @@
 using BusinessLogic;
 using CustomExceptions;
-using Domain;
+using Domain.Abstract;
+using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
 using Moq;
@@ -15,8 +16,6 @@ public class UserServiceTest
     private const string NewEmail2 = "juan.lopez@example.com";
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
-    
-    private const string UserDoesNotExistExceptionMessage = "Member not found";
     
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;
@@ -80,35 +79,6 @@ public class UserServiceTest
     }
     
     [TestMethod]
-    public void GetAllUsers()
-    {
-        var user2 = new User
-        {
-            Name = NewName,
-            Email = NewEmail2,
-            Password = NewPassword,
-            Surname = NewSurname
-        };
-        
-        _listOfUsers.Add(user2);
-        
-        _mockUserRepository
-            .Setup(v => v.GetAll(It.IsAny<PageData>())).Returns(_listOfUsers);
-        
-        _userService = new UserService(_mockUserRepository.Object);
-        
-        List<User> responseList = _userService.GetAllUsers(PageData.Default);
-        
-        _mockUserRepository.Verify();
-        
-        Assert.IsTrue(
-            _listOfUsers.Count == responseList.Count && 
-            _listOfUsers.All(user => responseList.Contains(user))
-        );
-
-    }
-    
-    [TestMethod]
     public void GetUsersWithFilter()
     {
         List<User> users = new List<User>();
@@ -137,7 +107,6 @@ public class UserServiceTest
         Assert.AreEqual(users, responseList);
 
     }
-    
     
     [TestMethod]
     public void UserIsAdmin()
