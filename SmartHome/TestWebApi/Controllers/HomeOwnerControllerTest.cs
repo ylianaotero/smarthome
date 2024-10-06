@@ -132,7 +132,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception());
 
-        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
+        ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         

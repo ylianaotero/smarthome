@@ -37,6 +37,7 @@ public class CompanyControllerTest
     private const string UserName =  "John";
     private const string UserSurname = "Doe";
     private const string Email1 = "john.doe@example.com";
+    private List<Company> _companies;
 
 
     [TestInitialize]
@@ -49,16 +50,10 @@ public class CompanyControllerTest
     [TestMethod]
     public void TestGetCompaniesByFilterOkStatusCode()
     {
-        List<Company> companies = new List<Company>
-        {
-            _defaultCompany1,
-            _defaultCompany2
-        };
-        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
-            .Returns(companies);
+            .Returns(_companies);
 
         GetCompaniesRequest request = new GetCompaniesRequest()
         {
@@ -73,16 +68,10 @@ public class CompanyControllerTest
     [TestMethod]
     public void TestGetCompaniesByFilterOkResponse()
     {
-        List<Company> companies = new List<Company>
-        {
-            _defaultCompany1,
-            _defaultCompany2
-        };
-        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
-            .Returns(companies);
+            .Returns(_companies);
 
         GetCompaniesRequest request = new GetCompaniesRequest()
         {
@@ -101,16 +90,10 @@ public class CompanyControllerTest
     [TestMethod]
     public void TestGetAllCompaniesOkStatusCode()
     {
-        List<Company> companies = new List<Company>
-        {
-            _defaultCompany1,
-            _defaultCompany2
-        };
-        
         _mockICompanyService
             .Setup(service => service
                 .GetCompaniesByFilter(It.IsAny<Func<Company, bool>>(), It.IsAny<PageData>()))
-            .Returns(companies);
+            .Returns(_companies);
         
         GetCompaniesRequest request = new GetCompaniesRequest();
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
@@ -184,8 +167,6 @@ public class CompanyControllerTest
             Surname = UserSurname,
             Roles = new List<Role>() { _companyOwner }
         };
-        
-        
     }
 
     private void SetupDefaultCompanies()
@@ -206,6 +187,12 @@ public class CompanyControllerTest
             RUT = RUT,
             LogoURL = LogoURL,
             Owner = _defaultUser
+        };
+        
+        _companies = new List<Company>
+        {
+            _defaultCompany1,
+            _defaultCompany2
         };
     }
     
