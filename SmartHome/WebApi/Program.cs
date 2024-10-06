@@ -26,9 +26,14 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseResponseCaching(); 
+
+
 app.UseRouting();
+
 app.UseAuthorization();
 app.MapControllers();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -37,5 +42,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
 
 app.Run();
