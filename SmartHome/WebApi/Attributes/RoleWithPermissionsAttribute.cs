@@ -1,11 +1,6 @@
 namespace WebApi.Attributes;
 
-public class RolesWithPermissionsAttribute : Attribute
+public class RolesWithPermissionsAttribute(params string[] rolesWithPermissions) : Attribute
 {
-    public List<string> RolesWithPermissions { get; }
-
-    public RolesWithPermissionsAttribute(params string[] rolesWithPermissions)
-    {
-        RolesWithPermissions = rolesWithPermissions.ToList();
-    }
+    public List<string> RolesWithPermissions { get; } = rolesWithPermissions.ToList();
 }

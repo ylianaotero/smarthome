@@ -1,15 +1,9 @@
 namespace WebApi.Attributes;
 
-public class RestrictToPrivilegedMembersAttribute : Attribute
+public class RestrictToPrivilegedMembersAttribute(bool withListPermissions, bool withAddPermissions) : Attribute
 {
-    public bool WithListPermissions { get; }
-    public bool WithAddPermissions { get; }
-    
-    public RestrictToPrivilegedMembersAttribute(bool withListPermissions, bool withAddPermissions)
-    {
-        WithListPermissions = withListPermissions;
-        WithAddPermissions = withAddPermissions;
-    }
-    
+    public bool WithListPermissions { get; } = withListPermissions;
+    public bool WithAddPermissions { get; } = withAddPermissions;
+
     public override string ToString() => "RestrictToPrivilegedMembers";
 }

@@ -1,6 +1,5 @@
 using CustomExceptions;
 using IBusinessLogic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -9,27 +8,19 @@ using WebApi.Attributes;
 namespace WebApi.Controllers;
 
 [Route("api/v1/administrators")]
-public class AdministratorController : ControllerBase
+public class AdministratorController(IUserService userService) : ControllerBase
 {
     private const string RoleWithPermissions = "Administrator";
     private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
-    private const int StatusCodeInternalServerError = 500; 
-    
-    private readonly IUserService _userService;
+    private const int StatusCodeInternalServerError = 500;
 
-    public AdministratorController(IUserService userService)
-    {
-        _userService = userService;
-    }
-    
     [HttpPost]
-    [AllowAnonymous]
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateAdministrator([FromBody] CreateAdminRequest createAdminRequest)
     {
         try
         {
-            _userService.CreateUser(createAdminRequest.ToEntity());
+            userService.CreateUser(createAdminRequest.ToEntity());
             AdminResponse userResponse = new AdminResponse(createAdminRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateAdministrator), userResponse);
@@ -46,12 +37,12 @@ public class AdministratorController : ControllerBase
     
     [HttpDelete]
     [RolesWithPermissions(RoleWithPermissions)]
-    [Route("/api/v1/administrators/{id}")]
+    [Route("{id}")]
     public IActionResult DeleteAdministrator([FromRoute] long id)
     {
         try
         {
-            _userService.DeleteUser(id);
+            userService.DeleteUser(id);
         }
         catch (ElementNotFound)
         {

@@ -1,4 +1,3 @@
-using Domain;
 using Domain.DTO;
 
 namespace Model.In;
