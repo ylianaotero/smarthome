@@ -725,5 +725,6 @@ public class HomeServiceTest
         _mockHomeRepository = new Mock<IRepository<Home>>();
         _mockDeviceRepository = new Mock<IRepository<Device>>();
         _mockUserRepository = new Mock<IRepository<User>>();
+        _mockMemberRepository = new Mock<IRepository<Member>>();
     }
 }

@@ -45,6 +45,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     }
     
     [HttpGet]
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Client)]
     [Route("types")]
     public IActionResult GetDeviceTypes()
     {

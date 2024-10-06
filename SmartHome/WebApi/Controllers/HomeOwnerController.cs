@@ -35,10 +35,6 @@ public class HomeOwnerController(IUserService userService) : ControllerBase
         {
             return Conflict(new { message = elementAlreadyExist.Message });
         }
-        catch (Exception)
-        {
-            return StatusCode(StatusCodeInternalServerError, new { message = ErrorMessageUnexpectedException });
-        }
     }
     
      [HttpPut]
