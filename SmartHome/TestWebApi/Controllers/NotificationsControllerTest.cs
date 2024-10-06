@@ -65,11 +65,11 @@ public class NotificationsControllerTest
         NotificationDTO notification = new NotificationDTO();
         _mockINotificationService.Setup(x => x.SendNotifications(notification));
         
-        ObjectResult result = _notificationController.CreateNotification(request) as CreatedAtActionResult;
+        CreatedAtActionResult result = _notificationController.CreateNotification(request) as CreatedAtActionResult;
         
         _mockINotificationService.Verify();
         
-        Assert.AreEqual(CreatedMessage, result.Value);
+        Assert.AreEqual(nameof(NotificationsController.CreateNotification), result.ActionName);
     }
     
     [TestMethod]
