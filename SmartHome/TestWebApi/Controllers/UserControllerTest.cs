@@ -23,11 +23,22 @@ public class UserControllerTest
     private const string Password = "Securepassword1@";
     private const string CannotFinItemMessage = "Cannot find item in list";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
+    
+    private const string ErrorMessageWhenInputIsInvalid = "Input not valid, try again";
+    private const string ErrorMessageWhenElementAlreadyExists =  "Element already exists, try again";
+    private const string ErrorMessageWhenElementNotFound = "Element not found, try again";
 
     private const string Role = "Administrator";
     
     private List<Role> _listOfRoles;
     private Session _session; 
+    
+    private const int OkStatusCode = 200;
+    private const int CreatedStatusCode = 201;
+    private const int NotFoundStatusCode = 404;
+    private const int ConflictStatusCode = 409;
+    private const int BadRequestStatusCode = 400;
+    private const int InternalServerErrorStatusCode = 500;
     
     private Mock<IUserService> _userServiceMock;
     private UserController _userController;
@@ -150,4 +161,84 @@ public class UserControllerTest
         
         return request;
     }
+    
+    [TestMethod]
+    public void CreateCompanyOwnerValidRequest()
+    {
+        PostCompanyOwnerRequest postCompanyOwnerRequest = new PostCompanyOwnerRequest()
+        {
+            Name = Name,
+            Surname = Surname,
+                Email = Email1, 
+                Password = Password
+        };
+
+        _userServiceMock.Setup(service => service.CreateUser(It.Is<User>(u =>
+            u.Name == Name &&
+            u.Email == Email1 &&
+            u.Password == Password &&
+            u.Surname == Surname
+        )));
+
+        ObjectResult result = _userController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
+        PostHomeOwnerResponse userResponse = result?.Value as PostHomeOwnerResponse;
+
+        _userServiceMock.Verify();
+        
+        Assert.IsTrue(
+            result != null &&
+            userResponse != null &&
+            result.StatusCode == CreatedStatusCode &&
+            postCompanyOwnerRequest.Name == userResponse.Name &&
+            postCompanyOwnerRequest.Email == userResponse.Email &&
+            postCompanyOwnerRequest.Surname == userResponse.Surname &&
+            userResponse.Roles.Count == 1
+        );
+    }
+    
+    [TestMethod]
+    public void CreateCompanyOwnerInvalidRequest()
+    {
+        PostCompanyOwnerRequest postCompanyOwnerRequest = new PostCompanyOwnerRequest()
+        {
+            Name = Name,
+            Surname = Surname,
+            Email = Email1, 
+            Password = Password
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
+        
+        ObjectResult result = _userController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
+        
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void CreateUserServiceThrowsUserAlreadyExists()
+    {
+        PostCompanyOwnerRequest postCompanyOwnerRequest = new PostCompanyOwnerRequest()
+        {
+            Name = Name,
+            Surname = Surname,
+            Email = Email1, 
+            Password = Password
+        };
+        
+        _userServiceMock
+            .Setup(service => service.CreateUser(It.IsAny<User>()))
+            .Throws(new ElementAlreadyExist(ErrorMessageWhenElementAlreadyExists));
+
+        ObjectResult result = _userController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
+        
+        _userServiceMock.Verify();
+        
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
+    }
+    
+    
 }
