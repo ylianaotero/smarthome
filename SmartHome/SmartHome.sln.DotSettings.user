@@ -32,12 +32,12 @@
     &lt;Project Location="C:\Users\angel\OneDrive\Escritorio\New folder\301178_231810_280070\SmartHome\TestDataAccess" Presentation="&amp;lt;TestDataAccess&amp;gt;" /&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e8bf59e2_002Ddf8a_002D4280_002D975d_002Dbdfbdecd331d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestPostSecurityCamerasCreatedStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e8bf59e2_002Ddf8a_002D4280_002D975d_002Dbdfbdecd331d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestPostSecurityCamerasCreatedStatusCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb1fbd0b_002D1576_002D4cb2_002Dabdf_002D4886b54d677f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestService&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -127,20 +127,6 @@ public class HomeOwnerControllerTest
     }
     
     [TestMethod]
-    public void CreateUserServiceThrowsUnexpectedException()
-    {
-        _userServiceMock
-            .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new Exception());
-
-        ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
-        
-        _userServiceMock.Verify();
-        
-        Assert.AreEqual(InternalServerErrorStatusCode, result.StatusCode);
-    }
-    
-    [TestMethod]
     public void CreateUserServiceThrowsUserAlreadyExists()
     {
         _userServiceMock

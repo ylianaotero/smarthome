@@ -32,4 +32,25 @@ public class UserController(IUserService userService) : ControllerBase
         
         return Ok(getUsersResponse);
     }
+    
+    [HttpPost]
+    [RolesWithPermissions(RoleWithPermissions)]
+    public IActionResult CreateCompanyOwner([FromBody] PostCompanyOwnerRequest postComapnyOwnerRequest)
+    {
+        try
+        {
+            userService.CreateUser(postComapnyOwnerRequest.ToEntity());
+            PostHomeOwnerResponse response = new PostHomeOwnerResponse(postComapnyOwnerRequest.ToEntity());
+            
+            return CreatedAtAction(nameof(CreateCompanyOwner), response);
+        }
+        catch (InputNotValid inputNotValid)
+        {
+            return BadRequest(new { message = inputNotValid.Message });
+        }
+        catch (ElementAlreadyExist elementAlreadyExist)
+        {
+            return Conflict(new { message = elementAlreadyExist.Message });
+        }
+    }
 }
