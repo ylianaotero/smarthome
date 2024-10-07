@@ -25,7 +25,6 @@ public class CompanyController(ICompanyService companyService, IUserService user
         return Ok(getCompaniesResponse);
     }
     
-    
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
     public IActionResult PostCompany([FromBody] PostCompanyRequest request)

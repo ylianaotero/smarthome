@@ -1,4 +1,3 @@
-using Domain.Abstract;
 using Domain.Concrete;
 
 namespace Model.Out;
@@ -15,7 +14,7 @@ public class PostCompanyOwnerResponse
         Name = user.Name;
         Email = user.Email;
         Surname = user.Surname;
-        Role = typeof(CompanyOwner).ToString();
+        Role = user.Roles.FirstOrDefault(r => r is CompanyOwner).Kind;
     }
 
     public override bool Equals(object? obj)
@@ -24,6 +23,6 @@ public class PostCompanyOwnerResponse
                Name == response.Name &&
                Email == response.Email &&
                Surname == response.Surname &&
-                Role == response.Role;
+               Role == response.Role;
     }
 }

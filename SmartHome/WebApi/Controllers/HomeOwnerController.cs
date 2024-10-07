@@ -43,6 +43,7 @@ public class HomeOwnerController(IUserService userService) : ControllerBase
          try 
          {
                userService.UpdateUser(id, putHomeOwnerRequest.ToEntity());
+               
                PostHomeOwnerResponse response = new PostHomeOwnerResponse(putHomeOwnerRequest.ToEntity());
                
                return Ok(response);

@@ -21,8 +21,7 @@ public class CompanyControllerTest
     private Company _defaultCompany1;
     private Company _defaultCompany2;
     private User _defaultUser;
-    
-    private const string UserDoesNotExistExceptionMessage = "Member not found";
+    private List<Company> _companies;
     
     private string Name = "Company 1";
     private string Name2 = "Company 2";
@@ -37,8 +36,7 @@ public class CompanyControllerTest
     private const string UserName =  "John";
     private const string UserSurname = "Doe";
     private const string Email1 = "john.doe@example.com";
-    private List<Company> _companies;
-
+    private const string UserDoesNotExistExceptionMessage = "Member not found";
 
     [TestInitialize]
     public void Initialize()

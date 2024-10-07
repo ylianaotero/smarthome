@@ -26,7 +26,6 @@ public class UserServiceTest
     private Administrator _administrator;
     private List<User> _listOfUsers; 
     
-    
     [TestInitialize]
     public void TestInitialize()
     {
@@ -333,5 +332,4 @@ public class UserServiceTest
         
         _mockUserRepository.Verify();
     }
-
 }

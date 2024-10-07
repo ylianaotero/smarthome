@@ -19,19 +19,23 @@ public class NotificationService
     public void SendNotifications(NotificationDTO notificationData)
     {
         (Home home, DeviceUnit device) = ExtractNotificationDTOObjects(notificationData);
-        
-        List<Member> membersToSendNotification = home.Members.Where(m => m.ReceivesNotifications).ToList();
 
-        foreach (Member member in membersToSendNotification)
+        if (device.IsConnected)
         {
-            Notification notification = new Notification();
+            List<Member> membersToSendNotification = home.Members.Where(m => m.ReceivesNotifications).ToList();
+
+            foreach (Member member in membersToSendNotification)
+            {
+                Notification notification = new Notification();
             
-            notification.Event = notificationData.Event;
-            notification.Home = home;
-            notification.DeviceUnit = device;
-            notification.Member = member;
+                notification.Event = notificationData.Event;
+                notification.Home = home;
+                notification.DeviceUnit = device;
+                notification.Member = member;
             
-            member.Notifications.Add(notification);
+                member.Notifications.Add(notification);
+                notificationRepository.Add(notification);
+            }
         }
     }
     
@@ -44,7 +48,7 @@ public class NotificationService
         }
         
         List<DeviceUnit> devices = home.Devices;
-        if(devices == null)
+        if (devices == null)
         {
             throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
@@ -52,7 +56,7 @@ public class NotificationService
         DeviceUnit device = devices
             .FirstOrDefault(d => d.HardwareId.ToString() == notificationData.HardwareId.ToString());
 
-        if(device == null)
+        if (device == null)
         {
             throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }

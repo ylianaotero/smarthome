@@ -9,12 +9,12 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/company-owners")]
 [ApiController]
+[RolesWithPermissions(RoleWithPermissions)]
 public class CompanyOwnerController(IUserService userService) : ControllerBase
 {
     private const string RoleWithPermissions = "Administrator";
     
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateCompanyOwner([FromBody] PostCompanyOwnerRequest postCompanyOwnerRequest)
     {
         try

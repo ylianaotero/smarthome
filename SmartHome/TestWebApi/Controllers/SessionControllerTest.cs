@@ -14,54 +14,32 @@ namespace TestWebApi.Controllers;
 public class SessionControllerTest
 {
     private const string ErrorMessageWhenCannotFindElement = "Input not valid, try again";
-    
-    private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
-    
-    private const string Name =  "John";
     private const string Email = "john.doe@example.com";
     private const string Password = "Securepassword1@";
-    private const string Surname = "Doe";
-    
     private const int NotFoundStatusCode = 404;
     private const int OkStatusCode = 200;
     
     private List<Role> _listOfRoles;
     private HomeOwner _homeOwner; 
-    
     private Mock<ISessionService> _sessionServiceMock;
     private SessionController _sessionController;
-
     private LoginRequest _createLoginRequest;
-    private User _user;
     private Session _session; 
     
     [TestInitialize]
     public void TestInitialize()
     {
         _sessionServiceMock = new Mock<ISessionService>(MockBehavior.Strict);
-
         _sessionController = new SessionController(_sessionServiceMock.Object);
         
         _listOfRoles = new List<Role>();
-
         _homeOwner = new HomeOwner();
-
         _listOfRoles.Add(_homeOwner); 
         
         _createLoginRequest = new LoginRequest()
         {
             Email = Email,
             Password = Password
-        };
-
-        _user = new User
-        {
-            Name = Name,
-            Email = Email,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl,
-            Roles = _listOfRoles
         };
         
         _session = new Session

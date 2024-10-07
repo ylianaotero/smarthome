@@ -9,7 +9,7 @@ public class HomeOwner : Role
     private const string MessageHomeNotFound = "Home not found"; 
     
     public override string Kind { get; set; }
-    public List<Home> Homes { get; set; }
+    public List<Home>? Homes { get; set; }
 
     public HomeOwner()
     {

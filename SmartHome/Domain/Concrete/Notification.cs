@@ -9,7 +9,7 @@ public class Notification
     public string Event { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool Read { get; set; }
-    public DateTime ReadAt { get; set; }
+    public DateTime? ReadAt { get; set; }
     
     public Notification(string newEvent)
     {
@@ -24,7 +24,7 @@ public class Notification
         Event = "";
         CreatedAt = DateTime.Now;  
         Read = false;  
-        ReadAt = DateTime.MinValue;  
+        ReadAt = null;  
     }
     
     public void MarkAsRead()

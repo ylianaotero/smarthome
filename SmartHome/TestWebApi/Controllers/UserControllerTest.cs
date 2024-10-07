@@ -23,7 +23,6 @@ public class UserControllerTest
     private const string Password = "Securepassword1@";
     private const string CannotFinItemMessage = "Cannot find item in list";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
-
     private const string Role = "Administrator";
     
     private List<Role> _listOfRoles;
@@ -35,7 +34,6 @@ public class UserControllerTest
     private User _user_2_example;
     private User _user_3_example;
     private List<User> _listOfUsers;
-
     private string _fullName;
 
     [TestInitialize]
@@ -80,7 +78,8 @@ public class UserControllerTest
             _user_3_example,
         ];
         _userServiceMock
-            .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Setup(service => service
+                .GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(listOfUsers); 
         _userController = new UserController(_userServiceMock.Object);
         GetUsersResponse expectedResponse = new GetUsersResponse(listOfUsers);
@@ -97,7 +96,8 @@ public class UserControllerTest
     public void CannotGetUsers()
     {
         _userServiceMock
-            .Setup(service => service.GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Setup(service => service
+                .GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Throws(new CannotFindItemInList(CannotFinItemMessage));
         _userController = new UserController(_userServiceMock.Object);
         

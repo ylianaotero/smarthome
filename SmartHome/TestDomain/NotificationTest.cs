@@ -54,8 +54,15 @@ public class NotificationTest
         
         Assert.IsTrue(
             _notification.Read  &&
-            _todayDate == _notification.ReadAt.Date
+            _todayDate == _notification.ReadAt.Value.Date
         );
-
+    }
+    
+    [TestMethod]
+    public void DefaultEvent()
+    {
+        Notification notification = new Notification();
+        
+        Assert.IsTrue(notification.Event == "");
     }
 }

@@ -10,9 +10,9 @@ public class CompanyOwner : Role
     public override string Kind { get; set; }
     public bool HasACompleteCompany { get; set; }
     
-    private Company _company ;
+    private Company? _company ;
 
-    public Company Company
+    public Company? Company
     {
         get => _company;
         set

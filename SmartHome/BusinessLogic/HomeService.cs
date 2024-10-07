@@ -11,7 +11,8 @@ public class HomeService (
     IRepository<Home> homeRepository, 
     IRepository<Device> deviceRepository, 
     IRepository<User> userRepository, 
-    IRepository<Member> memberRepository) : IHomeService
+    IRepository<Member> memberRepository,
+    IRepository<DeviceUnit> deviceUnitRepository) : IHomeService
 {
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
@@ -73,7 +74,6 @@ public class HomeService (
         home.Owner = user;
         
         userRepository.Update(user);
-        
         homeRepository.Update(home);
 
         return home;
@@ -103,6 +103,7 @@ public class HomeService (
             ReceivesNotifications = memberDTO.ReceivesNotifications
         }; 
         
+        memberRepository.Add(member);
         home.AddMember(member);
         homeRepository.Update(home);
     }
@@ -180,13 +181,17 @@ public class HomeService (
             {
                 throw new ElementNotFound(DeviceNotFoundMessage);
             }
-            
-            devices.Add(new DeviceUnit
+
+            DeviceUnit deviceUnit = new DeviceUnit()
             {
                 Device = deviceEntity,
                 IsConnected = device.IsConnected,
                 HardwareId = Guid.NewGuid(),
-            });
+            };
+            
+            devices.Add(deviceUnit);
+            
+            deviceUnitRepository.Add(deviceUnit);
         }
     }
     

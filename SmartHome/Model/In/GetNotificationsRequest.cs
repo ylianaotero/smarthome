@@ -11,10 +11,10 @@ public class GetNotificationsRequest
     
     public Func<Notification,bool> ToFilter()
     {
-        return notification => (HomeId == 0 || notification.Home.Id == HomeId) &&
-                               (UserId == 0 || notification.Member.User.Id == UserId) &&
-                               (Read == false || notification.Read == Read) &&
+        return notification => (HomeId == null || notification.Home?.Id == HomeId) &&
+                               (UserId == null || notification.Member?.User?.Id == UserId) &&
+                               (Read == null || notification.Read == Read) &&
                                (string.IsNullOrEmpty(Kind) 
-                                || notification.DeviceUnit.Device.Kind.ToLower() == Kind.ToLower());
+                                || notification.DeviceUnit?.Device?.Kind?.ToLower() == Kind.ToLower());
     }
 }

@@ -24,7 +24,6 @@ public class HomesControllerTest
     private Home _home;
     private Home _home2;
     private List<Home> _homes;
-    private List<Home> _empyHomes;
     private List<Member> _members;
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
@@ -56,9 +55,7 @@ public class HomesControllerTest
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
     private const int PreconditionFailedStatusCode = 412;
-    
     private const bool Permission = true; 
-    
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
@@ -91,7 +88,6 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetAllHomesWhenThereAreNoOkStatusCode()
     {
-        _empyHomes = [];
         _mockHomeService
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
             .Returns(_homes);
@@ -570,8 +566,6 @@ public class HomesControllerTest
         {
             _home, _home2
         };
-        
-        _empyHomes = new List<Home>();
     }
     
     private void SetupWindowSensor()
