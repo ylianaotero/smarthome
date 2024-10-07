@@ -14,50 +14,39 @@ namespace TestWebApi.Controllers;
 
 public class NotificationControllerTest
 {
-    private const string CannotFindItemInListMessage = "The requested resource was not found.";
+    
     private NotificationController _notificationController;
     private Mock<INotificationService> _mockINotificationService;
     private List<Notification> _listOfNotifications;
+    
+    private const string CannotFindItemInListMessage = "The requested resource was not found.";
     private const string? Kind = "alert";
     private const bool Read = true;
     private const string EventName = "Event";
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
-    private const int id = 1;
-    
-    private const string Event = "Door Opened";
+    private const int Id = 1;
     
     [TestInitialize]
     public void TestInitialize()
     {
         SetupNotificationController();
         _listOfNotifications = new List<Notification>();
-
-        WindowSensor windowSensor = new WindowSensor();
-        
-        DeviceUnit deviceUnit = new DeviceUnit()
-        {
-            Device = windowSensor
-        };
-
-        Notification notification = new Notification(Event)
-        {
-            DeviceUnit = deviceUnit
-        };
-
-        GetNotificationResponse getNotificationResponse = new GetNotificationResponse(notification);
     }
 
     [TestMethod]
     public void TestGetNotification()
     {
-        _mockINotificationService.Setup(x => x.GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null)).Returns(_listOfNotifications);
+        _mockINotificationService
+            .Setup(x => x
+                .GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null))
+            .Returns(_listOfNotifications);
         GetNotificationsRequest request = new GetNotificationsRequest()
         {
-            HomeId = id,
+            HomeId = Id,
             Kind = Kind,
             Read = Read,
-            UserId = id
+            UserId = Id
         };
         GetNotificationsResponse getNotificationResponse = new GetNotificationsResponse(_listOfNotifications);
         
@@ -72,7 +61,10 @@ public class NotificationControllerTest
     [TestMethod]
     public void TestGetNotificationNotFound()
     {
-        _mockINotificationService.Setup(x => x.GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null)).Throws(new CannotFindItemInList(CannotFindItemInListMessage));
+        _mockINotificationService
+            .Setup(x => x
+                .GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null))
+            .Throws(new CannotFindItemInList(CannotFindItemInListMessage));
         GetNotificationsRequest request = new GetNotificationsRequest();
         
         ObjectResult result = _notificationController.GetNotifications(request) as NotFoundObjectResult;
@@ -89,7 +81,7 @@ public class NotificationControllerTest
         {
             Event = EventName,
             HardwareId = new Guid(),
-            HomeId = id,
+            HomeId = Id,
         };
         NotificationDTO notification = new NotificationDTO();
         _mockINotificationService.Setup(x => x.SendNotifications(notification));
@@ -117,7 +109,9 @@ public class NotificationControllerTest
     public void TestCreateNotificationNotFoundReponse()
     {
         PostNotificationRequest request = new PostNotificationRequest();
-        _mockINotificationService.Setup(x => x.SendNotifications(It.IsAny<NotificationDTO>())).Throws(new CannotFindItemInList(CannotFindItemInListMessage));
+        _mockINotificationService
+            .Setup(x => x.SendNotifications(It.IsAny<NotificationDTO>()))
+            .Throws(new CannotFindItemInList(CannotFindItemInListMessage));
 
         ObjectResult result = _notificationController.CreateNotification(request) as NotFoundObjectResult;
         

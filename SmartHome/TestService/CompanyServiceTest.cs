@@ -15,8 +15,7 @@ public class CompanyServiceTest
     private List<Company> _companies;
     private Company _company;
     private Device _device;
-
-    private const string NewEmail = "juan.perez@example.com";
+    
     private const string CompanyName = "IoT Devices & Co.";
     private const string RUT = "123456789";
     private const string LogoUrl = "https://example.com/logo.jpg";
@@ -79,7 +78,7 @@ public class CompanyServiceTest
         {
             Name = "Device 1",
         };
-        new User() { Email = NewEmail }; 
+        
         _company = new Company()
         {
             Name = CompanyName,

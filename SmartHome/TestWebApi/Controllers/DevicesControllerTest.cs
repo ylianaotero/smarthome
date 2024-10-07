@@ -360,7 +360,7 @@ public class DevicesControllerTest
             Model = _defaultWindowSensor.Model,
             PhotoUrls = _defaultWindowSensor.PhotoURLs,
             Description = _defaultWindowSensor.Description,
-            Functionalities = _defaultWindowSensor.Functionalities,
+            Functionalities = null,
             Company = _defaultCompany.Id,
         };
     }
@@ -374,8 +374,8 @@ public class DevicesControllerTest
             PhotoUrls = _defaultCamera.PhotoURLs,
             Description = _defaultCamera.Description,
             Company = _defaultCompany.Id,
-            LocationType = _defaultCamera.LocationType,
-            Functionalities = _defaultCamera.Functionalities,
+            LocationType = _defaultCamera.LocationType.ToString(),
+            Functionalities = null,
         };
     }
     

@@ -24,7 +24,6 @@ var app = builder.Build();
 
 app.UseResponseCaching(); 
 
-
 app.UseRouting();
 
 app.UseAuthorization();
@@ -38,7 +37,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 
 app.Run();

@@ -9,13 +9,13 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/users")]
 [ApiController]
+[RolesWithPermissions(RoleWithPermissions)]
 public class UserController(IUserService userService) : ControllerBase
 {
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string RoleWithPermissions = "Administrator";
 
     [HttpGet]
-    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult GetUsers([FromQuery] GetUsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         GetUsersResponse getUsersResponse;

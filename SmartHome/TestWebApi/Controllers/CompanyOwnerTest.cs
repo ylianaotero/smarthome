@@ -57,6 +57,7 @@ public class CompanyOwnerTest
             Surname = Surname,
             Email = Email1,
             Password = Password,
+            Roles = new List<Role>(){new CompanyOwner()}
         });
 
         ObjectResult result = _companyOwnerController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;

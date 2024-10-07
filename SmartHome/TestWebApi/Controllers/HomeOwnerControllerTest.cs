@@ -30,7 +30,6 @@ public class HomeOwnerControllerTest
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
     private const int BadRequestStatusCode = 400;
-    private const int InternalServerErrorStatusCode = 500;
 
     private User _user; 
     private List<Role> _listOfRoles;
@@ -44,43 +43,10 @@ public class HomeOwnerControllerTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
-
-        _homeOwnerController = new HomeOwnerController(_userServiceMock.Object);
-
-        _listOfRoles = new List<Role>();
-
-        _homeOwner = new HomeOwner();
-
-        _listOfRoles.Add(_homeOwner); 
-        
-        _postHomeOwnerRequest = new PostHomeOwnerRequest
-        {
-            Name = Name,
-            Email = Email,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl
-        };
-        
-        _putHomeOwnerRequest = new PutHomeOwnerRequest
-        {
-            Name = Name,
-            Email = Email,
-            Password = Password,
-            Surname = Surname,
-            Photo = ProfilePictureUrl
-        };
-        
-        _user = new User
-        {
-            Name = _postHomeOwnerRequest.Name,
-            Email = _postHomeOwnerRequest.Email,
-            Password = _postHomeOwnerRequest.Password,
-            Surname = _postHomeOwnerRequest.Surname,
-            Photo = _postHomeOwnerRequest.Photo,
-            Roles = _listOfRoles
-        };
+        SetupDefaultMocks();
+        SetupDefaultRoles();
+        SetupDefaultRequests();
+        SetupDefaultUser();
     }
 
     [TestMethod]
@@ -197,5 +163,52 @@ public class HomeOwnerControllerTest
         ObjectResult result = _homeOwnerController.UpdateHomeOwner(HomeOwnerId, _putHomeOwnerRequest) as ObjectResult;
 
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+    private void SetupDefaultMocks()
+    {
+        _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
+        _homeOwnerController = new HomeOwnerController(_userServiceMock.Object);
+    }
+    
+    private void SetupDefaultRoles()
+    {
+        _listOfRoles = new List<Role>();
+        _homeOwner = new HomeOwner();
+        _listOfRoles.Add(_homeOwner); 
+    }
+    
+    private void SetupDefaultRequests()
+    {
+        _postHomeOwnerRequest = new PostHomeOwnerRequest
+        {
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
+        };
+        
+        _putHomeOwnerRequest = new PutHomeOwnerRequest
+        {
+            Name = Name,
+            Email = Email,
+            Password = Password,
+            Surname = Surname,
+            Photo = ProfilePictureUrl
+        };
+    }
+
+    private void SetupDefaultUser()
+    {
+        _user = new User
+        {
+            Name = _postHomeOwnerRequest.Name,
+            Email = _postHomeOwnerRequest.Email,
+            Password = _postHomeOwnerRequest.Password,
+            Surname = _postHomeOwnerRequest.Surname,
+            Photo = _postHomeOwnerRequest.Photo,
+            Roles = _listOfRoles
+        };
     }
 }

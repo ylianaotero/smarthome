@@ -75,6 +75,12 @@ public class MemberTest
         Assert.AreEqual(_member.GetNotificationById(_notification.Id), _notification);
     }
     
-    
-    
+    [TestMethod]
+    public void CompareMembersById()
+    {
+        Member member = new Member(_user);
+        member.Id = _member.Id + 1;
+        
+        Assert.AreNotEqual(_member.Id, member.Id);
+    }
 }

@@ -18,9 +18,9 @@ public class User
     private string _name { get; set; }
     private string _surname { get; set; }
     private string _password { get; set; }
-    public List<Role> Roles { get; set; }
+    public List<Role>? Roles { get; set; }
     public DateTime CreatedAt { get; private set; }
-    public string Photo { get; set; }
+    public string? Photo { get; set; }
 
     private IUserValidator _validator; 
     

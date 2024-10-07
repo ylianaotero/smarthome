@@ -7,7 +7,6 @@ using Model.In;
 using Model.Out;
 using Moq;
 using WebApi.Controllers;
-using Exception = System.Exception;
 
 namespace TestWebApi.Controllers;
 
@@ -28,8 +27,6 @@ public class AdministratorControllerTest
     private const string Email = "john.doe@example.com";
     private const string Password = "Securepassword1@";
     private const string Photo = "address";
-    private static readonly Guid Token = new Guid();
-
 
     private User _user; 
     private List<Role> _listOfRoles;
@@ -40,7 +37,7 @@ public class AdministratorControllerTest
     private PostAdministratorRequest _postAdministratorRequest;
     
     [TestInitialize]
-    public void SetUp()
+    public void TestInitialize()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
         _administratorController = new AdministratorController(_userServiceMock.Object);
@@ -73,7 +70,6 @@ public class AdministratorControllerTest
     [TestMethod]
     public void CreateAdminValidRequest()
     {
-
         _userServiceMock.Setup(service => service.CreateUser(It.Is<User>(u =>
             u.Name == _user.Name &&
             u.Email == _user.Email &&

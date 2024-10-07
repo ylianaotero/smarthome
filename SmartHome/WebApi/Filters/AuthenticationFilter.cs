@@ -113,13 +113,15 @@ namespace WebApi.Filters
             
             if (homeId != -1)
             {
-                RestrictToPrivilegedMembersAttribute? restrictToPrivilegedMembersAttribute = context.ActionDescriptor.EndpointMetadata
+                RestrictToPrivilegedMembersAttribute? restrictToPrivilegedMembersAttribute = context
+                    .ActionDescriptor.EndpointMetadata
                     .OfType<RestrictToPrivilegedMembersAttribute>()
                     .FirstOrDefault();
                 
                 if (restrictToPrivilegedMembersAttribute != null)
                 {
-                    return RestrictToPrivilegedMembers(context, restrictToPrivilegedMembersAttribute, uppercaseToken, homeId);
+                    return RestrictToPrivilegedMembers
+                        (context, restrictToPrivilegedMembersAttribute, uppercaseToken, homeId);
                 }
             }
             

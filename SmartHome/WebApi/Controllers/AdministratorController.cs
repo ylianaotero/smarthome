@@ -8,14 +8,13 @@ using WebApi.Attributes;
 namespace WebApi.Controllers;
 
 [Route("api/v1/administrators")]
+[ApiController]
+[RolesWithPermissions(RoleWithPermissions)]
 public class AdministratorController(IUserService userService) : ControllerBase
 {
     private const string RoleWithPermissions = "Administrator";
-    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
-    private const int StatusCodeInternalServerError = 500;
-
+    
     [HttpPost]
-    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult CreateAdministrator([FromBody] PostAdministratorRequest postAdministratorRequest)
     {
         try
@@ -36,7 +35,6 @@ public class AdministratorController(IUserService userService) : ControllerBase
     }
     
     [HttpDelete]
-    [RolesWithPermissions(RoleWithPermissions)]
     [Route("{id}")]
     public IActionResult DeleteAdministrator([FromRoute] long id)
     {

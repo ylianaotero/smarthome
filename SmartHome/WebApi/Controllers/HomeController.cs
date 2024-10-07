@@ -60,10 +60,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
         }
         catch (CannotAddItem e)
         {
-            if (e.Message == UserIsNotHomeOwnerMessage)
-            {
-                return StatusCode(StatusCodes.Status412PreconditionFailed, UserIsNotHomeOwnerMessage);
-            }
+            return StatusCode(StatusCodes.Status412PreconditionFailed, UserIsNotHomeOwnerMessage);
         }
         
         GetHomeResponse getHomeResponse = new GetHomeResponse(request.ToEntity());
