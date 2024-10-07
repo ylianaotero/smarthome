@@ -181,7 +181,7 @@ public class UserControllerTest
         )));
 
         ObjectResult result = _userController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
-        PostHomeOwnerResponse userResponse = result?.Value as PostHomeOwnerResponse;
+        PostCompanyOwnerResponse userResponse = result?.Value as PostCompanyOwnerResponse;
 
         _userServiceMock.Verify();
         

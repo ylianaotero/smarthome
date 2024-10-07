@@ -41,8 +41,8 @@ public class HomesControllerTest
     private const string Street = "Calle del Sol";
     private const string Street2 = "Avenida Siempre Viva";
     
-    private const int DoorNumber = 23;
-    private const int DoorNumber2 = 742;
+    private const int DoorNumber = 2;
+    private const string? DoorNumberString = "742";
     private const double Latitude = 34.0207;
     private const double Latitude2 = 34.0522;
     private const double Longitude = -118.4912;
@@ -77,7 +77,11 @@ public class HomesControllerTest
             .Setup(service => service.GetHomesByFilter(It.IsAny<Func<Home, bool>>()))
             .Returns(_homes);
 
-        GetHomeRequest request = new GetHomeRequest();
+        GetHomeRequest request = new GetHomeRequest()
+        {
+            DoorNumber = DoorNumberString,
+            Street = Street
+        };
 
         ObjectResult? result = _homeController.GetHomes(request) as OkObjectResult;
         
@@ -557,7 +561,7 @@ public class HomesControllerTest
         {
             Owner = _defaultOwner,
             Street = Street2,
-            DoorNumber = DoorNumber2,
+            DoorNumber = DoorNumber,
             Latitude = Latitude2,
             Longitude = Longitude2
         };

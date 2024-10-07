@@ -40,7 +40,7 @@ public class UserController(IUserService userService) : ControllerBase
         try
         {
             userService.CreateUser(postComapnyOwnerRequest.ToEntity());
-            PostHomeOwnerResponse response = new PostHomeOwnerResponse(postComapnyOwnerRequest.ToEntity());
+            PostCompanyOwnerResponse response = new PostCompanyOwnerResponse(postComapnyOwnerRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateCompanyOwner), response);
         }

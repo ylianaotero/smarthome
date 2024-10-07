@@ -27,6 +27,7 @@ public class AdministratorControllerTest
     private const string Surname = "Doe";
     private const string Email = "john.doe@example.com";
     private const string Password = "Securepassword1@";
+    private const string Photo = "address";
     private static readonly Guid Token = new Guid();
 
 
@@ -55,7 +56,8 @@ public class AdministratorControllerTest
             Name = Name,
             Email = Email,
             Password = Password,
-            Surname = Surname
+            Surname = Surname,
+            Photo = Photo
         };
 
         _user = new User

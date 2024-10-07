@@ -14,7 +14,7 @@ public class PostNotificationRequest
         {
             Event = this.Event,
             HomeId = this.HomeId,
-            HardwareId = this.HardwareId
+            HardwareId = new Guid()
         };
     }
 }
