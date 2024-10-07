@@ -5,31 +5,30 @@ namespace TestDomain;
 [TestClass]
 public class SessionTest
 {
-    private const string ValidEmail = "juanlopez@gmail.com";
+    private User _user;
+    private Session _session;
+    
     private static readonly Guid Guid = new Guid();
-
-    private User _user; 
+    private const string ValidEmail = "juanlopez@gmail.com";
     
     [TestInitialize]
     public void TestInitialize()
     {
         _user = new User();
+        _session = new Session();
         _user.Email = ValidEmail;
     }
     
     [TestMethod]
     public void TestNewSession()
     {
-        Session session = new Session();
-        
-        session.User = _user;
-        session.Id = Guid;
+        _session.User = _user;
+        _session.Id = Guid;
         
         Assert.IsTrue(
-            ValidEmail == session.User.Email &&
-            Guid == session.Id
+            ValidEmail == _session.User.Email &&
+            Guid == _session.Id
         );
-
     }
     
 }

@@ -5,85 +5,74 @@ namespace TestDomain;
 [TestClass]
 public class MemberTest
 {
+    private User _user;
+    private Member _member;
+    private Notification _notification;
+    
     private string _notificationEvent = "New Notification";
-    private User _user; 
+
     
     [TestInitialize]
     public void TestInitialize()
     {
         _user = new User(); 
+        _member = new Member(_user);
+        _notification = new Notification(_notificationEvent);
     }
     
     [TestMethod]
     public void TestAddNewMember()
     {
-        Member member = new Member(_user);
-        
-        Assert.AreEqual(_user, member.User);
+        Assert.AreEqual(_user, _member.User);
     }
     
     [TestMethod]
     public void TestAddReciveNotifications()
     {
-        Member member = new Member(_user);
-
-        member.ReceivesNotifications = true; 
+        _member.ReceivesNotifications = true; 
         
-        Assert.IsTrue(member.ReceivesNotifications);
+        Assert.IsTrue(_member.ReceivesNotifications);
     }
     
     [TestMethod]
     public void TestAddHasPermissionToListDevices()
     {
-        Member member = new Member(_user);
-
-        member.HasPermissionToListDevices= true; 
+        _member.HasPermissionToListDevices= true; 
         
-        Assert.IsTrue(member.HasPermissionToListDevices);
+        Assert.IsTrue(_member.HasPermissionToListDevices);
     }
     
     [TestMethod]
     public void TestAddHasPermissionToAddADevices()
     {
-        Member member = new Member(_user);
-
-        member.HasPermissionToAddADevice = true; 
+        _member.HasPermissionToAddADevice = true; 
         
-        Assert.IsTrue(member.HasPermissionToAddADevice);
+        Assert.IsTrue(_member.HasPermissionToAddADevice);
     }
     
     [TestMethod]
     public void AddNotification()
     {
-        Member member = new Member(_user);
-        Notification notification = new Notification(_notificationEvent);
-
-        member.AddNotification(notification);
+        _member.AddNotification(_notification);
         
-        Assert.AreEqual(member.Notifications.Count, 1);
+        Assert.AreEqual(_member.Notifications.Count, 1);
     }
     
     [TestMethod]
     public void RemoveNotification()
     {
-        Member member = new Member(_user);
-        Notification notification = new Notification(_notificationEvent);
-
-        member.AddNotification(notification);
-        member.RemoveNotification(notification);
+        _member.AddNotification(_notification);
+        _member.RemoveNotification(_notification);
         
-        Assert.AreEqual(member.Notifications.Count, 0);
+        Assert.AreEqual(_member.Notifications.Count, 0);
     }
     
     [TestMethod]
     public void GetNotificationById()
     {
-        Member member = new Member(_user);
-        Notification notification = new Notification(_notificationEvent);
-
-        member.AddNotification(notification);
+        _member.AddNotification(_notification);
         
-        Assert.AreEqual(member.GetNotificationById(notification.Id), notification);
+        Assert.AreEqual(_member.GetNotificationById(_notification.Id), _notification);
     }
     
     

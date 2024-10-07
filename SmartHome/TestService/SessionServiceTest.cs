@@ -11,30 +11,39 @@ namespace TestService;
 [TestClass]
 public class SessionServiceTest
 {
-        private const string ValidEmail = "juanlopez@gmail.com";
-        private const string ValidPassword = "juanLop1@";
-        
         private User _user;
+        private Home _home;
+        private Session _session; 
+    
+        private IUserService _userService;
+        private ISessionService _sessionService;
         
         private Mock<IRepository<User>> _mockUserRepository;
         private Mock<IRepository<Session>> _mockSessionRepository;
-        private IUserService _userService;
-        private ISessionService _sessionService;
-
-        private Session _session; 
-
+        
+        private const string permission = "Administrator";
+        private const string ValidPassword = "juanLop1@";
+        private const string ValidEmail = "juanlopez@gmail.com";
+        
         [TestInitialize]
-        public void Init()
+        public void TestInitialize()
         {
             _user = new User();
             _user.Email = ValidEmail;
             _user.Password = ValidPassword; 
             
+            _session = new Session();
+            _session.User = _user;
+            
+            _home = new Home()
+            {
+                Owner = _user
+            };
+            
             _mockUserRepository = new Mock<IRepository<User>>(MockBehavior.Strict);
             _mockSessionRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
             
-            _session = new Session();
-            _session.User = _user;
+            _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
         }
 
         [TestMethod]
@@ -50,9 +59,7 @@ public class SessionServiceTest
                 .Setup(repo => repo.Add(It.IsAny<Session>()))
                 .Verifiable();
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            var result = sessionService.LogIn(ValidEmail, ValidPassword);
+            Session result = _sessionService.LogIn(ValidEmail, ValidPassword);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -72,9 +79,7 @@ public class SessionServiceTest
                     .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
                 .Returns(new List<User>());
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            var result = sessionService.LogIn(ValidEmail, ValidPassword);
+            _sessionService.LogIn(ValidEmail, ValidPassword);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -92,9 +97,7 @@ public class SessionServiceTest
                 .Setup(repo => repo.Delete(It.IsAny<Session>()))
                 .Verifiable();
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            sessionService.LogOut(_session.Id);
+            _sessionService.LogOut(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -113,9 +116,7 @@ public class SessionServiceTest
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
                 .Returns(new List<Session>());
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            sessionService.LogOut(_session.Id);
+            _sessionService.LogOut(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -131,9 +132,7 @@ public class SessionServiceTest
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
                 .Returns(new List<Session> { _session });
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            User response = sessionService.GetUser(_session.Id);
+            User response = _sessionService.GetUser(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -150,9 +149,7 @@ public class SessionServiceTest
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
                 .Returns(new List<Session>());
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            sessionService.GetUser(new Guid());
+            _sessionService.GetUser(new Guid());
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -169,9 +166,7 @@ public class SessionServiceTest
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
                 .Returns(new List<Session> { _session });
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            bool response = sessionService.UserHasCorrectRole(_session.Id, "Administrator");
+            bool response = _sessionService.UserHasCorrectRole(_session.Id, permission);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -189,9 +184,7 @@ public class SessionServiceTest
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
                 .Returns(new List<Session> { _session });
             
-            var sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            bool response = sessionService.AuthorizationIsValid(_session.Id);
+            bool response = _sessionService.AuthorizationIsValid(_session.Id);
 
             _mockUserRepository.VerifyAll();
             _mockSessionRepository.VerifyAll();
@@ -202,17 +195,12 @@ public class SessionServiceTest
         [TestMethod]
         public void UserCanListDevicesInHomeWhenUserIsOwner()
         {
-            User user = new User();
-            Session session = new Session { User = user };
-            var home = new Home { Owner = user };
             _mockSessionRepository
                 .Setup(logic => logic
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
-                .Returns(new List<Session> { session });
+                .Returns(new List<Session> { _session });
             
-             _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-             bool response = _sessionService.UserCanListDevicesInHome(Guid.NewGuid(), home);
+             bool response = _sessionService.UserCanListDevicesInHome(Guid.NewGuid(), _home);
 
             Assert.IsTrue(response);
         }
@@ -220,17 +208,12 @@ public class SessionServiceTest
         [TestMethod]
         public void UserCanAddDevicesInHomeWhenUserIsOwner()
         {
-            User user = new User();
-            Session session = new Session { User = user };
-            var home = new Home { Owner = user };
             _mockSessionRepository
                 .Setup(logic => logic
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
-                .Returns(new List<Session> { session });
+                .Returns(new List<Session> { _session });
             
-            _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            bool response = _sessionService.UserCanAddDevicesInHome(Guid.NewGuid(), home);
+            bool response = _sessionService.UserCanAddDevicesInHome(Guid.NewGuid(), _home);
 
             Assert.IsTrue(response);
         }
@@ -238,24 +221,19 @@ public class SessionServiceTest
         [TestMethod]
         public void UserCanListDevicesInHomeWhenUserIsPrivilegedMember()
         {
-            User user = new User();
-            Session session = new Session { User = user };
-            Home home = new Home { Owner = user };
             Member member = new Member()
             {
-                User = user,
+                User = _user,
                 HasPermissionToListDevices = true,
             };
-            home.Members.Add(member);
+            _home.Members.Add(member);
             
             _mockSessionRepository
                 .Setup(logic => logic
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
-                .Returns(new List<Session> { session });
+                .Returns(new List<Session> { _session });
             
-            _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            bool response = _sessionService.UserCanListDevicesInHome(Guid.NewGuid(), home);
+            bool response = _sessionService.UserCanListDevicesInHome(Guid.NewGuid(), _home);
 
             Assert.IsTrue(response);
         }
@@ -263,24 +241,19 @@ public class SessionServiceTest
         [TestMethod]
         public void UserCanAddDevicesInHomeWhenUserIsPrivilegedMember()
         {
-            User user = new User();
-            Session session = new Session { User = user };
-            Home home = new Home { Owner = user };
             Member member = new Member()
             {
-                User = user,
+                User = _user,
                 HasPermissionToAddADevice = true,
             };
-            home.Members.Add(member);
+            _home.Members.Add(member);
             
             _mockSessionRepository
                 .Setup(logic => logic
                     .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
-                .Returns(new List<Session> { session });
+                .Returns(new List<Session> { _session });
             
-            _sessionService = new SessionService(_mockUserRepository.Object,_mockSessionRepository.Object);
-
-            bool response = _sessionService.UserCanAddDevicesInHome(Guid.NewGuid(), home);
+            bool response = _sessionService.UserCanAddDevicesInHome(Guid.NewGuid(), _home);
 
             Assert.IsTrue(response);
         }

@@ -24,13 +24,15 @@ public class HomeOwnerControllerTest
     private const string InvalidEmail = "invalid email";
     private const string Password = "Securepassword1@";
     private const string Surname = "Doe";
+    
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
-    private const int BadRequestStatusCode = 400;
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
+    private const int BadRequestStatusCode = 400;
     private const int InternalServerErrorStatusCode = 500;
 
+    private User _user; 
     private List<Role> _listOfRoles;
     private HomeOwner _homeOwner; 
     
@@ -38,10 +40,9 @@ public class HomeOwnerControllerTest
     private HomeOwnerController _homeOwnerController;
     private PostHomeOwnerRequest _postHomeOwnerRequest;
     private PutHomeOwnerRequest _putHomeOwnerRequest;
-    private User _user; 
     
     [TestInitialize]
-    public void SetUp()
+    public void TestInitialize()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
 
@@ -94,8 +95,8 @@ public class HomeOwnerControllerTest
             u.Photo == _user.Photo
         )));
 
-        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
-        var userResponse = result?.Value as PostHomeOwnerResponse;
+        ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
+        PostHomeOwnerResponse userResponse = result?.Value as PostHomeOwnerResponse;
 
         _userServiceMock.Verify();
         
@@ -118,7 +119,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
         
-        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
+        ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -132,7 +133,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new Exception());
 
-        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
+        ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -146,7 +147,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.CreateUser(It.IsAny<User>()))
             .Throws(new ElementAlreadyExist(ErrorMessageWhenElementAlreadyExists));
 
-        var result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
+        ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
@@ -164,8 +165,8 @@ public class HomeOwnerControllerTest
             u.Photo == _putHomeOwnerRequest.Photo
         ))).Verifiable();
 
-        var result = _homeOwnerController.UpdateHomeOwner(1, _putHomeOwnerRequest) as ObjectResult;
-        var userResponse = result?.Value as PostHomeOwnerResponse;
+        ObjectResult result = _homeOwnerController.UpdateHomeOwner(1, _putHomeOwnerRequest) as ObjectResult;
+        PostHomeOwnerResponse userResponse = result?.Value as PostHomeOwnerResponse;
         Assert.IsTrue(
             result != null && 
             userResponse != null && 
@@ -182,7 +183,7 @@ public class HomeOwnerControllerTest
     [TestMethod]
     public void UpdateHomeOwnerInvalidRequest()
     {
-        var updateHomeOwnerRequest = new PutHomeOwnerRequest
+        PutHomeOwnerRequest updateHomeOwnerRequest = new PutHomeOwnerRequest
         {
             Name = Name,
             Email = InvalidEmail,
@@ -195,7 +196,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.UpdateUser(It.IsAny<long>(), It.IsAny<User>()))
             .Throws(new InputNotValid(ErrorMessageWhenInputIsInvalid));
 
-        var result = _homeOwnerController.UpdateHomeOwner(1, updateHomeOwnerRequest) as ObjectResult;
+        ObjectResult result = _homeOwnerController.UpdateHomeOwner(1, updateHomeOwnerRequest) as ObjectResult;
 
         Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
@@ -207,7 +208,7 @@ public class HomeOwnerControllerTest
             .Setup(service => service.UpdateUser(It.IsAny<long>(), It.IsAny<User>()))
             .Throws(new ElementNotFound(ErrorMessageWhenElementNotFound));
 
-        var result = _homeOwnerController.UpdateHomeOwner(HomeOwnerId, _putHomeOwnerRequest) as ObjectResult;
+        ObjectResult result = _homeOwnerController.UpdateHomeOwner(HomeOwnerId, _putHomeOwnerRequest) as ObjectResult;
 
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
