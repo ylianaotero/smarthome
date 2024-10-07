@@ -18,7 +18,7 @@ public class AdministratorControllerTest
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
-    private const int InternalServerErrorStatusCode = 500;
+    private const int BadRequestStatusCode = 400;
 
     private const string ErrorMessageWhenUserNotFound = "User does not exists";
     private const string ErrorMessageWhenUserAlreadyExists = "Member already exists";
@@ -107,17 +107,17 @@ public class AdministratorControllerTest
     }
     
     [TestMethod]
-    public void CreateUser_OtherException()
+    public void CreateUserInvalidInput()
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new Exception());
+            .Throws(new InputNotValid("Invalid password"));
         
         ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
         _userServiceMock.Verify();
         
-        Assert.AreEqual(InternalServerErrorStatusCode, result.StatusCode);
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
     
     [TestMethod]
