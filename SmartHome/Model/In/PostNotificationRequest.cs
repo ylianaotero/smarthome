@@ -6,7 +6,7 @@ public class PostNotificationRequest
 {
     public string Event { get; set; }
     public long HomeId { get; set; }
-    public long HardwareId { get; set; }
+    public Guid HardwareId { get; set; }
     
     public NotificationDTO ToEntity()
     {
@@ -14,7 +14,7 @@ public class PostNotificationRequest
         {
             Event = this.Event,
             HomeId = this.HomeId,
-            HardwareId = new Guid()
+            HardwareId = this.HardwareId
         };
     }
 }

@@ -2,6 +2,7 @@
 using DataAccess;
 using IBusinessLogic;
 using IDataAccess;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceFactory;
@@ -17,5 +18,12 @@ public static class ServiceFactory
         serviceCollection.AddScoped<IHomeService, HomeService>();
         serviceCollection.AddScoped<ICompanyService, CompanyService>();
         serviceCollection.AddScoped<INotificationService, NotificationService>();
+    }
+    
+    public static void AddConnectionString(this IServiceCollection serviceCollection, string connectionString)
+    {
+        serviceCollection.AddDbContext<SmartHomeContext>
+            (options => options.UseSqlServer
+                (connectionString, b => b.MigrationsAssembly("DataAccess")));
     }
 }

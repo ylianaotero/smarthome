@@ -25,13 +25,13 @@ public class AdministratorController(IUserService userService) : ControllerBase
             
             return CreatedAtAction(nameof(CreateAdministrator), userResponse);
         }
+        catch (InputNotValid inputNotValid)
+        {
+            return BadRequest(new { message = inputNotValid.Message });
+        }
         catch (ElementAlreadyExist elementAlreadyExist)
         {
             return Conflict(new { message = elementAlreadyExist.Message });
-        }
-        catch (Exception)
-        {
-            return StatusCode(StatusCodeInternalServerError, new { message =  ErrorMessageUnexpectedException});
         }
     }
     

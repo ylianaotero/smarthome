@@ -8,14 +8,22 @@ public class PostCompanyOwnerResponse
     public string Name { get; set; }
     public string Email { get; set; }
     public string Surname { get; set; }
-    public List<Role> Roles { get; set; }
+    public string Role { get; set; }
 
     public PostCompanyOwnerResponse(User user)
     {
-        List<Role> listOfRoles = user.Roles;
         Name = user.Name;
         Email = user.Email;
         Surname = user.Surname;
-        Roles = listOfRoles;
+        Role = typeof(CompanyOwner).ToString();
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is PostCompanyOwnerResponse response &&
+               Name == response.Name &&
+               Email == response.Email &&
+               Surname == response.Surname &&
+                Role == response.Role;
     }
 }

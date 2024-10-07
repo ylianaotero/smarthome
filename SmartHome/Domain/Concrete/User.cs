@@ -6,8 +6,11 @@ namespace Domain.Concrete;
 
 public class User
 {
-    private const string MessageInvalidInput = "Input no valido"; 
     private const string MessageRoleNotFound = "The role does not exist"; 
+    private const string MessageInvalidName = "The name is invalid";
+    private const string MessageInvalidSurname = "The surname is invalid";
+    private const string MessageInvalidPassword = "The password is invalid";
+    private const string MessageInvalidEmail = "The email is invalid";
     
     [Key]
     public long Id { get; set; }
@@ -16,7 +19,6 @@ public class User
     private string _surname { get; set; }
     private string _password { get; set; }
     public List<Role> Roles { get; set; }
-    
     public DateTime CreatedAt { get; private set; }
     public string Photo { get; set; }
 
@@ -33,7 +35,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid(MessageInvalidInput );
+                throw new InputNotValid(MessageInvalidName);
             }
         } 
     }
@@ -49,7 +51,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid(MessageInvalidInput );
+                throw new InputNotValid(MessageInvalidSurname);
             }
             
         } 
@@ -66,7 +68,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid(MessageInvalidInput );
+                throw new InputNotValid(MessageInvalidPassword);
             }
             
         } 
@@ -83,7 +85,7 @@ public class User
             }
             else
             {
-                throw new InputNotValid(MessageInvalidInput );
+                throw new InputNotValid(MessageInvalidEmail);
             }
             
         } 

@@ -88,7 +88,7 @@ public class NotificationControllerTest
         PostNotificationRequest request = new PostNotificationRequest()
         {
             Event = EventName,
-            HardwareId = id,
+            HardwareId = new Guid(),
             HomeId = id,
         };
         NotificationDTO notification = new NotificationDTO();
