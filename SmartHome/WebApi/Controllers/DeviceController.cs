@@ -1,6 +1,5 @@
 using CustomExceptions;
 using IBusinessLogic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
@@ -59,7 +58,6 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [HttpPost]
     [Route("window-sensors")]
     [RolesWithPermissions(RoleWithPermissions)]
-    [AllowAnonymous]
     public IActionResult PostWindowSensors([FromBody] PostWindowSensorRequest request)
     {
         try
@@ -77,7 +75,6 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [HttpPost]
     [Route("security-cameras")]
     [RolesWithPermissions(RoleWithPermissions)]
-    [AllowAnonymous]
     public IActionResult PostSecurityCameras([FromBody] PostSecurityCameraRequest request)
     {
         try

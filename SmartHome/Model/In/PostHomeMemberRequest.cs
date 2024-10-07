@@ -2,7 +2,7 @@ using Domain.DTO;
 
 namespace Model.In;
 
-public class PutHomeMemberRequest
+public class PostHomeMemberRequest
 {
     public string UserEmail { get; set; }
     

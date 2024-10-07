@@ -105,10 +105,10 @@ public class HomeController(IHomeService homeService) : ControllerBase
         return Ok(getHomeResponse);
     }
 
-    [HttpPut]
+    [HttpPost]
     [Route("{id}/devices")]
     [RestrictToPrivilegedMembers(false, true)]
-    public IActionResult PutDevicesInHome([FromRoute] long id, [FromBody] PutHomeDevicesRequest request)
+    public IActionResult AddDevicesToHome([FromRoute] long id, [FromBody] PostHomeDevicesRequest request)
     {
         try
         {
@@ -121,10 +121,10 @@ public class HomeController(IHomeService homeService) : ControllerBase
         }
     }
     
-    [HttpPut]
+    [HttpPost]
     [Route("{id}/members")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] PutHomeMemberRequest request)
+    public IActionResult AddMemberToHome([FromRoute] long id, [FromBody] PostHomeMemberRequest request)
     {
         try
         {
@@ -164,6 +164,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
     
     [HttpGet]
     [Route("{id}/devices")]
+    [RestrictToPrivilegedMembers(true, false)]
     public IActionResult GetDevicesFromHome([FromRoute] int id)
     {
         GetDeviceUnitsResponse getDeviceUnitsResponse;

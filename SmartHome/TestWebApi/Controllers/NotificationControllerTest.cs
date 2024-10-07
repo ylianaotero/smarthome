@@ -12,11 +12,11 @@ namespace TestWebApi.Controllers;
 
 [TestClass]
 
-public class NotificationsControllerTest
+public class NotificationControllerTest
 {
     private const string CannotFindItemInListMessage = "The requested resource was not found.";
     private const string CreatedMessage = "The resource was created successfully.";
-    private NotificationsController _notificationController;
+    private NotificationController _notificationController;
     private Mock<INotificationService> _mockINotificationService;
     private List<Notification> _listOfNotifications;
     private const string EventName = "Event";
@@ -69,7 +69,7 @@ public class NotificationsControllerTest
         
         _mockINotificationService.Verify();
         
-        Assert.AreEqual(nameof(NotificationsController.CreateNotification), result.ActionName);
+        Assert.AreEqual(nameof(NotificationController.CreateNotification), result.ActionName);
     }
     
     [TestMethod]
@@ -112,6 +112,6 @@ public class NotificationsControllerTest
     {
 
         _mockINotificationService = new Mock<INotificationService>();
-        _notificationController = new NotificationsController(_mockINotificationService.Object);
+        _notificationController = new NotificationController(_mockINotificationService.Object);
     }
 }

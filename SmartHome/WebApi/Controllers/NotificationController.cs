@@ -8,7 +8,7 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/notifications")]
 [ApiController]
-public class NotificationsController(INotificationService notificationService) : ControllerBase
+public class NotificationController(INotificationService notificationService) : ControllerBase
 {
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
 
