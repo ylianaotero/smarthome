@@ -15,26 +15,50 @@ namespace TestWebApi.Controllers;
 public class NotificationControllerTest
 {
     private const string CannotFindItemInListMessage = "The requested resource was not found.";
-    private const string CreatedMessage = "The resource was created successfully.";
     private NotificationController _notificationController;
     private Mock<INotificationService> _mockINotificationService;
     private List<Notification> _listOfNotifications;
+    private const string? Kind = "alert";
+    private const bool Read = true;
     private const string EventName = "Event";
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
+    private const int id = 1;
+    
+    private const string Event = "Door Opened";
     
     [TestInitialize]
     public void TestInitialize()
     {
         SetupNotificationController();
         _listOfNotifications = new List<Notification>();
+
+        WindowSensor windowSensor = new WindowSensor();
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = windowSensor
+        };
+
+        Notification notification = new Notification(Event)
+        {
+            DeviceUnit = deviceUnit
+        };
+
+        GetNotificationResponse getNotificationResponse = new GetNotificationResponse(notification);
     }
 
     [TestMethod]
     public void TestGetNotification()
     {
         _mockINotificationService.Setup(x => x.GetNotificationsByFilter(It.IsAny<Func<Notification, bool>>(),null)).Returns(_listOfNotifications);
-        GetNotificationsRequest request = new GetNotificationsRequest();
+        GetNotificationsRequest request = new GetNotificationsRequest()
+        {
+            HomeId = id,
+            Kind = Kind,
+            Read = Read,
+            UserId = id
+        };
         GetNotificationsResponse getNotificationResponse = new GetNotificationsResponse(_listOfNotifications);
         
         ObjectResult result = _notificationController.GetNotifications(request) as OkObjectResult;
@@ -61,7 +85,12 @@ public class NotificationControllerTest
     [TestMethod]
     public void TestCreateNotification()
     {
-        PostNotificationRequest request = new PostNotificationRequest();
+        PostNotificationRequest request = new PostNotificationRequest()
+        {
+            Event = EventName,
+            HardwareId = id,
+            HomeId = id,
+        };
         NotificationDTO notification = new NotificationDTO();
         _mockINotificationService.Setup(x => x.SendNotifications(notification));
         
