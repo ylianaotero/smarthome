@@ -2,7 +2,7 @@ using Domain.DTO;
 
 namespace Model.In;
 
-public class PutHomeDevicesRequest
+public class PostHomeDevicesRequest
 { 
     public List<DeviceUnitRequest>? DeviceUnits { get; set; }
 

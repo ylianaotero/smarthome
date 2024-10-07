@@ -12,8 +12,6 @@ namespace WebApi.Controllers;
 [ApiController]
 public class HomeOwnerController(IUserService userService) : ControllerBase
 {
-    private const string ErrorMessageUnexpectedException =  "An unexpected error occurred. Please try again later.";
-    private const int StatusCodeInternalServerError = 500; 
     private const string RoleWithPermissions = "HomeOwner";
 
     [HttpPost]

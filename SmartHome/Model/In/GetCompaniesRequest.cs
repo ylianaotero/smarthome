@@ -4,7 +4,7 @@ namespace Model.In;
 
 public class GetCompaniesRequest
 {
-    public string? Company { get; set; }
+    public string? Name { get; set; }
     public string? Owner { get; set; }
     
     public Func<Company, bool> ToFilter()
@@ -48,7 +48,7 @@ public class GetCompaniesRequest
         return company => (string.IsNullOrEmpty(name) || 
                         company.Owner.Name.ToLower().Contains(name.ToLower()) || 
                         company.Owner.Surname.Contains(name.ToLower())) &&
-                          (string.IsNullOrEmpty(Company) || company.Name.ToLower().Contains(Company.ToLower()));
+                          (string.IsNullOrEmpty(Name) || company.Name.ToLower().Contains(Name.ToLower()));
                           
     }
     
@@ -59,6 +59,6 @@ public class GetCompaniesRequest
 
         return company => (company.Owner.Name.ToLower().Contains(lowerCaseName) &&
                         company.Owner.Surname.ToLower().Contains(lowerCaseSurname)) &&
-                          (string.IsNullOrEmpty(Company) || company.Name.ToLower().Contains(Company.ToLower()));
+                          (string.IsNullOrEmpty(Name) || company.Name.ToLower().Contains(Name.ToLower()));
     }
 }

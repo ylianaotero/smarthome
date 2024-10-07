@@ -4,15 +4,15 @@ namespace Model.In;
 
 public class PatchDeviceRequest
 {
-    public Guid DeviceUnitId { get; set; }
-    public bool Status { get; set; }
+    public Guid HardwareId { get; set; }
+    public bool IsConnected { get; set; }
     
     public DeviceUnit ToEntity()
     {
         return new DeviceUnit()
         {
-            HardwareId = DeviceUnitId,
-            IsConnected = Status
+            HardwareId = HardwareId,
+            IsConnected = IsConnected
         };
     }
 }
