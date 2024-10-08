@@ -116,6 +116,8 @@ public class SmartHomeContext : DbContext
             .WithMany(u => u.Notifications)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Notification>().Navigation(n => n.Member).AutoInclude();
+        modelBuilder.Entity<Notification>().Navigation(n => n.DeviceUnit).AutoInclude();
+        modelBuilder.Entity<Notification>().Navigation(n => n.Home).AutoInclude();
     }
     
     private void ConfigureHome(ModelBuilder modelBuilder)
@@ -133,6 +135,5 @@ public class SmartHomeContext : DbContext
     private void ConfigureMember(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Member>().Navigation(m => m.User).AutoInclude();
-        modelBuilder.Entity<Member>().Navigation(m => m.Notifications).AutoInclude();
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.OpenApi.Models;
 using ServiceFactory;
 using WebApi.Filters;
 
