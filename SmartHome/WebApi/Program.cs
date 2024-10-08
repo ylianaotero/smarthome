@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using ServiceFactory;
 using WebApi.Filters;
 
@@ -11,7 +12,6 @@ builder.Services.AddControllers(option =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddServices();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
