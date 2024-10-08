@@ -1,0 +1,1136 @@
+{
+	"info": {
+		"_postman_id": "1ddef170-f036-433f-803e-5327ae2ebcd6",
+		"name": "SmartHome API",
+		"description": "Esta colección de Postman contiene todos los endpoints necesarios para interactuar con la **SmartHome API**, una plataforma centralizada para la gestión de dispositivos inteligentes en hogares.\n\nLa plataforma está diseñada para soportar múltiples usuarios con distintos roles: **administradores**, **dueños de empresa**, y **dueños de hogares**, ofreciendo diferentes niveles de acceso y permisos. Estos endpoints incluyen funcionalidades para la creación y administración de dispositivos, usuarios y roles, así como la integración de dispositivos de diferentes fabricantes.\n\nLa colección está organizada en categorías clave:\n\n- **Gestión de usuarios**: Creación, modificación y eliminación de usuarios, y asignación de roles.\n    \n- **Gestión de dispositivos**: Agregar, consumir y administrar dispositivos inteligentes conectados a la plataforma.\n    \n- **Gestión de hogares:** Agregar, consumir y administrar hogares.\n    \n- **Gestión de empresas:** Agregar, consumir y administrar empresas de dispositivos inteligentes.\n    \n- **Gestión de notificaciones:** Enviar y consumir notificaciones asociadas a dispositivos.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33095968"
+	},
+	"item": [
+		{
+			"name": "Administrators",
+			"item": [
+				{
+					"name": "POST Administrators",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jackson\",\n    \"surname\": \"Belleville\",\n    \"email\": \"jacksonbelleville@gmail.com\",\n    \"photo\": \"https://static.wikia.nocookie.net/gilmoregirls/images/d/d7/Jackson_zpsbc778b3a.jpg/revision/latest?cb=20131229072506\",\n    \"password\": \"Password1%\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/administrators",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"administrators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Administrators by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/administrators/9",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"administrators",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _AdministratorController_.\n\n1. **POST /api/v1/administrators:** Este endpoint se utiliza para crear un nuevo administrador. El cuerpo de la solicitud debe contener los datos necesarios para crear un administrador, según lo especificado en el modelo _PostAdministratorRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created) con la respuesta _PostAdministratorResponse_.\n        \n    2. Si el administrador ya existe, devuelve un estado 409 (Conflict).\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n2. **DELETE /api/v1/administrators/{id}:** Este endpoint se utiliza para eliminar un administrador existente con el ID especificado.\n    \n    1. Si la eliminación es exitosa, devuelve un estado 200 (OK).\n        \n    2. Si el administrador no se encuentra, devuelve un estado 404 (Not Found).\n        \n\nAdemas, para todos los endpoints se cumple que:\n\n- Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n    \n- Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized).\n    \n- Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _Administrator_), devuelve un estado 403 (Forbidden)."
+		},
+		{
+			"name": "Companies",
+			"item": [
+				{
+					"name": "GET Companies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/companies",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Companies with filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/companies?name=Dragonfly&owner=Lorelai Gilmore",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"companies"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Dragonfly"
+								},
+								{
+									"key": "owner",
+									"value": "Lorelai Gilmore"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Companies with pagination",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/companies?page={{page}}&pageSize={{pageSize}}",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"companies"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "84ffcee3-60e8-4def-cd1d-08dce7955ba3",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"IoT Home\",\n  \"rut\": \"473457534\",\n  \"logoUrl\": \"https://t4.ftcdn.net/jpg/03/85/50/33/360_F_385503388_tBGEcrjitRyBXbbDQVSH14BXacRvo0cX.jpg\",\n  \"ownerId\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/companies",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _CompanyController_.\n\n1. **GET /api/v1/companies:** Este endpoint se utiliza para obtener una lista de empresas. Los parámetros de consulta _GetCompaniesRequest_ y _PageDataRequest_ permiten filtrar y paginar los resultados, respectivamente.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta _GetCompaniesResponse_.\n        \n    2. Si los query parameters de la solicitud están mal formados, devuelve un estado 400 (Bad Request).\n        \n2. **POST /api/v1/companies:** Este endpoint se utiliza para crear una nueva empresa. El cuerpo de la solicitud debe contener los datos necesarios para crear una empresa, según lo especificado en el modelo _PostCompanyRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created).\n        \n    2. Si no se encuentra un propietario de empresa con el id especificado y sin empresa asociada, devuelve un estado 404 (Not Found).\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n\nAdemas, para todos los endpoints se cumple que:\n\n- Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n    \n- Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized).\n    \n- Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _Administrator_ para el GET y _CompanyOwner_ para el POST), devuelve un estado 403 (Forbidden)."
+		},
+		{
+			"name": "Company Owners",
+			"item": [
+				{
+					"name": "POST Company Owners",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dave\",\n  \"surname\": \"Rygalski\",\n  \"email\": \"drygalski@gmail.com\",\n  \"password\": \"Password1%\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/company-owners",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"company-owners"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _CompanyOwnerController_.\n\n1. **POST /api/v1/company-owners:** Este endpoint se utiliza para crear un nuevo propietario de empresa. El cuerpo de la solicitud debe contener los datos necesarios para crear un propietario de hogar, según lo especificado en el modelo _PostCompanyOwnerRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created) con la respuesta _PostHomeOwnerResponse_.\n        \n    2. Si el propietario de la casa ya existe, devuelve un estado 409 (Conflict) con un mensaje de error.\n        \n    3. Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n        \n    4. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    5. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n    6. Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized).\n        \n    7. Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _Administrator_), devuelve un estado 403 (Forbidden)."
+		},
+		{
+			"name": "Devices",
+			"item": [
+				{
+					"name": "GET Devices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/devices",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Devices With Filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/devices?name=Arlo Pro 5S Spotlight Security Camera 2K HDR",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"devices"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Arlo Pro 5S Spotlight Security Camera 2K HDR"
+								},
+								{
+									"key": "model",
+									"value": "48264",
+									"disabled": true
+								},
+								{
+									"key": "company",
+									"value": "Peterson Devices",
+									"disabled": true
+								},
+								{
+									"key": "kind",
+									"value": "SecurityCamera",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Devices With Pagination",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/devices?page={{page}}&pageSize={{pageSize}}",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"devices"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Devices By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5217/api/v1/devices/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5217",
+							"path": [
+								"api",
+								"v1",
+								"devices",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Device Types",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{companyOwnerLorelaiToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/devices/types",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"devices",
+								"types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Window Sensor Devices",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{companyOwnerLorelaiToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Window Alarm Sensors 4 Pack\",\n    \"Model\": 5474,\n    \"PhotoUrls\": [\n        \"https://m.media-amazon.com/images/I/81d3gWM2VHL._AC_SL1500_.jpg\",\n        \"https://m.media-amazon.com/images/I/71MS3oCQ34L._AC_SL1500_.jpg\",\n        \"https://m.media-amazon.com/images/I/81KHpQqAfZL._AC_SL1500_.jpg\"\n    ],\n    \"Description\": \"Glass Break Sensor 130DB Loud Window Vibration Alarms, Burglar Intruder Entry Detector for Indoor Home Office Apartment & RV Security\",\n    \"Functionalities\": [\"OpenClosed\"],\n    \"Company\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/devices/window-sensors",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"devices",
+								"window-sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Security Camera Devices",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{companyOwnerLorelaiToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ring Stick Up Cam Battery \",\n    \"Model\": 32582935,\n    \"PhotoUrls\": [\n        \"https://m.media-amazon.com/images/I/419BrDcflML.jpg\",\n        \"https://m.media-amazon.com/images/I/41EMzkDF2KL._SL1000_.jpg\",\n        \"https://m.media-amazon.com/images/I/61ktgGAXj-L._SL1000_.jpg\",\n        \"https://m.media-amazon.com/images/I/61YB1QUE1WL._SL1000_.jpg\"\n    ],\n    \"Description\": \"Weather-Resistant Outdoor Camera, Live View, Color Night Vision, Two-way Talk, Motion alerts, Works with Alexa | White\",\n    \"Functionalities\": [\"MotionDetection\", \"HumanDetection\"],\n    \"LocationType\": \"Outdoor\",\n    \"Company\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/devices/security-cameras",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"devices",
+								"security-cameras"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _DeviceController_.\n\n1. **GET /api/v1/devices:** Este endpoint se utiliza para obtener una lista de dispositivos. Los parámetros de consulta _GetDeviceRequest_ y _PageDataRequest_ permiten filtrar y paginar los resultados, respectivamente.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta _GetDevicesResponse_.\n        \n    2. Si los query parameters de la solicitud están mal formados, devuelve un estado 400 (Bad Request).\n        \n2. **GET /api/v1/devices/{id}:** Este endpoint se utiliza para obtener un dispositivo específico por su ID.\n    \n    1. Si el dispositivo se encuentra, devuelve un estado 200 (OK) con la respuesta _GetDeviceResponse_.\n        \n    2. Si el dispositivo no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n3. **GET /api/v1/devices/types:** Este endpoint se utiliza para obtener una lista de los tipos de dispositivos.\n    \n    1. Devuelve un estado 200 (OK) con la respuesta _GetDeviceTypesResponse_.\n        \n4. **POST /api/v1/devices/window-sensors:** Este endpoint se utiliza para crear un nuevo sensor de ventana. El cuerpo de la solicitud debe contener los datos necesarios para crear un sensor de ventana, según lo especificado en el modelo _PostWindowSensorRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created).\n        \n    2. Si la compañía no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The company was not found.\"\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n    5. Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _CompanyOwner_), devuelve un estado 403 (Forbidden).\n        \n5. **POST /api/v1/devices/security-cameras:** Este endpoint se utiliza para crear una nueva cámara de seguridad. El cuerpo de la solicitud debe contener los datos necesarios para crear una cámara de seguridad, según lo especificado en el modelo _PostSecurityCameraRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created).\n        \n    2. Si la compañía no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The company was not found.\"\n        \n    3. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n    4. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    5. Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _CompanyOwner_), devuelve un estado 403 (Forbidden).\n        \n\nAdemas, para todos los endpoints se cumple que:\n\n- Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n    \n- Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized)."
+		},
+		{
+			"name": "Homes",
+			"item": [
+				{
+					"name": "GET Homes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Homes with filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes?street=Pearl St&doorNumber=233",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes"
+							],
+							"query": [
+								{
+									"key": "street",
+									"value": "Pearl St"
+								},
+								{
+									"key": "doorNumber",
+									"value": "233"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Home Members",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1/members",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Home Devices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{memberRoryToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1/devices",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Home By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Homes",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ownerId\": 2,\n  \"street\": \"Fifth St\",\n  \"doorNumber\": 234,\n  \"Latitude\": 547.458457,\n  \"Longitude\": 23.6457,\n  \"MaximumMembers\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Home Devices",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"deviceUnits\": [\n    {\n        \"deviceId\": 3,\n        \"isConnected\": true\n    },\n    {\n        \"deviceId\": 4,\n        \"isConnected\": false\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1/devices",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Home Members",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userEmail\": \"lorelaigilmore@gmail.com\",\n  \"hasPermissionToListDevices\": true,\n  \"hasPermissionToAddDevices\": true,\n  \"receivesNotifications\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1/members",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Home Member Notification Settings",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"memberEmail\": \"lanekim@gmail.com\",\n  \"receivesNotifications\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1/members",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Home Device Connection Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hardwareId\": \"ff4431d6-4f12-4602-bf2c-0fa64470713b\",\n  \"isConnected\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/homes/1/devices",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"homes",
+								"1",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _HomeController_.\n\n1. **GET /api/v1/homes:** Este endpoint se utiliza para obtener una lista de hogares, permitiendo filtrar segun el modelo _GetHomeRequest_.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta _GetHomesResponse_.\n        \n    2. Si los query parameters de la solicitud están mal formados, devuelve un estado 400 (Bad Request).\n        \n2. **POST /api/v1/homes:** Este endpoint se utiliza para crear un nuevo hogar, y requiere un body con los datos especificados en _PostHomeRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created).\n        \n    2. Si el propietario del hogar no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The home owner was not found.\"\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n3. **GET /api/v1/homes/{id}:** Este endpoint se utiliza para obtener un hogar específico por su ID.\n    \n    1. Si el hogar se encuentra, devuelve un estado 200 (OK) con la respuesta _GetHomeResponse_.\n        \n    2. Si el hogar no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n4. **GET /api/v1/homes/{id}/members:** Este endpoint se utiliza para obtener los miembros de un hogar.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta _GetMembersResponse_.\n        \n    2. Si el recurso no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n5. **POST /api/v1/homes/{id}/members:** Este endpoint se utiliza para agregar un miembro a un hogar, y requiere un body con los parametros especificados en _PostHomeMemberRequest_.\n    \n    1. Si la actualización es exitosa, devuelve un estado 200 (OK) con el mensaje \"The home was updated successfully\".\n        \n    2. Si el recurso no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n6. **PATCH /api/v1/homes/{id}/members:** Este endpoint se utiliza para cambiar el permiso de notificación de un miembro de un hogar, y requiere un body con los parametros especificados en _PatchDeviceRequest_.\n    \n    1. Si la actualización es exitosa, devuelve un estado 200 (OK) con el mensaje \"The home was updated successfully\".\n        \n    2. Si el recurso no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n7. **GET /api/v1/homes/{id}/devices:** Este endpoint se utiliza para obtener los dispositivos de un hogar.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta _GetDeviceUnitsResponse_.\n        \n    2. Si el recurso no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n8. **POST /api/v1/homes/{id}/devices:** Este endpoint se utiliza para agregar dispositivos a un hogar, y requiere un body con los parametros especificados en _PostHomeDevicesRequest_.\n    \n    1. Si la actualización es exitosa, devuelve un estado 200 (OK) con el mensaje \"The home was updated successfully\".\n        \n    2. Si el recurso no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n9. **PATCH /api/v1/homes/{id}/devices:** Este endpoint se utiliza para actualizar el estado de conexión de un dispositivo, y requiere un body con los parametros especificados en _PatchHomeMemberRequest_.\n    \n    1. Si la actualización es exitosa, devuelve un estado 200 (OK) con el mensaje \"The home was updated successfully\".\n        \n    2. Si el recurso no se encuentra, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n    3. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    4. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type).\n        \n\nAdemas, para todos los endpoints se cumple que:\n\n- Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n    \n- Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized).\n    \n- Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _Administrator_ para los endpoints 1 y 3, rol HomeOwner para los endpoints 2, 4, 5, 6 y 9, y ser el owner del hogar o ser un miembro del hogar con permisos suficientes para los endpoints 7 y 8), devuelve un estado 403 (Forbidden)."
+		},
+		{
+			"name": "Home Owners",
+			"item": [
+				{
+					"name": "POST Home Owners",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Michel\",\n  \"surname\": \"Gerard\",\n  \"email\": \"michelgerard@gmail.com\",\n  \"password\": \"Password1%\",\n  \"photo\": \"https://static.wikia.nocookie.net/gilmoregirls/images/c/c0/Michelpromo.jpeg/revision/latest/thumbnail/width/360/height/360?cb=20160325193509\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/home-owners",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"home-owners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Home Owners",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{homeOwnerRichardToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Richard\",\n  \"surname\": \"Gilmore\",\n  \"email\": \"richardgilmore@gmail.com\",\n  \"password\": \"Password1%\",\n  \"photo\": \"https://hellogiggles.com/wp-content/uploads/sites/7/2016/08/26/hBA3MpLwTiAx.jpg?quality=82&strip=all\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/home-owners/2",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"home-owners",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _HomeOwnerController_.\n\n1. **POST /api/v1/home-owners:** Este endpoint se utiliza para crear un nuevo propietario de hogar. El cuerpo de la solicitud debe contener los datos necesarios para crear un propietario de hogar, según lo especificado en el modelo _PostHomeOwnerRequest_.\n    \n    1. Si la creación es exitosa, devuelve un estado 201 (Created) con la respuesta _PostHomeOwnerResponse_.\n        \n    2. Si el propietario de la casa ya existe, devuelve un estado 409 (Conflict) con un mensaje de error.\n        \n2. **PUT /api/v1/home-owners/{id}:** Este endpoint se utiliza para actualizar un propietario de hogar existente con el ID especificado. El cuerpo de la solicitud debe contener los datos necesarios para actualizar un propietario de hogar, según lo especificado en el modelo _PutHomeOwnerRequest_.\n    \n    1. Si la actualización es exitosa, devuelve un estado 200 (OK) con la respuesta _PostHomeOwnerResponse_.\n        \n    2. Si el propietario de la casa no se encuentra, devuelve un estado 404 (Not Found) con un mensaje de error.\n        \n    3. Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized).\n        \n    4. Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _HomeOwner_), devuelve un estado 403 (Forbidden).\n        \n\nAdemas, para todos los endpoints se cumple que:\n\n- Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n    \n- Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n    \n- Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type)."
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "GET Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/notifications",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Notifications With Filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/notifications?read=false",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "homeId",
+									"value": "7",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "read",
+									"value": "false"
+								},
+								{
+									"key": "kind",
+									"value": "SecurityCamera",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Notifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event\": \"Human detected\",\n  \"homeId\": 1,\n  \"hardwareId\": \"8f56ab9e-7ca9-4897-ae3b-af5c36ae5920\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/notifications",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _NotificationController_.\n\nObservar que estos endpoints puede utilizarlos cualquier usuario autenticado. Esto se debe a que la letra no especifica quien genera o consume las notificaciones, por lo que para esta entrega decidimos dejarlo asi.\n\n1. **GET /api/v1/notifications:** Este endpoint se utiliza para obtener una lista de notificaciones basada en los filtros proporcionados en el cuerpo de la solicitud _GetNotificationsRequest_.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta GetNotificationsResponse.\n        \n    2. Si no se encuentran notificaciones que coincidan con los filtros, devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n    3. Si los query parameters de la solicitud están mal formados, devuelve un estado 400 (Bad Request).\n        \n2. **POST /api/v1/notifications:** Este endpoint se utiliza para enviar notificaciones a los miembros de un hogar que reciben notificaciones. El cuerpo de la solicitud debe contener los datos necesarios para crear una notificación, según lo especificado en el modelo _PostNotificationRequest_.\n    \n    1. Si la ejecucion es exitosa, devuelve un estado 201 (Created). Observar que si el hogar no tiene ningun miembro con notificaciones activadas, o si el dispositivo esta desconectado, se obtiene tambien este resultado pues no representa un error ya que simplemente no es necesario enviar las notificaciones.\n        \n    2. Si no se encuentra el recurso relacionado con la notificación (el hogar, o el dispositivo con el correspondiente hardware id en los dispositivos del hogar), devuelve un estado 404 (Not Found) con el mensaje \"The requested resource was not found.\"\n        \n\nAdemas, para todos los endpoints se cumple que:\n\n- Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n    \n- Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized)."
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"email\": \"lanekim@gmail.com\", \n    \"password\": \"Password1%\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{base_route}}/login",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _SessionController_.\n\n1. **POST /api/v1/login:** Este endpoint se utiliza para iniciar sesión en la aplicación. El cuerpo de la solicitud debe contener el correo electrónico y la contraseña del usuario, según lo especificado en el modelo _LoginRequest_.\n    \n    1. Si la autenticación es exitosa, devuelve un estado 200 (OK) con la respuesta _LoginResponse_ con el token.\n        \n    2. Si no se encuentra el usuario con las credenciales proporcionadas, devuelve un estado 404 (Not Found) con un mensaje de error.\n        \n    3. Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n        \n    4. Si el cuerpo de la solicitud está mal formado, devuelve un estado 400 (Bad Request).\n        \n    5. Si el cuerpo de la solicitud está vacío, devuelve un estado 415 (Unsupported Media Type)."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GET Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/users",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Users With Filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/users?fullName=Emily Gilmore&role=administrator",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "fullName",
+									"value": "Emily Gilmore"
+								},
+								{
+									"key": "role",
+									"value": "administrator"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Users With Pagination",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{base_route}}/users?page=2&pageSize=5",
+							"host": [
+								"{{host}}{{base_route}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aqui se encuentran los endpoints definidos en el _UserController_.\n\n1. **GET /api/v1/users:** Este endpoint se utiliza para obtener una lista de usuarios basada en los filtros proporcionados en el cuerpo de la solicitud _GetUsersRequest_.\n    \n    1. Si la solicitud es exitosa, devuelve un estado 200 (OK) con la respuesta _GetUsersResponse_.\n        \n    2. Si los query parameters de la solicitud están mal formados, devuelve un estado 400 (Bad Request).\n        \n    3. Si ocurre un error inesperado, devuelve un estado 500 (Internal Server Error).\n        \n    4. Si no se incluye Authorization Header, o si se incluye pero el token incluido esta mal formado o no corresponde a ninguna sesion, devuelve un estado 401 (Unauthorized).\n        \n    5. Si se incluye Authorization Header con un token valido, pero el usuario correspondiente no tiene suficientes permisos (rol _Administrator_), devuelve un estado 403 (Forbidden)."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:5217",
+			"type": "string"
+		},
+		{
+			"key": "base_route",
+			"value": "/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "page",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "pageSize",
+			"value": "3",
+			"type": "string"
+		},
+		{
+			"key": "administratorToken",
+			"value": "ef02f7d5-5d82-4c03-9775-08dce73bc90e",
+			"type": "string"
+		},
+		{
+			"key": "homeOwnerRichardToken",
+			"value": "ad718cc6-bc27-4719-9778-08dce73bc90e",
+			"type": "string"
+		},
+		{
+			"key": "companyOwnerLorelaiToken",
+			"value": "f21fa3ea-4f6b-4e19-9777-08dce73bc90e",
+			"type": "string"
+		},
+		{
+			"key": "memberRoryToken",
+			"value": "e9cdafa5-16e8-4dad-1c43-08dce74f87c1",
+			"type": "string"
+		}
+	]
+}
