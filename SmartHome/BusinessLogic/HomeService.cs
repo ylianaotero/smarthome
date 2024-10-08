@@ -72,9 +72,6 @@ public class HomeService (
         
         role.Homes.Add(home);
         home.Owner = user;
-        
-        userRepository.Update(user);
-        homeRepository.Update(home);
 
         return home;
     }
