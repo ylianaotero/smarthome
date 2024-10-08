@@ -100,13 +100,13 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<HomeOwner>().ToTable("Roles").HasBaseType<Role>();
         
         modelBuilder.Entity<CompanyOwner>().ToTable("Roles").HasBaseType<Role>();
-        modelBuilder.Entity<CompanyOwner>().Navigation(co => co.Company).AutoInclude();
     }
     
     private void ConfigureCompany(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Company>().Property(c => c.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Company>().HasOne<User>(c => c.Owner);
+        modelBuilder.Entity<Company>().Navigation(c => c.Owner).AutoInclude();
     }
     
     private void ConfigureNotification(ModelBuilder modelBuilder)
