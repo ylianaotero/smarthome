@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1ddef170-f036-433f-803e-5327ae2ebcd6",
+		"_postman_id": "2893f661-37f6-4bae-80cb-b5947ff62ee0",
 		"name": "SmartHome API",
 		"description": "Esta colección de Postman contiene todos los endpoints necesarios para interactuar con la **SmartHome API**, una plataforma centralizada para la gestión de dispositivos inteligentes en hogares.\n\nLa plataforma está diseñada para soportar múltiples usuarios con distintos roles: **administradores**, **dueños de empresa**, y **dueños de hogares**, ofreciendo diferentes niveles de acceso y permisos. Estos endpoints incluyen funcionalidades para la creación y administración de dispositivos, usuarios y roles, así como la integración de dispositivos de diferentes fabricantes.\n\nLa colección está organizada en categorías clave:\n\n- **Gestión de usuarios**: Creación, modificación y eliminación de usuarios, y asignación de roles.\n    \n- **Gestión de dispositivos**: Agregar, consumir y administrar dispositivos inteligentes conectados a la plataforma.\n    \n- **Gestión de hogares:** Agregar, consumir y administrar hogares.\n    \n- **Gestión de empresas:** Agregar, consumir y administrar empresas de dispositivos inteligentes.\n    \n- **Gestión de notificaciones:** Enviar y consumir notificaciones asociadas a dispositivos.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -1100,7 +1100,7 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "http://localhost:5217",
+			"value": "http://localhost:5000",
 			"type": "string"
 		},
 		{
