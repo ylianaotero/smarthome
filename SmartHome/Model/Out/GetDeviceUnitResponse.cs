@@ -18,5 +18,14 @@ public class GetDeviceUnitResponse
         Model = deviceUnit.Device.Model;
         Photo = deviceUnit.Device.PhotoURLs[0];
     }
-    
+
+    public override bool Equals(object? obj)
+    {
+        return obj is GetDeviceUnitResponse response &&
+               Name == response.Name &&
+               HardwareId.Equals(response.HardwareId) &&
+               IsConnected == response.IsConnected &&
+               Model == response.Model &&
+               Photo == response.Photo;
+    }
 }
