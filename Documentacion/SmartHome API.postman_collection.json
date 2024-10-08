@@ -63,13 +63,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{base_route}}/administrators/9",
+							"raw": "{{host}}{{base_route}}/administrators/12",
 							"host": [
 								"{{host}}{{base_route}}"
 							],
 							"path": [
 								"administrators",
-								"9"
+								"12"
 							]
 						}
 					},
@@ -149,7 +149,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{base_route}}/companies?page={{page}}&pageSize={{pageSize}}",
+							"raw": "{{host}}{{base_route}}/companies?page={{page}}&pageSize=1",
 							"host": [
 								"{{host}}{{base_route}}"
 							],
@@ -163,7 +163,7 @@
 								},
 								{
 									"key": "pageSize",
-									"value": "{{pageSize}}"
+									"value": "1"
 								}
 							]
 						}
@@ -177,13 +177,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "84ffcee3-60e8-4def-cd1d-08dce7955ba3",
+								"value": "{{companyOwnerLorelaiToken}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"IoT Home\",\n  \"rut\": \"473457534\",\n  \"logoUrl\": \"https://t4.ftcdn.net/jpg/03/85/50/33/360_F_385503388_tBGEcrjitRyBXbbDQVSH14BXacRvo0cX.jpg\",\n  \"ownerId\": 15\n}",
+							"raw": "{\n  \"name\": \"IoT Home\",\n  \"rut\": \"473457534\",\n  \"logoUrl\": \"https://t4.ftcdn.net/jpg/03/85/50/33/360_F_385503388_tBGEcrjitRyBXbbDQVSH14BXacRvo0cX.jpg\",\n  \"ownerId\": 13\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -747,7 +747,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"hardwareId\": \"ff4431d6-4f12-4602-bf2c-0fa64470713b\",\n  \"isConnected\": true\n}",
+							"raw": "{\n  \"hardwareId\": \"9eb98872-4dd5-4266-8f9c-63b7847ac86b\",\n  \"isConnected\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -916,10 +916,16 @@
 					"name": "POST Notifications",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{administratorToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"event\": \"Human detected\",\n  \"homeId\": 1,\n  \"hardwareId\": \"8f56ab9e-7ca9-4897-ae3b-af5c36ae5920\"\n}",
+							"raw": "{\n  \"event\": \"Human detected\",\n  \"homeId\": 1,\n  \"hardwareId\": \"9eb98872-4dd5-4266-8f9c-63b7847ac86b\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
