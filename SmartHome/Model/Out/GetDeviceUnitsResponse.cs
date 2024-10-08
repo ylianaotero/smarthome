@@ -4,11 +4,11 @@ namespace Model.Out;
 
 public class GetDeviceUnitsResponse
 {
-    public List<DeviceUnit> DevicesUnit { get; set; }
+    public List<GetDeviceUnitResponse> DevicesUnit { get; set; }
     
     public GetDeviceUnitsResponse(List<DeviceUnit> devicesUnit)
     {
-        DevicesUnit = devicesUnit;
+        DevicesUnit = devicesUnit.Select(deviceUnit => new GetDeviceUnitResponse(deviceUnit)).ToList();
     }
     
     public override bool Equals(object? obj)
