@@ -32,7 +32,8 @@ public class NotificationService
                 notification.Home = home;
                 notification.DeviceUnit = device;
                 notification.Member = member;
-            
+                notification.ReadAt = DateTime.MinValue; 
+                
                 member.Notifications.Add(notification);
                 notificationRepository.Add(notification);
             }
