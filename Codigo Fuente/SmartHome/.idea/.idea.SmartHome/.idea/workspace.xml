@@ -11,40 +11,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45d2be1b-ae03-4c01-862e-48f788af3fc8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/.idea.301178_231810_280070.dir/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/.idea.301178_231810_280070.dir/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/.idea.301178_231810_280070.dir/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/.idea.301178_231810_280070.dir/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/projectSettingsUpdater.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome.dir/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome.dir/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome.dir/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/smarthome.metadata.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/smarthome.projects.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/smarthome.strings.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/DesignTimeBuild/.dtbcache.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/FileContentIndex/55446451-1169-4e34-bb14-4d8fec5cc1a8.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/FileContentIndex/75174979-a273-48f9-90d3-f3123cb5af33.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/FileContentIndex/e0ff2b01-31d2-412d-b3f6-a22e9a9e1224.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/FileContentIndex/f471b8b4-48c2-4660-941f-77b93cd4496e.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/FileContentIndex/f69f0093-3486-42a5-9878-b13e70c12e0f.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/v17/.futdcache.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/v17/.suo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/v17/DocumentLayout.backup.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/v17/DocumentLayout.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/v17/TestStore/0/003.testlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/SmartHome/v17/TestStore/0/testlog.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartHome.sln.DotSettings.user.Corrupted.2024-09-17T08-50-08.Backup.Tmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartHome.sln.DotSettings.user.Corrupted.2024-09-17T08-50-08.Description.Tmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartHome.sln.DotSettings.user.Corrupted.2024-10-05T21-51-37.Backup.Tmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartHome.sln.DotSettings.user.Corrupted.2024-10-05T21-51-37.Description.Tmp" beforeDir="false" />
-    </list>
+    <list default="true" id="45d2be1b-ae03-4c01-862e-48f788af3fc8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,7 +86,7 @@
     "b764cd96-392b-48d7-8e40-011c06dc6370.executor": "Debug",
     "e8bf59e2-df8a-4280-975d-bdfbdecd331d.executor": "Debug",
     "f5522583-f860-434a-a97a-815e5c0f5be9.executor": "Debug",
-    "git-widget-placeholder": "fix/loading",
+    "git-widget-placeholder": "directorios-entrega",
     "last_opened_file_path": "/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -248,7 +215,7 @@
       <workItem from="1727798005108" duration="35322000" />
       <workItem from="1727994523632" duration="44313000" />
       <workItem from="1728074774253" duration="76924000" />
-      <workItem from="1728324889503" duration="38225000" />
+      <workItem from="1728324889503" duration="39613000" />
     </task>
     <servers />
   </component>
