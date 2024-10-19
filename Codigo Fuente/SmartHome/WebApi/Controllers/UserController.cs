@@ -52,5 +52,9 @@ public class UserController(IUserService userService) : ControllerBase
         {
             return BadRequest(RoleNotValidMessage);
         }
+        catch (CannotAddItem e)
+        {
+            return StatusCode(StatusCodes.Status412PreconditionFailed, e.Message);
+        }
     }
 }
