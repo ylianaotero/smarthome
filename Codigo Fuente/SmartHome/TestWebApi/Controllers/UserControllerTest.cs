@@ -103,6 +103,24 @@ public class UserControllerTest
         
         _userController.GetUsers(new GetUsersRequest(), DefaultPageDataRequest());
     }
+
+    [TestMethod]
+    public void AddRoleToUserOkStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()));
+        _userController = new UserController(_userServiceMock.Object);
+        AddRoleToUserRequest request = new AddRoleToUserRequest
+        {
+            Role = "Homeowner",
+        };
+        
+        ObjectResult result = _userController.AddRoleToUser(_user_1_example, request) as OkObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(200, result.StatusCode);
+    }
     
     private void SetupDefaultMock()
     {
