@@ -344,4 +344,15 @@ public class UserServiceTest
         
         Assert.IsTrue(_user.Roles.Contains(_homeOwner));
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestAssignInvalidRoleToUser()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        _userService.AssignRoleToUser(_user.Id, _administrator);
+        
+        _mockUserRepository.Verify();
+    }
 }
