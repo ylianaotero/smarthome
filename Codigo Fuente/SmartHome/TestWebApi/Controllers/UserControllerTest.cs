@@ -21,9 +21,12 @@ public class UserControllerTest
     private const string Email1 = "john.doe@example.com";
     private const string Email2 = "john.lopez@example.com";
     private const string Password = "Securepassword1@";
-    private const string CannotFinItemMessage = "Cannot find item in list";
+    private const string CannotFindItemMessage = "Cannot find item in list";
+    private const string CannotFindUserMessage = "Cannot find user";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
-    private const string Role = "Administrator";
+    private const string AdministratorRole = "Administrator";
+    private const string HomeOwnerRole = "HomeOwner";
+    
     
     private List<Role> _listOfRoles;
     private Session _session; 
@@ -71,7 +74,7 @@ public class UserControllerTest
         GetUsersRequest request = new GetUsersRequest
         {
             FullName = _fullName,
-            Role = Role
+            Role = AdministratorRole
         };
         List<User> listOfUsers =
         [
@@ -98,7 +101,7 @@ public class UserControllerTest
         _userServiceMock
             .Setup(service => service
                 .GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Throws(new CannotFindItemInList(CannotFinItemMessage));
+            .Throws(new CannotFindItemInList(CannotFindItemMessage));
         _userController = new UserController(_userServiceMock.Object);
         
         _userController.GetUsers(new GetUsersRequest(), DefaultPageDataRequest());
@@ -112,7 +115,7 @@ public class UserControllerTest
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {
-            Role = "Homeowner",
+            Role = HomeOwnerRole,
         };
         
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
@@ -127,11 +130,11 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
-            .Throws(new ElementNotFound("User not found"));
+            .Throws(new ElementNotFound(CannotFindUserMessage));
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {
-            Role = "Homeowner",
+            Role = HomeOwnerRole,
         };
         
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as NotFoundObjectResult;
