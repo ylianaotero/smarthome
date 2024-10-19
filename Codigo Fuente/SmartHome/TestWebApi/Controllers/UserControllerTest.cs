@@ -122,6 +122,25 @@ public class UserControllerTest
         Assert.AreEqual(200, result.StatusCode);
     }
     
+    [TestMethod]
+    public void AddRoleToUserNotFoundStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new ElementNotFound());
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = "Homeowner",
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as NotFoundObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(404, result.StatusCode);
+    }
+    
     private void SetupDefaultMock()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
