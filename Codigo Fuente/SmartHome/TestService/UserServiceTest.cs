@@ -332,4 +332,20 @@ public class UserServiceTest
         
         _mockUserRepository.Verify();
     }
+
+    [TestMethod]
+    public void TestAssignRoleToUser()
+    {
+        _listOfUsers.Add(_user);
+        
+        _mockUserRepository
+            .Setup(v => v.GetByFilter(It.IsAny<Func<User, bool>>(), PageData.Default))
+            .Returns(_listOfUsers);
+        
+        _userService.AssignRoleToUser(_user.Id, _homeOwner);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.IsTrue(_user.Roles.Contains(_homeOwner));
+    }
 }
