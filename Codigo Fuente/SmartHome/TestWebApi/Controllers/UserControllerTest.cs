@@ -127,7 +127,7 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
-            .Throws(new ElementNotFound());
+            .Throws(new ElementNotFound("User not found"));
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {

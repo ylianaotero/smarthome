@@ -37,8 +37,15 @@ public class UserController(IUserService userService) : ControllerBase
     [Route("{id}/roles")]
     public IActionResult PostUserRole([FromRoute] long id, [FromBody] PostUserRoleRequest request)
     {
-        userService.AssignRoleToUser(id, request.Role);
+        try
+        {
+            userService.AssignRoleToUser(id, request.Role);
         
-        return Ok("Ok");
+            return Ok("Ok");
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(NotFoundMessage);
+        }
     }
 }
