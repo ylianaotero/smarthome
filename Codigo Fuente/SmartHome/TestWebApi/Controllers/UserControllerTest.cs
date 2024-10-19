@@ -25,6 +25,7 @@ public class UserControllerTest
     private const string CannotFindItemMessage = "Cannot find item in list";
     private const string CannotFindUserMessage = "Cannot find user";
     private const string InputNotValidMessage = "Input not valid";
+    private const string CannotAddItemMessage = "Cannot add item";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string AdministratorRole = "Administrator";
     private const string HomeOwnerRole = "HomeOwner";
@@ -170,7 +171,7 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
-            .Throws(new CannotAddItem("Cannot add item"));
+            .Throws(new CannotAddItem(CannotAddItemMessage));
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {
