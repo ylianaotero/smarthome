@@ -9,6 +9,7 @@ using Model.In;
 using Model.Out;
 using Moq;
 using WebApi.Controllers;
+using InputNotValid = CustomExceptions.InputNotValid;
 
 namespace TestWebApi.Controllers;
 
@@ -150,7 +151,7 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
-            .Throws(new ElementNotFound(CannotFindUserMessage));
+            .Throws(new InputNotValid("Input not valid"));
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {

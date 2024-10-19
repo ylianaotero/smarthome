@@ -47,5 +47,9 @@ public class UserController(IUserService userService) : ControllerBase
         {
             return NotFound(NotFoundMessage);
         }
+        catch (InputNotValid)
+        {
+            return BadRequest("Invalid input");
+        }
     }
 }
