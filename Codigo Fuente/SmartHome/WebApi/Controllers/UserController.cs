@@ -13,6 +13,7 @@ namespace WebApi.Controllers;
 public class UserController(IUserService userService) : ControllerBase
 {
     private const string NotFoundMessage = "The requested resource was not found.";
+    private const string RoleNotValidMessage = "Role not valid";
     private const string RoleWithPermissions = "Administrator";
 
     [HttpGet]
@@ -49,7 +50,7 @@ public class UserController(IUserService userService) : ControllerBase
         }
         catch (InputNotValid)
         {
-            return BadRequest("Invalid input");
+            return BadRequest(RoleNotValidMessage);
         }
     }
 }

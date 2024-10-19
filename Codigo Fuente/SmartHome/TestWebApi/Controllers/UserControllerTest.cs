@@ -4,7 +4,6 @@ using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using Model.In;
 using Model.Out;
 using Moq;
@@ -25,6 +24,7 @@ public class UserControllerTest
     private const string Password = "Securepassword1@";
     private const string CannotFindItemMessage = "Cannot find item in list";
     private const string CannotFindUserMessage = "Cannot find user";
+    private const string InputNotValidMessage = "Input not valid";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string AdministratorRole = "Administrator";
     private const string HomeOwnerRole = "HomeOwner";
@@ -151,7 +151,7 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
-            .Throws(new InputNotValid("Input not valid"));
+            .Throws(new InputNotValid(InputNotValidMessage));
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {
