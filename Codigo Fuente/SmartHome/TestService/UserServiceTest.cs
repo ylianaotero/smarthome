@@ -355,4 +355,17 @@ public class UserServiceTest
         
         _mockUserRepository.Verify();
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void TestAssignRoleToUserThatAlreadyHasIt()
+    {
+        _user.Roles.Add(_homeOwner);
+        
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
+        
+        _mockUserRepository.Verify();
+    }
 }
