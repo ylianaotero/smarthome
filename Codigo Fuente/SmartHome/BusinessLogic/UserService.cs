@@ -67,11 +67,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         User existingUser = GetUserById(userId);
         
         VerifyRoleIsAssignable(roleType);
-        
-        if (existingUser.Roles.Exists(r => r.Kind == roleType))
-        {
-            throw new ElementAlreadyExist(UserAlreadyHasRoleExceptionMessage);
-        }
+        VerifyUserDoesNotHaveRoleAlready(existingUser, roleType);
         
         Role role = RoleFactory.CreateRole(roleType);
         
@@ -143,6 +139,14 @@ public class UserService(IRepository<User> userRepository) : IUserService
         if (!_assignableRoles.Contains(role))
         {
             throw new CannotAddItem(RoleNotAssignableExceptionMessage);
+        }
+    }
+    
+    private void VerifyUserDoesNotHaveRoleAlready(User user, string role)
+    {
+        if (user.Roles.Exists(r => r.Kind == role))
+        {
+            throw new ElementAlreadyExist(UserAlreadyHasRoleExceptionMessage);
         }
     }
     
