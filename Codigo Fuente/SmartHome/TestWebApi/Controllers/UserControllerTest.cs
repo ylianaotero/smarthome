@@ -4,6 +4,7 @@ using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using Model.In;
 using Model.Out;
 using Moq;
@@ -142,6 +143,25 @@ public class UserControllerTest
         _userServiceMock.Verify();
 
         Assert.AreEqual(404, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void AddRoleToUserBadRequestStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new ElementNotFound(CannotFindUserMessage));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = Random.Shared.Next().ToString()
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as BadRequestObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(400, result.StatusCode);
     }
     
     private void SetupDefaultMock()
