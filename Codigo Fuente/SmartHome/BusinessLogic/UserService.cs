@@ -1,4 +1,5 @@
 using CustomExceptions;
+using Domain.Abstract;
 using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
@@ -59,6 +60,14 @@ public class UserService(IRepository<User> userRepository) : IUserService
         }
     }
     
+    public void AssignRoleToUser(long userId, Role role)
+    {
+        User existingUser = GetUserById(userId);
+        
+        existingUser.Roles.Add(role);
+        userRepository.Update(existingUser);
+    }
+    
     public Company AddOwnerToCompany(long id, Company company)
     {
         User user = GetUserById(id);
@@ -77,7 +86,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         
         throw new ElementNotFound(UserDoesNotExistExceptionMessage);
     }
-    
+
     public bool CompanyOwnerIsComplete(long id)
     {
         User existingUser =  GetUserById(id);
