@@ -1,3 +1,4 @@
+using Domain.Abstract;
 using Domain.Concrete;
 using IDataAccess;
 
@@ -11,5 +12,6 @@ public interface IUserService
     void DeleteUser(long id);
     void UpdateUser(long id, User user);
     bool CompanyOwnerIsComplete(long id);
-    Company AddOwnerToCompany(long id, Company company); 
+    Company AddOwnerToCompany(long id, Company company);
+    void AssignRoleToUser(long userId, Role role);
 }
