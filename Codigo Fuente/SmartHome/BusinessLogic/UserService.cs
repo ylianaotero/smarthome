@@ -63,9 +63,16 @@ public class UserService(IRepository<User> userRepository) : IUserService
     public void AssignRoleToUser(long userId, Role role)
     {
         User existingUser = GetUserById(userId);
-        
-        existingUser.Roles.Add(role);
-        userRepository.Update(existingUser);
+
+        if (role is HomeOwner)
+        {
+            existingUser.Roles.Add(role);
+            userRepository.Update(existingUser);
+        }
+        else
+        {
+            throw new InputNotValid("Role not allowed for this user");
+        }
     }
     
     public Company AddOwnerToCompany(long id, Company company)
