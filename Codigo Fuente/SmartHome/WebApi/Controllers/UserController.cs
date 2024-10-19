@@ -32,4 +32,13 @@ public class UserController(IUserService userService) : ControllerBase
         
         return Ok(getUsersResponse);
     }
+    
+    [HttpPost]
+    [Route("{id}/roles")]
+    public IActionResult AddRoleToUser([FromRoute] long id, [FromBody] AddRoleToUserRequest request)
+    {
+        userService.AssignRoleToUser(id, request.Role);
+        
+        return Ok("Ok");
+    }
 }

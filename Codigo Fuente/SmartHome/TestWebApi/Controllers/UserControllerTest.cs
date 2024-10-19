@@ -115,7 +115,7 @@ public class UserControllerTest
             Role = "Homeowner",
         };
         
-        ObjectResult result = _userController.AddRoleToUser(_user_1_example, request) as OkObjectResult;
+        ObjectResult result = _userController.AddRoleToUser(_user_1_example.Id, request) as OkObjectResult;
 
         _userServiceMock.Verify();
 
