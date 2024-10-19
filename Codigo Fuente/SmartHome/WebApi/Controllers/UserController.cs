@@ -35,7 +35,7 @@ public class UserController(IUserService userService) : ControllerBase
     
     [HttpPost]
     [Route("{id}/roles")]
-    public IActionResult AddRoleToUser([FromRoute] long id, [FromBody] AddRoleToUserRequest request)
+    public IActionResult PostUserRole([FromRoute] long id, [FromBody] PostUserRoleRequest request)
     {
         userService.AssignRoleToUser(id, request.Role);
         

@@ -1,6 +1,6 @@
 namespace Model.In;
 
-public class AddRoleToUserRequest
+public class PostUserRoleRequest
 {
     public string Role { get; set; }
 }

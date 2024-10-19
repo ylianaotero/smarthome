@@ -110,12 +110,12 @@ public class UserControllerTest
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()));
         _userController = new UserController(_userServiceMock.Object);
-        AddRoleToUserRequest request = new AddRoleToUserRequest
+        PostUserRoleRequest request = new PostUserRoleRequest
         {
             Role = "Homeowner",
         };
         
-        ObjectResult result = _userController.AddRoleToUser(_user_1_example.Id, request) as OkObjectResult;
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
 
         _userServiceMock.Verify();
 
