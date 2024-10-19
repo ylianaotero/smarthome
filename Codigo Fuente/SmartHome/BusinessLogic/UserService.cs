@@ -10,8 +10,9 @@ public class UserService(IRepository<User> userRepository) : IUserService
 {
     private const string UserDoesNotExistExceptionMessage = "Member not found";
     private const string UserAlreadyExistExceptionMessage = "Member already exists";
-
-    private IUserService _userServiceImplementation;
+    private const string RoleNotAssignableExceptionMessage = "Role cannot be assigned to an existing user";
+    
+    private readonly List<string> _assignableRoles = ["HomeOwner"];
 
     public void CreateUser(User user)
     {
@@ -59,22 +60,19 @@ public class UserService(IRepository<User> userRepository) : IUserService
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
     }
-    
-    public void AssignRoleToUser(long userId, Role role)
+
+    public void AssignRoleToUser(long userId, string roleType)
     {
         User existingUser = GetUserById(userId);
-
-        if (role is HomeOwner)
-        {
-            existingUser.Roles.Add(role);
-            userRepository.Update(existingUser);
-        }
-        else
-        {
-            throw new InputNotValid("Role not allowed for this user");
-        }
+        
+        VerifyRoleIsAssignable(roleType);
+        
+        Role role = RoleFactory.CreateRole(roleType);
+        
+        existingUser.Roles.Add(role);
+        userRepository.Update(existingUser);
     }
-    
+  
     public Company AddOwnerToCompany(long id, Company company)
     {
         User user = GetUserById(id);
@@ -132,6 +130,14 @@ public class UserService(IRepository<User> userRepository) : IUserService
         }
 
         return user; 
+    }
+    
+    private void VerifyRoleIsAssignable(string role)
+    {
+        if (!_assignableRoles.Contains(role))
+        {
+            throw new CannotAddItem(RoleNotAssignableExceptionMessage);
+        }
     }
     
     private List<CompanyOwner> GetCompanyOwnerRoles(User user)

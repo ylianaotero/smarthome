@@ -338,20 +338,20 @@ public class UserServiceTest
     {
         _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
         
-        _userService.AssignRoleToUser(_user.Id, _homeOwner);
+        _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
         
         _mockUserRepository.Verify();
         
-        Assert.IsTrue(_user.Roles.Contains(_homeOwner));
+        Assert.IsTrue(_user.Roles.Any(r => r.Kind == _homeOwner.Kind));
     }
     
     [TestMethod]
-    [ExpectedException(typeof(InputNotValid))]
+    [ExpectedException(typeof(CannotAddItem))]
     public void TestAssignInvalidRoleToUser()
     {
         _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
         
-        _userService.AssignRoleToUser(_user.Id, _administrator);
+        _userService.AssignRoleToUser(_user.Id, _administrator.Kind);
         
         _mockUserRepository.Verify();
     }

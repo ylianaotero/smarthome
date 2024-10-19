@@ -13,5 +13,5 @@ public interface IUserService
     void UpdateUser(long id, User user);
     bool CompanyOwnerIsComplete(long id);
     Company AddOwnerToCompany(long id, Company company);
-    void AssignRoleToUser(long userId, Role role);
+    void AssignRoleToUser(long userId, string roleType);
 }
