@@ -165,6 +165,25 @@ public class UserControllerTest
         Assert.AreEqual(400, result.StatusCode);
     }
     
+    [TestMethod]
+    public void AddRoleToUserPreconditionFailedStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new CannotAddItem("Cannot add item"));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = Random.Shared.Next().ToString()
+        };
+
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as ObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(412, result.StatusCode);
+    }
+    
     private void SetupDefaultMock()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
