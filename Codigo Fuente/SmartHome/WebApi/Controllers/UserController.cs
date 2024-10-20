@@ -9,13 +9,14 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/users")]
 [ApiController]
-[RolesWithPermissions(RoleWithPermissions)]
 public class UserController(IUserService userService) : ControllerBase
 {
     private const string NotFoundMessage = "The requested resource was not found.";
-    private const string RoleWithPermissions = "Administrator";
+    private const string AdministratorRole = "Administrator";
+    private const string HomeOwnerRole = "HomeOwner";
 
     [HttpGet]
+    [RolesWithPermissions(AdministratorRole, HomeOwnerRole)]
     public IActionResult GetUsers([FromQuery] GetUsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         GetUsersResponse getUsersResponse;
@@ -43,9 +44,9 @@ public class UserController(IUserService userService) : ControllerBase
         
             return Ok("Ok");
         }
-        catch (ElementNotFound e)
+        catch (ElementNotFound)
         {
-            return NotFound(e.Message);
+            return NotFound(NotFoundMessage);
         }
         catch (InputNotValid e)
         {
