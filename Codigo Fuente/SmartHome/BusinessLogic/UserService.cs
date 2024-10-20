@@ -33,6 +33,17 @@ public class UserService(IRepository<User> userRepository) : IUserService
     {
         return userRepository.GetByFilter(filter, pageData);
     }
+    
+    public User GetUserById(long id)
+    {
+        User user = userRepository.GetById(id); 
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
+    }
 
     public bool IsAdmin(string email)
     {
@@ -115,17 +126,6 @@ public class UserService(IRepository<User> userRepository) : IUserService
         List<User> listOfuser = userRepository.GetByFilter(predicate, pageData); 
         User user = listOfuser.FirstOrDefault();
         
-        if (user == null)
-        {
-            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
-        }
-
-        return user; 
-    }
-    
-    private User GetUserById(long Id)
-    {
-        User user = userRepository.GetById(Id); 
         if (user == null)
         {
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
