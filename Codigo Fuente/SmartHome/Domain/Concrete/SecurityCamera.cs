@@ -1,18 +1,7 @@
 using Domain.Abstract;
+using Domain.Enum;
 
 namespace Domain.Concrete;
-
-public enum LocationType
-{
-    Indoor,
-    Outdoor
-}
- 
-public enum SecurityCameraFunctionality
-{
-    MotionDetection,
-    HumanDetection,
-}
 
 public class SecurityCamera : Device
 {

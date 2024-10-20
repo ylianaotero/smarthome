@@ -1,4 +1,5 @@
 using Domain.Concrete;
+using Domain.Enum;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace TestDomain;

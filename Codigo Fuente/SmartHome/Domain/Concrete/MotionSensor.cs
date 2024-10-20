@@ -1,11 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Domain.Concrete;
-
-public enum MotionSensorFunctionality
-{
-    MotionDetection
-}
 
 public class MotionSensor
 {
