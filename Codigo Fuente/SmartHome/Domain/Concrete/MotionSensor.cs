@@ -1,19 +1,11 @@
-using Domain.Abstract;
-
 namespace Domain.Concrete;
 
-public enum MovementSensorFunctionality
+public class MotionSensor
 {
-    MotionDetection
-}
-
-public class MovementSensor : Device
-{
-    public List<MovementSensorFunctionality>? Functionalities { get; set; }
-    public override string Kind { get; set; }
+    public long Id { get; set; }
     
-    public MovementSensor()
+    public MotionSensor()
     {
-        Kind = "MovementSensor";
+        
     }
 }
