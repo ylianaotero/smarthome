@@ -231,12 +231,12 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.GetUserById(It.IsAny<long>()))
-            .Throws(new ElementNotFound("not found"));
+            .Throws(new ElementNotFound(CannotFindItemMessage));
         _userController = new UserController(_userServiceMock.Object);
 
         ObjectResult result = _userController.GetUser(_user_1_example.Id) as NotFoundObjectResult;
         
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
     private void SetupDefaultMock()
