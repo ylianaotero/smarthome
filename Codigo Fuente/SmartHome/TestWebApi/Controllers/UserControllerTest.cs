@@ -8,6 +8,7 @@ using Model.In;
 using Model.Out;
 using Moq;
 using WebApi.Controllers;
+using InputNotValid = CustomExceptions.InputNotValid;
 
 namespace TestWebApi.Controllers;
 
@@ -21,9 +22,20 @@ public class UserControllerTest
     private const string Email1 = "john.doe@example.com";
     private const string Email2 = "john.lopez@example.com";
     private const string Password = "Securepassword1@";
-    private const string CannotFinItemMessage = "Cannot find item in list";
+    private const string CannotFindItemMessage = "Cannot find item in list";
+    private const string CannotFindUserMessage = "Cannot find user";
+    private const string InputNotValidMessage = "Input not valid";
+    private const string CannotAddItemMessage = "Cannot add item";
+    private const string RoleAlreadyExistMessage = "Role already exist";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
-    private const string Role = "Administrator";
+    private const string AdministratorRole = "Administrator";
+    private const string HomeOwnerRole = "HomeOwner";
+    private const int OkStatusCode = 200;
+    private const int NotFoundStatusCode = 404;
+    private const int BadRequestStatusCode = 400;
+    private const int PreconditionFailedStatusCode = 412;
+    private const int ConflictStatusCode = 409;
+    
     
     private List<Role> _listOfRoles;
     private Session _session; 
@@ -71,7 +83,7 @@ public class UserControllerTest
         GetUsersRequest request = new GetUsersRequest
         {
             FullName = _fullName,
-            Role = Role
+            Role = AdministratorRole
         };
         List<User> listOfUsers =
         [
@@ -98,10 +110,169 @@ public class UserControllerTest
         _userServiceMock
             .Setup(service => service
                 .GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Throws(new CannotFindItemInList(CannotFinItemMessage));
+            .Throws(new CannotFindItemInList(CannotFindItemMessage));
         _userController = new UserController(_userServiceMock.Object);
         
-        _userController.GetUsers(new GetUsersRequest(), DefaultPageDataRequest());
+        ObjectResult result = _userController
+            .GetUsers(new GetUsersRequest(), DefaultPageDataRequest()) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+
+    [TestMethod]
+    public void AddRoleToUserOkStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = HomeOwnerRole,
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(OkStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void AddRoleToUserOkResponse()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Returns(_user_1_example);
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = HomeOwnerRole,
+        };
+        GetUserResponse expectedResponse = new GetUserResponse(_user_1_example);
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
+        GetUserResponse getUserResponse = result.Value as GetUserResponse;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(expectedResponse, getUserResponse);
+    }
+    
+    [TestMethod]
+    public void AddRoleToUserNotFoundStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new ElementNotFound(CannotFindUserMessage));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = HomeOwnerRole,
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as NotFoundObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void AddRoleToUserBadRequestStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new InputNotValid(InputNotValidMessage));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = Random.Shared.Next().ToString()
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as BadRequestObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void AddRoleToUserPreconditionFailedStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new CannotAddItem(CannotAddItemMessage));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = Random.Shared.Next().ToString()
+        };
+
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as ObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void AddRoleToUserConflictStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new ElementAlreadyExist(RoleAlreadyExistMessage));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = HomeOwnerRole,
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as ConflictObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
+    }
+
+    [TestMethod]
+    public void GetUserByIdOkStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.GetUserById(It.IsAny<long>()))
+            .Returns(_user_1_example);
+        _userController = new UserController(_userServiceMock.Object);
+        
+        ObjectResult result = _userController.GetUser(_user_1_example.Id) as OkObjectResult;
+        
+        Assert.AreEqual(OkStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void GetUserByIdNotFoundStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.GetUserById(It.IsAny<long>()))
+            .Throws(new ElementNotFound(CannotFindItemMessage));
+        _userController = new UserController(_userServiceMock.Object);
+
+        ObjectResult result = _userController.GetUser(_user_1_example.Id) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+
+    [TestMethod]
+    public void GetUserByIdOkResponse()
+    {
+        _userServiceMock
+            .Setup(service => service.GetUserById(It.IsAny<long>()))
+            .Returns(_user_1_example);
+        _userController = new UserController(_userServiceMock.Object);
+        GetUserResponse expectedResponse = new GetUserResponse(_user_1_example);
+        
+        ObjectResult result = _userController.GetUser(_user_1_example.Id) as OkObjectResult;
+        GetUserResponse getUserResponse = result.Value as GetUserResponse;
+        
+        Assert.AreEqual(expectedResponse, getUserResponse);
     }
     
     private void SetupDefaultMock()
@@ -149,10 +320,10 @@ public class UserControllerTest
     {
         _session = new Session(); 
         _session.User = _user_1_example;
-        _session.Id = new Guid();
+        _session.Id = Guid.NewGuid();
     }
     
-    private PageDataRequest DefaultPageDataRequest()
+    private static PageDataRequest DefaultPageDataRequest()
     {
         PageDataRequest request = new PageDataRequest();
         
