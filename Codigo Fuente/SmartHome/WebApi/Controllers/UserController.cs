@@ -55,5 +55,9 @@ public class UserController(IUserService userService) : ControllerBase
         {
             return StatusCode(StatusCodes.Status412PreconditionFailed, e.Message);
         }
+        catch (ElementAlreadyExist e)
+        {
+            return Conflict(e.Message);
+        }
     }
 }
