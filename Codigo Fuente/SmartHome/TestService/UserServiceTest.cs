@@ -379,4 +379,27 @@ public class UserServiceTest
         
         _mockUserRepository.Verify();
     }
+    
+    [TestMethod]
+    public void TestGetUserById()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        User response = _userService.GetUserById(_user.Id);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.AreEqual(_user, response);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestGetUserByIdNotFound()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns((User?)null);
+        
+        _userService.GetUserById(_user.Id);
+        
+        _mockUserRepository.Verify();
+    }
 }
