@@ -8,7 +8,7 @@ using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymou
 
 namespace WebApi.Filters
 {
-    public abstract class AuthenticationFilterAttribute : Attribute, IAuthorizationFilter
+    public class AuthenticationFilterAttribute : Attribute, IAuthorizationFilter
     {
         private const string MissingHeaderMessage = "Authorization header is needed";
         private const string InvalidTokenMessage = "Invalid token format";

@@ -13,7 +13,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
     private const string RoleNotAssignableExceptionMessage = "Role cannot be assigned to an existing user";
     private const string UserAlreadyHasRoleExceptionMessage = "User already has the role";
     
-    private readonly List<string> _assignableRoles = ["HomeOwner"];
+    private readonly List<string> _assignableRoles = ["homeowner"];
 
     public void CreateUser(User user)
     {
@@ -136,7 +136,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
     
     private void VerifyRoleIsAssignable(string role)
     {
-        if (!_assignableRoles.Contains(role))
+        if (!_assignableRoles.Contains(role.ToLower()))
         {
             throw new CannotAddItem(RoleNotAssignableExceptionMessage);
         }
@@ -144,7 +144,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
     
     private static void VerifyUserDoesNotHaveRoleAlready(User user, string role)
     {
-        if (user.Roles.Exists(r => r.Kind == role))
+        if (user.Roles.Exists(r => r.Kind.ToLower() == role.ToLower()))
         {
             throw new ElementAlreadyExist(UserAlreadyHasRoleExceptionMessage);
         }
