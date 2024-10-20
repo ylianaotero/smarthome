@@ -213,6 +213,7 @@ public class UserControllerTest
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
 
+    [TestMethod]
     public void GetUserByIdOkStatusCode()
     {
         _userServiceMock
