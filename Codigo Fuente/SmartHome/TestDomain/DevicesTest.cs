@@ -230,7 +230,7 @@ public class DevicesTest
     public void TestAddMotionDetectionFunctionalityToMotionSensor()
     {
         List<MotionSensorFunctionality>? functionalities = new List<MotionSensorFunctionality> 
-            {MotionSensorrFunctionality.MotionDetection};
+            {MotionSensorFunctionality.MotionDetection};
         
         MotionSensor motionSensor = new MotionSensor();
         motionSensor.Functionalities = functionalities;
