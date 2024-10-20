@@ -26,9 +26,15 @@ public class UserControllerTest
     private const string CannotFindUserMessage = "Cannot find user";
     private const string InputNotValidMessage = "Input not valid";
     private const string CannotAddItemMessage = "Cannot add item";
+    private const string RoleAlreadyExistMessage = "Role already exist";
     private const string ProfilePictureUrl = "https://example.com/images/profile.jpg";
     private const string AdministratorRole = "Administrator";
     private const string HomeOwnerRole = "HomeOwner";
+    private const int OkStatusCode = 200;
+    private const int NotFoundStatusCode = 404;
+    private const int BadRequestStatusCode = 400;
+    private const int PreconditionFailedStatusCode = 412;
+    private const int ConflictStatusCode = 409;
     
     
     private List<Role> _listOfRoles;
@@ -125,7 +131,7 @@ public class UserControllerTest
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(200, result.StatusCode);
+        Assert.AreEqual(OkStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -144,7 +150,7 @@ public class UserControllerTest
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -163,7 +169,7 @@ public class UserControllerTest
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(400, result.StatusCode);
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -182,7 +188,7 @@ public class UserControllerTest
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(412, result.StatusCode);
+        Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
     }
     
     [TestMethod]
@@ -190,7 +196,7 @@ public class UserControllerTest
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
-            .Throws(new ElementAlreadyExist(CannotFindUserMessage));
+            .Throws(new ElementAlreadyExist(RoleAlreadyExistMessage));
         _userController = new UserController(_userServiceMock.Object);
         PostUserRoleRequest request = new PostUserRoleRequest
         {
@@ -201,7 +207,7 @@ public class UserControllerTest
 
         _userServiceMock.Verify();
 
-        Assert.AreEqual(409, result.StatusCode);
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
     
     private void SetupDefaultMock()
