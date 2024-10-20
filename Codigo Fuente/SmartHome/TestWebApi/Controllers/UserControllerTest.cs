@@ -113,7 +113,10 @@ public class UserControllerTest
             .Throws(new CannotFindItemInList(CannotFindItemMessage));
         _userController = new UserController(_userServiceMock.Object);
         
-        _userController.GetUsers(new GetUsersRequest(), DefaultPageDataRequest());
+        ObjectResult result = _userController
+            .GetUsers(new GetUsersRequest(), DefaultPageDataRequest()) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
 
     [TestMethod]
@@ -255,10 +258,10 @@ public class UserControllerTest
     {
         _session = new Session(); 
         _session.User = _user_1_example;
-        _session.Id = new Guid();
+        _session.Id = Guid.NewGuid();
     }
     
-    private PageDataRequest DefaultPageDataRequest()
+    private static PageDataRequest DefaultPageDataRequest()
     {
         PageDataRequest request = new PageDataRequest();
         

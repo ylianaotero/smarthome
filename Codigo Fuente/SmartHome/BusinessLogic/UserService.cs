@@ -37,7 +37,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
     public bool IsAdmin(string email)
     {
         User existingUser =  GetBy(u => u.Email == email, PageData.Default);
-        bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
+        bool hasAdministrator = existingUser.Roles.Exists(role => role is Administrator);
         
         return hasAdministrator; 
     }
@@ -142,7 +142,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         }
     }
     
-    private void VerifyUserDoesNotHaveRoleAlready(User user, string role)
+    private static void VerifyUserDoesNotHaveRoleAlready(User user, string role)
     {
         if (user.Roles.Exists(r => r.Kind == role))
         {
@@ -150,7 +150,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         }
     }
     
-    private List<CompanyOwner> GetCompanyOwnerRoles(User user)
+    private static List<CompanyOwner> GetCompanyOwnerRoles(User user)
     {
         return user.Roles
             .Where(role => role is CompanyOwner)
@@ -158,10 +158,10 @@ public class UserService(IRepository<User> userRepository) : IUserService
             .ToList();
     }
 
-    private CompanyOwner SearchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
+    private static CompanyOwner SearchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
     {
         CompanyOwner incompleteRole = companyOwnerRoles
-            .FirstOrDefault(role => role.HasACompleteCompany == false);  
+            .Find(role => !role.HasACompleteCompany);  
 
         return incompleteRole;
     }

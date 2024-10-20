@@ -342,7 +342,7 @@ public class UserServiceTest
         
         _mockUserRepository.Verify();
         
-        Assert.IsTrue(_user.Roles.Any(r => r.Kind == _homeOwner.Kind));
+        Assert.IsTrue(_user.Roles.Exists(r => r.Kind == _homeOwner.Kind));
     }
     
     [TestMethod]
