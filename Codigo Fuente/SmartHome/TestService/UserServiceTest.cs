@@ -347,11 +347,22 @@ public class UserServiceTest
     
     [TestMethod]
     [ExpectedException(typeof(CannotAddItem))]
-    public void TestAssignInvalidRoleToUser()
+    public void TestAssignRoleThatIsNotAllowedForExistingUsers()
     {
         _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
         
         _userService.AssignRoleToUser(_user.Id, _administrator.Kind);
+        
+        _mockUserRepository.Verify();
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestAssignInvalidRoleToUser()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        _userService.AssignRoleToUser(_user.Id, "InvalidRole");
         
         _mockUserRepository.Verify();
     }

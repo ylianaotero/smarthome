@@ -66,10 +66,10 @@ public class UserService(IRepository<User> userRepository) : IUserService
     {
         User existingUser = GetUserById(userId);
         
+        Role role = RoleFactory.CreateRole(roleType);
+        
         VerifyRoleIsAssignable(roleType);
         VerifyUserDoesNotHaveRoleAlready(existingUser, roleType);
-        
-        Role role = RoleFactory.CreateRole(roleType);
         
         existingUser.Roles.Add(role);
         userRepository.Update(existingUser);

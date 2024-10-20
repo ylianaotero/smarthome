@@ -13,8 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45d2be1b-ae03-4c01-862e-48f788af3fc8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartHome.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmartHome.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestService/UserServiceTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TestService/UserServiceTest.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,42 +75,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.WebApi: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.Domain.executor&quot;: &quot;Run&quot;,
-    &quot;1f983e87-3e4b-4a45-92ad-2ba6fc55c74e.executor&quot;: &quot;Debug&quot;,
-    &quot;2115f40c-6284-4971-93f2-5796a91c58b6.executor&quot;: &quot;Debug&quot;,
-    &quot;6c468d98-28ed-433b-86f0-09a6e7c2920d.executor&quot;: &quot;Debug&quot;,
-    &quot;7714f814-d3d5-416f-906b-c0ae1891f91b.executor&quot;: &quot;Debug&quot;,
-    &quot;7f4425f3-8426-4fae-b600-f6248abd271c.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;ab5e2b38-1d7f-43e6-aa03-8cc5ab36cefb.executor&quot;: &quot;Debug&quot;,
-    &quot;b764cd96-392b-48d7-8e40-011c06dc6370.executor&quot;: &quot;Debug&quot;,
-    &quot;e8bf59e2-df8a-4280-975d-bdfbdecd331d.executor&quot;: &quot;Debug&quot;,
-    &quot;f5522583-f860-434a-a97a-815e5c0f5be9.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.WebApi: http.executor": "Run",
+    ".NET Project.Domain.executor": "Run",
+    "1f983e87-3e4b-4a45-92ad-2ba6fc55c74e.executor": "Debug",
+    "2115f40c-6284-4971-93f2-5796a91c58b6.executor": "Debug",
+    "6c468d98-28ed-433b-86f0-09a6e7c2920d.executor": "Debug",
+    "7714f814-d3d5-416f-906b-c0ae1891f91b.executor": "Debug",
+    "7f4425f3-8426-4fae-b600-f6248abd271c.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ab5e2b38-1d7f-43e6-aa03-8cc5ab36cefb.executor": "Debug",
+    "b764cd96-392b-48d7-8e40-011c06dc6370.executor": "Debug",
+    "e8bf59e2-df8a-4280-975d-bdfbdecd331d.executor": "Debug",
+    "f5522583-f860-434a-a97a-815e5c0f5be9.executor": "Debug",
+    "git-widget-placeholder": "feat/add-homeowner-role-to-user",
+    "last_opened_file_path": "/Users/ylianaotero/RiderProjects/301178_231810_280070/SmartHome",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;GitIgnore&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "GitIgnore"
     ],
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\angel\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\angel\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\angel\\AppData\\Local\\Symbols\\src&quot;
+    "rider.external.source.directories": [
+      "C:\\Users\\angel\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\angel\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\angel\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.WebApi: http">
     <configuration name="Domain" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -250,12 +249,56 @@
     <option name="coveragePercentColumnWidth" value="125" />
     <option name="sortOrder" value="DESCENDING" />
     <option name="sortedColumn" value="1" />
-    <option name="symbolColumnWidth" value="611" />
+    <option name="symbolColumnWidth" value="694" />
     <coverage-tree-state>
       <expand>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 51% 2481/5042" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Concrete 99% 3/367" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Domain 99% 3/399" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Concrete 99% 3/367" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="RoleFactory 57% 3/7" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLogic 91% 32/361" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLogic 91% 32/361" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLogic 91% 32/361" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 67% 1706/5154" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLogic 91% 32/361" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLogic 91% 32/361" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="UserService 86% 14/101" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
       </expand>
       <select />
