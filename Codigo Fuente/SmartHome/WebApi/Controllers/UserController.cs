@@ -39,6 +39,7 @@ public class UserController(IUserService userService) : ControllerBase
     [RolesWithPermissions(AdministratorRole)]
     public IActionResult GetUser([FromRoute] long id)
     {
+        return Ok(new GetUserResponse(userService.GetUserById(id)));
         try
         {
             userService.GetUserById(id);
@@ -47,8 +48,6 @@ public class UserController(IUserService userService) : ControllerBase
         {
             return NotFound(e.Message);
         }
-        
-        return Ok("Ok");
     }
     
     [HttpPost]
