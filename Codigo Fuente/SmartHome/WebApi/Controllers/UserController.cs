@@ -39,10 +39,17 @@ public class UserController(IUserService userService) : ControllerBase
     [RolesWithPermissions(AdministratorRole)]
     public IActionResult GetUser([FromRoute] long id)
     {
-        userService.GetUserById(id);
+        try
+        {
+            userService.GetUserById(id);
+        }
+        catch (ElementNotFound e)
+        {
+            return NotFound(e.Message);
+        }
+        
         return Ok("Ok");
     }
-    
     
     [HttpPost]
     [Route("{id}/roles")]

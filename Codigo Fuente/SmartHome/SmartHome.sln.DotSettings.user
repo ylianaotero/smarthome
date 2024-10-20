@@ -10,6 +10,7 @@
     &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest.TestGetUserById&lt;/TestId&gt;
     &lt;TestId&gt;MSTest::74646BC3-DCCC-44A3-916F-0CDEC8D816CC::net8.0::TestService.UserServiceTest.TestGetUserByIdNotFound&lt;/TestId&gt;
     &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.UserControllerTest.GetUserByIdOkStatusCode&lt;/TestId&gt;
+    &lt;TestId&gt;MSTest::C38AF2E5-7E1A-451B-9502-06795F4C7BBE::net8.0::TestWebApi.Controllers.UserControllerTest.GetUserByIdNotFoundStatusCode&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	
