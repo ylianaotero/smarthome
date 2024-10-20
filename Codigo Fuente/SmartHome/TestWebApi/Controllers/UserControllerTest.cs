@@ -185,6 +185,25 @@ public class UserControllerTest
         Assert.AreEqual(412, result.StatusCode);
     }
     
+    [TestMethod]
+    public void AddRoleToUserConflictStatusCode()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new ElementAlreadyExist(CannotFindUserMessage));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = HomeOwnerRole,
+        };
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as ConflictObjectResult;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(409, result.StatusCode);
+    }
+    
     private void SetupDefaultMock()
     {
         _userServiceMock = new Mock<IUserService>(MockBehavior.Strict);
