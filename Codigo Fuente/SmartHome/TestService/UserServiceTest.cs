@@ -338,11 +338,11 @@ public class UserServiceTest
     {
         _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
         
-        _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
+        User user = _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
         
         _mockUserRepository.Verify();
         
-        Assert.IsTrue(_user.Roles.Exists(r => r.Kind == _homeOwner.Kind));
+        Assert.IsTrue(user.Roles.Exists(r => r.Kind == _homeOwner.Kind));
     }
     
     [TestMethod]

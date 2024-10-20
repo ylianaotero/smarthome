@@ -73,7 +73,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         }
     }
 
-    public void AssignRoleToUser(long userId, string roleType)
+    public User AssignRoleToUser(long userId, string roleType)
     {
         User existingUser = GetUserById(userId);
         
@@ -84,6 +84,8 @@ public class UserService(IRepository<User> userRepository) : IUserService
         
         existingUser.Roles.Add(role);
         userRepository.Update(existingUser);
+        
+        return existingUser;
     }
   
     public Company AddOwnerToCompany(long id, Company company)
