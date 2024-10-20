@@ -138,6 +138,26 @@ public class UserControllerTest
     }
     
     [TestMethod]
+    public void AddRoleToUserOkResponse()
+    {
+        _userServiceMock
+            .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()));
+        _userController = new UserController(_userServiceMock.Object);
+        PostUserRoleRequest request = new PostUserRoleRequest
+        {
+            Role = HomeOwnerRole,
+        };
+        GetUserResponse expectedResponse = new GetUserResponse(_user_1_example);
+        
+        ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
+        GetUserResponse getUserResponse = result.Value as GetUserResponse;
+
+        _userServiceMock.Verify();
+
+        Assert.AreEqual(expectedResponse, getUserResponse);
+    }
+    
+    [TestMethod]
     public void AddRoleToUserNotFoundStatusCode()
     {
         _userServiceMock
