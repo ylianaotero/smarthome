@@ -217,4 +217,12 @@ public class DevicesTest
     {
         Assert.IsFalse(_securityCamera1.Equals(_securityCamera2));
     }
+
+    [TestMethod]
+    public void TestCreateMotionSensor()
+    {
+        MotionSensor motionSensor = new MotionSensor() {Id = 1};
+        
+        Assert.AreEqual(1, motionSensor.Id);
+    }
 }
