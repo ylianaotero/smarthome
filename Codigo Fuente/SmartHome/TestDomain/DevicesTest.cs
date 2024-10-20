@@ -229,10 +229,10 @@ public class DevicesTest
     [TestMethod]
     public void TestAddMotionDetectionFunctionalityToMotionSensor()
     {
-        List<MovementSensorFunctionality>? functionalities = new List<MovementSensorFunctionality> 
-            {MovementSensorFunctionality.MotionDetection};
+        List<MotionSensorFunctionality>? functionalities = new List<MotionSensorFunctionality> 
+            {MotionSensorrFunctionality.MotionDetection};
         
-        MovementSensor motionSensor = new MovementSensor();
+        MotionSensor motionSensor = new MotionSensor();
         motionSensor.Functionalities = functionalities;
         
         Assert.AreEqual(functionalities, motionSensor.Functionalities);
