@@ -238,6 +238,21 @@ public class UserControllerTest
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
+
+    [TestMethod]
+    public void GetUserByIdOkResponse()
+    {
+        _userServiceMock
+            .Setup(service => service.GetUserById(It.IsAny<long>()))
+            .Returns(_user_1_example);
+        _userController = new UserController(_userServiceMock.Object);
+        GetUserResponse expectedResponse = new GetUserResponse(_user_1_example);
+        
+        ObjectResult result = _userController.GetUser(_user_1_example.Id) as OkObjectResult;
+        GetUserResponse getUserResponse = result.Value as GetUserResponse;
+        
+        Assert.AreEqual(expectedResponse, getUserResponse);
+    }
     
     private void SetupDefaultMock()
     {
