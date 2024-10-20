@@ -16,7 +16,7 @@ public class UserController(IUserService userService) : ControllerBase
     private const string HomeOwnerRole = "HomeOwner";
 
     [HttpGet]
-    [RolesWithPermissions(AdministratorRole, HomeOwnerRole)]
+    [RolesWithPermissions(AdministratorRole)]
     public IActionResult GetUsers([FromQuery] GetUsersRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         GetUsersResponse getUsersResponse;
@@ -34,8 +34,19 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(getUsersResponse);
     }
     
+    [HttpGet]
+    [Route("{id}")]
+    [RolesWithPermissions(AdministratorRole)]
+    public IActionResult GetUser([FromRoute] long id)
+    {
+        userService.GetUserById(id);
+        return Ok("Ok");
+    }
+    
+    
     [HttpPost]
     [Route("{id}/roles")]
+    [RolesWithPermissions(AdministratorRole, HomeOwnerRole)]
     public IActionResult PostUserRole([FromRoute] long id, [FromBody] PostUserRoleRequest request)
     {
         try
