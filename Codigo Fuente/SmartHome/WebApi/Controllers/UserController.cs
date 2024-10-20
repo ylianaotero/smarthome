@@ -58,12 +58,11 @@ public class UserController(IUserService userService) : ControllerBase
     [RolesWithPermissions(AdministratorRole, HomeOwnerRole)]
     public IActionResult PostUserRole([FromRoute] long id, [FromBody] PostUserRoleRequest request)
     {
-        return Ok(new GetUserResponse(userService.AssignRoleToUser(id, request.Role)));
+        GetUserResponse getUserResponse;
+
         try
         {
-            userService.AssignRoleToUser(id, request.Role);
-        
-            return Ok("Ok");
+            getUserResponse = new GetUserResponse(userService.AssignRoleToUser(id, request.Role));
         }
         catch (ElementNotFound)
         {
@@ -81,5 +80,7 @@ public class UserController(IUserService userService) : ControllerBase
         {
             return Conflict(e.Message);
         }
+
+        return Ok(getUserResponse);
     }
 }
