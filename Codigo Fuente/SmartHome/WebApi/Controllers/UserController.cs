@@ -39,15 +39,18 @@ public class UserController(IUserService userService) : ControllerBase
     [RolesWithPermissions(AdministratorRole)]
     public IActionResult GetUser([FromRoute] long id)
     {
-        return Ok(new GetUserResponse(userService.GetUserById(id)));
+        GetUserResponse getUserResponse;
+        
         try
         {
-            userService.GetUserById(id);
+            getUserResponse = new GetUserResponse(userService.GetUserById(id));
         }
         catch (ElementNotFound e)
         {
             return NotFound(e.Message);
         }
+        
+        return Ok(getUserResponse);
     }
     
     [HttpPost]
