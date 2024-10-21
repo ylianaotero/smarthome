@@ -337,6 +337,19 @@ public class DevicesControllerTest
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostMotionSensorsNotFoundStatusCode()
+    {
+        PostMotionSensorRequest request = DefaultMotionSensorRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostMotionSensors(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         SetupDefaultAuxObjects();
