@@ -111,7 +111,14 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostSmartLamps([FromBody] PostSmartLampRequest request)
     {
-        deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        try
+        {
+            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(CompanyNotFoundMessage);
+        }
         
         return CreatedAtAction(nameof(PostSmartLamps), request);
     }
