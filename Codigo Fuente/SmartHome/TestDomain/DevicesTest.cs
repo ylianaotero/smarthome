@@ -294,4 +294,12 @@ public class DevicesTest
         
         Assert.AreEqual(functionalities, smartLamp.Functionalities);
     }
+    
+    [TestMethod]
+    public void TestAddKindToSmartLamp()
+    {
+        SmartLamp smartLamp = new SmartLamp() {Kind = "SmartLamp"};
+        
+        Assert.AreEqual("SmartLamp", smartLamp.Kind);
+    }
 }
