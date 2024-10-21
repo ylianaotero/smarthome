@@ -1,14 +1,12 @@
-using System.ComponentModel.DataAnnotations;
+using Domain.Abstract;
 using Domain.Enum;
 
 namespace Domain.Concrete;
 
-public class SmartLamp
+public class SmartLamp : Device
 {
-    [Key]
-    public long Id { get; set; }
     public List<SmartLampFunctionality>? Functionalities { get; set; }
-    public string Kind { get; set; }
+    public sealed override string Kind { get; set; }
     
     public SmartLamp()
     {
