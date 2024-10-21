@@ -1,11 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Domain.Concrete;
-
-public enum SmartLampFunctionality
-{
-    OnOff
-}
 
 public class SmartLamp
 {
