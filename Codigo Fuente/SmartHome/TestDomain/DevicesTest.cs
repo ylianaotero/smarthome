@@ -287,7 +287,7 @@ public class DevicesTest
     [TestMethod]
     public void TestAddOnOffFunctionalityToSmartLamp()
     {
-        functionalities = new List<SmartLampFunctionality> {SmartLampFunctionality.OnOff};
+        List<SmartLampFunctionality> functionalities = new List<SmartLampFunctionality> {SmartLampFunctionality.OnOff};
         
         SmartLamp smartLamp = new SmartLamp();
         smartLamp.Functionalities = functionalities;
