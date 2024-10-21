@@ -209,13 +209,13 @@ public class DevicesTest
     }
 
     [TestMethod]
-    public void TestDifferentiationOfWindowSensorsViaHardwardId()
+    public void TestDifferentiationOfWindowSensorsViaId()
     {
         Assert.IsFalse(_windowSensor1.Equals(_windowSensor2));
     }
     
     [TestMethod]
-    public void TestDifferentiationOfSecurityCamerasViaHardwardId()
+    public void TestDifferentiationOfSecurityCamerasViaId()
     {
         Assert.IsFalse(_securityCamera1.Equals(_securityCamera2));
     }
@@ -246,5 +246,33 @@ public class DevicesTest
         MotionSensor motionSensor = new MotionSensor() {Kind = MotionSensorType};
         
         Assert.AreEqual(MotionSensorType, motionSensor.Kind);
+    }
+    
+    [TestMethod]
+    public void TestMotionSensorEquals()
+    {
+        MotionSensor motionSensor1 = new MotionSensor()
+        {
+            Id = 1,
+            Name = "My Motion Sensor",
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<MotionSensorFunctionality>(){MotionSensorFunctionality.MotionDetection},
+            Company = _company
+        };
+        
+        MotionSensor motionSensor2 = new MotionSensor()
+        {
+            Id = 1,
+            Name = "My Motion Sensor",
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<MotionSensorFunctionality>(){MotionSensorFunctionality.MotionDetection},
+            Company = _company
+        };
+        
+        Assert.IsTrue(motionSensor1.Equals(motionSensor2));
     }
 }
