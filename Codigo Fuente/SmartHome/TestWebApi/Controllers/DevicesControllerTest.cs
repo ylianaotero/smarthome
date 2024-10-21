@@ -354,6 +354,15 @@ public class DevicesControllerTest
     public void TestPostSmartLampsCreatedStatusCode()
     {
         PostSmartLampRequest request = DefaultSmartLampRequest();
+        SmartLamp smartLamp = new SmartLamp()
+        {
+            Name = request.Name,
+            Model = request.Model,
+            PhotoURLs = request.PhotoUrls,
+            Description = request.Description,
+            Functionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff },
+            Company = _defaultCompany
+        };
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -364,7 +373,7 @@ public class DevicesControllerTest
         
         _mockICompanyService
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
-            .Returns(_defaultMotionSensor);
+            .Returns(smartLamp);
         
         ObjectResult? result = _deviceController.PostSmartLamps(request) as CreatedAtActionResult;
         
@@ -487,6 +496,19 @@ public class DevicesControllerTest
             PhotoUrls = _defaultMotionSensor.PhotoURLs,
             Description = _defaultMotionSensor.Description,
             Functionalities = _motionSensorFunctionalities.Select(func => func.ToString()).ToList(),
+            Company = _defaultCompany.Id,
+        };
+    }
+    
+    private PostSmartLampRequest DefaultSmartLampRequest()
+    {
+        return new PostSmartLampRequest()
+        {
+            Name = "My Smart Lamp",
+            Model = _defaultMotionSensor.Model,
+            PhotoUrls = _defaultMotionSensor.PhotoURLs,
+            Description = _defaultMotionSensor.Description,
+            Functionalities = new List<string>() {"OnOff"},
             Company = _defaultCompany.Id,
         };
     }

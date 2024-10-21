@@ -91,6 +91,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     
     [HttpPost]
     [Route("motion-sensors")]
+    [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostMotionSensors([FromBody] PostMotionSensorRequest request)
     {
         try
@@ -103,6 +104,16 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         }
         
         return CreatedAtAction(nameof(PostMotionSensors), request);
+    }
+    
+    [HttpPost]
+    [Route("motion-sensors")]
+    [RolesWithPermissions(RoleWithPermissions)]
+    public IActionResult PostSmartLamps([FromBody] PostSmartLampRequest request)
+    {
+        deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        
+        return CreatedAtAction(nameof(PostSmartLamps), request);
     }
     
     private GetDeviceTypesResponse GetDeviceTypesResponse(List<string> deviceTypes)
