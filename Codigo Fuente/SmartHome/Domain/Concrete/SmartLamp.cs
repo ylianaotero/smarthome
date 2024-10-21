@@ -8,8 +8,10 @@ public class SmartLamp
     [Key]
     public long Id { get; set; }
     public List<SmartLampFunctionality>? Functionalities { get; set; }
+    public string Kind { get; set; }
     
     public SmartLamp()
     {
+        Kind = GetType().Name;
     }
 }
