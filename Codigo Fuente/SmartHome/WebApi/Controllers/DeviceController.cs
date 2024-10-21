@@ -107,7 +107,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     }
     
     [HttpPost]
-    [Route("motion-sensors")]
+    [Route("smart-lamps")]
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult PostSmartLamps([FromBody] PostSmartLampRequest request)
     {
