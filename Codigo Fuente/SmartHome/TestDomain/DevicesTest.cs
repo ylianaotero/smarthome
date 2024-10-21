@@ -283,4 +283,15 @@ public class DevicesTest
         
         Assert.AreEqual(1, smartLamp.Id);
     }
+    
+    [TestMethod]
+    public void TestAddOnOffFunctionalityToSmartLamp()
+    {
+        functionalities = new List<SmartLampFunctionality> {SmartLampFunctionality.OnOff};
+        
+        SmartLamp smartLamp = new SmartLamp();
+        smartLamp.Functionalities = functionalities;
+        
+        Assert.AreEqual(functionalities, smartLamp.Functionalities);
+    }
 }
