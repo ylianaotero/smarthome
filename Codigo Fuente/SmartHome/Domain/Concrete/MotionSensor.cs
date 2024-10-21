@@ -3,19 +3,19 @@ using Domain.Enum;
 
 namespace Domain.Concrete;
 
-public class WindowSensor : Device
+public class MotionSensor : Device
 {
-    public List<WindowSensorFunctionality>? Functionalities { get; set; }
     public sealed override string Kind { get; set; }
-
-    public WindowSensor()
+    public List<MotionSensorFunctionality>? Functionalities { get; set; }
+    
+    public MotionSensor()
     {
         Kind = GetType().Name;
     }
-    
+
     public override bool Equals(object? obj)
     {
-        return obj is WindowSensor sensor &&
+        return obj is MotionSensor sensor &&
                Name == sensor.Name &&
                Model == sensor.Model &&
                Description == sensor.Description &&

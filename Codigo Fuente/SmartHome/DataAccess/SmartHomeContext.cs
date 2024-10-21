@@ -62,7 +62,9 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<Device>()
             .HasDiscriminator<string>("Kind")
             .HasValue<SecurityCamera>("SecurityCamera")
-            .HasValue<WindowSensor>("WindowSensor");
+            .HasValue<WindowSensor>("WindowSensor")
+            .HasValue<MotionSensor>("MotionSensor")
+            .HasValue<SmartLamp>("SmartLamp");
         
         modelBuilder.Entity<SecurityCamera>().ToTable("Devices").HasBaseType<Device>();
         modelBuilder.Entity<SecurityCamera>()
@@ -72,6 +74,16 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<WindowSensor>().ToTable("Devices").HasBaseType<Device>();
         modelBuilder.Entity<WindowSensor>()
             .Property(ws => ws.Functionalities)
+            .HasColumnName("Functionalities");
+        
+        modelBuilder.Entity<MotionSensor>().ToTable("Devices").HasBaseType<Device>();
+        modelBuilder.Entity<MotionSensor>()
+            .Property(ms => ms.Functionalities)
+            .HasColumnName("Functionalities");
+        
+        modelBuilder.Entity<SmartLamp>().ToTable("Devices").HasBaseType<Device>();
+        modelBuilder.Entity<SmartLamp>()
+            .Property(sl => sl.Functionalities)
             .HasColumnName("Functionalities");
     }
     

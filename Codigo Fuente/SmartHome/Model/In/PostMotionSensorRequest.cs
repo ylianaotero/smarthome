@@ -3,7 +3,7 @@ using Domain.Enum;
 
 namespace Model.In;
 
-public class PostWindowSensorRequest
+public class PostMotionSensorRequest
 {
     public string Name { get; set; }
     public long Model { get; set; }
@@ -12,9 +12,9 @@ public class PostWindowSensorRequest
     public List<string>? Functionalities { get; set; }
     public long Company { get; set; }
     
-    public WindowSensor ToEntity() 
+    public MotionSensor ToEntity() 
     {
-        return new WindowSensor() 
+        return new MotionSensor() 
         {
             Name = this.Name,
             Model = this.Model,
@@ -24,9 +24,9 @@ public class PostWindowSensorRequest
         };
     }
     
-    private List<WindowSensorFunctionality> GetFunctionalities()
+    private List<MotionSensorFunctionality> GetFunctionalities()
     {
-        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality>();
+        List<MotionSensorFunctionality> functionalities = new List<MotionSensorFunctionality>();
         
         if (this.Functionalities == null)
         {
@@ -35,11 +35,11 @@ public class PostWindowSensorRequest
         
         foreach (var functionality in this.Functionalities)
         {
-            foreach (var func in Enum.GetValues(typeof(WindowSensorFunctionality)))
+            foreach (var func in Enum.GetValues(typeof(MotionSensorFunctionality)))
             {
                 if (func.ToString().ToLower() == functionality.ToLower().Replace(" ", ""))
                 {
-                    functionalities.Add((WindowSensorFunctionality)func);
+                    functionalities.Add((MotionSensorFunctionality)func);
                     break;
                 }
             }

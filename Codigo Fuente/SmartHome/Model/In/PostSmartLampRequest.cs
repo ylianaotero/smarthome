@@ -3,7 +3,7 @@ using Domain.Enum;
 
 namespace Model.In;
 
-public class PostWindowSensorRequest
+public class PostSmartLampRequest
 {
     public string Name { get; set; }
     public long Model { get; set; }
@@ -12,9 +12,9 @@ public class PostWindowSensorRequest
     public List<string>? Functionalities { get; set; }
     public long Company { get; set; }
     
-    public WindowSensor ToEntity() 
+    public SmartLamp ToEntity() 
     {
-        return new WindowSensor() 
+        return new SmartLamp() 
         {
             Name = this.Name,
             Model = this.Model,
@@ -24,9 +24,9 @@ public class PostWindowSensorRequest
         };
     }
     
-    private List<WindowSensorFunctionality> GetFunctionalities()
+    private List<SmartLampFunctionality> GetFunctionalities()
     {
-        List<WindowSensorFunctionality> functionalities = new List<WindowSensorFunctionality>();
+        List<SmartLampFunctionality> functionalities = new List<SmartLampFunctionality>();
         
         if (this.Functionalities == null)
         {
@@ -35,11 +35,11 @@ public class PostWindowSensorRequest
         
         foreach (var functionality in this.Functionalities)
         {
-            foreach (var func in Enum.GetValues(typeof(WindowSensorFunctionality)))
+            foreach (var func in Enum.GetValues(typeof(SmartLampFunctionality)))
             {
                 if (func.ToString().ToLower() == functionality.ToLower().Replace(" ", ""))
                 {
-                    functionalities.Add((WindowSensorFunctionality)func);
+                    functionalities.Add((SmartLampFunctionality)func);
                     break;
                 }
             }

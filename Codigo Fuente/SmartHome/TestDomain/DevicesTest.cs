@@ -1,4 +1,5 @@
 using Domain.Concrete;
+using Domain.Enum;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace TestDomain;
@@ -15,15 +16,21 @@ public class DevicesTest
     private Company _company;
     private List<SecurityCameraFunctionality> _cameraFunctionalities;
     private List<WindowSensorFunctionality> _windowSensorfunctionalities;
+    private List<MotionSensorFunctionality> _motionSensorFunctionalities;
+    private List<SmartLampFunctionality> _smartLampFunctionalities;
     
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
+    private const string MotionSensorName = "My Motion Sensor";
+    private const string SmartLampName = "My Smart Lamp";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
     
     private const string WindowSensorType = "WindowSensor";
     private const string SecurityCameraType = "SecurityCamera";
+    private const string MotionSensorType = "MotionSensor";
+    private const string SmartLampType = "SmartLamp";
     
     [TestInitialize]
     public void TestInitialize()
@@ -31,6 +38,8 @@ public class DevicesTest
         _company = new Company();
         _windowSensorfunctionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
         _cameraFunctionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
+        _motionSensorFunctionalities = new List<MotionSensorFunctionality> {MotionSensorFunctionality.MotionDetection};
+        _smartLampFunctionalities = new List<SmartLampFunctionality> {SmartLampFunctionality.OnOff};
 
         InitializeDevices();
     }
@@ -207,14 +216,120 @@ public class DevicesTest
     }
 
     [TestMethod]
-    public void TestDifferentiationOfWindowSensorsViaHardwardId()
+    public void TestDifferentiationOfWindowSensorsViaId()
     {
         Assert.IsFalse(_windowSensor1.Equals(_windowSensor2));
     }
     
     [TestMethod]
-    public void TestDifferentiationOfSecurityCamerasViaHardwardId()
+    public void TestDifferentiationOfSecurityCamerasViaId()
     {
         Assert.IsFalse(_securityCamera1.Equals(_securityCamera2));
+    }
+
+    [TestMethod]
+    public void TestCreateMotionSensor()
+    {
+        MotionSensor motionSensor = new MotionSensor() {Id = 1};
+        
+        Assert.AreEqual(1, motionSensor.Id);
+    }
+    
+    [TestMethod]
+    public void TestAddMotionDetectionFunctionalityToMotionSensor()
+    {
+        MotionSensor motionSensor = new MotionSensor();
+        motionSensor.Functionalities = _motionSensorFunctionalities;
+        
+        Assert.AreEqual(_motionSensorFunctionalities, motionSensor.Functionalities);
+    }
+    
+    [TestMethod]
+    public void TestAddKindToMotionSensor()
+    {
+        MotionSensor motionSensor = new MotionSensor() {Kind = MotionSensorType};
+        
+        Assert.AreEqual(MotionSensorType, motionSensor.Kind);
+    }
+    
+    [TestMethod]
+    public void TestMotionSensorEquals()
+    {
+        MotionSensor motionSensor1 = new MotionSensor()
+        {
+            Id = 1,
+            Name = MotionSensorName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _motionSensorFunctionalities,
+            Company = _company
+        };
+        
+        MotionSensor motionSensor2 = new MotionSensor()
+        {
+            Id = 1,
+            Name = MotionSensorName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _motionSensorFunctionalities,
+            Company = _company
+        };
+        
+        Assert.IsTrue(motionSensor1.Equals(motionSensor2));
+    }
+    
+    [TestMethod]
+    public void TestCreateSmartLamp()
+    {
+        SmartLamp smartLamp = new SmartLamp() {Id = 1};
+        
+        Assert.AreEqual(1, smartLamp.Id);
+    }
+    
+    [TestMethod]
+    public void TestAddOnOffFunctionalityToSmartLamp()
+    {
+        SmartLamp smartLamp = new SmartLamp();
+        smartLamp.Functionalities = _smartLampFunctionalities;
+        
+        Assert.AreEqual(_smartLampFunctionalities, smartLamp.Functionalities);
+    }
+    
+    [TestMethod]
+    public void TestAddKindToSmartLamp()
+    {
+        SmartLamp smartLamp = new SmartLamp() {Kind = SmartLampType};
+        
+        Assert.AreEqual(SmartLampType, smartLamp.Kind);
+    }
+    
+    [TestMethod]
+    public void TestSmartLampEquals()
+    {
+        SmartLamp smartLamp1 = new SmartLamp()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _smartLampFunctionalities,
+            Company = _company
+        };
+        
+        SmartLamp smartLamp2 = new SmartLamp()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = _smartLampFunctionalities,
+            Company = _company
+        };
+        
+        Assert.IsTrue(smartLamp1.Equals(smartLamp2));
     }
 }
