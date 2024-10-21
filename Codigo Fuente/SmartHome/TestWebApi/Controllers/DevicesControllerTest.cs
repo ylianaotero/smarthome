@@ -19,6 +19,7 @@ public class DevicesControllerTest
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
     private MotionSensor _defaultMotionSensor;
+    private SmartLamp _defaultSmartLamp;
     private DeviceController _deviceController;
     private Mock<IDeviceService> _mockIDeviceService;
     private Mock<ICompanyService> _mockICompanyService;
@@ -28,21 +29,24 @@ public class DevicesControllerTest
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string MotionSensorName = "My Motion Sensor";
+    private const string SmartLampName = "My Smart Lamp";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const string CompanyName = "IoT DeviceUnits & Co.";
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
     private const string MotionSensorType = "MotionSensor";
+    private const string SmartLampType = "SmartLamp";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
     private const string CompanyNotFoundExceptionMessage = "Company not found";
     
+    private LocationType _locationType;
     private List<Device> _devices;
     private List<string> _deviceTypes;
     private List<string> _photos;
-    private LocationType _locationType;
     private List<SecurityCameraFunctionality> _securityCameraFunctionalities;
     private List<WindowSensorFunctionality> _windowSensorFunctionalities;
     private List<MotionSensorFunctionality> _motionSensorFunctionalities;
+    private List<SmartLampFunctionality> _smartLampFunctionalities;
     
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
@@ -354,15 +358,6 @@ public class DevicesControllerTest
     public void TestPostSmartLampsCreatedStatusCode()
     {
         PostSmartLampRequest request = DefaultSmartLampRequest();
-        SmartLamp smartLamp = new SmartLamp()
-        {
-            Name = request.Name,
-            Model = request.Model,
-            PhotoURLs = request.PhotoUrls,
-            Description = request.Description,
-            Functionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff },
-            Company = _defaultCompany
-        };
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -373,7 +368,7 @@ public class DevicesControllerTest
         
         _mockICompanyService
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
-            .Returns(smartLamp);
+            .Returns(_defaultSmartLamp);
         
         ObjectResult? result = _deviceController.PostSmartLamps(request) as CreatedAtActionResult;
         
@@ -396,14 +391,16 @@ public class DevicesControllerTest
         [
             _defaultCamera,
             _defaultWindowSensor,
-            _defaultMotionSensor
+            _defaultMotionSensor,
+            _defaultSmartLamp
         ];
         
         _deviceTypes =
         [
             SecurityCameraType,
             WindowSensorType,
-            MotionSensorType
+            MotionSensorType,
+            SmartLampType
         ];
     }
 
@@ -418,6 +415,7 @@ public class DevicesControllerTest
         _motionSensorFunctionalities = new List<MotionSensorFunctionality>() { MotionSensorFunctionality.MotionDetection };
         _windowSensorFunctionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed };
         _securityCameraFunctionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.HumanDetection };
+        _smartLampFunctionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff };
         _locationType = LocationType.Indoor;
     }
 
@@ -449,6 +447,14 @@ public class DevicesControllerTest
             PhotoURLs = _photos,
             Company = _defaultCompany,
             Functionalities = _motionSensorFunctionalities
+        };
+        _defaultSmartLamp = new SmartLamp()
+        {
+            Name =  SmartLampName,
+            Model = DeviceModel,
+            PhotoURLs = _photos,
+            Company = _defaultCompany,
+            Functionalities = _smartLampFunctionalities
         };
     }
 
@@ -504,11 +510,11 @@ public class DevicesControllerTest
     {
         return new PostSmartLampRequest()
         {
-            Name = "My Smart Lamp",
+            Name = SmartLampName,
             Model = _defaultMotionSensor.Model,
             PhotoUrls = _defaultMotionSensor.PhotoURLs,
             Description = _defaultMotionSensor.Description,
-            Functionalities = new List<string>() {"OnOff"},
+            Functionalities = _smartLampFunctionalities.Select(func => func.ToString()).ToList(),
             Company = _defaultCompany.Id,
         };
     }
@@ -529,7 +535,8 @@ public class DevicesControllerTest
         [
             _defaultCamera,
             _defaultWindowSensor,
-            _defaultMotionSensor
+            _defaultMotionSensor,
+            _defaultSmartLamp
         ];
 
         return new GetDevicesResponse(devices);
