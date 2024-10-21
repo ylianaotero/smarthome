@@ -302,4 +302,32 @@ public class DevicesTest
         
         Assert.AreEqual("SmartLamp", smartLamp.Kind);
     }
+    
+    [TestMethod]
+    public void TestSmartLampEquals()
+    {
+        SmartLamp smartLamp1 = new SmartLamp()
+        {
+            Id = 1,
+            Name = "My Smart Lamp",
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SmartLampFunctionality> {SmartLampFunctionality.OnOff},
+            Company = _company
+        };
+        
+        SmartLamp smartLamp2 = new SmartLamp()
+        {
+            Id = 1,
+            Name = "My Smart Lamp",
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SmartLampFunctionality> {SmartLampFunctionality.OnOff},
+            Company = _company
+        };
+        
+        Assert.IsTrue(smartLamp1.Equals(smartLamp2));
+    }
 }
