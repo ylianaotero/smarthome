@@ -350,6 +350,34 @@ public class DevicesControllerTest
         Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostSmartLampsCreatedStatusCode()
+    {
+        PostSmartLampRequest request = DefaultSmartLampRequest();
+        _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company 
+        )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultMotionSensor);
+        
+        ObjectResult? result = _deviceController.PostSmartLamps(request) as CreatedAtActionResult;
+        
+        _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company
+        )), Times.Once);
+        Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         SetupDefaultAuxObjects();
