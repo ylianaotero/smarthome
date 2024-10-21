@@ -275,4 +275,12 @@ public class DevicesTest
         
         Assert.IsTrue(motionSensor1.Equals(motionSensor2));
     }
+    
+    [TestMethod]
+    public void TestCreateSmartLamp()
+    {
+        SmartLamp smartLamp = new SmartLamp() {Id = 1};
+        
+        Assert.AreEqual(1, smartLamp.Id);
+    }
 }
