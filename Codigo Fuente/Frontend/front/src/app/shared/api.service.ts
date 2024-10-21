@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { sessionModel, sessionRequest } from '../logIn/sessionModel';
 import {userRegistrationModel, userRegistrationInstance, userRetrieveModel} from '../signUpHomeOwner/signUpUserModel';
-import {home} from '../homesOfHomeOwner/homeModels';
+import {home, addMemberRequest, addMemberToHomeRequest, member} from '../homesOfHomeOwner/homeModels';
 import {createHomeModel, homeRetrieveModel} from '../createHome/createHomeModel';
 import {tap} from 'rxjs';
 
@@ -48,5 +48,13 @@ export class ApiService {
 
   getHomesOfHomeOwner() {
     return this.httpClient.get<home[]>(this.url + '/homes' + '?HomeOwnerId=' + this.currentSession?.user.id.toString(), { headers: { 'Authorization': `${this.currentSession?.token}` } });
+  }
+
+  postMemberToHome(data: addMemberRequest){
+    return this.httpClient.post(this.url + '/homes/' + data.id.toString() + '/members', new addMemberToHomeRequest(data.email,data.hasPermissionToListDevices,data.hasPermissionToAddDevice,data.recivesNotifications), { headers: { 'Authorization': `${this.currentSession?.token}` } });
+  }
+
+  getMembersOfHome(data: number){
+    return this.httpClient.get<member[]>(this.url + '/homes/' + data.toString() + '/members', { headers: { 'Authorization': `${this.currentSession?.token}` } });
   }
 }

@@ -151,6 +151,16 @@ Thumbs.db
 
 ../Frontend/front/node_modules/
 
+# Ignorar carpetas de Angular y dist
+../Frontend/front/.angular/
+../Frontend/front/dist/
+
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos de configuración de npm
+package-lock.json
+package.json
 
 
 
