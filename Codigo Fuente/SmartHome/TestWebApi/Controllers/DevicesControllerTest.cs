@@ -2,6 +2,7 @@ using CustomExceptions;
 using IBusinessLogic;
 using Domain.Abstract;
 using Domain.Concrete;
+using Domain.Enum;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -304,13 +305,22 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostMotionSensorsCreatedStatusCode()
     {
-        PostMotionSensorRequest request = new PostMotionSensorRequest()
+        MotionSensor defaultMotionSensor = new MotionSensor()
         {
             Name = "My Motion Sensor",
             Model = 1345354616346,
-            PhotoUrls = new List<string>() { "https://example.com/photo.jpg" },
+            PhotoURLs = new List<string>() { "https://example.com/photo.jpg" },
             Description = "My Motion Sensor Description",
-            Company = 1,
+            Company = _defaultCompany,
+            Functionalities = new List<MotionSensorFunctionality>() { MotionSensorFunctionality.MotionDetection }
+        };
+        PostMotionSensorRequest request = new PostMotionSensorRequest()
+        {
+            Name = defaultMotionSensor.Name,
+            Model = defaultMotionSensor.Model,
+            PhotoUrls = defaultMotionSensor.PhotoURLs,
+            Description = defaultMotionSensor.Description,
+            Company = _defaultCompany.Id,
             Functionalities = new List<string>() {"MotionDetection"}
         };
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
@@ -323,7 +333,7 @@ public class DevicesControllerTest
         
         _mockICompanyService
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
-            .Returns(_defaultWindowSensor);
+            .Returns(defaultMotionSensor);
         
         ObjectResult? result = _deviceController.PostMotionSensors(request) as CreatedAtActionResult;
         
