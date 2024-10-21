@@ -9,7 +9,6 @@ public class MotionSensor : Device
     [Key]
     public long Id { get; set; }
     public sealed override string Kind { get; set; }
-    
     public List<MotionSensorFunctionality>? Functionalities { get; set; }
     
     public MotionSensor()
