@@ -13,17 +13,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45d2be1b-ae03-4c01-862e-48f788af3fc8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Frontend/front/src/app/createHome/createHome.component.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Frontend/front/src/app/createHome/createHome.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Frontend/front/src/app/createHome/createHome.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Frontend/front/src/app/createHome/createHomeModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/account/account.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/account/account.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/account/account.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/account/account.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/account/account.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/account/account.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/app-routing.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/app.routes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/homePage/homePage.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/homePage/homePage.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/homePage/homePage.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/homePage/homePage.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/homePage/homePage.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/homePage/homePage.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logIn.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logIn.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logIn.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logIn.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logIn.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logIn.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logInUserModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/logInUserModel.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/sessionModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/logIn/sessionModel.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/shared/api.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/shared/api.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpHomeOwner.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpHomeOwner.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpHomeOwner.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpHomeOwner.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpHomeOwner.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpHomeOwner.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpUserModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/front/src/app/signUpHomeOwner/signUpUserModel.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmartHome/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Out/LoginResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Model/Out/LoginResponse.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +49,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Symbols/src/dotnet/aspnetcore/954f61dd38b33caa2b736c73530bd5a294174437/src/Mvc/Mvc.Core/src/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Frontend/front/package-lock.json" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BusinessLogic/HomeService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DataAccess/SmartHomeContext.cs" root0="FORCE_HIGHLIGHTING" />
@@ -234,6 +247,9 @@
       <workItem from="1728411306730" duration="10997000" />
       <workItem from="1728427042813" duration="324000" />
       <workItem from="1729272710191" duration="20228000" />
+      <workItem from="1729304589349" duration="9349000" />
+      <workItem from="1729356846688" duration="3920000" />
+      <workItem from="1729463468210" duration="6272000" />
     </task>
     <servers />
   </component>
