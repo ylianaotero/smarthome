@@ -382,6 +382,19 @@ public class DevicesControllerTest
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
     
+    [TestMethod]
+    public void TestSmartLampsSensorsNotFoundStatusCode()
+    {
+        PostSmartLampRequest request = DefaultSmartLampRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostSmartLamps(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         SetupDefaultAuxObjects();
