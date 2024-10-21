@@ -301,6 +301,42 @@ public class DevicesControllerTest
         Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostMotionSensorsCreatedStatusCode()
+    {
+        PostMotionSensorRequest request = new PostMotionSensorRequest()
+        {
+            Name = "My Motion Sensor",
+            Model = 1345354616346,
+            PhotoUrls = new List<string>() { "https://example.com/photo.jpg" },
+            Description = "My Motion Sensor Description",
+            Company = 1,
+            Functionalities = new List<string>() {"MotionDetection"}
+        };
+        _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company 
+        )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultWindowSensor);
+        
+        ObjectResult? result = _deviceController.PostMotionSensors(request) as CreatedAtActionResult;
+        
+        _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company
+        )), Times.Once);
+        Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
         List<string> photos =
