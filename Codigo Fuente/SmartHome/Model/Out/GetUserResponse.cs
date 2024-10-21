@@ -10,6 +10,8 @@ public class GetUserResponse
     public string FullName { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<Role> Roles { get; set; }
+    
+    public long Id { get; set; }
 
     public GetUserResponse(User user)
     {
@@ -18,6 +20,7 @@ public class GetUserResponse
         FullName = user.Name + " " + user.Surname;
         CreatedAt = user.CreatedAt; 
         Roles =  LoadRolesList(user.Roles);
+        Id = user.Id; 
     }
     
     public override bool Equals(object? obj)

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Homes of Home Owner</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome para los iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <!-- Vincular el archivo CSS -->
+  <link rel="stylesheet" href="homesOfHomeOwner.component.css">
+</head>
+<body>
+
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Lista de mis hogares</h1> <!-- Título agregado -->
+
+  <div class="row">
+    <!-- Comprobar si hay casas -->
+    <div *ngIf="homes.length > 0; else noHomes">
+      <div class="row">
+        <!-- Iterar sobre las casas y mostrarlas en tarjetas (Bootstrap cards) -->
+        <div class="col-md-6 mb-4" *ngFor="let home of homes"> <!-- Cambiado a col-md-6 -->
+          <div class="card shadow-sm d-flex flex-column h-100"> <!-- Flexbox para llenar el espacio -->
+            <div class="card-body flex-grow-1">
+              <h5 class="card-title">Home ID: {{ home.id }}</h5>
+              <p class="card-text">Dirección: {{ home.street }}</p>
+              <p class="card-text">Número de Puerta: {{ home.doorNumber }}</p>
+              <!-- Botones -->
+              <div class="mt-auto"> <!-- Asegura que los botones se mantengan en la parte inferior -->
+                <button class="btn btn-primary btn-block mb-2">
+                  <i class="fas fa-user-plus"></i> Agregar Miembro
+                </button>
+                <button class="btn btn-secondary btn-block mb-2">
+                  <i class="fas fa-plug"></i> Asociar Dispositivo
+                </button>
+                <button class="btn btn-info btn-block mb-2">
+                  <i class="fas fa-users"></i> Listar Miembros
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Si no hay casas, mostrar un mensaje -->
+    <ng-template #noHomes>
+      <p class="text-center">No se encontraron casas para este propietario.</p>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+

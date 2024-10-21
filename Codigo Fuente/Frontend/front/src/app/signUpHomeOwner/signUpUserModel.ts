@@ -1,35 +1,33 @@
 export interface userRegistrationModel {
   name: string;
   email: string;
-  address: string;
+  surname: string;
   password: string;
+  photo: string;
 }
 
 export class userRegistrationInstance implements userRegistrationModel {
   name: string;
   email: string;
-  address: string;
   password: string;
-  constructor() {
-    this.name = "";
-    this.email = "";
-    this.address = "";
-    this.password = "";
+  surname: string;
+  photo: string;
+
+  constructor(name: string, email: string, password: string, surname: string , photo : string ){
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.surname = surname;
+    this.photo = photo;
   }
 }
 
-export interface userModel{
-  id: string;
-  name: string;
-  email: string;
-  address: string;
-  password: string;
-}
 
 export interface userRetrieveModel{
-  guid: string;
   name: string;
   email: string;
-  address: string;
+  surname: string;
+  photo: string;
   roles: string[];
+  id: number;
 }

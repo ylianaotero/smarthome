@@ -4,6 +4,7 @@ namespace Model.Out;
 
 public class GetHomeResponse
 {
+    public long Id { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
@@ -15,6 +16,8 @@ public class GetHomeResponse
         DoorNumber = home.DoorNumber;
         Latitude = home.Latitude;
         Longitude = home.Longitude;
+        Id = home.Id; 
+
     }
     public override bool Equals(object? obj)
     {
