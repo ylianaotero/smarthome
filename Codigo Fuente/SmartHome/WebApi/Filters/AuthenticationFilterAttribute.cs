@@ -8,7 +8,7 @@ using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymou
 
 namespace WebApi.Filters
 {
-    public class AuthenticationFilter : Attribute, IAuthorizationFilter
+    public class AuthenticationFilterAttribute : Attribute, IAuthorizationFilter
     {
         private const string MissingHeaderMessage = "Authorization header is needed";
         private const string InvalidTokenMessage = "Invalid token format";
@@ -39,7 +39,7 @@ namespace WebApi.Filters
             }
         }
         
-        private bool HandleAnnonymousAttribute(AuthorizationFilterContext context)
+        private static bool HandleAnnonymousAttribute(AuthorizationFilterContext context)
         {
             AllowAnonymousAttribute? allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<AllowAnonymousAttribute>()
@@ -77,8 +77,6 @@ namespace WebApi.Filters
         
         private bool HandleRolesWithPermissionsAttribute(AuthorizationFilterContext context, Guid uppercaseToken)
         {
-            ISessionService sessionService = GetSessionService(context);
-            
             RolesWithPermissionsAttribute? rolesWithPermissionsAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<RolesWithPermissionsAttribute>()
                 .FirstOrDefault();
@@ -97,7 +95,7 @@ namespace WebApi.Filters
             ISessionService sessionService = GetSessionService(context);
             
             bool correctUser = attribute.RolesWithPermissions
-                .Any(role => sessionService.UserHasCorrectRole(token, role));
+                .Exists(role => sessionService.UserHasCorrectRole(token, role));
 
             if (correctUser) return true;
             
@@ -177,12 +175,12 @@ namespace WebApi.Filters
             return true;
         }
 
-        private ISessionService GetSessionService(AuthorizationFilterContext context)
+        private static ISessionService GetSessionService(AuthorizationFilterContext context)
         {
             return context.HttpContext.RequestServices.GetService(typeof(ISessionService)) as ISessionService;
         }
         
-        private IHomeService GetHomeService(AuthorizationFilterContext context)
+        private static IHomeService GetHomeService(AuthorizationFilterContext context)
         {
             return context.HttpContext.RequestServices.GetService(typeof(IHomeService)) as IHomeService;
         }

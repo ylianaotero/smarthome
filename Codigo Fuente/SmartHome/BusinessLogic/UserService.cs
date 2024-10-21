@@ -1,4 +1,5 @@
 using CustomExceptions;
+using Domain.Abstract;
 using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
@@ -9,8 +10,10 @@ public class UserService(IRepository<User> userRepository) : IUserService
 {
     private const string UserDoesNotExistExceptionMessage = "Member not found";
     private const string UserAlreadyExistExceptionMessage = "Member already exists";
-
-    private IUserService _userServiceImplementation;
+    private const string RoleNotAssignableExceptionMessage = "Role cannot be assigned to an existing user";
+    private const string UserAlreadyHasRoleExceptionMessage = "User already has the role";
+    
+    private readonly List<string> _assignableRoles = ["homeowner"];
 
     public void CreateUser(User user)
     {
@@ -30,11 +33,22 @@ public class UserService(IRepository<User> userRepository) : IUserService
     {
         return userRepository.GetByFilter(filter, pageData);
     }
+    
+    public User GetUserById(long id)
+    {
+        User user = userRepository.GetById(id); 
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        return user; 
+    }
 
     public bool IsAdmin(string email)
     {
         User existingUser =  GetBy(u => u.Email == email, PageData.Default);
-        bool hasAdministrator = existingUser.Roles.Any(role => role is Administrator);
+        bool hasAdministrator = existingUser.Roles.Exists(role => role is Administrator);
         
         return hasAdministrator; 
     }
@@ -58,7 +72,22 @@ public class UserService(IRepository<User> userRepository) : IUserService
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
     }
-    
+
+    public User AssignRoleToUser(long userId, string roleType)
+    {
+        User existingUser = GetUserById(userId);
+        
+        Role role = RoleFactory.CreateRole(roleType);
+        
+        VerifyRoleIsAssignable(roleType);
+        VerifyUserDoesNotHaveRoleAlready(existingUser, roleType);
+        
+        existingUser.Roles.Add(role);
+        userRepository.Update(existingUser);
+        
+        return existingUser;
+    }
+  
     public Company AddOwnerToCompany(long id, Company company)
     {
         User user = GetUserById(id);
@@ -77,7 +106,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         
         throw new ElementNotFound(UserDoesNotExistExceptionMessage);
     }
-    
+
     public bool CompanyOwnerIsComplete(long id)
     {
         User existingUser =  GetUserById(id);
@@ -107,18 +136,23 @@ public class UserService(IRepository<User> userRepository) : IUserService
         return user; 
     }
     
-    private User GetUserById(long Id)
+    private void VerifyRoleIsAssignable(string role)
     {
-        User user = userRepository.GetById(Id); 
-        if (user == null)
+        if (!_assignableRoles.Contains(role.ToLower()))
         {
-            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+            throw new CannotAddItem(RoleNotAssignableExceptionMessage);
         }
-
-        return user; 
     }
     
-    private List<CompanyOwner> GetCompanyOwnerRoles(User user)
+    private static void VerifyUserDoesNotHaveRoleAlready(User user, string role)
+    {
+        if (user.Roles.Exists(r => r.Kind.ToLower() == role.ToLower()))
+        {
+            throw new ElementAlreadyExist(UserAlreadyHasRoleExceptionMessage);
+        }
+    }
+    
+    private static List<CompanyOwner> GetCompanyOwnerRoles(User user)
     {
         return user.Roles
             .Where(role => role is CompanyOwner)
@@ -126,10 +160,10 @@ public class UserService(IRepository<User> userRepository) : IUserService
             .ToList();
     }
 
-    private CompanyOwner SearchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
+    private static CompanyOwner SearchAnIncompleteCompanyOwnerRole(List<CompanyOwner> companyOwnerRoles)
     {
         CompanyOwner incompleteRole = companyOwnerRoles
-            .FirstOrDefault(role => role.HasACompleteCompany == false);  
+            .Find(role => !role.HasACompleteCompany);  
 
         return incompleteRole;
     }
