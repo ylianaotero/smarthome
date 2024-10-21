@@ -1,0 +1,141 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+}
+
+p {
+  text-align: center;
+  margin: 0;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #6c5ce7;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.link-button:hover {
+  text-decoration: none;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #74b9ff, #a29bfe);
+  z-index: -1;
+}
+
+.signup-container {
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  margin: 20px;
+  box-sizing: border-box;
+}
+
+
+.back-btn {
+  top: 0px;
+  left: 0px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #333;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.back-btn:hover {
+  color: #6200ea;
+}
+
+.back-btn i {
+  font-size: 1.5rem;
+}
+
+.signup-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.signup-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #6c5ce7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-btn:hover {
+  background-color: #4b4edb;
+}
+
+.signup-container p {
+  margin-top: 10px;
+  color: #666;
+}
+
+.signup-container a {
+  color: #6c5ce7;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-container a:hover {
+  text-decoration: underline;
+}

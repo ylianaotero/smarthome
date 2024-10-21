@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creación de Hogares</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="./createHome.component.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-body">
+      <div class="back-button">
+        <button (click)="goHome()" class="btn btn-white">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+      </div>
+      <h1 class="text-center text-primary">Creación de Hogares</h1>
+      <form id="create-home-form" (ngSubmit)="registerHome(streetValue, doorNumberValue, latitudeValue, longitudeValue, maximumMembersValue)" #homeForm="ngForm">
+        <div class="form-group">
+          <label for="street">Calle Principal:</label>
+          <input
+            type="text" class="form-control" id="street" name="street" #street="ngModel" [(ngModel)]="streetValue" placeholder="Ingresa la calle">
+        </div>
+        <div class="form-group">
+          <label for="door-number">Número de Puerta:</label>
+          <input type="number" class="form-control" id="door-number" name="door-number" #doorNumber="ngModel" [(ngModel)]="doorNumberValue" min="0">
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latitud:</label>
+          <input type="number" class="form-control" id="latitude" name="latitude" step="0.000001" #latitude="ngModel" [(ngModel)]="latitudeValue">
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitud:</label>
+          <input type="number" class="form-control" id="longitude" name="longitude" step="0.000001" #longitude="ngModel" [(ngModel)]="longitudeValue">
+        </div>
+        <div class="form-group">
+          <label for="maximum-members">Número de Miembros:</label>
+          <input type="number" class="form-control" id="maximum-members" name="maximum-members" #maximumMembers="ngModel" [(ngModel)]="maximumMembersValue" placeholder="Ingresa el maximo de miembros" min="1">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="homeForm.invalid">Registrar Hogar</button>
+        <br>
+      </form>
+      <p class="feedback" [ngClass]="{'feedback-error': feedback === 'Por favor, completa todos los campos obligatorios.', 'feedback-success': feedback !== 'Por favor, completa todos los campos obligatorios.' && feedback !== ''}">
+        {{ feedback }}
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
