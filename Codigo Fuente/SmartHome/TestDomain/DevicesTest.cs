@@ -25,6 +25,7 @@ public class DevicesTest
     
     private const string WindowSensorType = "WindowSensor";
     private const string SecurityCameraType = "SecurityCamera";
+    private const string MotionSensorType = "MotionSensor";
     
     [TestInitialize]
     public void TestInitialize()
@@ -237,5 +238,13 @@ public class DevicesTest
         motionSensor.Functionalities = functionalities;
         
         Assert.AreEqual(functionalities, motionSensor.Functionalities);
+    }
+    
+    [TestMethod]
+    public void TestAddKindToMotionSensor()
+    {
+        MotionSensor motionSensor = new MotionSensor() {Kind = MotionSensorType};
+        
+        Assert.AreEqual(MotionSensorType, motionSensor.Kind);
     }
 }
