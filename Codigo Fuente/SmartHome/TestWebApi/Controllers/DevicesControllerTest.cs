@@ -18,6 +18,7 @@ public class DevicesControllerTest
     private Company _defaultCompany;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
+    private MotionSensor _defaultMotionSensor;
     private DeviceController _deviceController;
     private Mock<IDeviceService> _mockIDeviceService;
     private Mock<ICompanyService> _mockICompanyService;
@@ -26,15 +27,22 @@ public class DevicesControllerTest
     private const long DeviceModel = 1345354616346;
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
+    private const string MotionSensorName = "My Motion Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const string CompanyName = "IoT DeviceUnits & Co.";
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
+    private const string MotionSensorType = "MotionSensor";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
     private const string CompanyNotFoundExceptionMessage = "Company not found";
     
     private List<Device> _devices;
     private List<string> _deviceTypes;
+    private List<string> _photos;
+    private LocationType _locationType;
+    private List<SecurityCameraFunctionality> _securityCameraFunctionalities;
+    private List<WindowSensorFunctionality> _windowSensorFunctionalities;
+    private List<MotionSensorFunctionality> _motionSensorFunctionalities;
     
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
@@ -305,24 +313,7 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestPostMotionSensorsCreatedStatusCode()
     {
-        MotionSensor defaultMotionSensor = new MotionSensor()
-        {
-            Name = "My Motion Sensor",
-            Model = 1345354616346,
-            PhotoURLs = new List<string>() { "https://example.com/photo.jpg" },
-            Description = "My Motion Sensor Description",
-            Company = _defaultCompany,
-            Functionalities = new List<MotionSensorFunctionality>() { MotionSensorFunctionality.MotionDetection }
-        };
-        PostMotionSensorRequest request = new PostMotionSensorRequest()
-        {
-            Name = defaultMotionSensor.Name,
-            Model = defaultMotionSensor.Model,
-            PhotoUrls = defaultMotionSensor.PhotoURLs,
-            Description = defaultMotionSensor.Description,
-            Company = _defaultCompany.Id,
-            Functionalities = new List<string>() {"MotionDetection"}
-        };
+        PostMotionSensorRequest request = DefaultMotionSensorRequest();
         _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
             device.Name == request.Name &&
             device.Model == request.Model &&
@@ -333,7 +324,7 @@ public class DevicesControllerTest
         
         _mockICompanyService
             .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
-            .Returns(defaultMotionSensor);
+            .Returns(_defaultMotionSensor);
         
         ObjectResult? result = _deviceController.PostMotionSensors(request) as CreatedAtActionResult;
         
@@ -349,45 +340,66 @@ public class DevicesControllerTest
     
     private void SetupDefaultObjects()
     {
-        List<string> photos =
-        [
-            DevicePhotoUrl
-        ];
-        
-        _defaultCompany = new Company
-        {
-            Name = CompanyName,
-            Id = 1
-        };
-
-        _defaultCamera = new SecurityCamera()
-        {
-            Name = CameraName, 
-            Model = DeviceModel, 
-            PhotoURLs = photos, 
-            Company = _defaultCompany, 
-            Kind = SecurityCameraType
-        };
-        _defaultWindowSensor = new WindowSensor()
-        {
-            Name = WindowSensorName, 
-            Model = DeviceModel, 
-            PhotoURLs = photos, 
-            Company = _defaultCompany, 
-            Kind = WindowSensorType
-        };
+        SetupDefaultAuxObjects();
+        SetupDefaultDeviceObjects();
         
         _devices =
         [
             _defaultCamera,
-            _defaultWindowSensor
+            _defaultWindowSensor,
+            _defaultMotionSensor
         ];
         
         _deviceTypes =
         [
             SecurityCameraType,
-            WindowSensorType
+            WindowSensorType,
+            MotionSensorType
         ];
+    }
+
+    private void SetupDefaultAuxObjects()
+    {
+        _photos = new List<string>() {DevicePhotoUrl};
+        _defaultCompany = new Company
+        {
+            Name = CompanyName,
+            Id = 1
+        };
+        _motionSensorFunctionalities = new List<MotionSensorFunctionality>() { MotionSensorFunctionality.MotionDetection };
+        _windowSensorFunctionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed };
+        _securityCameraFunctionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.HumanDetection };
+        _locationType = LocationType.Indoor;
+    }
+
+    private void SetupDefaultDeviceObjects()
+    {
+        _defaultCamera = new SecurityCamera()
+        {
+            Name = CameraName, 
+            Model = DeviceModel, 
+            PhotoURLs = _photos, 
+            Company = _defaultCompany, 
+            Kind = SecurityCameraType,
+            Functionalities = _securityCameraFunctionalities
+        };
+        _defaultWindowSensor = new WindowSensor()
+        {
+            Name = WindowSensorName, 
+            Model = DeviceModel, 
+            PhotoURLs = _photos, 
+            Company = _defaultCompany, 
+            Kind = WindowSensorType,
+            Functionalities = _windowSensorFunctionalities
+        };
+        _defaultMotionSensor = new MotionSensor()
+        {
+            Name = MotionSensorName,
+            Model = DeviceModel,
+            PhotoURLs = _photos,
+            Company = _defaultCompany,
+            Functionalities = _motionSensorFunctionalities
+        };
     }
 
     private void SetupDeviceController()
@@ -406,7 +418,7 @@ public class DevicesControllerTest
             Model = _defaultWindowSensor.Model,
             PhotoUrls = _defaultWindowSensor.PhotoURLs,
             Description = _defaultWindowSensor.Description,
-            Functionalities = null,
+            Functionalities = _windowSensorFunctionalities.Select(func => func.ToString()).ToList(),
             Company = _defaultCompany.Id,
         };
     }
@@ -421,7 +433,20 @@ public class DevicesControllerTest
             Description = _defaultCamera.Description,
             Company = _defaultCompany.Id,
             LocationType = _defaultCamera.LocationType.ToString(),
-            Functionalities = null,
+            Functionalities = _securityCameraFunctionalities.Select(func => func.ToString()).ToList(),
+        };
+    }
+
+    private PostMotionSensorRequest DefaultMotionSensorRequest()
+    {
+        return new PostMotionSensorRequest()
+        {
+            Name = _defaultMotionSensor.Name,
+            Model = _defaultMotionSensor.Model,
+            PhotoUrls = _defaultMotionSensor.PhotoURLs,
+            Description = _defaultMotionSensor.Description,
+            Functionalities = _motionSensorFunctionalities.Select(func => func.ToString()).ToList(),
+            Company = _defaultCompany.Id,
         };
     }
     
@@ -440,7 +465,8 @@ public class DevicesControllerTest
         List<Device> devices =
         [
             _defaultCamera,
-            _defaultWindowSensor
+            _defaultWindowSensor,
+            _defaultMotionSensor
         ];
 
         return new GetDevicesResponse(devices);
