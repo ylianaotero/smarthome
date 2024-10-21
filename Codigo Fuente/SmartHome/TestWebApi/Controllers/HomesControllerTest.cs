@@ -40,6 +40,7 @@ public class HomesControllerTest
     private const string Street = "Calle del Sol";
     private const string Street2 = "Avenida Siempre Viva";
     
+    private const string Alias = "Mi Casa";
     private const int DoorNumber = 2;
     private const string? DoorNumberString = "742";
     private const double Latitude = 34.0207;
@@ -153,7 +154,8 @@ public class HomesControllerTest
     }
     
     [TestMethod]
-    public void TestPostHomeOkStatusCode()
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestPostHomeWithoutAliasOkStatusCode()
     {
         PostHomeRequest request = new PostHomeRequest()
         {
@@ -172,6 +174,30 @@ public class HomesControllerTest
         
         Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
     }
+    
+    [TestMethod]
+    public void TestPostHomeWithAliasOkStatusCode()
+    {
+        PostHomeRequest request = new PostHomeRequest()
+        {
+            OwnerId = HomeOwnerId,
+            Street = Street,
+            DoorNumber = DoorNumber,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            MaximumMembers = MaxHomeMembers,
+            Alias = Alias
+        };
+    
+        _mockHomeService.Setup(service => service.CreateHome(It.IsAny<Home>()));
+        _mockHomeService.Setup(service => service.AddOwnerToHome(HomeOwnerId, It.IsAny<Home>()))
+            .Returns(It.IsAny<Home>());
+    
+        ObjectResult? result = _homeController.PostHomes(request) as CreatedAtActionResult;
+    
+        Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+
     
     [TestMethod]
     public void TestPostHomeNotFoundStatusCode()
