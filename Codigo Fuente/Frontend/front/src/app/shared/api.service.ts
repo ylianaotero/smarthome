@@ -1,0 +1,52 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { sessionModel, sessionRequest } from '../logIn/sessionModel';
+import {userRegistrationModel, userRegistrationInstance, userRetrieveModel} from '../signUpHomeOwner/signUpUserModel';
+import {home} from '../homesOfHomeOwner/homeModels';
+import {createHomeModel, homeRetrieveModel} from '../createHome/createHomeModel';
+import {tap} from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+
+  constructor(private httpClient: HttpClient) {
+    this.updateSession();
+  }
+
+  url: string = 'http://localhost:5217/api/v1';
+
+  currentSession: sessionModel | undefined = undefined;
+
+  updateSession() {
+    if (!this.currentSession) {
+      const userSession = localStorage.getItem('user');
+      if (userSession) {
+        this.currentSession = JSON.parse(userSession) as sessionModel;
+      }
+    }
+  }
+
+
+  postSession(data: sessionRequest) {
+    return this.httpClient.post<sessionModel>(this.url + '/login', data).pipe(
+      tap((session: sessionModel) => {
+        this.currentSession = session;
+        localStorage.setItem('user', JSON.stringify(session)); // Guarda la sesión en localStorage
+      })
+    );
+  }
+
+  postHomeOwner(data: userRegistrationInstance) {
+    return this.httpClient.post<userRetrieveModel>(this.url + '/home-owners', data);
+  }
+
+  postHome(data: createHomeModel){
+    return this.httpClient.post<homeRetrieveModel>(this.url + '/homes', data , { headers: { 'Authorization': `${this.currentSession?.token}` } });
+  }
+
+  getHomesOfHomeOwner() {
+    return this.httpClient.get<home[]>(this.url + '/homes' + '?HomeOwnerId=' + this.currentSession?.user.id.toString(), { headers: { 'Authorization': `${this.currentSession?.token}` } });
+  }
+}
