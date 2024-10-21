@@ -131,7 +131,6 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetDeviceByIdNotFoundStatusCode()
     {
-        Guid token = Guid.NewGuid();
         _mockIDeviceService.Setup(service => service.GetDeviceById(1))
             .Throws(new ElementNotFound(DeviceNotFoundExceptionMessage));
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
@@ -381,7 +380,8 @@ public class DevicesControllerTest
             PhotoURLs = _photos, 
             Company = _defaultCompany, 
             Kind = SecurityCameraType,
-            Functionalities = _securityCameraFunctionalities
+            Functionalities = _securityCameraFunctionalities,
+            LocationType = _locationType
         };
         _defaultWindowSensor = new WindowSensor()
         {
@@ -450,7 +450,7 @@ public class DevicesControllerTest
         };
     }
     
-    private PageDataRequest DefaultPageDataRequest()
+    private static PageDataRequest DefaultPageDataRequest()
     {
         PageDataRequest request = new PageDataRequest();
         
