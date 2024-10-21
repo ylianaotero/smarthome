@@ -93,7 +93,14 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [Route("motion-sensors")]
     public IActionResult PostMotionSensors([FromBody] PostMotionSensorRequest request)
     {
-        deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        try
+        {
+            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(CompanyNotFoundMessage);
+        }
         
         return CreatedAtAction(nameof(PostMotionSensors), request);
     }
