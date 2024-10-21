@@ -16,9 +16,11 @@ public class DevicesTest
     private Company _company;
     private List<SecurityCameraFunctionality> _cameraFunctionalities;
     private List<WindowSensorFunctionality> _windowSensorfunctionalities;
+    private List<MotionSensorFunctionality> _motionSensorFunctionalities;
     
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
+    private const string MotionSensorName = "My Motion Sensor";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const long DeviceModel = 1345354616346;
@@ -33,6 +35,7 @@ public class DevicesTest
         _company = new Company();
         _windowSensorfunctionalities = new List<WindowSensorFunctionality> {WindowSensorFunctionality.OpenClosed};
         _cameraFunctionalities = new List<SecurityCameraFunctionality> {SecurityCameraFunctionality.MotionDetection};
+        _motionSensorFunctionalities = new List<MotionSensorFunctionality> {MotionSensorFunctionality.MotionDetection};
 
         InitializeDevices();
     }
@@ -231,13 +234,10 @@ public class DevicesTest
     [TestMethod]
     public void TestAddMotionDetectionFunctionalityToMotionSensor()
     {
-        List<MotionSensorFunctionality>? functionalities = new List<MotionSensorFunctionality> 
-            {MotionSensorFunctionality.MotionDetection};
-        
         MotionSensor motionSensor = new MotionSensor();
-        motionSensor.Functionalities = functionalities;
+        motionSensor.Functionalities = _motionSensorFunctionalities;
         
-        Assert.AreEqual(functionalities, motionSensor.Functionalities);
+        Assert.AreEqual(_motionSensorFunctionalities, motionSensor.Functionalities);
     }
     
     [TestMethod]
@@ -254,22 +254,22 @@ public class DevicesTest
         MotionSensor motionSensor1 = new MotionSensor()
         {
             Id = 1,
-            Name = "My Motion Sensor",
+            Name = MotionSensorName
             Model = DeviceModel,
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
-            Functionalities = new List<MotionSensorFunctionality>(){MotionSensorFunctionality.MotionDetection},
+            Functionalities = _motionSensorFunctionalities,
             Company = _company
         };
         
         MotionSensor motionSensor2 = new MotionSensor()
         {
             Id = 1,
-            Name = "My Motion Sensor",
+            Name = MotionSensorName,
             Model = DeviceModel,
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
-            Functionalities = new List<MotionSensorFunctionality>(){MotionSensorFunctionality.MotionDetection},
+            Functionalities = _motionSensorFunctionalities,
             Company = _company
         };
         
