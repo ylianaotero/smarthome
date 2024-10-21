@@ -254,7 +254,7 @@ public class DevicesTest
         MotionSensor motionSensor1 = new MotionSensor()
         {
             Id = 1,
-            Name = MotionSensorName
+            Name = MotionSensorName,
             Model = DeviceModel,
             Description = DeviceDescription,
             PhotoURLs = new List<string> { DevicePhotoUrl },
