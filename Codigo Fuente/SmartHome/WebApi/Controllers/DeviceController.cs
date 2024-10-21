@@ -89,6 +89,15 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
     
+    [HttpPost]
+    [Route("motion-sensors")]
+    public IActionResult PostMotionSensors([FromBody] PostMotionSensorRequest request)
+    {
+        deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+        
+        return CreatedAtAction(nameof(PostMotionSensors), request);
+    }
+    
     private GetDeviceTypesResponse GetDeviceTypesResponse(List<string> deviceTypes)
     {
         GetDeviceTypesResponse getDeviceTypesResponse = new GetDeviceTypesResponse()
