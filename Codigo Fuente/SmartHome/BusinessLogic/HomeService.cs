@@ -132,7 +132,10 @@ public class HomeService (
       
         MapDevices(homeDevices, devices);
         
-        home.Devices = devices;
+        foreach(var device in devices)
+        {
+            home.Devices.Add(device);
+        }
         
         homeRepository.Update(home);
     }

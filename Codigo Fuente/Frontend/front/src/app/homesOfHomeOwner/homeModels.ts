@@ -8,6 +8,14 @@ export interface home {
   longitude: number;
 }
 
+export interface deviceUnit {
+  name: string;
+  hardwareId: string;
+  isConnected: boolean;
+  model: number;
+  photo: string;
+}
+
 export class addMemberRequest{
   id: number;
   email: string;
@@ -28,6 +36,48 @@ export class addMemberRequest{
     this.recivesNotifications = recivesNotifications;
   }
 }
+
+export class addDeviceRequest{
+  id: number;
+  deviceId : number;
+  isConnected: boolean;
+  constructor(
+    id: number,
+    deviceId : number,
+    isConnected: boolean,
+  ) {
+    this.id = id;
+    this.deviceId = deviceId;
+    this.isConnected = isConnected;
+  }
+}
+
+export class addDeviceToHomeRequest {
+  deviceId : number;
+  isConnected: boolean;
+  constructor(
+    deviceId : number,
+    isConnected: boolean,
+  ) {
+    this.deviceId = deviceId;
+    this.isConnected = isConnected;
+  }
+}
+
+export class addDeviceToHomeListRequest {
+  deviceUnits : addDeviceToHomeRequest[] = [];
+
+  constructor(element?: addDeviceToHomeRequest) {
+    if (element) {
+      this.addElement(element);
+    }
+  }
+
+  addElement(element: addDeviceToHomeRequest) {
+    this.deviceUnits.push(element);
+  }
+}
+
 
 
 export class addMemberToHomeRequest {
