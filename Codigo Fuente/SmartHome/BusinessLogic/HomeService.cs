@@ -182,6 +182,7 @@ public class HomeService (
             DeviceUnit deviceUnit = new DeviceUnit()
             {
                 Device = deviceEntity,
+                Name = deviceEntity.Name,
                 IsConnected = device.IsConnected,
                 HardwareId = Guid.NewGuid(),
             };
