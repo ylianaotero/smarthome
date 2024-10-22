@@ -214,4 +214,17 @@ public class HomeService (
 
         return (user, role as HomeOwner);
     }
+    
+    public void UpdateHomeAlias(long id, string alias)
+    {
+        Home home = homeRepository.GetById(id);
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        
+        home.Alias = alias;
+        
+        homeRepository.Update(home);
+    }
 }

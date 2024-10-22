@@ -205,6 +205,7 @@ public class HomesControllerTest
         PostHomeRequest request = new PostHomeRequest()
         {
             OwnerId = HomeOwnerId,
+            Alias = Alias,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -226,6 +227,7 @@ public class HomesControllerTest
         PostHomeRequest request = new PostHomeRequest()
         {
             OwnerId = HomeOwnerId,
+            Alias = Alias,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
@@ -240,6 +242,42 @@ public class HomesControllerTest
         
         Assert.AreEqual(412, result2!.StatusCode);
     }
+    
+    [TestMethod]
+    public void TestPatchHomeAliasOkStatusCode()
+    {
+        PatchHomeRequest request = new PatchHomeRequest()
+        {
+            Alias = Alias
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateHomeAlias(It.IsAny<long>(), It.IsAny<string>()));
+        
+        ObjectResult? result = _homeController.UpdateHomeAlias(1,request) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPatchHomeAliasNotFoundStatusCode()
+    {
+        PatchHomeRequest request = new PatchHomeRequest()
+        {
+            Alias = Alias
+        };
+
+        _mockHomeService.Setup(service => service.UpdateHomeAlias(It.IsAny<long>(), It.IsAny<string>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+
+        IActionResult result = _homeController.UpdateHomeAlias(1, request);
+
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+
+        ObjectResult? objectResult = result as ObjectResult;
+        Assert.AreEqual(NotFoundStatusCode, objectResult!.StatusCode);
+    }
+
+    
 
     [TestMethod]
     public void TestGetMembersFromHomeOkResponse()

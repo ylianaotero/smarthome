@@ -174,4 +174,20 @@ public class HomeController(IHomeService homeService) : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateHomeAlias([FromRoute] long id, [FromBody] PatchHomeRequest request)
+    {
+        try
+        {
+            homeService.UpdateHomeAlias(id, request.Alias);
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
 }
