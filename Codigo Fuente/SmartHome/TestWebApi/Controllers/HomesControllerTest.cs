@@ -41,6 +41,7 @@ public class HomesControllerTest
     private const string Street2 = "Avenida Siempre Viva";
     
     private const string Alias = "Mi Casa";
+    private const string CustomName = "Living Camera";
     private const int DoorNumber = 2;
     private const string? DoorNumberString = "742";
     private const double Latitude = 34.0207;
@@ -369,6 +370,7 @@ public class HomesControllerTest
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
     
+    [TestMethod]
     public void TestTryToPutMemberInAFullHomeStatusCode()
     {
         PostHomeMemberRequest postHomeMemberRequest = new PostHomeMemberRequest()
@@ -566,6 +568,41 @@ public class HomesControllerTest
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
         
+    }
+    
+    [TestMethod]
+    public void TestUpdateDeviceUnitNameOkStatusCode()
+    {
+        PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
+        {
+            HardwareId = new Guid(),
+            Name = CustomName
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>()));
+        _homeController = new HomeController(_mockHomeService.Object);
+        
+        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,request) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestUpdateDeviceUnitNameNotFoundStatusCode()
+    {
+        PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
+        {
+            HardwareId = new Guid(),
+            Name = CustomName
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        _homeController = new HomeController(_mockHomeService.Object);
+        
+        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,request) as ObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
     private GetHomeResponse DefaultHomeResponse()

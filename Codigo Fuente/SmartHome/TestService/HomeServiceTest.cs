@@ -477,6 +477,46 @@ public class HomeServiceTest
         _homeService.UpdateHomeAlias(_defaultHome.Id, UpdatedAlias);
     }
     
+    [TestMethod]
+    public void TestUpdateCustomDeviceName()
+    {
+        _defaultHome.Devices = new List<DeviceUnit>()
+        {
+            _securityCameraUnit
+        };
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice);
+        
+        Assert.AreEqual(_updatedDevice.Device.Name, _defaultHome.Devices[0].Device.Name);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateCustomDeviceNameBecauseHomeNotFound()
+    {
+        _defaultHome.Devices = new List<DeviceUnit>()
+        {
+            _securityCameraUnit
+        };
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
+        
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateCustomDeviceNameBecauseDeviceUnitNotFound()
+    {
+        _defaultHome.Devices = new List<DeviceUnit>();
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _windowSensorUnit);
+    }
+    
     private void SetupDefaultObjects()
     {
         _homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object,

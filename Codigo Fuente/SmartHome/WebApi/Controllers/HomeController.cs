@@ -191,4 +191,21 @@ public class HomeController(IHomeService homeService) : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
+    
+    [HttpPatch]
+    [Route("{id}/devices")]
+    [RestrictToPrivilegedMembers(false, true)]
+    public IActionResult UpdateCustomDeviceName([FromRoute] long id, [FromBody] PatchDeviceUnitRequest request)
+    {
+        try
+        {
+            homeService.UpdateDeviceCustomName(id, request.ToEntity());
+            return Ok(UpdatedDeviceNameMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+
 }
