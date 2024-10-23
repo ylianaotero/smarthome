@@ -81,23 +81,47 @@ export class addDeviceToHomeListRequest {
 
 
 export class addMemberToHomeRequest {
-  userEmail: string;
-  hasPermissionToListDevices: boolean;
-  hasPermissionToAddDevice: boolean;
-  recivesNotifications: boolean;
+  UserEmail: string = "";
+  HasPermissionToListDevices: boolean = false;
+  HasPermissionToAddADevice: boolean = false;
+  ReceivesNotifications: boolean = false;
 
   constructor(
     userEmail: string,
     hasPermissionToListDevices: boolean,
     hasPermissionToAddDevice: boolean,
-    recivesNotifications: boolean
+    receivesNotifications: boolean
   ) {
-    this.userEmail = userEmail;
-    this.hasPermissionToListDevices = hasPermissionToListDevices;
-    this.hasPermissionToAddDevice = hasPermissionToAddDevice;
-    this.recivesNotifications = recivesNotifications;
+    this.UserEmail = userEmail;
+    this.HasPermissionToListDevices = hasPermissionToListDevices;
+    this.HasPermissionToAddADevice = hasPermissionToAddDevice;
+    this.ReceivesNotifications = receivesNotifications;
   }
 }
+
+export class ChangeMemberNotificationsRequest {
+  IdHome: number;
+  MemberEmail: string;
+  ReceivesNotifications: boolean;
+
+  constructor(idHome: number, memberEmail: string, receivesNotifications: boolean) {
+    this.IdHome = idHome;
+    this.MemberEmail = memberEmail;
+    this.ReceivesNotifications = receivesNotifications;
+  }
+}
+
+export class ChangeMemberRequest {
+  MemberEmail: string;
+  ReceivesNotifications: boolean;
+
+  constructor(memberEmail: string, receivesNotifications: boolean) {
+    this.MemberEmail = memberEmail;
+    this.ReceivesNotifications = receivesNotifications;
+  }
+}
+
+
 
 export interface member {
   fullName: string;
@@ -105,7 +129,7 @@ export interface member {
   photo: string;
   hasPermissionToListDevices: boolean,
   hasPermissionToAddDevice: boolean,
-  recivesNotifications: boolean
+  receivesNotifications: boolean
 }
 
 

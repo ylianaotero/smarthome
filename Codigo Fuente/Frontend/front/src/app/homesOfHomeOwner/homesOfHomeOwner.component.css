@@ -1,9 +1,9 @@
-/* Estilos para las tarjetas de las casas */
+
 .card {
   border-radius: 10px;
   display: flex;
-  flex-direction: column; /* Asegura que el contenido esté en columna */
-  height: 100%; /* Hace que todas las tarjetas tengan la misma altura */
+  flex-direction: column;
+  height: 100%;
 }
 
 
@@ -18,17 +18,17 @@
 }
 
 .modal-open {
-  overflow: hidden;  /* Evita el scroll mientras el modal está abierto */
+  overflow: hidden;
 }
 
 .card-title {
   font-weight: bold;
-  color: #007bff; /* Color azul de Bootstrap */
+  color: #007bff;
 }
 
 .card-text {
   font-size: 14px;
-  color: #6c757d; /* Color gris de Bootstrap */
+  color: #6c757d;
 }
 
 .text-center {
@@ -37,12 +37,12 @@
 }
 
 .card-body {
-  flex-grow: 1; /* Permite que el cuerpo de la tarjeta crezca para llenar el espacio */
+  flex-grow: 1;
   padding: 1.5rem;
 }
 
 
 button {
-  font-size: 1rem; /* Ajusta el tamaño de fuente */
+  font-size: 1rem;
 }
 

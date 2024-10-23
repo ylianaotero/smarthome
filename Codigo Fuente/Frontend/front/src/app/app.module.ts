@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {CreateHomeComponent} from './createHome/createHome.component';
 import {HomesOfHomeOwnerComponent} from './homesOfHomeOwner/homesOfHomeOwner.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -28,7 +29,8 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    NgxPaginationModule
   ],
   declarations: [
     AppComponent,

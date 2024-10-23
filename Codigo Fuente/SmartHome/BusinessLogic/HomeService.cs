@@ -115,7 +115,6 @@ public class HomeService (
         {
             throw new ElementNotFound(HomeNotFoundMessage);
         }
-
         member.ReceivesNotifications = memberDto.ReceivesNotifications; 
         memberRepository.Update(member);
     }

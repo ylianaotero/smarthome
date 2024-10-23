@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../shared/api.service';
-import {addDeviceRequest, addMemberRequest, home, member, deviceUnit} from './homeModels';
+import {
+  addDeviceRequest,
+  addMemberRequest,
+  home,
+  member,
+  deviceUnit,
+  ChangeMemberNotificationsRequest
+} from './homeModels';
 
 @Component({
   selector: 'app-homes-home-owner',
@@ -61,6 +68,7 @@ export class HomesOfHomeOwnerComponent implements OnInit {
     this.api.getMembersOfHome(id).subscribe({
       next: (res: any) => {
         this.members = res.members || [];
+        console.log(this.members);
       }
     });
   }
@@ -76,8 +84,50 @@ export class HomesOfHomeOwnerComponent implements OnInit {
     });
   }
 
-  toggleNotification(member: any): void {
-    member.receivesNotifications = !member.receivesNotifications;
+  toggleNotification(member: member): void {
+    const confirmation = confirm(`¿Estás seguro de cambiar la notificación de ${member.fullName}?`);
+    if (confirmation) {
+      member.receivesNotifications = !member.receivesNotifications;
+      this.changeMemberNotifications(member);
+    }
+  }
+
+  changeMemberNotifications(member: member){
+
+    if (!this.selectedHome || !this.selectedHome.id) {
+      this.feedback = "Error al identificar la casa seleccionada, reeintente.";
+      return;
+    }
+
+    const request = new ChangeMemberNotificationsRequest(
+      this.selectedHome.id,
+      member.email,
+      member.receivesNotifications
+    );
+
+    this.api.changeMemberNotifications(request).subscribe({
+      error: (err) => {
+        if(err.status == 200){
+          this.feedback = 'Notificación cambiada exitosamente.';
+          return;
+        }
+        this.handleErrorNotifications(err);
+        return;
+      }
+    });
+
+  }
+
+  handleErrorNotifications(err: any): void {
+    if (err.status === 0) {
+      this.feedback = 'No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.';
+    } else if (err.status === 400) {
+      this.feedback = 'Datos inválidos. Verifica la información e intenta nuevamente.';
+    } else if (err.status === 404) {
+      this.feedback = 'La casa o el miembro seleccionados no fueron encontrados.';
+    } else {
+      this.feedback = 'Ocurrió un error inesperado. Por favor, intenta más tarde.';
+    }
   }
 
   openModal(home: home, modal: string): void {
