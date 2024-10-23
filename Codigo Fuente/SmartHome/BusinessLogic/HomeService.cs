@@ -115,7 +115,6 @@ public class HomeService (
         {
             throw new ElementNotFound(HomeNotFoundMessage);
         }
-
         member.ReceivesNotifications = memberDto.ReceivesNotifications; 
         memberRepository.Update(member);
     }
@@ -132,7 +131,10 @@ public class HomeService (
       
         MapDevices(homeDevices, devices);
         
-        home.Devices = devices;
+        foreach(var device in devices)
+        {
+            home.Devices.Add(device);
+        }
         
         homeRepository.Update(home);
     }
