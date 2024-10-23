@@ -11,6 +11,7 @@ public class GetUserResponse
     public string FullName { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<Role> Roles { get; set; }
+    
 
     public GetUserResponse(User user)
     {

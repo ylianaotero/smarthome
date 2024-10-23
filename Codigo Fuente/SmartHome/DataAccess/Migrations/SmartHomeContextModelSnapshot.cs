@@ -308,6 +308,20 @@ namespace DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Concrete.MotionSensor", b =>
+                {
+                    b.HasBaseType("Domain.Abstract.Device");
+
+                    b.Property<string>("Functionalities")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Functionalities");
+
+                    b.ToTable("Devices", (string)null);
+
+                    b.HasDiscriminator().HasValue("MotionSensor");
+                });
+
             modelBuilder.Entity("Domain.Concrete.SecurityCamera", b =>
                 {
                     b.HasBaseType("Domain.Abstract.Device");
@@ -323,6 +337,20 @@ namespace DataAccess.Migrations
                     b.ToTable("Devices", (string)null);
 
                     b.HasDiscriminator().HasValue("SecurityCamera");
+                });
+
+            modelBuilder.Entity("Domain.Concrete.SmartLamp", b =>
+                {
+                    b.HasBaseType("Domain.Abstract.Device");
+
+                    b.Property<string>("Functionalities")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Functionalities");
+
+                    b.ToTable("Devices", (string)null);
+
+                    b.HasDiscriminator().HasValue("SmartLamp");
                 });
 
             modelBuilder.Entity("Domain.Concrete.WindowSensor", b =>

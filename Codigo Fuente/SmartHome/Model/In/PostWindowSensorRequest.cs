@@ -1,4 +1,5 @@
 using Domain.Concrete;
+using Domain.Enum;
 
 namespace Model.In;
 

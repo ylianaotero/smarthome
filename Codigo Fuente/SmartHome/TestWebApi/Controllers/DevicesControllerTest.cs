@@ -2,6 +2,7 @@ using CustomExceptions;
 using IBusinessLogic;
 using Domain.Abstract;
 using Domain.Concrete;
+using Domain.Enum;
 using IDataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -17,6 +18,8 @@ public class DevicesControllerTest
     private Company _defaultCompany;
     private SecurityCamera _defaultCamera;
     private WindowSensor _defaultWindowSensor;
+    private MotionSensor _defaultMotionSensor;
+    private SmartLamp _defaultSmartLamp;
     private DeviceController _deviceController;
     private Mock<IDeviceService> _mockIDeviceService;
     private Mock<ICompanyService> _mockICompanyService;
@@ -25,15 +28,25 @@ public class DevicesControllerTest
     private const long DeviceModel = 1345354616346;
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
+    private const string MotionSensorName = "My Motion Sensor";
+    private const string SmartLampName = "My Smart Lamp";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const string CompanyName = "IoT DeviceUnits & Co.";
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
+    private const string MotionSensorType = "MotionSensor";
+    private const string SmartLampType = "SmartLamp";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
     private const string CompanyNotFoundExceptionMessage = "Company not found";
     
+    private LocationType _locationType;
     private List<Device> _devices;
     private List<string> _deviceTypes;
+    private List<string> _photos;
+    private List<SecurityCameraFunctionality> _securityCameraFunctionalities;
+    private List<WindowSensorFunctionality> _windowSensorFunctionalities;
+    private List<MotionSensorFunctionality> _motionSensorFunctionalities;
+    private List<SmartLampFunctionality> _smartLampFunctionalities;
     
     private const int OkStatusCode = 200;
     private const int CreatedStatusCode = 201;
@@ -122,7 +135,6 @@ public class DevicesControllerTest
     [TestMethod]
     public void TestGetDeviceByIdNotFoundStatusCode()
     {
-        Guid token = Guid.NewGuid();
         _mockIDeviceService.Setup(service => service.GetDeviceById(1))
             .Throws(new ElementNotFound(DeviceNotFoundExceptionMessage));
         _mockISessionService.Setup(service => service.GetUser(It.IsAny<Guid>())).Returns(new User());
@@ -301,47 +313,162 @@ public class DevicesControllerTest
         Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostMotionSensorsCreatedStatusCode()
+    {
+        PostMotionSensorRequest request = DefaultMotionSensorRequest();
+        _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company 
+        )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultMotionSensor);
+        
+        ObjectResult? result = _deviceController.PostMotionSensors(request) as CreatedAtActionResult;
+        
+        _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company
+        )), Times.Once);
+        Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostMotionSensorsNotFoundStatusCode()
+    {
+        PostMotionSensorRequest request = DefaultMotionSensorRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostMotionSensors(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostSmartLampsCreatedStatusCode()
+    {
+        PostSmartLampRequest request = DefaultSmartLampRequest();
+        _mockIDeviceService.Setup(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company 
+        )));
+        
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Returns(_defaultSmartLamp);
+        
+        ObjectResult? result = _deviceController.PostSmartLamps(request) as CreatedAtActionResult;
+        
+        _mockIDeviceService.Verify(service => service.CreateDevice(It.Is<Device>(device => 
+            device.Name == request.Name &&
+            device.Model == request.Model &&
+            device.PhotoURLs == request.PhotoUrls &&
+            device.Description == request.Description &&
+            device.Company.Id == request.Company
+        )), Times.Once);
+        Assert.AreEqual(CreatedStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestSmartLampsSensorsNotFoundStatusCode()
+    {
+        PostSmartLampRequest request = DefaultSmartLampRequest();
+        _mockICompanyService
+            .Setup(service => service.AddCompanyToDevice(It.IsAny<long>(), It.IsAny<Device>()))
+            .Throws(new ElementNotFound(CompanyNotFoundExceptionMessage));
+        
+        NotFoundObjectResult? result = _deviceController.PostSmartLamps(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
     private void SetupDefaultObjects()
     {
-        List<string> photos =
-        [
-            DevicePhotoUrl
-        ];
-        
-        _defaultCompany = new Company
-        {
-            Name = CompanyName,
-            Id = 1
-        };
-
-        _defaultCamera = new SecurityCamera()
-        {
-            Name = CameraName, 
-            Model = DeviceModel, 
-            PhotoURLs = photos, 
-            Company = _defaultCompany, 
-            Kind = SecurityCameraType
-        };
-        _defaultWindowSensor = new WindowSensor()
-        {
-            Name = WindowSensorName, 
-            Model = DeviceModel, 
-            PhotoURLs = photos, 
-            Company = _defaultCompany, 
-            Kind = WindowSensorType
-        };
+        SetupDefaultAuxObjects();
+        SetupDefaultDeviceObjects();
         
         _devices =
         [
             _defaultCamera,
-            _defaultWindowSensor
+            _defaultWindowSensor,
+            _defaultMotionSensor,
+            _defaultSmartLamp
         ];
         
         _deviceTypes =
         [
             SecurityCameraType,
-            WindowSensorType
+            WindowSensorType,
+            MotionSensorType,
+            SmartLampType
         ];
+    }
+
+    private void SetupDefaultAuxObjects()
+    {
+        _photos = new List<string>() {DevicePhotoUrl};
+        _defaultCompany = new Company
+        {
+            Name = CompanyName,
+            Id = 1
+        };
+        _motionSensorFunctionalities = new List<MotionSensorFunctionality>() { MotionSensorFunctionality.MotionDetection };
+        _windowSensorFunctionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed };
+        _securityCameraFunctionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.HumanDetection };
+        _smartLampFunctionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff };
+        _locationType = LocationType.Indoor;
+    }
+
+    private void SetupDefaultDeviceObjects()
+    {
+        _defaultCamera = new SecurityCamera()
+        {
+            Name = CameraName, 
+            Model = DeviceModel, 
+            PhotoURLs = _photos, 
+            Company = _defaultCompany, 
+            Kind = SecurityCameraType,
+            Functionalities = _securityCameraFunctionalities,
+            LocationType = _locationType
+        };
+        _defaultWindowSensor = new WindowSensor()
+        {
+            Name = WindowSensorName, 
+            Model = DeviceModel, 
+            PhotoURLs = _photos, 
+            Company = _defaultCompany, 
+            Kind = WindowSensorType,
+            Functionalities = _windowSensorFunctionalities
+        };
+        _defaultMotionSensor = new MotionSensor()
+        {
+            Name = MotionSensorName,
+            Model = DeviceModel,
+            PhotoURLs = _photos,
+            Company = _defaultCompany,
+            Functionalities = _motionSensorFunctionalities
+        };
+        _defaultSmartLamp = new SmartLamp()
+        {
+            Name =  SmartLampName,
+            Model = DeviceModel,
+            PhotoURLs = _photos,
+            Company = _defaultCompany,
+            Functionalities = _smartLampFunctionalities
+        };
     }
 
     private void SetupDeviceController()
@@ -360,7 +487,7 @@ public class DevicesControllerTest
             Model = _defaultWindowSensor.Model,
             PhotoUrls = _defaultWindowSensor.PhotoURLs,
             Description = _defaultWindowSensor.Description,
-            Functionalities = null,
+            Functionalities = _windowSensorFunctionalities.Select(func => func.ToString()).ToList(),
             Company = _defaultCompany.Id,
         };
     }
@@ -375,11 +502,37 @@ public class DevicesControllerTest
             Description = _defaultCamera.Description,
             Company = _defaultCompany.Id,
             LocationType = _defaultCamera.LocationType.ToString(),
-            Functionalities = null,
+            Functionalities = _securityCameraFunctionalities.Select(func => func.ToString()).ToList(),
+        };
+    }
+
+    private PostMotionSensorRequest DefaultMotionSensorRequest()
+    {
+        return new PostMotionSensorRequest()
+        {
+            Name = _defaultMotionSensor.Name,
+            Model = _defaultMotionSensor.Model,
+            PhotoUrls = _defaultMotionSensor.PhotoURLs,
+            Description = _defaultMotionSensor.Description,
+            Functionalities = _motionSensorFunctionalities.Select(func => func.ToString()).ToList(),
+            Company = _defaultCompany.Id,
         };
     }
     
-    private PageDataRequest DefaultPageDataRequest()
+    private PostSmartLampRequest DefaultSmartLampRequest()
+    {
+        return new PostSmartLampRequest()
+        {
+            Name = SmartLampName,
+            Model = _defaultMotionSensor.Model,
+            PhotoUrls = _defaultMotionSensor.PhotoURLs,
+            Description = _defaultMotionSensor.Description,
+            Functionalities = _smartLampFunctionalities.Select(func => func.ToString()).ToList(),
+            Company = _defaultCompany.Id,
+        };
+    }
+    
+    private static PageDataRequest DefaultPageDataRequest()
     {
         PageDataRequest request = new PageDataRequest();
         
@@ -394,7 +547,9 @@ public class DevicesControllerTest
         List<Device> devices =
         [
             _defaultCamera,
-            _defaultWindowSensor
+            _defaultWindowSensor,
+            _defaultMotionSensor,
+            _defaultSmartLamp
         ];
 
         return new GetDevicesResponse(devices);

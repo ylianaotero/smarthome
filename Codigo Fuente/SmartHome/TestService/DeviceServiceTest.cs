@@ -23,6 +23,8 @@ public class DeviceServiceTest
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const string SecurityCameraType = "SecurityCamera";
     private const string WindowSensorType = "WindowSensor";
+    private const string MotionSensorType = "MotionSensor";
+    private const string SmartLampType = "SmartLamp";
     private const string CompanyName = "IoT Devices & Co.";
     
     [TestInitialize]
@@ -55,8 +57,10 @@ public class DeviceServiceTest
     {
         List<string> deviceTypes = new List<string>()
         {
+            MotionSensorType,
             SecurityCameraType,
-            WindowSensorType
+            SmartLampType,
+            WindowSensorType,
         };
         
         List<string> retrievedDeviceTypes = _deviceService.GetDeviceTypes();

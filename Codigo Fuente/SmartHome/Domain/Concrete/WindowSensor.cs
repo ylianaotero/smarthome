@@ -1,11 +1,7 @@
 using Domain.Abstract;
+using Domain.Enum;
 
 namespace Domain.Concrete;
-
-public enum WindowSensorFunctionality
-{
-    OpenClosed
-}
 
 public class WindowSensor : Device
 {

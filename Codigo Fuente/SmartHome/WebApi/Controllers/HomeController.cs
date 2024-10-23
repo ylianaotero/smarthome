@@ -22,13 +22,14 @@ public class HomeController(IHomeService homeService) : ControllerBase
     private const int PreconditionFailedStatusCode = 412;
 
     [HttpGet]
-    [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult GetHomes([FromQuery] GetHomeRequest request)
     {
         GetHomesResponse getHomesResponse = new GetHomesResponse(homeService.GetHomesByFilter(request.ToFilter()));
         
         return Ok(getHomesResponse);
     }
+    
     
     [HttpPatch]
     [Route("{id}/members")]
