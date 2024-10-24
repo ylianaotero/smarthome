@@ -44,6 +44,10 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  currentPage: number = 1;
+  pageSize: number = 2; //cuantos se van a ver por pagina
+  totalDevices: number = 0;
+
   getDevices(): void {
     const filters: DeviceFilterRequestModel = {
       Name: this.selectedName,
@@ -52,17 +56,27 @@ export class AccountComponent implements OnInit {
       Kind: this.selectedKind
     };
 
-
-    this.api.getDevices(filters).subscribe({
+    this.api.getDevices(filters, this.currentPage, this.pageSize).subscribe({
       next: (res: any) => {
         this.devices = res.devices || [];
-        console.log(this.devices);
+        this.totalDevices =  res.totalCount || 0;
       },
       error: (err) => {
         console.error('Error al obtener dispositivos', err);
       }
     });
   }
+
+
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getDevices();
+  }
+  get totalPages(): number {
+    return Math.ceil(this.totalDevices / this.pageSize);
+  }
+
+
 
 
   goCreateHome(): void {
