@@ -84,7 +84,7 @@ export class ApiService {
     return this.httpClient.get(this.url + '/devices' + '/types', {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
-  getDevices(modelIn: DeviceFilterRequestModel): Observable<deviceModel[]> {
+  getDevices(modelIn: DeviceFilterRequestModel, page: number, pageSize: number): Observable<deviceModel[]> {
     const url = this.url + '/devices';
     let params = new HttpParams();
     if (modelIn.Name) {
@@ -100,6 +100,10 @@ export class ApiService {
     if (modelIn.Kind) {
       params = params.set('Kind', modelIn.Kind);
     }
+
+    params = params.set('Page', page.toString());
+    params = params.set('PageSize', pageSize.toString());
+
     return this.httpClient.get<deviceModel[]>(url, {
       params,
       headers: { 'Authorization': `${this.currentSession?.token}` }
