@@ -19,8 +19,9 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [HttpGet] 
     public IActionResult GetDevices([FromQuery] GetDeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
+        int count = deviceService.GetDevicesByFilter(request.ToFilter(), null).Count; 
         GetDevicesResponse getDevicesResponse = new GetDevicesResponse
-            (deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+            (deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
         
         return Ok(getDevicesResponse);
     }

@@ -61,6 +61,10 @@ export class HomesOfHomeOwnerComponent implements OnInit {
     });
   }
 
+  goHome(): void {
+    this.router.navigate(['/account']);
+  }
+
   getMembers(id?: number): void {
     if(!id){
       return;

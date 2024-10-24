@@ -221,7 +221,7 @@ public class DevicesControllerTest
             .Setup(service => service
                 .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
             .Returns(devices);
-        GetDevicesResponse? expectedResponse = new GetDevicesResponse(devices);
+        GetDevicesResponse? expectedResponse = new GetDevicesResponse(devices, 1);
         
         ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         GetDevicesResponse? response = result!.Value as GetDevicesResponse;
@@ -552,7 +552,7 @@ public class DevicesControllerTest
             _defaultSmartLamp
         ];
 
-        return new GetDevicesResponse(devices);
+        return new GetDevicesResponse(devices, 1);
     }
     
     private GetDeviceResponse DefaultSecurityCameraResponse()

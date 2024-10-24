@@ -8,11 +8,18 @@
 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="homesOfHomeOwner.component.css">
 </head>
 <body>
 
 <div class="container mt-4">
+  <div class="back-button">
+    <button (click)="goHome()" class="btn btn-white">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+  </div>
   <h1 class="text-center mb-4">Lista de mis hogares</h1>
   <div class="row">
     <div class="col-md-6 mb-4" *ngFor="let home of homes">
@@ -46,7 +53,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <!-- Modal -->
 <div class="modal fade" id="myModalMembers" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfMembersOpen" [style.display]="isModalOfMembersOpen ? 'block' : 'none'"
