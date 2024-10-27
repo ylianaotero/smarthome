@@ -17,9 +17,8 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
     public void CreateDevice(Device device)
     {
         Company deviceCompany = device.Company;
-        //bool validateNumber = deviceCompany.ValidateNumber;
-        //Prueba
-        bool validateNumber = false;
+        bool validateNumber = deviceCompany.ValidateNumber;
+        
         Modelo deviceModel = new Modelo();
         deviceModel.set_Value(device.Model);
         

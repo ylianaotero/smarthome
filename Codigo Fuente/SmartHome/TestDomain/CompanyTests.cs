@@ -83,4 +83,12 @@ public class CompanyTests
         
         Assert.AreEqual(_owner, _company.Owner);
     }
+    
+    [TestMethod]
+    public void TestAddValidateNumberToCompany()
+    {
+        _company.ValidateNumber = true;
+        
+        Assert.IsTrue(_company.ValidateNumber);
+    }
 }

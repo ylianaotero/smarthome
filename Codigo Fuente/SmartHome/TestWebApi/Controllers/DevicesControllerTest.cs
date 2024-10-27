@@ -288,6 +288,19 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestPostWindowSensorsBadRequestStatusCode()
+    {
+        PostWindowSensorRequest request = DefaultWindowSensorRequest();
+        _mockIDeviceService
+            .Setup(service => service.CreateDevice(It.IsAny<Device>()))
+            .Throws(new InputNotValid("Model is not valid"));
+        
+        BadRequestObjectResult? result = _deviceController.PostWindowSensors(request) as BadRequestObjectResult;
+        
+        Assert.AreEqual(400, result!.StatusCode);
+    }
+    
+    [TestMethod]
     public void TestPostWindowSensorsNotFoundStatusCode()
     {
         PostSecurityCameraRequest request = DefaultSecurityCameraRequest();
@@ -311,6 +324,33 @@ public class DevicesControllerTest
         NotFoundObjectResult? result = _deviceController.PostWindowSensors(request) as NotFoundObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostSecurityCamerasBadRequestStatusCode()
+    {
+        PostSecurityCameraRequest request = DefaultSecurityCameraRequest();
+        _mockIDeviceService
+            .Setup(service => service.CreateDevice(It.IsAny<Device>()))
+            .Throws(new InputNotValid("Model is not valid"));
+        
+        BadRequestObjectResult? result = _deviceController.PostSecurityCameras(request) as BadRequestObjectResult;
+        
+        Assert.AreEqual(400, result!.StatusCode);
+    }
+    
+    
+    [TestMethod]
+    public void TestPostMotionSensorsBadRequestStatusCode()
+    {
+        PostMotionSensorRequest request = DefaultMotionSensorRequest();
+        _mockIDeviceService
+            .Setup(service => service.CreateDevice(It.IsAny<Device>()))
+            .Throws(new InputNotValid("Model is not valid"));
+        
+        BadRequestObjectResult? result = _deviceController.PostMotionSensors(request) as BadRequestObjectResult;
+        
+        Assert.AreEqual(400, result!.StatusCode);
     }
     
     [TestMethod]
