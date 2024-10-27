@@ -1,14 +1,14 @@
 using IBusinessLogic;
-//using IModelValidator;
 using System.Reflection;
 
 namespace BusinessLogic
 {
     public class ModelValidatorLogic : IModelValidatorLogic
     {
-        public List<IModelValidator> GetAllImporters()
+        public List<IModelValidator> GetAllValidators()
         {
-            var importersPath = "./ActiveModels";
+            var importersPath = "ActiveModels";
+            Console.WriteLine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
             string[] filePaths = Directory.GetFiles(importersPath); 
             List<IModelValidator> availableImporters = new List<IModelValidator>();
 
@@ -21,11 +21,11 @@ namespace BusinessLogic
 
                     foreach (Type type in myAssembly.GetTypes())
                     {
-                        if (ImplementsRequiredInterface(type))
-                        {
-                            IModelValidator instance = (IModelValidator)Activator.CreateInstance(type); 
+                       if (ImplementsRequiredInterface(type)) 
+                       {
+                            IModelValidator instance = (IModelValidator)Activator.CreateInstance(type);
                             availableImporters.Add(instance);
-                        }
+                       }
                     }
                 }
             }

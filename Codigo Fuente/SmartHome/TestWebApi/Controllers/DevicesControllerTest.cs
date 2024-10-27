@@ -25,7 +25,7 @@ public class DevicesControllerTest
     private Mock<ICompanyService> _mockICompanyService;
     private Mock<ISessionService> _mockISessionService;
     
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string MotionSensorName = "My Motion Sensor";
@@ -208,7 +208,7 @@ public class DevicesControllerTest
             new SecurityCamera()
             {
                 Name = request.Name,
-                Model = request.Model!.Value,
+                Model = request.Model,
                 PhotoURLs = new List<string>() { DevicePhotoUrl },
                 Company = new Company()
                 {

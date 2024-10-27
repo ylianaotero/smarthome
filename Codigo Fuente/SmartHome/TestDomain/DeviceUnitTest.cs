@@ -11,7 +11,7 @@ public class DeviceUnitTest
     private const string CameraName = "My Security Camera";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     private const bool DeviceIsConnected = true;
     
     [TestInitialize]

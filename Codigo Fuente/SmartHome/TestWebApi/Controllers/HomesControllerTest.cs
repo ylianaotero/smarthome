@@ -58,7 +58,7 @@ public class HomesControllerTest
     private const bool Permission = true; 
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
 
     [TestInitialize]
     public void TestInitialize()

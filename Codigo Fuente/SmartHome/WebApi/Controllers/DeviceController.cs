@@ -69,6 +69,10 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         {
             return NotFound(CompanyNotFoundMessage);
         } 
+        catch (InputNotValid)
+        {
+            return BadRequest("Model is not valid");
+        }
         
         return CreatedAtAction(nameof(PostWindowSensors), request);
     }

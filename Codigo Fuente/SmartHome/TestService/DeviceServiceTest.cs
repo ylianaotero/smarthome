@@ -17,7 +17,7 @@ public class DeviceServiceTest
     private WindowSensor _defaultWindowSensor;
     private Mock<IRepository<Device>> _mockDeviceRepository;
     
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "edf124";
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";

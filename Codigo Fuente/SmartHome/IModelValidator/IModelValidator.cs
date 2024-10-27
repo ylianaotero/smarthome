@@ -1,4 +1,6 @@
-﻿public interface IModelValidator
+﻿using Domain.Concrete;
+
+public interface IModelValidator
 {
-    bool IsValid(string model);
+    public bool EsValido(Modelo modelo);
 }

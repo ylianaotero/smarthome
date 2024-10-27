@@ -473,7 +473,7 @@ public class HomeServiceTest
         {
             Id = 1, 
             Name = "Cámara de seguridad", 
-            Model = 123, 
+            Model = "123", 
             Description = "Cámara para exteriores"
         };
         
@@ -481,7 +481,7 @@ public class HomeServiceTest
         {
             Id = 2, 
             Name = "Sensor de ventana", 
-            Model = 456, 
+            Model = "456", 
             Description = "Sensor para ventanas"
         };
     }

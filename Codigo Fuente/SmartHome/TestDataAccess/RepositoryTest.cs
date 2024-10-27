@@ -26,7 +26,7 @@ public class RepositoryTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     
     private const string CompanyName = "IoT Devices & Co.";
     private const string CompanyRUT = "123456789";
@@ -55,7 +55,7 @@ public class RepositoryTest
     [TestMethod]
     public void TestGetDevicesByFilterWithPagination()
     {
-        long otherModel = 1345354616347;
+        string otherModel = "1345354616347";
         List<Device> devices = new List<Device>
         {
             _defaultCamera,
@@ -96,7 +96,7 @@ public class RepositoryTest
     [TestMethod]
     public void TestGetDevicesByFilterWithoutPagination()
     {
-        long otherModel = 1345354616347;
+        string otherModel = "1345354616347";
         List<Device> devices = new List<Device>
         {
             _defaultCamera,
