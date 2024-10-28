@@ -9,6 +9,7 @@ public class Home
     private const string MessageMemberNotFound = "Member not found"; 
     private const string MessageDeviceAlreadyExists = "Device already exists"; 
     private const string MessageDeviceNotFound = "Device not found";
+    private const string MessageRoomByNameAlreadyExists = "A room with the same name has already been added to this home";
     
     [Key]
     public long Id { get; set; }
@@ -31,28 +32,17 @@ public class Home
 
     public void AddMember(Member member)
     {
-        if (MemberExist(member.User.Email))
+        if (MemberExists(member.User.Email))
         {
             throw new CannotAddItem(MessageMemberAlreadyExists); 
         }
+        
         Members.Add(member);
-    }
-    
-    public bool MemberExist(string email)
-    {
-        Member member = Members.Find(m => m.User.Email == email);
-        
-        if (member == null)
-        {
-            return false; 
-        }
-        
-        return true; 
     }
     
     public Member FindMember(string email)
     {
-        if (!MemberExist(email))
+        if (!MemberExists(email))
         {
             throw new CannotFindItemInList(MessageMemberNotFound ); 
         }
@@ -81,9 +71,9 @@ public class Home
 
     public void AddRoom(Room room)
     {
-        if (Rooms.Exists(r => r.Name == room.Name))
+        if (RoomExists(room))
         {
-            throw new ElementAlreadyExist("A room with the same name has already been added to this home");
+            throw new ElementAlreadyExist(MessageRoomByNameAlreadyExists);
         }
         
         Rooms.Add(room);
@@ -91,7 +81,7 @@ public class Home
 
     public void AddDevice(DeviceUnit device)
     {
-        if (!DeviceExist(device.HardwareId))
+        if (!DeviceExists(device.HardwareId))
         {
             Devices.Add(device);
         }
@@ -101,21 +91,9 @@ public class Home
         }
     }
     
-    private bool DeviceExist(Guid id)
-    {
-        DeviceUnit device = Devices.Find(d => d.HardwareId == id);
-        
-        if (device == null)
-        {
-            return false; 
-        }
-        
-        return true; 
-    }
-
     public DeviceUnit FindDevice(Guid id)
     {
-        if (DeviceExist(id))
+        if (DeviceExists(id))
         {
             return Devices.Find(d => d.HardwareId == id); 
         }
@@ -126,5 +104,20 @@ public class Home
     public void DeleteDevice(Guid id)
     {
         Devices.Remove(FindDevice(id));
+    }
+    
+    private bool MemberExists(string email)
+    {
+        return Members.Exists(m => m.User.Email == email);
+    }
+    
+    private bool RoomExists(Room room)
+    {
+        return Rooms.Exists(r => r.Name == room.Name);
+    }
+    
+    private bool DeviceExists(Guid id)
+    {
+        return Devices.Exists(d => d.HardwareId == id);
     }
 }
