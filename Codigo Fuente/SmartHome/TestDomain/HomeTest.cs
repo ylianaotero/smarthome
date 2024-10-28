@@ -247,6 +247,6 @@ public class HomeTest
 
         _home.AddRoom(room);
 
-        Assert.AreEqual(room.Name, _home.Rooms.FirstOrDefault().Name))
+        Assert.AreEqual(room.Name, _home.Rooms.FirstOrDefault().Name);
     }
 }

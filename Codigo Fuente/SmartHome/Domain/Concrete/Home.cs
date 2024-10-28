@@ -18,7 +18,7 @@ public class Home
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public int MaximumMembers { get; set; }
-  
+    public List<Room> Rooms { get; set; }
     public List<DeviceUnit> Devices { get; set; }
     public List<Member> Members { get; set; }
 
@@ -76,6 +76,11 @@ public class Home
         {
             throw new CannotFindItemInList(MessageMemberNotFound); 
         }
+    }
+
+    public void AddRoom(Room room)
+    {
+        Rooms.Add(room);
     }
 
     public void AddDevice(DeviceUnit device)
