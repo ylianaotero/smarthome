@@ -7,6 +7,7 @@ public class DeviceUnitTest
 {
     private DeviceUnit _deviceUnit;
     private SecurityCamera _securityCamera;
+    private Room _room;
     private Guid _deviceHardwareId;
     
     private const string CameraName = "My Security Camera";
@@ -14,6 +15,8 @@ public class DeviceUnitTest
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const string DeviceModel = "1345354616346";
+    private const string RoomName = "Bedroom";
+    private const long RoomId = 1;
     private const bool DeviceIsConnected = true;
     
     [TestInitialize]
@@ -30,6 +33,12 @@ public class DeviceUnitTest
         _deviceHardwareId = Guid.NewGuid();
         
         _deviceUnit = new DeviceUnit() {};
+        
+        _room = new Room()
+        {
+            Id = RoomId,
+            Name = RoomName
+        };
     }
     
     [TestMethod]
@@ -62,5 +71,13 @@ public class DeviceUnitTest
         _deviceUnit.Name = CameraCustomName;
         
         Assert.AreEqual(CameraCustomName, _deviceUnit.Name);
+    }
+    
+    [TestMethod]
+    public void TestAddRoomToDeviceUnit()
+    {
+        _deviceUnit.Room = _room;
+        
+        Assert.AreEqual(_deviceUnit.Room, _room);
     }
 }
