@@ -25,7 +25,7 @@ public class DevicesTest
     private const string SmartLampName = "My Smart Lamp";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     
     private const string WindowSensorType = "WindowSensor";
     private const string SecurityCameraType = "SecurityCamera";

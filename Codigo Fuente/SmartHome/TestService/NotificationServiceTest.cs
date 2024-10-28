@@ -25,7 +25,7 @@ public class NotificationServiceTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     private const string EventName = "New event";
     private const string Street = "Calle del Sol";
     private const int DoorNumber = 23;

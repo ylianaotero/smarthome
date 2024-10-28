@@ -69,6 +69,10 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         {
             return NotFound(CompanyNotFoundMessage);
         } 
+        catch (InputNotValid)
+        {
+            return BadRequest("Model is not valid");
+        }
         
         return CreatedAtAction(nameof(PostWindowSensors), request);
     }
@@ -86,6 +90,10 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         {
             return NotFound(CompanyNotFoundMessage);
         }
+        catch (InputNotValid)
+        {
+            return BadRequest("Model is not valid");
+        }
         
         return CreatedAtAction(nameof(PostSecurityCameras), request);
     }
@@ -102,6 +110,10 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         catch (ElementNotFound)
         {
             return NotFound(CompanyNotFoundMessage);
+        }
+        catch (InputNotValid)
+        {
+            return BadRequest("Model is not valid");
         }
         
         return CreatedAtAction(nameof(PostMotionSensors), request);

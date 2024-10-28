@@ -17,7 +17,7 @@ public class DeviceServiceTest
     private WindowSensor _defaultWindowSensor;
     private Mock<IRepository<Device>> _mockDeviceRepository;
     
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "edf124";
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
@@ -68,13 +68,33 @@ public class DeviceServiceTest
         CollectionAssert.AreEqual(deviceTypes, retrievedDeviceTypes);
     }
     
+    /*
+     [TestMethod]
+       public void TestCreateDevice()
+       {
+           _mockDeviceRepository.Setup(x => x.Add(_defaultWindowSensor));
+           
+           _deviceService.CreateDevice(_defaultWindowSensor);
+           _mockDeviceRepository.Verify(x => x.Add(_defaultWindowSensor), Times.Once);
+       }
+     */
+
     [TestMethod]
-    public void TestCreateDevice()
+    public void TestCreateDeviceWithValidationNumber()
     {
-        _mockDeviceRepository.Setup(x => x.Add(_defaultWindowSensor));
+        _mockDeviceRepository.Setup(x => x.Add(_defaultCamera));
         
-        _deviceService.CreateDevice(_defaultWindowSensor);
-        _mockDeviceRepository.Verify(x => x.Add(_defaultWindowSensor), Times.Once);
+        _deviceService.CreateDevice(_defaultCamera);
+        _mockDeviceRepository.Verify(x => x.Add(_defaultCamera), Times.Once);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestCreateDeviceThrowsException()
+    {
+        _defaultCompany.ValidateNumber = false;
+        
+        _deviceService.CreateDevice(_defaultCamera);
     }
 
     [TestMethod]
@@ -99,7 +119,11 @@ public class DeviceServiceTest
     {
         _devices = new List<Device>();
         
-        _defaultCompany = new Company { Name = CompanyName };
+        _defaultCompany = new Company
+        {
+            Name = CompanyName,
+            ValidateNumber = true
+        };
         
         List<string> photos = new List<string>()
         {
