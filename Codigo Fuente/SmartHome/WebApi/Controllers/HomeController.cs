@@ -194,8 +194,8 @@ public class HomeController(IHomeService homeService) : ControllerBase
     }
     
     [HttpPatch]
-    [Route("{id}/devices/{deviceId}")]
-    [RestrictToPrivilegedMembers(false, true)]
+    [Route("{homeId}/devices/{deviceId}")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult UpdateCustomDeviceName([FromRoute] long homeId, [FromRoute] Guid deviceId, [FromBody] PatchDeviceUnitRequest request)
     {
         try

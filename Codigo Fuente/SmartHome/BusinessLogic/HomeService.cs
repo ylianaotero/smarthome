@@ -233,22 +233,22 @@ public class HomeService (
     
     public void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId)
     {
-        Home home = homeRepository.GetById(id);
+        Home home = homeRepository.GetById(id)!;
         if (home == null)
         {
             throw new ElementNotFound(HomeNotFoundMessage);
         }
-        
-        DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == deviceId);
-        
-        if (deviceUnit == null)
+
+        try
+        {
+            DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == deviceId);
+            deviceUnit.Name = device.Name;
+            homeRepository.Update(home);
+        }
+        catch (ElementNotFound)
         {
             throw new ElementNotFound(DeviceNotFoundMessage);
         }
-        
-        deviceUnit.Name = device.Name;
-        
-        homeRepository.Update(home);
     }
     
     /*
