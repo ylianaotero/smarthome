@@ -247,4 +247,18 @@ public class HomeTest
 
         Assert.AreEqual(_room.Name, _home.Rooms.FirstOrDefault().Name);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void TestAddRoomWithTheSameNameToHome()
+    {
+        _home.AddRoom(_room);
+
+        Room newRoom = new Room()
+        {
+            Name = RoomName
+        };
+        
+        _home.AddRoom(newRoom);
+    }
 }
