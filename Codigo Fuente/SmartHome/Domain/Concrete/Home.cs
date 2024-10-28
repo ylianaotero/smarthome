@@ -40,16 +40,6 @@ public class Home
         Members.Add(member);
     }
     
-    public Member FindMember(string email)
-    {
-        if (!MemberExists(email))
-        {
-            throw new CannotFindItemInList(MessageMemberNotFound ); 
-        }
-        
-        return Members.Find(m => m.User.Email == email); 
-    }
-    
     public bool MemberCanReceiveNotifications(string email)
     {
         Member member = FindMember(email);
@@ -68,15 +58,15 @@ public class Home
             throw new CannotFindItemInList(MessageMemberNotFound); 
         }
     }
-
-    public void AddRoom(Room room)
+    
+    public Member FindMember(string email)
     {
-        if (RoomExists(room))
+        if (!MemberExists(email))
         {
-            throw new ElementAlreadyExist(MessageRoomByNameAlreadyExists);
+            throw new CannotFindItemInList(MessageMemberNotFound ); 
         }
         
-        Rooms.Add(room);
+        return Members.Find(m => m.User.Email == email); 
     }
 
     public void AddDevice(DeviceUnit device)
@@ -106,6 +96,16 @@ public class Home
         Devices.Remove(FindDevice(id));
     }
     
+    
+    public void AddRoom(Room room)
+    {
+        if (RoomExists(room))
+        {
+            throw new ElementAlreadyExist(MessageRoomByNameAlreadyExists);
+        }
+        
+        Rooms.Add(room);
+    }
     private bool MemberExists(string email)
     {
         return Members.Exists(m => m.User.Email == email);
@@ -113,7 +113,7 @@ public class Home
     
     private bool RoomExists(Room room)
     {
-        return Rooms.Exists(r => r.Name == room.Name);
+        return Rooms.Exists(r => r.Name == room.Name) || Rooms.Exists(r => r.Id == room.Id);
     }
     
     private bool DeviceExists(Guid id)
