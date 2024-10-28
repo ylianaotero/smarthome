@@ -1,4 +1,5 @@
 using IBusinessLogic;
+using ImportersLogic;
 using Moq;
 
 namespace ImporterLogicTest;
@@ -17,7 +18,7 @@ public class ImporterLogicTest
     [TestMethod]
     public void NewImporterLogic()
     {
-        ImporterLogic importerLogic = new ImporterLogic(_mockDeviceService); 
+        ImporterLogic importerLogic = new ImporterLogic(_mockDeviceService.Object); 
         
         Assert.IsNotNull(importerLogic);
     }

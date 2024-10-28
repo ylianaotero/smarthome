@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatorLetter", "Validato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IImporter", "IImporter\IImporter.csproj", "{A2B649ED-2737-4E1E-BE9E-D97230C82009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImporterLogic", "ImporterLogic\ImporterLogic.csproj", "{1CA0C691-DBDA-465B-BFDF-461136E7AEC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportersLogic", "ImportersLogic\ImportersLogic.csproj", "{1CA0C691-DBDA-465B-BFDF-461136E7AEC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImporterLogicTest", "ImporterLogicTest\ImporterLogicTest.csproj", "{9F23EE89-7578-44FD-A32B-F9FBD83FA3B9}"
 EndProject

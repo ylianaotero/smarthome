@@ -23,7 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\IBusinessLogic\IBusinessLogic.csproj" />
-      <ProjectReference Include="..\ImporterLogic\ImporterLogic.csproj" />
+      <ProjectReference Include="..\ImportersLogic\ImportersLogic.csproj" />
     </ItemGroup>
 
 </Project>
