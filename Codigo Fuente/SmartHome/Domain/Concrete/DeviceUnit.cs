@@ -9,6 +9,7 @@ public class DeviceUnit
     [Key] 
     public Guid HardwareId { get; set; }
     public Device Device { get; set; }
+    public Room Room { get; set; }
     public bool IsConnected { get; set; }
     
     public DeviceUnit()
