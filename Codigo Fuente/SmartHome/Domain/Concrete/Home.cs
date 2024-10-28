@@ -26,6 +26,7 @@ public class Home
     {
         Members = new List<Member>();
         Devices = new List<DeviceUnit>();
+        Rooms = new List<Room>();
     }
 
     public void AddMember(Member member)
@@ -39,7 +40,7 @@ public class Home
     
     public bool MemberExist(string email)
     {
-        Member member = Members.FirstOrDefault(m => m.User.Email == email);
+        Member member = Members.Find(m => m.User.Email == email);
         
         if (member == null)
         {
@@ -56,7 +57,7 @@ public class Home
             throw new CannotFindItemInList(MessageMemberNotFound ); 
         }
         
-        return Members.FirstOrDefault(m => m.User.Email == email); 
+        return Members.Find(m => m.User.Email == email); 
     }
     
     public bool MemberCanReceiveNotifications(string email)
@@ -97,7 +98,7 @@ public class Home
     
     private bool DeviceExist(Guid id)
     {
-        DeviceUnit device = Devices.FirstOrDefault(d => d.HardwareId == id);
+        DeviceUnit device = Devices.Find(d => d.HardwareId == id);
         
         if (device == null)
         {
@@ -111,7 +112,7 @@ public class Home
     {
         if (DeviceExist(id))
         {
-            return Devices.FirstOrDefault(d => d.HardwareId == id); 
+            return Devices.Find(d => d.HardwareId == id); 
         }
         
         throw new CannotFindItemInList(MessageDeviceNotFound ); 

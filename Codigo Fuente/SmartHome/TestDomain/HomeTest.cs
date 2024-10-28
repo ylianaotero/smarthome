@@ -13,16 +13,16 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
+    private const string RoomName = "Living room";
     private const int Id = 11;
-    
-    private long _homeOwnerId;
     
     private User _user; 
     private User _defaultOwner;
 
     private Member _member; 
 
-    private DeviceUnit _deviceUnit; 
+    private DeviceUnit _deviceUnit;
+    private Room _room;
 
     private Home _home;
     
@@ -51,15 +51,18 @@ public class HomeTest
         
         _deviceUnit = new DeviceUnit()
         {
-            HardwareId = new Guid(),
+            HardwareId = Guid.NewGuid(),
             IsConnected = true,
             Device = new SecurityCamera()
+        };
+
+        _room = new Room()
+        {
+            Name = RoomName
         };
         
         _user.Email = Email1;
         _member = new Member(_user); 
-        
-        _homeOwnerId = 000;
     }
     
     [TestCleanup]
@@ -99,7 +102,7 @@ public class HomeTest
     public void TestAddMember()
     {
         _home.AddMember(_member); 
-        Assert.AreEqual(1, _home.Members.Count());
+        Assert.AreEqual(1, _home.Members.Count);
     }
     
     [TestMethod]
@@ -165,7 +168,7 @@ public class HomeTest
         
         _home.DeleteMember(Email1); 
         
-        Member memberWithEmail1 = _home.Members.FirstOrDefault(m => m.User.Email == Email1);
+        Member memberWithEmail1 = _home.Members.Find(m => m.User.Email == Email1);
         
         Assert.IsNull(memberWithEmail1);
     }
@@ -185,9 +188,9 @@ public class HomeTest
     {
         _home.AddDevice(_deviceUnit); 
         
-        Assert.AreEqual(1, _home.Devices.Count());
+        Assert.AreEqual(1, _home.Devices.Count);
         
-        DeviceUnit device = _home.Devices.FirstOrDefault(d => d.HardwareId == _deviceUnit.HardwareId);
+        DeviceUnit device = _home.Devices.Find(d => d.HardwareId == _deviceUnit.HardwareId);
         
         Assert.IsNotNull(device);
     }
@@ -234,19 +237,14 @@ public class HomeTest
         
         _home.DeleteDevice(_deviceUnit.HardwareId); 
         
-        Assert.AreEqual(0, _home.Devices.Count());
+        Assert.AreEqual(0, _home.Devices.Count);
     }
 
     [TestMethod]
     public void TestAddRoomToHome()
     {
-        Room room = new Room()
-        {
-            Name = "Living room"
-        };
+       _home.AddRoom(_room);
 
-        _home.AddRoom(room);
-
-        Assert.AreEqual(room.Name, _home.Rooms.FirstOrDefault().Name);
+        Assert.AreEqual(_room.Name, _home.Rooms.FirstOrDefault().Name);
     }
 }
