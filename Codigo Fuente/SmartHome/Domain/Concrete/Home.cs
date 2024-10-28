@@ -81,6 +81,11 @@ public class Home
 
     public void AddRoom(Room room)
     {
+        if (Rooms.Exists(r => r.Name == room.Name))
+        {
+            throw new ElementAlreadyExist("A room with the same name has already been added to this home");
+        }
+        
         Rooms.Add(room);
     }
 
