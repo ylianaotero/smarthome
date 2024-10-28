@@ -194,13 +194,13 @@ public class HomeController(IHomeService homeService) : ControllerBase
     }
     
     [HttpPatch]
-    [Route("{id}/devices")]
+    [Route("{id}/devices/{deviceId}")]
     [RestrictToPrivilegedMembers(false, true)]
-    public IActionResult UpdateCustomDeviceName([FromRoute] long id, [FromBody] PatchDeviceUnitRequest request)
+    public IActionResult UpdateCustomDeviceName([FromRoute] long homeId, [FromRoute] Guid deviceId, [FromBody] PatchDeviceUnitRequest request)
     {
         try
         {
-            homeService.UpdateDeviceCustomName(id, request.ToEntity());
+            homeService.UpdateDeviceCustomName(homeId, request.ToEntity(), deviceId);
             return Ok(UpdatedDeviceNameMessage);
         }
         catch (ElementNotFound)

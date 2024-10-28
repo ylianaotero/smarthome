@@ -570,7 +570,8 @@ public class HomesControllerTest
         
     }
     
-    [TestMethod]
+    //Desde aca cambian con la nueva implementacion
+    /*[TestMethod]
     public void TestUpdateDeviceUnitNameOkStatusCode()
     {
         PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
@@ -586,7 +587,9 @@ public class HomesControllerTest
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
+    */
     
+    /*
     [TestMethod]
     public void TestUpdateDeviceUnitNameNotFoundStatusCode()
     {
@@ -601,6 +604,40 @@ public class HomesControllerTest
         _homeController = new HomeController(_mockHomeService.Object);
         
         ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,request) as ObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    */
+
+    [TestMethod]
+    public void TestUpdateDeviceUnitNameOkStatusCode()
+    {
+        PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
+        {
+            Name = CustomName
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()));
+        _homeController = new HomeController(_mockHomeService.Object);
+        
+        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,new Guid(),request) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestUpdateDeviceUnitNameNotFoundStatusCode()
+    {
+        PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
+        {
+            Name = CustomName
+        };
+        
+        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        _homeController = new HomeController(_mockHomeService.Object);
+        
+        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,new Guid(),request) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }

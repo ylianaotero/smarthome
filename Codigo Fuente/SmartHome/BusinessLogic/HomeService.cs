@@ -229,7 +229,7 @@ public class HomeService (
         homeRepository.Update(home);
     }
     
-    public void UpdateDeviceCustomName(long id, DeviceUnit device)
+    public void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId)
     {
         Home home = homeRepository.GetById(id);
         if (home == null)
@@ -237,7 +237,7 @@ public class HomeService (
             throw new ElementNotFound(HomeNotFoundMessage);
         }
         
-        DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == device.HardwareId);
+        DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == deviceId);
         
         if (deviceUnit == null)
         {
@@ -248,4 +248,24 @@ public class HomeService (
         
         homeRepository.Update(home);
     }
+    
+    /*
+     Antes el Update estaba asi:
+     Home home = homeRepository.GetById(id);
+       if (home == null)
+       {
+           throw new ElementNotFound(HomeNotFoundMessage);
+       }
+       
+       DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == device.HardwareId);
+       
+       if (deviceUnit == null)
+       {
+           throw new ElementNotFound(DeviceNotFoundMessage);
+       }
+       
+       deviceUnit.Name = device.Name;
+       
+       homeRepository.Update(home);
+     */
 }

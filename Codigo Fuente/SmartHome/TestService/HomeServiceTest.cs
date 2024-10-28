@@ -477,6 +477,7 @@ public class HomeServiceTest
         _homeService.UpdateHomeAlias(_defaultHome.Id, UpdatedAlias);
     }
     
+    //DESDE ACA CAMBIAN LOS TESTS
     [TestMethod]
     public void TestUpdateCustomDeviceName()
     {
@@ -487,35 +488,62 @@ public class HomeServiceTest
         
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
         
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice);
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
         
-        Assert.AreEqual(_updatedDevice.Device.Name, _defaultHome.Devices[0].Device.Name);
+        Assert.AreEqual(_updatedDevice, _defaultHome.Devices[0]);
     }
+    
+    /*
+     _defaultHome.Devices = new List<DeviceUnit>()
+       {
+           _securityCameraUnit
+       };
+       
+       _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+       
+       _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice);
+       
+       Assert.AreEqual(_updatedDevice.Device.Name, _defaultHome.Devices[0].Device.Name);
+     */
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotUpdateCustomDeviceNameBecauseHomeNotFound()
     {
-        _defaultHome.Devices = new List<DeviceUnit>()
-        {
-            _securityCameraUnit
-        };
+        _defaultHome.Devices = new List<DeviceUnit>();
         
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
         
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice);
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
     }
+    
+    /*
+     _defaultHome.Devices = new List<DeviceUnit>()
+       {
+           _securityCameraUnit
+       };
+       
+       _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
+       
+       _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice);
+     */
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotUpdateCustomDeviceNameBecauseDeviceUnitNotFound()
     {
-        _defaultHome.Devices = new List<DeviceUnit>();
-        
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
         
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _windowSensorUnit);
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, new Guid());
     }
+    
+    /*
+      _defaultHome.Devices = new List<DeviceUnit>();
+              
+              _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+              
+              _homeService.UpdateDeviceCustomName(_defaultHome.Id, _windowSensorUnit);
+     */
     
     private void SetupDefaultObjects()
     {
