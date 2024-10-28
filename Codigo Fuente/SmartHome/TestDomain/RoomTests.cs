@@ -22,5 +22,7 @@ public class RoomTests
             Device = device,
             Room = room
         };
+        
+        Assert.AreEqual(deviceUnit.Room, room);
     }
 }
