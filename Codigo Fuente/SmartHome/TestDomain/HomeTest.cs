@@ -236,5 +236,17 @@ public class HomeTest
         
         Assert.AreEqual(0, _home.Devices.Count());
     }
-    
+
+    [TestMethod]
+    public void TestAddRoomToHome()
+    {
+        Room room = new Room()
+        {
+            Name = "Living room"
+        };
+
+        _home.AddRoom(room);
+
+        Assert.AreEqual(1, _home.Rooms.Count());
+    }
 }
