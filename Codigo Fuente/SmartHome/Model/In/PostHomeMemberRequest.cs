@@ -17,9 +17,11 @@ public class PostHomeMemberRequest
         return new MemberDTO
         {
             UserEmail = UserEmail, 
-            ReceivesNotifications = ReceivesNotifications, 
+            HasPermissionToAddADevice = HasPermissionToAddADevice,
             HasPermissionToListDevices = HasPermissionToListDevices,
-            HasPermissionToAddADevice = HasPermissionToAddADevice
+            ReceivesNotifications = ReceivesNotifications
+            
+           
         };
     }
 }

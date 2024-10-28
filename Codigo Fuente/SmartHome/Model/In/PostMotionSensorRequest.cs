@@ -6,7 +6,7 @@ namespace Model.In;
 public class PostMotionSensorRequest
 {
     public string Name { get; set; }
-    public long Model { get; set; }
+    public string Model { get; set; }
     public List<string> PhotoUrls { get; set; }
     public string Description { get; set; }
     public List<string>? Functionalities { get; set; }

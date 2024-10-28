@@ -25,7 +25,7 @@ public class DevicesControllerTest
     private Mock<ICompanyService> _mockICompanyService;
     private Mock<ISessionService> _mockISessionService;
     
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     private const string CameraName = "My Security Camera";
     private const string WindowSensorName = "My Window Sensor";
     private const string MotionSensorName = "My Motion Sensor";
@@ -208,7 +208,7 @@ public class DevicesControllerTest
             new SecurityCamera()
             {
                 Name = request.Name,
-                Model = request.Model!.Value,
+                Model = request.Model,
                 PhotoURLs = new List<string>() { DevicePhotoUrl },
                 Company = new Company()
                 {
@@ -221,7 +221,7 @@ public class DevicesControllerTest
             .Setup(service => service
                 .GetDevicesByFilter(It.IsAny<Func<Device, bool>>(), It.IsAny<PageData>()))
             .Returns(devices);
-        GetDevicesResponse? expectedResponse = new GetDevicesResponse(devices);
+        GetDevicesResponse? expectedResponse = new GetDevicesResponse(devices, 1);
         
         ObjectResult? result = _deviceController.GetDevices(request, DefaultPageDataRequest()) as OkObjectResult;
         GetDevicesResponse? response = result!.Value as GetDevicesResponse;
@@ -288,6 +288,19 @@ public class DevicesControllerTest
     }
     
     [TestMethod]
+    public void TestPostWindowSensorsBadRequestStatusCode()
+    {
+        PostWindowSensorRequest request = DefaultWindowSensorRequest();
+        _mockIDeviceService
+            .Setup(service => service.CreateDevice(It.IsAny<Device>()))
+            .Throws(new InputNotValid("Model is not valid"));
+        
+        BadRequestObjectResult? result = _deviceController.PostWindowSensors(request) as BadRequestObjectResult;
+        
+        Assert.AreEqual(400, result!.StatusCode);
+    }
+    
+    [TestMethod]
     public void TestPostWindowSensorsNotFoundStatusCode()
     {
         PostSecurityCameraRequest request = DefaultSecurityCameraRequest();
@@ -311,6 +324,33 @@ public class DevicesControllerTest
         NotFoundObjectResult? result = _deviceController.PostWindowSensors(request) as NotFoundObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result!.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestPostSecurityCamerasBadRequestStatusCode()
+    {
+        PostSecurityCameraRequest request = DefaultSecurityCameraRequest();
+        _mockIDeviceService
+            .Setup(service => service.CreateDevice(It.IsAny<Device>()))
+            .Throws(new InputNotValid("Model is not valid"));
+        
+        BadRequestObjectResult? result = _deviceController.PostSecurityCameras(request) as BadRequestObjectResult;
+        
+        Assert.AreEqual(400, result!.StatusCode);
+    }
+    
+    
+    [TestMethod]
+    public void TestPostMotionSensorsBadRequestStatusCode()
+    {
+        PostMotionSensorRequest request = DefaultMotionSensorRequest();
+        _mockIDeviceService
+            .Setup(service => service.CreateDevice(It.IsAny<Device>()))
+            .Throws(new InputNotValid("Model is not valid"));
+        
+        BadRequestObjectResult? result = _deviceController.PostMotionSensors(request) as BadRequestObjectResult;
+        
+        Assert.AreEqual(400, result!.StatusCode);
     }
     
     [TestMethod]
@@ -552,7 +592,7 @@ public class DevicesControllerTest
             _defaultSmartLamp
         ];
 
-        return new GetDevicesResponse(devices);
+        return new GetDevicesResponse(devices, 1);
     }
     
     private GetDeviceResponse DefaultSecurityCameraResponse()

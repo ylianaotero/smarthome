@@ -5,7 +5,7 @@ namespace Model.In;
 public class GetDeviceRequest
 {
     public string? Name { get; set; }
-    public long? Model { get; set; }
+    public string? Model { get; set; }
     public string? Company { get; set; }
     public string? Kind { get; set; }
     

@@ -21,8 +21,145 @@
   <a class="btn btn-primary" (click)="goHomesOfHomeOwner()">
     <i class="bi bi-list-ul"></i> Listar Hogares
   </a>
+  <a class="btn btn-primary" (click)="openModal('showDevices')">
+    <i class="bi bi-display"></i> Listar Dispositivos
+  </a>
+
+  <a class="btn btn-primary" (click)="openModal('showSupportedDevices')">
+    <i class="bi bi-gear"></i> Listar Dispositivos Soportados
+  </a>
 
 </div>
+
+<div class="modal fade" id="myModalShowSupportedDevices" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="isModalOfListOfSupportedDevicesOpen" [style.display]="isModalOfListOfSupportedDevicesOpen ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'showSupportedDevices')">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Visualizar dispositivos soportados</h5>
+        <button type="button" class="close" (click)="closeModal('showSupportedDevices')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let device of supportedDevices">
+            <td>{{ device }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('showSupportedDevices')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="isModalOfListOfDevicesOpen" [style.display]="isModalOfListOfDevicesOpen ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'showDevices')">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Visualizar dispositivos</h5>
+        <button type="button" class="close" (click)="closeModal('showDevices')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="filter-container row g-3 mb-3">
+          <div class="col-12 mb-3">
+            <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName">
+          </div>
+
+          <div class="col-12 mb-3">
+            <input type="number" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel">
+          </div>
+
+          <div class="col-12 mb-3">
+            <input type="text" class="form-control" placeholder="Filtrar por empresa" [(ngModel)]="selectedCompany">
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="deviceTypeSelect" class="form-label">Tipo de dispositivo</label>
+            <div class="input-group">
+              <select class="form-select" id="deviceTypeSelect" [(ngModel)]="selectedKind">
+                <option value="">Todos los tipos</option>
+                <option *ngFor="let type of supportedDevices" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12 mb-3 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" (click)="getDevices()">Buscar</button>
+          </div>
+
+        </div>
+
+
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Foto</th>
+            <th scope="col">Empresa</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let device of devices">
+            <td>{{ device.name }}</td>
+            <td>{{ device.model }}</td>
+            <td><img [src]="device.photoUrl" alt="Device Image" style="max-width: 100px; height: auto;" /></td>
+            <td>{{ device.companyName }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer d-flex flex-column align-items-center">
+        <nav aria-label="Page navigation" class="mb-2">
+          <ul class="pagination justify-content-center mb-0">
+            <li class="page-item">
+              <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span>
+            </li>
+            <li class="page-item">
+              <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+            </li>
+          </ul>
+        </nav>
+
+        <button type="button" class="btn btn-secondary" (click)="closeModal('showDevices')">Cerrar</button>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 
 <!-- Enlace a Bootstrap JS y jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

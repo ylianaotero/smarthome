@@ -7,7 +7,7 @@ public class GetDeviceUnitResponse
     public string Name { get; set; }
     public Guid HardwareId { get; set; }
     public bool IsConnected { get; set; }
-    public long Model { get; set; }
+    public string Model { get; set; }
     public string Photo { get; set; }
     
     public GetDeviceUnitResponse(DeviceUnit deviceUnit)

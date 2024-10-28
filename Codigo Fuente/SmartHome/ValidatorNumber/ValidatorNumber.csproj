@@ -7,9 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\IDataAccess\IDataAccess.csproj" />
-      <ProjectReference Include="..\IBusinessLogic\IBusinessLogic.csproj" />
       <ProjectReference Include="..\IModelValidator\IModelValidator.csproj" />
     </ItemGroup>
 

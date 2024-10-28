@@ -8,11 +8,18 @@
 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="homesOfHomeOwner.component.css">
 </head>
 <body>
 
 <div class="container mt-4">
+  <div class="back-button">
+    <button (click)="goHome()" class="btn btn-white">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+  </div>
   <h1 class="text-center mb-4">Lista de mis hogares</h1>
   <div class="row">
     <div class="col-md-6 mb-4" *ngFor="let home of homes">
@@ -25,12 +32,17 @@
             <button class="btn btn-primary btn-block mb-2" (click)="openModal(home, 'addMembers')">
               <i class="fas fa-user-plus"></i> Agregar Miembro
             </button>
-            <button class="btn btn-secondary btn-block mb-2">
+            <button class="btn btn-secondary btn-block mb-2" (click)="openModal(home, 'addDevice')">
               <i class="fas fa-plug"></i> Asociar Dispositivo
             </button>
             <button class="btn btn-info btn-block mb-2"  (click)="openModal(home, 'showMembers')">
               <i class="fas fa-users"></i> Listar Miembros
             </button>
+
+            <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'showDevices')">
+              <i class="fas fa-tablet-alt"></i> Listar Dispositivos
+            </button>
+
           </div>
         </div>
       </div>
@@ -41,7 +53,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <!-- Modal -->
 <div class="modal fade" id="myModalMembers" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfMembersOpen" [style.display]="isModalOfMembersOpen ? 'block' : 'none'"
@@ -112,6 +123,54 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModalDevice" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="isModalOfDeviceOpen" [style.display]="isModalOfDeviceOpen ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'addDevice')">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar dispositivo a la casa {{ selectedHome?.id }}</h5>
+        <button type="button" class="close" (click)="closeModal('addDevice')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form #deviceForm="ngForm" (ngSubmit)="postDevice()" novalidate>
+
+          <div class="form-group">
+            <label for="deviceId">Id del dispositivo:</label>
+            <input type="number" class="form-control" id="deviceId"
+                   [(ngModel)]="newDevice.deviceId" name="deviceId"
+                   required placeholder="Ingrese el id del dispositivo">
+            <div *ngIf="deviceForm.submitted && deviceForm.controls['deviceId']?.invalid" class="text-danger">
+              El id del dispositivo es requerido y debe ser válido.
+            </div>
+          </div>
+
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="isConnected"
+                   [(ngModel)]="newDevice.isConnected" name="isConnected">
+            <label class="form-check-label" for="isConnected">
+              ¿Está conectado?
+            </label>
+          </div>
+
+          <div *ngIf="feedback" class="alert alert-info">
+            {{ feedback }}
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('addDevice')">Cerrar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!deviceForm.valid" (click)="postDevice()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -129,20 +188,81 @@
       </div>
 
       <div class="modal-body">
-        <div class="modal-body">
-          <div *ngIf="members.length === 0" class="alert alert-warning">
-            No hay miembros en esta casa.
-          </div>
-          <ul *ngIf="members.length > 0" class="list-group">
-            <li *ngFor="let member of members" class="list-group-item">
-              {{ member.fullName }}
-            </li>
-          </ul>
+        <!-- Alerta de Feedback -->
+        <div *ngIf="feedback" class="alert alert-info" role="alert">
+          {{ feedback }}
         </div>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Nombre Completo</th>
+            <th scope="col">¿Recibe Notificaciones?</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let member of members">
+            <td>{{ member.fullName }}</td>
+            <td>
+              <button class="btn" (click)="toggleNotification(member)">
+                <i
+                  class="fas"
+                  [ngClass]="{
+                      'fa-bell text-success': member.receivesNotifications,
+                      'fa-bell-slash text-danger': !member.receivesNotifications
+                    }"
+                ></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="isModalOfListOfDevicesOpen" [style.display]="isModalOfListOfDevicesOpen ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'showDevices')">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Visualizar dispositivos de la casa {{ selectedHome?.id }}</h5>
+        <button type="button" class="close" (click)="closeModal('showDevices')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
 
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">ID del Hardware</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">¿Conectado?</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let device of devices">
+            <td>{{ device.name }}</td>
+            <td>{{ device.hardwareId }}</td>
+            <td>{{ device.model }}</td>
+            <td>
+              <i *ngIf="device.isConnected" class="fas fa-check text-success"></i>
+              <i *ngIf="!device.isConnected" class="fas fa-times text-danger"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal('showMembers')">Cerrar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal('showDevices')">Cerrar</button>
       </div>
     </div>
   </div>
