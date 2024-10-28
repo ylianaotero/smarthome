@@ -91,6 +91,8 @@ public class SmartHomeContext : DbContext
     {
         modelBuilder.Entity<DeviceUnit>().HasOne<Device>(du => du.Device);
         modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Device).AutoInclude();
+        modelBuilder.Entity<DeviceUnit>().HasOne<Room>(du => du.Room);
+        modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Room).AutoInclude();
     }
     
     private void ConfigureUser(ModelBuilder modelBuilder)
@@ -137,11 +139,13 @@ public class SmartHomeContext : DbContext
         modelBuilder.Entity<Home>().Navigation(h => h.Members).AutoInclude();
         modelBuilder.Entity<Home>().Navigation(h => h.Devices).AutoInclude();
         modelBuilder.Entity<Home>().Navigation(h => h.Owner).AutoInclude();
+        modelBuilder.Entity<Home>().Navigation(h => h.Rooms).AutoInclude();
         modelBuilder.Entity<Home>().ToTable("Homes");
         modelBuilder.Entity<Home>().Property(h => h.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Home>().HasOne<User>(h => h.Owner);
         modelBuilder.Entity<Home>().HasMany<Member>(h => h.Members);
         modelBuilder.Entity<Home>().HasMany<DeviceUnit>(h => h.Devices);
+        modelBuilder.Entity<Home>().HasMany<Room>(h => h.Rooms);
     }
     
     private void ConfigureMember(ModelBuilder modelBuilder)
