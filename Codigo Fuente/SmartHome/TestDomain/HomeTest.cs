@@ -58,6 +58,7 @@ public class HomeTest
 
         _room = new Room()
         {
+            Id = Id,
             Name = RoomName
         };
         
@@ -256,7 +257,22 @@ public class HomeTest
 
         Room newRoom = new Room()
         {
-            Name = RoomName
+            Name = _room.Name
+        };
+        
+        _home.AddRoom(newRoom);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void TestAddRoomWithTheSameIdToHome()
+    {
+        _home.AddRoom(_room);
+
+        Room newRoom = new Room()
+        {
+            Id = _room.Id,
+            Name = _room.Name + " 2"
         };
         
         _home.AddRoom(newRoom);
