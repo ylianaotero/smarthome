@@ -17,7 +17,7 @@ public class ImportController(IImporter.IImporter importer) : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest("Either such directory could not be found, or the file name is not correct.");
+            return NotFound("Either such directory could not be found, or the file name is not correct.");
         }
     }
     
