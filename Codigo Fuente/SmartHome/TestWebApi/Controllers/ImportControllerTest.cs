@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WebApi.Controllers;
 
 namespace TestWebApi.Controllers;
 
@@ -30,13 +31,15 @@ public class ImportControllerTest
         
         _importController = new ImportController(_mockImporter.Object);
         
-        ObjectResult result = _importController.GetName(_directoryPath) as OkObjectResult;
+        ObjectResult result = _importController.GetNames(_directoryPath) as OkObjectResult;
         List<string> response = result.Value as List<string>;
         
         _mockImporter.Verify();
         
         Assert.AreEqual(_listImporters, response);
     }
+    
+    
 
     
     
