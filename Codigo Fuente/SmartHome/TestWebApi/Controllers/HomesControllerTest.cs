@@ -569,45 +569,6 @@ public class HomesControllerTest
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
         
     }
-    
-    //Desde aca cambian con la nueva implementacion
-    /*[TestMethod]
-    public void TestUpdateDeviceUnitNameOkStatusCode()
-    {
-        PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
-        {
-            HardwareId = new Guid(),
-            Name = CustomName
-        };
-        
-        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>()));
-        _homeController = new HomeController(_mockHomeService.Object);
-        
-        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,request) as OkObjectResult;
-        
-        Assert.AreEqual(OKStatusCode, result.StatusCode);
-    }
-    */
-    
-    /*
-    [TestMethod]
-    public void TestUpdateDeviceUnitNameNotFoundStatusCode()
-    {
-        PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
-        {
-            HardwareId = new Guid(),
-            Name = CustomName
-        };
-        
-        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>()))
-            .Throws(new ElementNotFound(ElementNotFoundMessage));
-        _homeController = new HomeController(_mockHomeService.Object);
-        
-        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,request) as ObjectResult;
-        
-        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
-    }
-    */
 
     [TestMethod]
     public void TestUpdateDeviceUnitNameOkStatusCode()

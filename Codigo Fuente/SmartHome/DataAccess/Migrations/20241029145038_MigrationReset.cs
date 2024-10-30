@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration : Migration
+    public partial class MigrationReset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,7 +38,8 @@ namespace DataAccess.Migrations
                     OwnerId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RUT = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LogoURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LogoURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ValidateNumber = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,13 +77,13 @@ namespace DataAccess.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Model = table.Column<long>(type: "bigint", nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhotoURLs = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyId = table.Column<long>(type: "bigint", nullable: true),
                     Kind = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    LocationType = table.Column<int>(type: "int", nullable: true),
-                    Functionalities = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Functionalities = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LocationType = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -127,6 +128,7 @@ namespace DataAccess.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    Alias = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DoorNumber = table.Column<int>(type: "int", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: false),
@@ -148,31 +150,6 @@ namespace DataAccess.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeviceUnits",
-                columns: table => new
-                {
-                    HardwareId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeviceId = table.Column<long>(type: "bigint", nullable: false),
-                    IsConnected = table.Column<bool>(type: "bit", nullable: false),
-                    HomeId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceUnits", x => x.HardwareId);
-                    table.ForeignKey(
-                        name: "FK_DeviceUnits_Devices_DeviceId",
-                        column: x => x.DeviceId,
-                        principalTable: "Devices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DeviceUnits_Homes_HomeId",
-                        column: x => x.HomeId,
-                        principalTable: "Homes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -201,6 +178,58 @@ namespace DataAccess.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Room",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HomeId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Room", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Room_Homes_HomeId",
+                        column: x => x.HomeId,
+                        principalTable: "Homes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeviceUnits",
+                columns: table => new
+                {
+                    HardwareId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeviceId = table.Column<long>(type: "bigint", nullable: false),
+                    IsConnected = table.Column<bool>(type: "bit", nullable: false),
+                    RoomId = table.Column<long>(type: "bigint", nullable: false),
+                    HomeId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeviceUnits", x => x.HardwareId);
+                    table.ForeignKey(
+                        name: "FK_DeviceUnits_Devices_DeviceId",
+                        column: x => x.DeviceId,
+                        principalTable: "Devices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DeviceUnits_Homes_HomeId",
+                        column: x => x.HomeId,
+                        principalTable: "Homes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DeviceUnits_Room_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Room",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -261,6 +290,11 @@ namespace DataAccess.Migrations
                 column: "HomeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DeviceUnits_RoomId",
+                table: "DeviceUnits",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Homes_HomeOwnerId",
                 table: "Homes",
                 column: "HomeOwnerId");
@@ -306,6 +340,11 @@ namespace DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Room_HomeId",
+                table: "Room",
+                column: "HomeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sessions_UserId",
                 table: "Sessions",
                 column: "UserId");
@@ -328,6 +367,9 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Devices");
+
+            migrationBuilder.DropTable(
+                name: "Room");
 
             migrationBuilder.DropTable(
                 name: "Homes");
