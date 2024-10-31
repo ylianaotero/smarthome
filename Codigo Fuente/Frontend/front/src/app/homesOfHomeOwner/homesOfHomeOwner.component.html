@@ -225,8 +225,10 @@
 
 
 <div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
-     [class.show]="isModalOfListOfDevicesOpen" [style.display]="isModalOfListOfDevicesOpen ? 'block' : 'none'"
+     [class.show]="isModalOfListOfDevicesOpen"
+     [style.display]="isModalOfListOfDevicesOpen ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'showDevices')">
+
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -237,7 +239,13 @@
       </div>
 
       <div class="modal-body">
-        <table class="table table-striped">
+        <!-- Mostrar mensaje de error si existe -->
+        <div *ngIf="errorMessage != '' " class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Mostrar la tabla si no hay errores y hay dispositivos -->
+        <table *ngIf="errorMessage == '' " class="table table-striped">
           <thead>
           <tr>
             <th scope="col">Nombre</th>
@@ -260,13 +268,13 @@
         </table>
       </div>
 
-
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal('showDevices')">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 

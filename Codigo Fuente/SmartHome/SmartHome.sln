@@ -38,6 +38,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportersLogic", "Importers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImporterLogicTest", "ImporterLogicTest\ImporterLogicTest.csproj", "{9F23EE89-7578-44FD-A32B-F9FBD83FA3B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonDeviceImporter", "JsonDeviceImporter\JsonDeviceImporter.csproj", "{BFF77E39-41E3-4223-BBAD-086622188BA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImporterTests", "ImporterTests\ImporterTests.csproj", "{83270B8D-48E1-4C9B-B79A-B2A637046E13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,5 +124,13 @@ Global
 		{9F23EE89-7578-44FD-A32B-F9FBD83FA3B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F23EE89-7578-44FD-A32B-F9FBD83FA3B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F23EE89-7578-44FD-A32B-F9FBD83FA3B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF77E39-41E3-4223-BBAD-086622188BA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF77E39-41E3-4223-BBAD-086622188BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF77E39-41E3-4223-BBAD-086622188BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF77E39-41E3-4223-BBAD-086622188BA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83270B8D-48E1-4C9B-B79A-B2A637046E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83270B8D-48E1-4C9B-B79A-B2A637046E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83270B8D-48E1-4C9B-B79A-B2A637046E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83270B8D-48E1-4C9B-B79A-B2A637046E13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

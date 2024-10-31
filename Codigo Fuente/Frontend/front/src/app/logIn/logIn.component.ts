@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../shared/api.service';
 import { Router } from '@angular/router';
-import { sessionRequest } from './sessionModel';
+import {sessionModel, sessionRequest} from './sessionModel';
 
 @Component({
   selector: 'app-log-in',
@@ -28,7 +28,9 @@ export class LogInComponent {
         this.api.currentSession = res;
         this.feedback = "success";
         localStorage.setItem('user', JSON.stringify(res));
-        this.router.navigate(['account']);
+        console.log(res.user.roles);
+        this.redirection(res);
+
       },
       error: err => {
         this.feedback = "Invalid credentials";
@@ -37,6 +39,23 @@ export class LogInComponent {
         }
       }
     });
+  }
+
+  redirection(res: sessionModel){
+    if (res.user && res.user.roles) {
+      const hasHomeOwnerRole = res.user.roles.some(role => role.kind === 'HomeOwner');
+      const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
+
+      if (hasHomeOwnerRole) {
+        this.router.navigate(['account']);
+      } else if (hasCompanyOwnerRole) {
+        this.router.navigate(['/imports']);
+      } else {
+        // Manejo si no tiene ninguno de los roles requeridos
+      }
+    } else {
+      // Manejo si res.user o res.user.roles no existen
+    }
   }
 
   goToRegister(): void {

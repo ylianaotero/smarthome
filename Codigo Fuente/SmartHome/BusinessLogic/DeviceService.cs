@@ -24,6 +24,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         
         if (ModelIsValid(deviceModel, validateNumber))
         {
+            Console.WriteLine("hace el add");
             deviceRepository.Add(device);
         }
         else
@@ -31,6 +32,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
             throw new InputNotValid(ModelValidatorError);
         }
     }
+
 
     private bool ModelIsValid(Modelo deviceModel, bool validateNumber)
     {
@@ -71,4 +73,5 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
 
         return deviceTypes;
     }
+    
 }

@@ -54,7 +54,19 @@ public class SessionService(IRepository<User> userRepository, IRepository<Sessio
 
         return session.User; 
     }
-    
+
+    public List<CompanyOwner> GetCompanyOwnerRole(Guid token)
+    {
+        User user = GetUser(token);
+        
+        List<CompanyOwner> companyOwnerRoles = user.Roles
+            .Where(role => role.Kind == "CompanyOwner")
+            .OfType<CompanyOwner>()
+            .ToList();
+
+        return companyOwnerRoles;
+    }
+
     public bool UserHasCorrectRole(Guid? authorization, string roleWithPermissions)
     {
         return GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r, roleWithPermissions));
