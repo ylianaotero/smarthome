@@ -158,6 +158,18 @@ public class HomeService (
         homeRepository.Update(home);
     }
     
+    public void AddRoomToHome(long homeId, Room room)
+    {
+        Home home = homeRepository.GetById(homeId);
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        
+        home.Rooms.Add(room);
+        homeRepository.Update(home);
+    }
+    
     private User GetBy(Func<User, bool> predicate, PageData pageData)
     {
         User user = userRepository.GetByFilter(predicate, pageData).FirstOrDefault(); 
