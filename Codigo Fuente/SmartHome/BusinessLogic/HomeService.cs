@@ -184,6 +184,7 @@ public class HomeService (
             DeviceUnit deviceUnit = new DeviceUnit()
             {
                 Device = deviceEntity,
+                Name = deviceEntity.Name,
                 IsConnected = device.IsConnected,
                 HardwareId = Guid.NewGuid(),
             };
@@ -216,4 +217,57 @@ public class HomeService (
 
         return (user, role as HomeOwner);
     }
+    
+    public void UpdateHomeAlias(long id, string alias)
+    {
+        Home home = homeRepository.GetById(id);
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        
+        home.Alias = alias;
+        
+        homeRepository.Update(home);
+    }
+    
+    public void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId)
+    {
+        Home home = homeRepository.GetById(id)!;
+        if (home == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+
+        try
+        {
+            DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == deviceId);
+            deviceUnit.Name = device.Name;
+            homeRepository.Update(home);
+        }
+        catch (ElementNotFound)
+        {
+            throw new ElementNotFound(DeviceNotFoundMessage);
+        }
+    }
+    
+    /*
+     Antes el Update estaba asi:
+     Home home = homeRepository.GetById(id);
+       if (home == null)
+       {
+           throw new ElementNotFound(HomeNotFoundMessage);
+       }
+       
+       DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == device.HardwareId);
+       
+       if (deviceUnit == null)
+       {
+           throw new ElementNotFound(DeviceNotFoundMessage);
+       }
+       
+       deviceUnit.Name = device.Name;
+       
+       homeRepository.Update(home);
+     */
 }

@@ -17,6 +17,7 @@ public class HomeController(IHomeService homeService) : ControllerBase
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
     private const string SourceAlreadyExistsMessage = "Source Already Exists";
+    private const string UpdatedDeviceNameMessage = "The device custom name was updated successfully.";
     
     private const int PreconditionFailedStatusCode = 412;
 
@@ -175,4 +176,37 @@ public class HomeController(IHomeService homeService) : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateHomeAlias([FromRoute] long id, [FromBody] PatchHomeRequest request)
+    {
+        try
+        {
+            homeService.UpdateHomeAlias(id, request.Alias);
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    [HttpPatch]
+    [Route("{homeId}/devices/{deviceId}")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateCustomDeviceName([FromRoute] long homeId, [FromRoute] Guid deviceId, [FromBody] PatchDeviceUnitRequest request)
+    {
+        try
+        {
+            homeService.UpdateDeviceCustomName(homeId, request.ToEntity(), deviceId);
+            return Ok(UpdatedDeviceNameMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+
 }

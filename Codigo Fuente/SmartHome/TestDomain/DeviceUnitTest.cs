@@ -11,6 +11,7 @@ public class DeviceUnitTest
     private Guid _deviceHardwareId;
     
     private const string CameraName = "My Security Camera";
+    private const string CameraCustomName = "Front Door Camera";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
     private const string DeviceModel = "1345354616346";
@@ -62,6 +63,14 @@ public class DeviceUnitTest
         _deviceUnit.HardwareId = _deviceHardwareId;
         
         Assert.AreEqual(_deviceHardwareId, _deviceUnit.HardwareId);
+    }
+    
+    [TestMethod]
+    public void TestAddNameToDeviceUnit()
+    {
+        _deviceUnit.Name = CameraCustomName;
+        
+        Assert.AreEqual(CameraCustomName, _deviceUnit.Name);
     }
     
     [TestMethod]

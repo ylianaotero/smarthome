@@ -13,6 +13,7 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
+    private const string Alias = "Casa de Juan";
     private const string RoomName = "Living room";
     private const int Id = 11;
     
@@ -97,6 +98,20 @@ public class HomeTest
             newHome.Devices.Count == 0
         );
 
+    }
+    
+    [TestMethod]
+    public void TestAddAliasToHome()
+    {
+        _home.Alias = Alias;
+        Assert.AreEqual(Alias, _home.Alias);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestAddEmptyAliasToHome()
+    {
+        _home.Alias = "";
     }
     
     [TestMethod]

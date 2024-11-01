@@ -5,6 +5,7 @@ namespace Model.In;
 public class PostHomeRequest
 {
     public long OwnerId { get; set; }
+    public string Alias { get; set; }
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
@@ -13,13 +14,16 @@ public class PostHomeRequest
     
     public Home ToEntity()
     {
-        return new Home()
+        Home home = new Home()
         {
             Street = this.Street,
+            Alias = this.Alias,
             DoorNumber = this.DoorNumber,
             Latitude = this.Latitude,
             Longitude = this.Longitude,
             MaximumMembers = this.MaximumMembers
         };
+
+        return home;
     }
 }

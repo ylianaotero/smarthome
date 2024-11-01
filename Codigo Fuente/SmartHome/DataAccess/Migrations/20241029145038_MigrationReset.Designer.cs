@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SmartHomeContext))]
-    [Migration("20241021135835_MigracionNewDeviceTypes")]
-    partial class MigracionNewDeviceTypes
+    [Migration("20241029145038_MigrationReset")]
+    partial class MigrationReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,8 +45,9 @@ namespace DataAccess.Migrations
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
 
-                    b.Property<long>("Model")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -117,6 +118,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("ValidateNumber")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
@@ -139,11 +143,20 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsConnected")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RoomId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("HardwareId");
 
                     b.HasIndex("DeviceId");
 
                     b.HasIndex("HomeId");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("DeviceUnits");
                 });
@@ -155,6 +168,10 @@ namespace DataAccess.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoorNumber")
                         .HasColumnType("int");
@@ -258,6 +275,28 @@ namespace DataAccess.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Domain.Concrete.Room", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("HomeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeId");
+
+                    b.ToTable("Room");
                 });
 
             modelBuilder.Entity("Domain.Concrete.Session", b =>
@@ -444,7 +483,15 @@ namespace DataAccess.Migrations
                         .WithMany("Devices")
                         .HasForeignKey("HomeId");
 
+                    b.HasOne("Domain.Concrete.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Device");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Domain.Concrete.Home", b =>
@@ -504,6 +551,13 @@ namespace DataAccess.Migrations
                     b.Navigation("Member");
                 });
 
+            modelBuilder.Entity("Domain.Concrete.Room", b =>
+                {
+                    b.HasOne("Domain.Concrete.Home", null)
+                        .WithMany("Rooms")
+                        .HasForeignKey("HomeId");
+                });
+
             modelBuilder.Entity("Domain.Concrete.Session", b =>
                 {
                     b.HasOne("Domain.Concrete.User", "User")
@@ -529,6 +583,8 @@ namespace DataAccess.Migrations
                     b.Navigation("Devices");
 
                     b.Navigation("Members");
+
+                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("Domain.Concrete.Member", b =>
