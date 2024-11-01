@@ -15,4 +15,6 @@ public interface IHomeService
     void UpdateMemberNotificationPermission(MemberDTO memberDto, long homeId);
     void AddDevicesToHome(long homeId, List<DeviceUnitDTO> devices);
     void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit);
+    void UpdateHomeAlias(long isAny, string s);
+    void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId);
 }

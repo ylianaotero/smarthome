@@ -38,6 +38,8 @@ public class HomeServiceTest
     private Member _member2;
     private Member _member1; 
     
+    private const string Alias = "My Home";
+    private const string UpdatedAlias = "Maison";
     private const string Street = "Calle del Sol";
     private const int DoorNumber = 23;
     private const double Latitude = 34.0207;
@@ -455,6 +457,60 @@ public class HomeServiceTest
         
         _homeService.UpdateDeviceConnectionStatus(_defaultHome.Id, _updatedDevice);
     }
+
+    [TestMethod]
+    public void TestUpdateHomeAlias()
+    {
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateHomeAlias(_defaultHome.Id, UpdatedAlias);
+        
+        Assert.AreEqual(UpdatedAlias, _defaultHome.Alias);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateHomeAliasBecauseHomeNotFound()
+    {
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
+        
+        _homeService.UpdateHomeAlias(_defaultHome.Id, UpdatedAlias);
+    }
+    
+    [TestMethod]
+    public void TestUpdateCustomDeviceName()
+    {
+        _defaultHome.Devices = new List<DeviceUnit>()
+        {
+            _securityCameraUnit
+        };
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
+        
+        Assert.AreEqual(_updatedDevice, _defaultHome.Devices[0]);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateCustomDeviceNameBecauseHomeNotFound()
+    {
+        _defaultHome.Devices = new List<DeviceUnit>();
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
+        
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestCannotUpdateCustomDeviceNameBecauseDeviceUnitNotFound()
+    {
+        _mockHomeRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns((Home?)null);
+        
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, new Guid());
+    }
     
     private void SetupDefaultObjects()
     {
@@ -526,6 +582,7 @@ public class HomeServiceTest
         {
             Id = 1,
             Owner = _defaultOwner,
+            Alias = Alias,
             Street = Street,
             DoorNumber = DoorNumber,
             Latitude = Latitude,
