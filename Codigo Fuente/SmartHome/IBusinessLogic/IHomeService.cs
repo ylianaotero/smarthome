@@ -12,6 +12,7 @@ public interface IHomeService
     List<Member> GetMembersFromHome(long homeId);
     Home AddOwnerToHome(long userId, Home home);
     void AddMemberToHome(long homeId, MemberDTO memberDTO);
+    void AddRoomToHome(long homeId, Room room);
     void UpdateMemberNotificationPermission(MemberDTO memberDto, long homeId);
     void AddDevicesToHome(long homeId, List<DeviceUnitDTO> devices);
     void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit);

@@ -105,18 +105,16 @@ public class HomeService (
         homeRepository.Update(home);
     }
     
-    public void UpdateMemberNotificationPermission(MemberDTO memberDto, long homeId)
+    public void AddRoomToHome(long homeId, Room room)
     {
-        List<Member> listOfMembers = GetMembersFromHome(homeId); 
-        
-        Member member = listOfMembers.FirstOrDefault(m => m.User.Email == memberDto.UserEmail);
-
-        if (member == null)
+        Home home = homeRepository.GetById(homeId);
+        if (home == null)
         {
             throw new ElementNotFound(HomeNotFoundMessage);
         }
-        member.ReceivesNotifications = memberDto.ReceivesNotifications; 
-        memberRepository.Update(member);
+        
+        home.Rooms.Add(room);
+        homeRepository.Update(home);
     }
     
     public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
@@ -139,6 +137,20 @@ public class HomeService (
         homeRepository.Update(home);
     }
     
+    public void UpdateMemberNotificationPermission(MemberDTO memberDto, long homeId)
+    {
+        List<Member> listOfMembers = GetMembersFromHome(homeId); 
+        
+        Member member = listOfMembers.FirstOrDefault(m => m.User.Email == memberDto.UserEmail);
+
+        if (member == null)
+        {
+            throw new ElementNotFound(HomeNotFoundMessage);
+        }
+        member.ReceivesNotifications = memberDto.ReceivesNotifications; 
+        memberRepository.Update(member);
+    }
+    
     public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
     {
         Home home = homeRepository.GetById(id);
@@ -155,18 +167,6 @@ public class HomeService (
         
         device.IsConnected = deviceUnit.IsConnected;
         
-        homeRepository.Update(home);
-    }
-    
-    public void AddRoomToHome(long homeId, Room room)
-    {
-        Home home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
-        
-        home.Rooms.Add(room);
         homeRepository.Update(home);
     }
     
