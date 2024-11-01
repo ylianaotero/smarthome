@@ -9,21 +9,21 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/imports")]
 [ApiController]
-public class ImportController(IImporter.IImporter importer, ISessionService sessionService) : ControllerBase
+public class ImportController(IImporter.IImporter importer, ISessionService sessionService,ICompanyService companyService ) : ControllerBase
 {
     private IImporter.IImporter _importer = importer;
     private ISessionService _sessionService = sessionService;
+    private ICompanyService _companyService = companyService;
     
     private const string RoleWithPermissions = "CompanyOwner";
     
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissions)]
-    public IActionResult GetNames([FromQuery] string dllPath)
+    public IActionResult GetNames()
     {
         try
         {
-            Console.WriteLine(dllPath);
-            List<ImportResponse> implementations = this._importer.GetImplementationsNamesAndPath(dllPath);
+            List<ImportResponse> implementations = this._importer.GetImplementationsNamesAndPath();
             
             foreach (var imp in implementations)
             {
@@ -49,14 +49,14 @@ public class ImportController(IImporter.IImporter importer, ISessionService sess
 
             if (Guid.TryParse(authHeader, out Guid tokenGuid))
             {
-                if (this._importer.Import(importRequest.DllPath, importRequest.FilePath, importRequest.Type,_sessionService.GetCompanyOwnerRole(tokenGuid) ))
+                if (this._importer.Import(importRequest.DllPath, importRequest.FilePath, importRequest.Type, _companyService.GetCompaniesOwners(_sessionService.GetUserId(tokenGuid))))
                 {
                     return Ok("Ok");
                 }
             }
             
 
-            return NotFound("Either such directory could not be found, or the file name is not correct.");
+            return NotFound("hola");
         }
         catch (CannotAccessItem cannotAccessItem)
         {

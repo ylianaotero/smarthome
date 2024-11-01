@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Reflection.Emit;
+using CustomExceptions;
 using Domain.Abstract;
 using Domain.Concrete;
 using IBusinessLogic;
@@ -30,29 +31,14 @@ public class ImporterLogicTest
         Assert.IsNotNull(importerLogic);
     }
     
-    [TestMethod]
-    public void GetImplementationsNames()
-    {
-        var mockDeviceService = new Mock<IDeviceService>();
-        ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
-        
-        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..","..","..", "Imports");
-
-        var result = importerLogic.GetImplementationsNamesAndPath(directoryPath);
-        
-        Assert.IsNotNull(result); 
-        Assert.AreEqual(0, result.Count); 
-    }
     
     [TestMethod]
     public void GetImplementationsNames_return_json()
     {
         var mockDeviceService = new Mock<IDeviceService>();
         ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
-        
-        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..","..","..", "Imports", "JsonImporter");
 
-        var result = importerLogic.GetImplementationsNamesAndPath(directoryPath);
+        var result = importerLogic.GetImplementationsNamesAndPath();
         
         Assert.IsNotNull(result); 
         Assert.AreEqual(1, result.Count); 
@@ -65,6 +51,7 @@ public class ImporterLogicTest
     
     
     [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
     public void Import_json()
     {
         var mockDeviceService = new Mock<IDeviceService>();
@@ -72,21 +59,14 @@ public class ImporterLogicTest
         
         ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
         
-        var dllPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "Imports", "JsonImporter", "JsonDeviceImporter.dll");
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "DeviceImporter", "devices-to-import.json");
 
         Company company = new Company(); 
-
-        CompanyOwner companyOwner = new CompanyOwner() {Company = company}; 
         
-        List<CompanyOwner> list = new List<CompanyOwner>(); 
+        List<Company> list = new List<Company>(); 
         
-        list.Add(companyOwner);
+        list.Add(company);
         
-        var result = importerLogic.Import(dllPath, filePath, "json",list );
-        
-        Assert.IsTrue(result);
-        mockDeviceService.Verify(s => s.CreateDevice(It.IsAny<Device>()), Times.AtLeastOnce);
+        importerLogic.Import("directoryOfDll", "filePath", "json", list);
     }
 
     

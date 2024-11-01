@@ -34,4 +34,9 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
         
         return device;
     }
+    
+    public List<Company> GetCompaniesOwners(long userId)
+    {
+        return companyRepository.GetByFilter(s => s.Owner.Id == userId, null);
+    }
 }

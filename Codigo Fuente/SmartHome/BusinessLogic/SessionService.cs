@@ -54,17 +54,17 @@ public class SessionService(IRepository<User> userRepository, IRepository<Sessio
 
         return session.User; 
     }
-
-    public List<CompanyOwner> GetCompanyOwnerRole(Guid token)
+    
+    public long GetUserId(Guid token)
     {
-        User user = GetUser(token);
-        
-        List<CompanyOwner> companyOwnerRoles = user.Roles
-            .Where(role => role.Kind == "CompanyOwner")
-            .OfType<CompanyOwner>()
-            .ToList();
+        Session session = sessionRepository.GetByFilter(s => s.Id == token, null).FirstOrDefault();
 
-        return companyOwnerRoles;
+        if (session == null)
+        {
+            throw new CannotFindItemInList(SessionDoesNotExistExceptionMessage); 
+        }
+
+        return session.User.Id; 
     }
 
     public bool UserHasCorrectRole(Guid? authorization, string roleWithPermissions)

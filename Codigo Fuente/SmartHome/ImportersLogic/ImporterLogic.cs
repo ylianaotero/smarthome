@@ -18,17 +18,19 @@ public class ImporterLogic : IImporter.IImporter
         _deviceService = deviceService; 
     }
 
-    public List<ImportResponse> GetImplementationsNamesAndPath(string directoryOfDll)
+    public List<ImportResponse> GetImplementationsNamesAndPath()
     {
-        var assemblyPaths = Directory.GetFiles(directoryOfDll, "*.dll");
+        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\DLLsImports"));
+
+        var assemblyPaths = Directory.GetFiles(directoryOfDll, "*.dll", SearchOption.AllDirectories);
         var assemblies = assemblyPaths
             .Select(Assembly.LoadFrom)
             .ToList();
 
         var implementations = FindImplementations(assemblies);
-        
+
         var ret = new List<ImportResponse>();
-        
+
         foreach (var (name, location) in implementations)
         {
             ImportResponse importResponse = new ImportResponse(); 
@@ -37,8 +39,9 @@ public class ImporterLogic : IImporter.IImporter
             importResponse.ImplementationName = name; 
             ret.Add(importResponse);
         }
-        
+
         return ret;
+
     }
 
     private List<(string ImplementationName, string AssemblyLocation)> FindImplementations(List<Assembly> assemblies)
@@ -61,19 +64,15 @@ public class ImporterLogic : IImporter.IImporter
     }
 
 
-    public bool Import(string dllPath, string filePath, string type, List<CompanyOwner> listOfRoles)
+    public bool Import(string dllPath, string filePath, string type, List<Company> listOfCompanies)
     {
         IDeviceImport requestedImplementation = GetImplementation(dllPath, type);
         List<DeviceImportModel> imported = requestedImplementation.CreateObjectModel(filePath);
         foreach (DeviceImportModel device in imported)
         {
-            foreach (var role in listOfRoles)
+            foreach (var company in listOfCompanies)
             {
-                if (role.Company != null)
-                {
-                    Console.WriteLine("holi");
-                    _deviceService.CreateDevice(device.ToEntity(role.Company));
-                }
+                _deviceService.CreateDevice(device.ToEntity(company));
             }
         }
         return true;
@@ -82,7 +81,7 @@ public class ImporterLogic : IImporter.IImporter
 
     private IDeviceImport GetImplementation(string path, string type)
     {
-        if (type.ToLower().Equals("json"))
+        if (type.ToLower().Equals("json") && File.Exists(path))
         {
             Assembly jsonAssembly = Assembly.LoadFrom(path);
             foreach (var item in jsonAssembly.GetTypes().Where(t => typeof(IDeviceImport).IsAssignableFrom(t)))

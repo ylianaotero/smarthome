@@ -7,7 +7,7 @@ public interface ISessionService
     Session LogIn(string email, string password);
     void LogOut(Guid token);
     User GetUser(Guid token);
-    List<CompanyOwner> GetCompanyOwnerRole(Guid token);
+    long GetUserId(Guid token);
     bool UserHasCorrectRole(Guid? authorization, string roleWithPermissions);
     bool AuthorizationIsValid(Guid? authorization);
     bool UserCanListDevicesInHome(Guid token, Home home);

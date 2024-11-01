@@ -9,9 +9,9 @@ public class JsonImporterTest
     public void CreateObjectModel_ShouldReturnNonEmptyList()
     {
         JsonDevicesImporter importer = new JsonDevicesImporter();
-    
-        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "DeviceImporter");
-        var jsonFilePath = Path.Combine(directoryPath, "devices-to-import.json");
+        
+        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\ExampleJson"));
+        var jsonFilePath = Path.Combine(directoryOfDll, "example.json");
         
         var result = importer.CreateObjectModel(jsonFilePath); 
         

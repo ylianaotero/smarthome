@@ -5,7 +5,7 @@ namespace IImporter;
 
 public interface IImporter
 {
-    List<ImportResponse> GetImplementationsNamesAndPath(string directoryOfDll);
+    List<ImportResponse> GetImplementationsNamesAndPath();
     
-    bool Import(string dllPath, string filePath, string type, List<CompanyOwner> listRoles); 
+    bool Import(string dllPath, string filePath, string type, List<Company> listRoles); 
 }

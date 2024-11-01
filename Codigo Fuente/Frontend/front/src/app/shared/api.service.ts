@@ -85,8 +85,8 @@ export class ApiService {
     return this.httpClient.get(this.url + '/devices' + '/types', {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
-  getImporters(directoryPath: string ) {
-    return this.httpClient.get<importer[]>(this.url + '/imports?dllPath=' + directoryPath, {headers: {'Authorization': `${this.currentSession?.token}`}});
+  getImporters() {
+    return this.httpClient.get<importer[]>(this.url + '/imports', {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   importDevices(data: ImportDevicesRequest) {

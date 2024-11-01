@@ -21,7 +21,7 @@ export class ImportComponent implements OnInit {
   }
 
   getImporters() {
-    this.api.getImporters('C:\\Users\\angel\\OneDrive\\Escritorio\\dll').subscribe({
+    this.api.getImporters().subscribe({
       next: (res: any) => {
         console.log(res);
         this.importers = res || [];
