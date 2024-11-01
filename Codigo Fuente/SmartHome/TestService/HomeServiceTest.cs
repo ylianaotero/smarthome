@@ -18,23 +18,17 @@ public class HomeServiceTest
     private Mock<IRepository<DeviceUnit>> _mockDeviceUnitRepository;
     
     private HomeService _homeService;
-    
-    private Home _home;
     private Home _defaultHome;
-    
     private WindowSensor _windowSensor;
     private SecurityCamera _securityCamera;
     private DeviceUnit _windowSensorUnit;
     private DeviceUnit _securityCameraUnit;
     private DeviceUnit _updatedDevice;
-    
     private User _user1;
     private User _user2;
     private User _defaultOwner;
-
     private MemberDTO _memberDTO2;
     private MemberDTO _memberDTO1; 
-    
     private Member _member2;
     private Member _member1; 
     
@@ -50,6 +44,7 @@ public class HomeServiceTest
     private const int Id = 999;
     private const bool IsConnectedTrue = true;
     private const bool IsConnectedFalse = false;
+    private const string RoomName = "Living Room";
 
     
     [TestInitialize]
@@ -195,6 +190,8 @@ public class HomeServiceTest
             .Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
         
         _homeService.UpdateMemberNotificationPermission(memberDto, _defaultHome.Id);
+        
+        Assert.AreEqual(memberDto.ReceivesNotifications, _defaultHome.FindMember(memberDto.UserEmail).ReceivesNotifications);
     }
     
     [TestMethod]
@@ -413,7 +410,7 @@ public class HomeServiceTest
         DeviceUnit device = new DeviceUnit()
         {
             Device = _securityCamera,
-            HardwareId = new Guid(),
+            HardwareId = Guid.NewGuid(),
             IsConnected = IsConnectedTrue
         };
 
@@ -509,7 +506,7 @@ public class HomeServiceTest
     {
         _mockHomeRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns((Home?)null);
         
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, new Guid());
+        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, Guid.NewGuid());
     }
     
     [TestMethod]
@@ -517,8 +514,8 @@ public class HomeServiceTest
     {
         Room room = new Room()
         {
-            Id = 1,
-            Name = "Living Room"
+            Id = Id,
+            Name = RoomName
         };
         
         _defaultHome.Rooms = new List<Room>();
@@ -565,21 +562,21 @@ public class HomeServiceTest
         _windowSensorUnit = new DeviceUnit
         {
             Device = _windowSensor,
-            HardwareId = new Guid(),
+            HardwareId = Guid.NewGuid(),
             IsConnected = true
         };
         
         _securityCameraUnit = new DeviceUnit
         {
             Device = _securityCamera,
-            HardwareId = new Guid(),
+            HardwareId = Guid.NewGuid(),
             IsConnected = false
         };
         
          _updatedDevice = new DeviceUnit()
         {
             Device = _securityCamera,
-            HardwareId = new Guid(),
+            HardwareId = Guid.NewGuid(),
             IsConnected = IsConnectedFalse
         };
     }
