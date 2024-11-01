@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>ImporterLogic</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.0" />
+    </ItemGroup>
+    
+
+    <ItemGroup>
+      <ProjectReference Include="..\IBusinessLogic\IBusinessLogic.csproj" />
+      <ProjectReference Include="..\IImporter\IImporter.csproj" />
+    </ItemGroup>
+
+</Project>

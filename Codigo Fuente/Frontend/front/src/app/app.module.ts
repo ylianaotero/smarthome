@@ -12,6 +12,7 @@ import {CreateHomeComponent} from './createHome/createHome.component';
 import {HomesOfHomeOwnerComponent} from './homesOfHomeOwner/homesOfHomeOwner.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
+import {ImportComponent} from './import/import.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'account', component: AccountComponent },
   { path: 'home', component: HomePageComponent },
   { path: 'homes', component: CreateHomeComponent },
-  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent }
+  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
+  { path: 'imports', component: ImportComponent }
 ];
 
 @NgModule({
@@ -39,7 +41,8 @@ const routes: Routes = [
     SignUpHomeOwnerComponent,
     AccountComponent,
     CreateHomeComponent,
-    HomesOfHomeOwnerComponent
+    HomesOfHomeOwnerComponent,
+    ImportComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

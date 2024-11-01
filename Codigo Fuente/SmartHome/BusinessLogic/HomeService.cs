@@ -242,6 +242,12 @@ public class HomeService (
         try
         {
             DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == deviceId);
+            
+            if (deviceUnit == null)
+            {
+                throw new ElementNotFound(DeviceNotFoundMessage);
+            }
+            
             deviceUnit.Name = device.Name;
             homeRepository.Update(home);
         }
@@ -251,23 +257,4 @@ public class HomeService (
         }
     }
     
-    /*
-     Antes el Update estaba asi:
-     Home home = homeRepository.GetById(id);
-       if (home == null)
-       {
-           throw new ElementNotFound(HomeNotFoundMessage);
-       }
-       
-       DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == device.HardwareId);
-       
-       if (deviceUnit == null)
-       {
-           throw new ElementNotFound(DeviceNotFoundMessage);
-       }
-       
-       deviceUnit.Name = device.Name;
-       
-       homeRepository.Update(home);
-     */
 }

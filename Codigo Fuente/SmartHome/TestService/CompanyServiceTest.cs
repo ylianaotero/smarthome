@@ -15,11 +15,13 @@ public class CompanyServiceTest
     private List<Company> _companies;
     private Company _company;
     private Device _device;
-    
+
     private const string CompanyName = "IoT Devices & Co.";
     private const string RUT = "123456789";
     private const string LogoUrl = "https://example.com/logo.jpg";
     private const long CompanyId = 1;
+
+    private const string DeviceName = "Device 1";
 
     [TestInitialize]
     public void TestInitialize()
@@ -27,19 +29,19 @@ public class CompanyServiceTest
         SetupDefaultObjects();
         CreateMockCompanyRepository();
     }
-    
+
     [TestMethod]
     public void TestGetCompaniesWithFilter()
     {
         _companies.Add(_company);
         Func<Company, bool> filter = c => c.Name == CompanyName;
-        
+
         _mockCompanyRepository
             .Setup(x => x.GetByFilter(filter, It.IsAny<PageData>()))
             .Returns(_companies);
-        
-        List<Company> retrievedCompanies =  _companyService.GetCompaniesByFilter(filter, PageData.Default);
-        
+
+        List<Company> retrievedCompanies = _companyService.GetCompaniesByFilter(filter, PageData.Default);
+
         Assert.AreEqual(_companies, retrievedCompanies);
     }
 
@@ -50,19 +52,19 @@ public class CompanyServiceTest
         _companyService.CreateCompany(_company);
         _mockCompanyRepository.Verify(x => x.Add(_company), Times.Once);
     }
-    
+
     [TestMethod]
     public void TestAddCompanyToDevice()
     {
         _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns(_company);
 
-        _companyService = new CompanyService(_mockCompanyRepository.Object); 
+        _companyService = new CompanyService(_mockCompanyRepository.Object);
         _companyService.AddCompanyToDevice(CompanyId, _device);
-        
+
         _mockCompanyRepository.Verify(x => x.Update(_company), Times.Once);
         Assert.AreEqual(_device.Company, _company);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestAddNonExistentCompanyToDevice()
@@ -70,15 +72,45 @@ public class CompanyServiceTest
         _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns((Company?)null);
         _companyService.AddCompanyToDevice(CompanyId, _device);
     }
-    
+
+    [TestMethod]
+    public void TestGetCompaniesOfOwners()
+    {
+        _companies.Add(_company);
+
+        _mockCompanyRepository.Setup(x => x.GetByFilter(It.IsAny<Func<Company, bool>>(), null)).Returns(_companies);
+
+        _companyService = new CompanyService(_mockCompanyRepository.Object);
+
+        List<Company> list = _companyService.GetCompaniesOfOwners(1);
+
+        _mockCompanyRepository.VerifyAll();
+
+        Assert.AreEqual(_companies, list);
+    }
+
+    [TestMethod]
+    public void TestGetCompaniesOfOwners_returnNull()
+    {
+        _mockCompanyRepository.Setup(x => x.GetByFilter(It.IsAny<Func<Company, bool>>(), null)).Returns(new List<Company>());
+
+        _companyService = new CompanyService(_mockCompanyRepository.Object);
+
+        List<Company> list = _companyService.GetCompaniesOfOwners(1);
+
+        _mockCompanyRepository.VerifyAll();
+
+        Assert.AreEqual(0, list.Count);
+    }
+
     private void SetupDefaultObjects()
     {
         _companies = new List<Company>();
         _device = new SecurityCamera()
         {
-            Name = "Device 1",
+            Name = DeviceName,
         };
-        
+
         _company = new Company()
         {
             Name = CompanyName,
@@ -87,7 +119,7 @@ public class CompanyServiceTest
             Id = CompanyId
         };
     }
-    
+
     private void CreateMockCompanyRepository()
     {
         _mockCompanyRepository = new Mock<IRepository<Company>>();

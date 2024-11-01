@@ -15,6 +15,7 @@ import {
 import {createHomeModel, homeRetrieveModel} from '../createHome/createHomeModel';
 import {Observable, tap} from 'rxjs';
 import {DeviceFilterRequestModel, deviceModel} from '../account/deviceModels';
+import {ImportDevicesRequest, importer} from '../import/importerModels';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,7 @@ export class ApiService {
     return this.httpClient.post<sessionModel>(this.url + '/login', data).pipe(
       tap((session: sessionModel) => {
         this.currentSession = session;
-        localStorage.setItem('user', JSON.stringify(session)); // Guarda la sesión en localStorage
+        localStorage.setItem('user', JSON.stringify(session));
       })
     );
   }
@@ -82,6 +83,14 @@ export class ApiService {
 
   getSupportedDevices() {
     return this.httpClient.get(this.url + '/devices' + '/types', {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  getImporters() {
+    return this.httpClient.get<importer[]>(this.url + '/imports', {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  importDevices(data: ImportDevicesRequest) {
+    return this.httpClient.post(this.url + '/imports', data ,{headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   getDevices(modelIn: DeviceFilterRequestModel, page: number, pageSize: number): Observable<deviceModel[]> {

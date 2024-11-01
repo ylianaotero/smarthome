@@ -55,6 +55,18 @@ public class SessionService(IRepository<User> userRepository, IRepository<Sessio
         return session.User; 
     }
     
+    public long GetUserId(Guid token)
+    {
+        Session session = sessionRepository.GetByFilter(s => s.Id == token, null).FirstOrDefault();
+
+        if (session == null)
+        {
+            throw new CannotFindItemInList(SessionDoesNotExistExceptionMessage); 
+        }
+
+        return session.User.Id; 
+    }
+
     public bool UserHasCorrectRole(Guid? authorization, string roleWithPermissions)
     {
         return GetUser(authorization.Value).Roles.Exists(r => RoleIsAdequate(r, roleWithPermissions));

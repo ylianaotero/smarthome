@@ -27,6 +27,8 @@ public class AdministratorControllerTest
     private const string Email = "john.doe@example.com";
     private const string Password = "Securepassword1@";
     private const string Photo = "address";
+    private const string InvalidPassword = "invalidPassword";
+
 
     private User _user; 
     private List<Role> _listOfRoles;
@@ -107,7 +109,7 @@ public class AdministratorControllerTest
     {
         _userServiceMock
             .Setup(service => service.CreateUser(It.IsAny<User>()))
-            .Throws(new InputNotValid("Invalid password"));
+            .Throws(new InputNotValid(InvalidPassword));
         
         ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         

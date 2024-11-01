@@ -28,6 +28,11 @@ export interface userRetrieveModel{
   email: string;
   surname: string;
   photo: string;
-  roles: string[];
+  roles: rol[];
   id: number;
+}
+
+export interface rol{
+  id: number;
+  kind: string;
 }
