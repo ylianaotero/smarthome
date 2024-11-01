@@ -512,6 +512,24 @@ public class HomeServiceTest
         _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, new Guid());
     }
     
+    [TestMethod]
+    public void TestAddRoomsToHome()
+    {
+        Room room = new Room()
+        {
+            Id = 1,
+            Name = "Living Room"
+        };
+        
+        _defaultHome.Rooms = new List<Room>();
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.AddRoomToHome(_defaultHome.Id, room);
+        
+        Assert.AreEqual(room, _defaultHome.Rooms[0]);
+    }
+    
     private void SetupDefaultObjects()
     {
         _homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object,
