@@ -1,3 +1,4 @@
+using CustomExceptions;
 using JsonDeviceImporter;
 
 namespace ImporterTests;
@@ -17,6 +18,18 @@ public class JsonImporterTest
         
         Assert.IsNotNull(result); 
         Assert.IsTrue(result.Count > 0); 
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void Test_CreateObjectModel_FileNotFound()
+    {
+        JsonDevicesImporter importer = new JsonDevicesImporter();
+        
+        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\ExampleJson"));
+        var jsonFilePath = Path.Combine(directoryOfDll, "noExiste.json");
+        
+        importer.CreateObjectModel(jsonFilePath); 
     }
     
     

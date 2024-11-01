@@ -19,13 +19,5 @@ public class JsonDevicesImporter : IDeviceImport
         {
             throw new ElementNotFound("Archivo no encontrado: " + path);
         }
-        catch (UnauthorizedAccessException)
-        {
-            throw new CannotAccessItem("Acceso no autorizado al archivo: " + path);
-        }
-        catch (JsonReaderException)
-        {
-            throw new CannotAccessItem("Error al leer el archivo JSON.");
-        }
     }
 }

@@ -10,5 +10,5 @@ public interface ICompanyService
     public List<Company> GetCompaniesByFilter(Func<Company, bool> filter, PageData pageData);
     Device AddCompanyToDevice(long companyId, Device device);
 
-    List<Company> GetCompaniesOwners(long userId); 
+    List<Company> GetCompaniesOfOwners(long userId); 
 }

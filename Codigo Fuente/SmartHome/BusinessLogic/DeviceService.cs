@@ -16,7 +16,7 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
     
     public void CreateDevice(Device device)
     {
-       /* Company deviceCompany = device.Company;
+        Company deviceCompany = device.Company;
         bool validateNumber = deviceCompany.ValidateNumber;
         
         Modelo deviceModel = new Modelo();
@@ -24,13 +24,12 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         
         if (ModelIsValid(deviceModel, validateNumber))
         {
-            Console.WriteLine("hace el add");*/
             deviceRepository.Add(device);
-       /* }
+        }
         else
         {
             throw new InputNotValid(ModelValidatorError);
-        }*/
+        }
     }
 
 

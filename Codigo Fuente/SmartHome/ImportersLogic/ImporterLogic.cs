@@ -81,17 +81,25 @@ public class ImporterLogic : IImporter.IImporter
 
     private IDeviceImport GetImplementation(string path, string type)
     {
-        if (type.ToLower().Equals("json") && File.Exists(path))
+        try
         {
-            Assembly jsonAssembly = Assembly.LoadFrom(path);
-            foreach (var item in jsonAssembly.GetTypes().Where(t => typeof(IDeviceImport).IsAssignableFrom(t)))
+            if (type.ToLower().Equals("json") && File.Exists(path))
             {
-                if (item.FullName.ToLower().Contains("json"))
+                Assembly jsonAssembly = Assembly.LoadFrom(path);
+                foreach (var item in jsonAssembly.GetTypes().Where(t => typeof(IDeviceImport).IsAssignableFrom(t)))
                 {
-                    return Activator.CreateInstance(item) as IDeviceImport;
+                    if (item.FullName.ToLower().Contains("json"))
+                    {
+                        return Activator.CreateInstance(item) as IDeviceImport;
+                    }
                 }
             }
+            throw new ElementNotFound("Type or dll not found");
         }
-        throw new ElementNotFound("Type or dll not found");
+        catch (FileNotFoundException ex)
+        {
+            throw new ElementNotFound("File not found");
+        }
     }
+    
 }

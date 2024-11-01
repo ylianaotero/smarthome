@@ -70,6 +70,79 @@ public class ImporterLogicTest
     }
 
     
+    [TestMethod]
+    public void Import_json_with_data()
+    {
+        string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\DLLsImports\JsonImport\JsonDeviceImporter.dll"));
+        
+        string jsonPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\ExampleJson\example.json"));
+
+        
+        var mockDeviceService = new Mock<IDeviceService>();
+        mockDeviceService.Setup(s => s.CreateDevice(It.IsAny<Device>())).Verifiable();
+        
+        ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
+        
+
+        Company company = new Company(); 
+        
+        List<Company> list = new List<Company>(); 
+        
+        list.Add(company);
+        
+        bool res = importerLogic.Import( dllPath, jsonPath, "json", list);
+        
+        Assert.IsTrue(res);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void Import_type_not_found()
+    {
+        string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\DLLsImports\JsonImport\JsonDeviceImporter.dll"));
+        
+        string jsonPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\ExampleJson\example.json"));
+
+        
+        var mockDeviceService = new Mock<IDeviceService>();
+        mockDeviceService.Setup(s => s.CreateDevice(It.IsAny<Device>())).Verifiable();
+        
+        ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
+        
+
+        Company company = new Company(); 
+        
+        List<Company> list = new List<Company>(); 
+        
+        list.Add(company);
+        
+        importerLogic.Import( dllPath, jsonPath, "html", list);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void Test_Import_type_dllFIle_not_found()
+    {
+        string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\DLLsImports\JsonImport\noExiste.dll"));
+        
+        string jsonPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\ExampleJson\example.json"));
+
+        
+        var mockDeviceService = new Mock<IDeviceService>();
+        mockDeviceService.Setup(s => s.CreateDevice(It.IsAny<Device>())).Verifiable();
+        
+        ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
+        
+
+        Company company = new Company(); 
+        
+        List<Company> list = new List<Company>(); 
+        
+        list.Add(company);
+        
+        importerLogic.Import( dllPath, jsonPath, "json", list);
+    }
+    
     private void SetupMocks()
     {
         _mockDeviceService = new Mock<IDeviceService>();

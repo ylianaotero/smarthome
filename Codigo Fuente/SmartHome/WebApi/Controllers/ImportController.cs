@@ -49,22 +49,22 @@ public class ImportController(IImporter.IImporter importer, ISessionService sess
 
             if (Guid.TryParse(authHeader, out Guid tokenGuid))
             {
-                if (this._importer.Import(importRequest.DllPath, importRequest.FilePath, importRequest.Type, _companyService.GetCompaniesOwners(_sessionService.GetUserId(tokenGuid))))
+                if (this._importer.Import(importRequest.DllPath, importRequest.FilePath, importRequest.Type,
+                        _companyService.GetCompaniesOfOwners(_sessionService.GetUserId(tokenGuid))))
                 {
                     return Ok("Ok");
                 }
             }
-            
 
-            return NotFound("hola");
-        }
-        catch (CannotAccessItem cannotAccessItem)
-        {
-            return StatusCode(StatusCodes.Status403Forbidden, cannotAccessItem.Message);
+            return NotFound("not found");
         }
         catch (ElementNotFound elementNotFound)
         {
             return NotFound(elementNotFound.Message);
+        }
+        catch (CannotFindItemInList cannotFindItemInList)
+        {
+            return NotFound(cannotFindItemInList.Message);
         }
         
     }

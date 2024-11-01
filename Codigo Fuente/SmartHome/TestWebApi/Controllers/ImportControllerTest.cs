@@ -1,4 +1,5 @@
 using BusinessLogic;
+using CustomExceptions;
 using Domain.Concrete;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,8 @@ public class ImportControllerTest
     private string _directoryPath; 
     private string _dllFile; 
     private string _jsonFile; 
+    
+    private const string ElementNotFoundMessage = "Element not found";
     
     private Mock<IImporter.IImporter> _mockImporter;
     
@@ -94,7 +97,7 @@ public class ImportControllerTest
         
         _mockSessionService.Setup(x => x.GetUserId(It.IsAny<Guid>())).Returns(1);
 
-        _mockCompanyService.Setup(x => x.GetCompaniesOwners(1)).Returns(new List<Company>()); 
+        _mockCompanyService.Setup(x => x.GetCompaniesOfOwners(1)).Returns(new List<Company>()); 
             
 
         _mockImporter
@@ -122,6 +125,86 @@ public class ImportControllerTest
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
+    
+    
+    [TestMethod]
+    public void Test_Import_notFound()
+    {
+        var httpContext = new DefaultHttpContext();
+        string validGuid = Guid.NewGuid().ToString(); 
+        httpContext.Request.Headers["Authorization"] = validGuid;
+        
+        
+        _mockSessionService.Setup(x => x.GetUserId(It.IsAny<Guid>())).Throws(new CannotFindItemInList(ElementNotFoundMessage ));
+
+        _mockCompanyService.Setup(x => x.GetCompaniesOfOwners(1)).Returns(new List<Company>()); 
+            
+
+        _mockImporter
+            .Setup(x => x.Import(_dllFile, _jsonFile, "json",new List<Company>() ))
+            .Returns(true);
+
+        _importController = new ImportController(_mockImporter.Object, _mockSessionService.Object, _mockCompanyService.Object)
+        {
+            ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContext 
+            }
+        };
+
+        ImportRequest importRequest = new ImportRequest()
+        {
+            DllPath = _dllFile,
+            FilePath = _jsonFile,
+            Type = "json"
+        };
+
+        ObjectResult result = _importController.Import(importRequest) as ObjectResult;
+
+        _mockImporter.Verify();
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void Test_Import_PathNotFound()
+    {
+        var httpContext = new DefaultHttpContext();
+        string validGuid = Guid.NewGuid().ToString(); 
+        httpContext.Request.Headers["Authorization"] = validGuid;
+        
+        
+        _mockSessionService.Setup(x => x.GetUserId(It.IsAny<Guid>())).Returns(1);
+
+        _mockCompanyService.Setup(x => x.GetCompaniesOfOwners(1)).Returns(new List<Company>());
+
+
+        _mockImporter
+            .Setup(x => x.Import(_dllFile, _jsonFile, "json", new List<Company>()))
+            .Returns(false); 
+
+        _importController = new ImportController(_mockImporter.Object, _mockSessionService.Object, _mockCompanyService.Object)
+        {
+            ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContext 
+            }
+        };
+
+        ImportRequest importRequest = new ImportRequest()
+        {
+            DllPath = _dllFile,
+            FilePath = _jsonFile,
+            Type = "json"
+        };
+
+        ObjectResult result = _importController.Import(importRequest) as ObjectResult;
+
+        _mockImporter.Verify();
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+
 
     
     

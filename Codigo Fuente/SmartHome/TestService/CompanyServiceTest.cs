@@ -71,6 +71,38 @@ public class CompanyServiceTest
         _companyService.AddCompanyToDevice(CompanyId, _device);
     }
     
+    [TestMethod]
+    public void TestGetCompaniesOfOwners()
+    {
+        _companies.Add(_company);
+        
+        _mockCompanyRepository.Setup(x => x.GetByFilter(It.IsAny<Func<Company, bool>>(), null)).Returns(_companies);
+
+        _companyService = new CompanyService(_mockCompanyRepository.Object); 
+
+        List<Company> list = _companyService.GetCompaniesOfOwners(1);
+        
+        _mockCompanyRepository.VerifyAll();
+        
+        Assert.AreEqual(_companies,list);
+        
+    }
+    
+    [TestMethod]
+    public void TestGetCompaniesOfOwners_returnNull()
+    {
+        _mockCompanyRepository.Setup(x => x.GetByFilter(It.IsAny<Func<Company, bool>>(), null)).Returns(new List<Company>());
+
+        _companyService = new CompanyService(_mockCompanyRepository.Object); 
+
+        List<Company> list = _companyService.GetCompaniesOfOwners(1);
+        
+        _mockCompanyRepository.VerifyAll();
+        
+        Assert.AreEqual(0,list.Count);
+        
+    }
+    
     private void SetupDefaultObjects()
     {
         _companies = new List<Company>();
