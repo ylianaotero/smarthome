@@ -7,17 +7,26 @@ namespace JsonDeviceImporter;
 
 public class JsonDevicesImporter : IDeviceImport
 {
+    private const string DataNotFoundMessage = "Data not found";
+    private const string FileNotFoundMessage = "File not found";
+
     public List<DeviceImportModel> CreateObjectModel(string path)
     {
         try
         {
             var json = File.ReadAllText(path);
             var deviceImportList = JsonConvert.DeserializeObject<DeviceImportList>(json);
-            return deviceImportList.Dispositivos;
+
+            if (deviceImportList != null)
+            {
+                return deviceImportList.Dispositivos;
+            }
+
+            throw new ElementNotFound(DataNotFoundMessage);
         }
         catch (FileNotFoundException)
         {
-            throw new ElementNotFound("Archivo no encontrado: " + path);
+            throw new ElementNotFound(FileNotFoundMessage);
         }
     }
 }

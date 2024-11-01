@@ -15,6 +15,7 @@ public class UserServiceTest
     private const string NewEmail = "juan.perez@example.com";
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
+    private const string InvalidRole = "InvalidTole";
     
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;
@@ -362,7 +363,7 @@ public class UserServiceTest
     {
         _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
         
-        _userService.AssignRoleToUser(_user.Id, "InvalidRole");
+        _userService.AssignRoleToUser(_user.Id, InvalidRole);
         
         _mockUserRepository.Verify();
     }

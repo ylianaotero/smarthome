@@ -1,23 +1,28 @@
 using CustomExceptions;
 using Domain.Abstract;
 
-namespace Domain.Concrete;
-
-public abstract class RoleFactory
+namespace Domain.Concrete
 {
-    private const string InvalidRoleTypeExceptionMessage = "Invalid role type";
-    public static Role CreateRole(string roleType)
+    public abstract class RoleFactory
     {
-        switch (roleType.ToLower())
+        private const string InvalidRoleTypeExceptionMessage = "Invalid role type";
+        private const string AdministratorRoleType = "administrator";
+        private const string CompanyOwnerRoleType = "companyowner";
+        private const string HomeOwnerRoleType = "homeowner";
+
+        public static Role CreateRole(string roleType)
         {
-            case "administrator":
-                return new Administrator();
-            case "companyowner":
-                return new CompanyOwner();
-            case "homeowner":
-                return new HomeOwner();
-            default:
-                throw new InputNotValid(InvalidRoleTypeExceptionMessage);
+            switch (roleType.ToLower())
+            {
+                case AdministratorRoleType:
+                    return new Administrator();
+                case CompanyOwnerRoleType:
+                    return new CompanyOwner();
+                case HomeOwnerRoleType:
+                    return new HomeOwner();
+                default:
+                    throw new InputNotValid(InvalidRoleTypeExceptionMessage);
+            }
         }
     }
 }

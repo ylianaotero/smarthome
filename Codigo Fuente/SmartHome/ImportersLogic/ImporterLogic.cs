@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using CustomExceptions;
-using Domain.Abstract;
 using Domain.Concrete;
 using IBusinessLogic;
 using IImporter;
@@ -11,6 +10,13 @@ namespace ImportersLogic;
 
 public class ImporterLogic : IImporter.IImporter
 {
+    private const string DllSearchPattern = "*.dll";
+    private const string DllDirectoryPath = @"..\..\..\..\DLLsImports";
+    private const string JsonImportType = "json";
+    private const string JsonImplementationName = "json";
+    private const string FileNotFoundMessage = "File not found";
+    private const string TypeOrDllNotFoundMessage = "Type or dll not found";
+
     private IDeviceService _deviceService; 
     
     public ImporterLogic(IDeviceService deviceService)
@@ -20,9 +26,9 @@ public class ImporterLogic : IImporter.IImporter
 
     public List<ImportResponse> GetImplementationsNamesAndPath()
     {
-        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\DLLsImports"));
+        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), DllDirectoryPath));
 
-        var assemblyPaths = Directory.GetFiles(directoryOfDll, "*.dll", SearchOption.AllDirectories);
+        var assemblyPaths = Directory.GetFiles(directoryOfDll, DllSearchPattern, SearchOption.AllDirectories);
         var assemblies = assemblyPaths
             .Select(Assembly.LoadFrom)
             .ToList();
@@ -34,14 +40,12 @@ public class ImporterLogic : IImporter.IImporter
         foreach (var (name, location) in implementations)
         {
             ImportResponse importResponse = new ImportResponse(); 
-            Console.WriteLine($"Implementación: {name}, Ubicación: {location}");
             importResponse.AssemblyLocation = location;
             importResponse.ImplementationName = name; 
             ret.Add(importResponse);
         }
 
         return ret;
-
     }
 
     private List<(string ImplementationName, string AssemblyLocation)> FindImplementations(List<Assembly> assemblies)
@@ -63,7 +67,6 @@ public class ImporterLogic : IImporter.IImporter
         return ret;
     }
 
-
     public bool Import(string dllPath, string filePath, string type, List<Company> listOfCompanies)
     {
         IDeviceImport requestedImplementation = GetImplementation(dllPath, type);
@@ -77,29 +80,32 @@ public class ImporterLogic : IImporter.IImporter
         }
         return true;
     }
-    
 
     private IDeviceImport GetImplementation(string path, string type)
     {
         try
         {
-            if (type.ToLower().Equals("json") && File.Exists(path))
+            if (type.ToLower().Equals(JsonImportType) && File.Exists(path))
             {
                 Assembly jsonAssembly = Assembly.LoadFrom(path);
                 foreach (var item in jsonAssembly.GetTypes().Where(t => typeof(IDeviceImport).IsAssignableFrom(t)))
                 {
-                    if (item.FullName.ToLower().Contains("json"))
+                    if (item.FullName != null && item.FullName.ToLower().Contains(JsonImplementationName))
                     {
-                        return Activator.CreateInstance(item) as IDeviceImport;
+                        IDeviceImport deviceImport = Activator.CreateInstance(item) as IDeviceImport;
+                        if (deviceImport != null)
+                        {
+                            return deviceImport ;
+                        }
+                        
                     }
                 }
             }
-            throw new ElementNotFound("Type or dll not found");
+            throw new ElementNotFound(TypeOrDllNotFoundMessage);
         }
         catch (FileNotFoundException ex)
         {
-            throw new ElementNotFound("File not found");
+            throw new ElementNotFound(FileNotFoundMessage);
         }
     }
-    
 }

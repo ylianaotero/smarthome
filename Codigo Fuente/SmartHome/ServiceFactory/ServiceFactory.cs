@@ -19,7 +19,6 @@ public static class ServiceFactory
         serviceCollection.AddScoped<IHomeService, HomeService>();
         serviceCollection.AddScoped<ICompanyService, CompanyService>();
         serviceCollection.AddScoped<INotificationService, NotificationService>();
-        
         serviceCollection.AddScoped<IImporter.IImporter, ImporterLogic>();
     }
     

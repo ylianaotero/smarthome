@@ -19,12 +19,15 @@ public class DeviceImportModel
     public bool PersonDetection { get; set; }
     public bool MovementDetection { get; set; }
 
+    private const string CameraType = "camera";
+    private const string SensorMovementType = "sensor-movement";
+    private const string SmartLampType = "smart-lamp";
+
     public Device ToEntity(Company company)
     {
-        // Determina el tipo de dispositivo basado en "Tipo"
         switch (Tipo.ToLower())
         {
-            case "camera":
+            case CameraType:
                 return new SecurityCamera
                 {
                     Name = Nombre,
@@ -36,7 +39,7 @@ public class DeviceImportModel
                     Company = company
                 };
 
-            case "sensor-movement":
+            case SensorMovementType:
                 return new MotionSensor
                 {
                     Name = Nombre,
@@ -47,7 +50,7 @@ public class DeviceImportModel
                     Company = company
                 };
 
-            case "smart-lamp":
+            case SmartLampType:
                 return new SmartLamp
                 {
                     Name = Nombre,

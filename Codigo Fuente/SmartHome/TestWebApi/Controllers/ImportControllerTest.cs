@@ -17,7 +17,6 @@ public class ImportControllerTest
 {
     private const int NotFoundStatusCode = 404;
     
-    private string _directoryPath; 
     private string _dllFile; 
     private string _jsonFile; 
     
@@ -40,7 +39,6 @@ public class ImportControllerTest
     {
         _mockImporter = new Mock<IImporter.IImporter>(MockBehavior.Strict);
         _mockCompanyService = new Mock<ICompanyService>(MockBehavior.Strict);
-        _directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..","..","..", "Imports", "JsonImporter");
         _dllFile = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "Imports", "JsonImporter", "JsonDeviceImporter.dll");
         _jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "DeviceImporter", "devices-to-import.json");
         _listImporters = new List<ImportResponse>
@@ -204,12 +202,5 @@ public class ImportControllerTest
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
-
-
-    
-    
-    
-
-    
     
 }

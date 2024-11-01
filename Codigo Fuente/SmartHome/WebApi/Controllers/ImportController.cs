@@ -9,14 +9,17 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/imports")]
 [ApiController]
-public class ImportController(IImporter.IImporter importer, ISessionService sessionService,ICompanyService companyService ) : ControllerBase
+public class ImportController(IImporter.IImporter importer, ISessionService sessionService, ICompanyService companyService) : ControllerBase
 {
     private IImporter.IImporter _importer = importer;
     private ISessionService _sessionService = sessionService;
     private ICompanyService _companyService = companyService;
-    
+
     private const string RoleWithPermissions = "CompanyOwner";
-    
+    private const string AuthorizationHeader = "Authorization";
+    private const string NotFoundMessage = "Not found";
+    private const string OkMessage = "Ok";
+
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult GetNames()
@@ -24,39 +27,33 @@ public class ImportController(IImporter.IImporter importer, ISessionService sess
         try
         {
             List<ImportResponse> implementations = this._importer.GetImplementationsNamesAndPath();
-            
-            foreach (var imp in implementations)
-            {
-                Console.WriteLine($"LOL  Implementación: {imp.ImplementationName}, Ubicación: {imp.AssemblyLocation}");
-            }
 
             return Ok(implementations);
         }
         catch (Exception ex)
         {
-            return NotFound("Either such directory could not be found, or the file name is not correct.");
+            return NotFound(ex.Message);
         }
     }
 
-    
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissions)]
     public IActionResult Import([FromBody] ImportRequest importRequest)
     {
         try
         {
-            string authHeader = HttpContext.Request.Headers["Authorization"];
+            string authHeader = HttpContext.Request.Headers[AuthorizationHeader];
 
             if (Guid.TryParse(authHeader, out Guid tokenGuid))
             {
                 if (this._importer.Import(importRequest.DllPath, importRequest.FilePath, importRequest.Type,
                         _companyService.GetCompaniesOfOwners(_sessionService.GetUserId(tokenGuid))))
                 {
-                    return Ok("Ok");
+                    return Ok(OkMessage);
                 }
             }
 
-            return NotFound("not found");
+            return NotFound(NotFoundMessage);
         }
         catch (ElementNotFound elementNotFound)
         {
@@ -66,12 +63,5 @@ public class ImportController(IImporter.IImporter importer, ISessionService sess
         {
             return NotFound(cannotFindItemInList.Message);
         }
-        
     }
-    
-    
-    
-    
-    
-    
 }

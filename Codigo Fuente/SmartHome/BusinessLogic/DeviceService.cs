@@ -10,7 +10,9 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
 {
     private const string ModelValidatorError = "Model is not valid";
     private const string DeviceNotFoundMessage = "Device not found";
-    
+    private const string ValidatorNumber = "ValidatorNumber";
+    private const string ValidatorLetter = "ValidatorLetter";
+
     private IModelValidator _modelValidator;
     private Modelo _modelo;
     
@@ -32,18 +34,17 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
         }
     }
 
-
     private bool ModelIsValid(Modelo deviceModel, bool validateNumber)
     {
-        bool IsValid = false;
+        bool isValid = false;
         if (_modelValidator == null)
         {
-            string modelValidatorName = validateNumber ? "ValidatorNumber" : "ValidatorLetter";
+            string modelValidatorName = validateNumber ? ValidatorNumber : ValidatorLetter;
             _modelValidator = new ModelValidatorLogic().GetAllValidators().Find(v => v.GetType().Name == modelValidatorName);
-            IsValid = _modelValidator.EsValido(deviceModel);
+            isValid = _modelValidator.EsValido(deviceModel);
         }
 
-        return IsValid;
+        return isValid;
     }
 
     public Device GetDeviceById(long id)
@@ -72,5 +73,4 @@ public class DeviceService(IRepository<Device> deviceRepository) : IDeviceServic
 
         return deviceTypes;
     }
-    
 }
