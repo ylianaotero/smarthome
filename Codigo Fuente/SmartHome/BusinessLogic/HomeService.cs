@@ -57,12 +57,14 @@ public class HomeService (
     public List<Member> GetMembersFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
+        
         return home.Members;
     }
     
     public List<DeviceUnit> GetDevicesFromHome(int homeId)
     {
         Home home = GetHomeById(homeId);
+        
         return home.Devices;
     }
     
@@ -79,6 +81,7 @@ public class HomeService (
     public void AddMemberToHome(long homeId, MemberDTO memberDTO)
     {
         Home home = GetHomeById(homeId);
+        
         if (home.Members.Any(m => m.User.Email == memberDTO.UserEmail))
         {
             throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
@@ -107,12 +110,7 @@ public class HomeService (
     
     public void AddRoomToHome(long homeId, Room room)
     {
-        Home home = homeRepository.GetById(homeId);
-        
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        Home home = GetHomeById(homeId);
         
         home.AddRoom(room);
         homeRepository.Update(home);
@@ -120,11 +118,7 @@ public class HomeService (
     
     public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
     {
-        Home home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        Home home = GetHomeById(homeId);
         
         List<DeviceUnit> devices = new List<DeviceUnit>();
       
@@ -148,17 +142,15 @@ public class HomeService (
         {
             throw new ElementNotFound(HomeNotFoundMessage);
         }
+        
         member.ReceivesNotifications = memberDto.ReceivesNotifications; 
         memberRepository.Update(member);
     }
     
     public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
     {
-        Home home = homeRepository.GetById(id);
-        if(home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        Home home = GetHomeById(id);
+        
         DeviceUnit device = home.Devices.FirstOrDefault(d => d.HardwareId == deviceUnit.HardwareId);
         
         if (device == null)
@@ -173,11 +165,7 @@ public class HomeService (
     
     public void UpdateHomeAlias(long id, string alias)
     {
-        Home home = homeRepository.GetById(id);
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        Home home = GetHomeById(id);
         
         home.Alias = alias;
         
@@ -186,11 +174,7 @@ public class HomeService (
     
     public void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId)
     {
-        Home home = homeRepository.GetById(id)!;
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        Home home = GetHomeById(id);
 
         try
         {
