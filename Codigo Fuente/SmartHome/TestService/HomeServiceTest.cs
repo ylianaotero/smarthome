@@ -544,6 +544,26 @@ public class HomeServiceTest
         _homeService.AddRoomToHome(_defaultHome.Id, room);
     }
     
+    [TestMethod]
+    public void TestUpdateDeviceRoomInHome()
+    {
+        Room room = new Room()
+        {
+            Id = Id,
+            Name = RoomName
+        };
+
+        _defaultHome.Rooms = [room];
+        
+        _defaultHome.Devices = [_securityCameraUnit];
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        
+        Assert.AreEqual(room, _defaultHome.Rooms[0]);
+    }
+    
     private void SetupDefaultObjects()
     {
         _homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object,
