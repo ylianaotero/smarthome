@@ -527,6 +527,23 @@ public class HomeServiceTest
         Assert.AreEqual(room, _defaultHome.Rooms[0]);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestAddRoomsToNonexistentHome()
+    {
+        Room room = new Room()
+        {
+            Id = Id,
+            Name = RoomName
+        };
+        
+        _defaultHome.Rooms = new List<Room>();
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(null as Home);
+        
+        _homeService.AddRoomToHome(_defaultHome.Id, room);
+    }
+    
     private void SetupDefaultObjects()
     {
         _homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object,
