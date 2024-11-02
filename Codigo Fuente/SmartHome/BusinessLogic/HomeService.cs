@@ -194,6 +194,15 @@ public class HomeService (
         }
     }
     
+    public void UpdateDeviceRoom(long id, DeviceUnit device, Room room)
+    {
+        Home home = homeRepository.GetById(id);
+        
+        device.Room = room;
+        
+        homeRepository.Update(home);
+    }
+    
     private User GetBy(Func<User, bool> predicate, PageData pageData)
     {
         User user = userRepository.GetByFilter(predicate, pageData).FirstOrDefault(); 
