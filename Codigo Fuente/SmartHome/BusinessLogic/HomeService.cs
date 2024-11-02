@@ -108,9 +108,7 @@ public class HomeService (
     public void AddRoomToHome(long homeId, Room room)
     {
         Home home = homeRepository.GetById(homeId);
-        
-        
-        home.Rooms.Add(room);
+        home.AddRoom(room);
         homeRepository.Update(home);
     }
     
