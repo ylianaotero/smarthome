@@ -108,10 +108,7 @@ public class HomeService (
     public void AddRoomToHome(long homeId, Room room)
     {
         Home home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        
         
         home.Rooms.Add(room);
         homeRepository.Update(home);
