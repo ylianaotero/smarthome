@@ -198,6 +198,13 @@ public class HomeService (
     {
         Home home = GetHomeById(id);
         
+        bool deviceExists = home.Devices.Exists(d => d.HardwareId == device.HardwareId);
+        
+        if (!deviceExists)
+        {
+            throw new CannotFindItemInList("");
+        }           
+        
         device.Room = room;
         
         homeRepository.Update(home);
