@@ -27,6 +27,7 @@ public class HomesControllerTest
     private List<Member> _members;
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
+    private Room _defaultRoom;
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
@@ -39,9 +40,9 @@ public class HomesControllerTest
     private const string Email2 = "jane@example.com";
     private const string Street = "Calle del Sol";
     private const string Street2 = "Avenida Siempre Viva";
-    
     private const string Alias = "Mi Casa";
     private const string CustomName = "Living Camera";
+    private const string RoomName = "Living Room";
     private const int DoorNumber = 2;
     private const string? DoorNumberString = "742";
     private const double Latitude = 34.0207;
@@ -606,14 +607,9 @@ public class HomesControllerTest
     [TestMethod]
     public void TestAddRoomToHomeOkStatusCode()
     {
-        Room room = new Room()
-        {
-            Name = "Living Room"
-        };
-        
         PostHomeRoomRequest request = new PostHomeRoomRequest()
         {
-            Name = room.Name
+            Name = _defaultRoom.Name
         };
         
         _mockHomeService.Setup(service => service.AddRoomToHome(It.IsAny<long>(), It.IsAny<Room>()));
@@ -627,14 +623,9 @@ public class HomesControllerTest
     [TestMethod]
     public void TestAddRoomToHomeNotFoundStatusCode()
     {
-        Room room = new Room()
-        {
-            Name = "Living Room"
-        };
-        
         PostHomeRoomRequest request = new PostHomeRoomRequest()
         {
-            Name = room.Name
+            Name = _defaultRoom.Name
         };
         
         _mockHomeService
@@ -651,14 +642,9 @@ public class HomesControllerTest
     [TestMethod]
     public void TestAddRoomToHomeConflictStatusCode()
     {
-        Room room = new Room()
-        {
-            Name = "Living Room"
-        };
-        
         PostHomeRoomRequest request = new PostHomeRoomRequest()
         {
-            Name = room.Name
+            Name = _defaultRoom.Name
         };
         
         _mockHomeService
@@ -684,10 +670,10 @@ public class HomesControllerTest
     
     private void SetupDefaultObjects()
     {
-
         SetupHomes();
         SetupUsers();
         SetupWindowSensor();
+        SetupRoom();
     }
     
     private void SetupUsers()
@@ -745,6 +731,14 @@ public class HomesControllerTest
             PhotoURLs = new List<string> {DevicePhotoUrl},
             Model = DeviceModel,
             Company = _defaultCompany
+        };
+    }
+
+    private void SetupRoom()
+    {
+        _defaultRoom = new Room()
+        {
+            Name = RoomName
         };
     }
 
