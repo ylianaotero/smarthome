@@ -143,6 +143,15 @@ public class HomeController(IHomeService homeService) : ControllerBase
         }
     }
     
+    [HttpPost]
+    [Route("{id}/rooms")]
+    public IActionResult AddRoomToHome([FromRoute] long id, [FromBody] PostHomeRoomRequest request)
+    {
+        homeService.AddRoomToHome(id, request.ToEntity());
+        
+        return Ok(UpdatedHomeMessage);
+    }
+    
     [HttpPatch]
     [Route("{id}/devices")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
