@@ -645,7 +645,7 @@ public class HomesControllerTest
 
         ObjectResult? result = _homeController.AddRoomToHome(_home.Id, request) as NotFoundObjectResult;
         
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
     private GetHomeResponse DefaultHomeResponse()
