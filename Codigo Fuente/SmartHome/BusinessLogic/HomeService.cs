@@ -196,12 +196,7 @@ public class HomeService (
     
     public void UpdateDeviceRoom(long id, DeviceUnit device, Room room)
     {
-        Home home = homeRepository.GetById(id);
-        
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        Home home = GetHomeById(id);
         
         device.Room = room;
         
