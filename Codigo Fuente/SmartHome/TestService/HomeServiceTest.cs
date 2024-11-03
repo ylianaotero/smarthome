@@ -583,6 +583,23 @@ public class HomeServiceTest
         _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestUpdateDeviceRoomInHomeThatDoesNotHaveDevice()
+    {
+        Room room = new Room()
+        {
+            Id = Id,
+            Name = RoomName
+        };
+
+        _defaultHome.Rooms = [room];
+        
+        _defaultHome.Devices = [];
+        
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+    }
+    
     private void SetupDefaultObjects()
     {
         _homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object,
