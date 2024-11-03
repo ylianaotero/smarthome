@@ -598,6 +598,8 @@ public class HomeServiceTest
         _defaultHome.Devices = [];
         
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
     }
     
     private void SetupDefaultObjects()
