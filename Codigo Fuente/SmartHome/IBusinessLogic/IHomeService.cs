@@ -18,4 +18,5 @@ public interface IHomeService
     void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit);
     void UpdateHomeAlias(long isAny, string s);
     void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId);
+    void UpdateDeviceRoom(long id, DeviceUnit device, Room room);
 }
