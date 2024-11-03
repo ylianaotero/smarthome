@@ -202,7 +202,7 @@ public class HomeService (
         
         if (!deviceExists)
         {
-            throw new CannotFindItemInList("");
+            throw new CannotFindItemInList(DeviceNotFoundMessage);
         }           
         
         device.Room = room;
