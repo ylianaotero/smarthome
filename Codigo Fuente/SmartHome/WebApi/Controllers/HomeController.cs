@@ -148,9 +148,16 @@ public class HomeController(IHomeService homeService) : ControllerBase
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult AddRoomToHome([FromRoute] long id, [FromBody] PostHomeRoomRequest request)
     {
-        homeService.AddRoomToHome(id, request.ToEntity());
+        try
+        {
+            homeService.AddRoomToHome(id, request.ToEntity());
         
-        return Ok(UpdatedHomeMessage);
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
     }
     
     [HttpPatch]
