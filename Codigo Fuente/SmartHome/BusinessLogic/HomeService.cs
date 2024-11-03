@@ -203,7 +203,14 @@ public class HomeService (
         if (!deviceExists)
         {
             throw new CannotFindItemInList(DeviceNotFoundMessage);
-        }           
+        }         
+        
+        bool roomExists = home.Rooms.Exists(r => r.Id == room.Id);
+        
+        if (!roomExists)
+        {
+            throw new CannotFindItemInList("");
+        }   
         
         device.Room = room;
         
