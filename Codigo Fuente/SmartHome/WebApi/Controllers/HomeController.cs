@@ -158,6 +158,10 @@ public class HomeController(IHomeService homeService) : ControllerBase
         {
             return NotFound(ResourceNotFoundMessage);
         }
+        catch (ElementAlreadyExist)
+        {
+            return Conflict(SourceAlreadyExistsMessage);
+        }
     }
     
     [HttpPatch]
