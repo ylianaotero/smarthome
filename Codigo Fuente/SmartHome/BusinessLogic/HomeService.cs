@@ -16,6 +16,7 @@ public class HomeService (
 {
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
+    private const string RoomNotFoundMessage = "Room not found";
     private const string UserNotFoundMessage = "Member not found";
     private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
@@ -82,7 +83,7 @@ public class HomeService (
     {
         Home home = GetHomeById(homeId);
         
-        if (home.Members.Any(m => m.User.Email == memberDTO.UserEmail))
+        if (home.Members.Exists(m => m.User.Email == memberDTO.UserEmail))
         {
             throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
         }
@@ -136,7 +137,7 @@ public class HomeService (
     {
         List<Member> listOfMembers = GetMembersFromHome(homeId); 
         
-        Member member = listOfMembers.FirstOrDefault(m => m.User.Email == memberDto.UserEmail);
+        Member member = listOfMembers.Find(m => m.User.Email == memberDto.UserEmail);
 
         if (member == null)
         {
@@ -151,7 +152,7 @@ public class HomeService (
     {
         Home home = GetHomeById(id);
         
-        DeviceUnit device = home.Devices.FirstOrDefault(d => d.HardwareId == deviceUnit.HardwareId);
+        DeviceUnit device = home.Devices.Find(d => d.HardwareId == deviceUnit.HardwareId);
         
         if (device == null)
         {
@@ -178,7 +179,7 @@ public class HomeService (
 
         try
         {
-            DeviceUnit deviceUnit = home.Devices.FirstOrDefault(d => d.HardwareId == deviceId);
+            DeviceUnit deviceUnit = home.Devices.Find(d => d.HardwareId == deviceId);
             
             if (deviceUnit == null)
             {
@@ -198,19 +199,7 @@ public class HomeService (
     {
         Home home = GetHomeById(id);
         
-        bool deviceExists = home.Devices.Exists(d => d.HardwareId == device.HardwareId);
-        
-        if (!deviceExists)
-        {
-            throw new CannotFindItemInList(DeviceNotFoundMessage);
-        }         
-        
-        bool roomExists = home.Rooms.Exists(r => r.Id == room.Id);
-        
-        if (!roomExists)
-        {
-            throw new CannotFindItemInList("");
-        }   
+        VerifyDeviceAndRoomExistInHome(home, device, room);
         
         device.Room = room;
         
@@ -268,7 +257,7 @@ public class HomeService (
             throw new CannotAddItem(UserIsNotHomeOwnerMessage);
         }
 
-        Role role = userRoles.FirstOrDefault(r => r is HomeOwner);
+        Role role = userRoles.Find(r => r is HomeOwner);
         if (role == null)
         {
             throw new CannotAddItem(UserIsNotHomeOwnerMessage);
@@ -277,4 +266,20 @@ public class HomeService (
         return (user, role as HomeOwner);
     }
     
+    private static void VerifyDeviceAndRoomExistInHome(Home home, DeviceUnit device, Room room)
+    {
+        bool deviceExists = home.Devices.Exists(d => d.HardwareId == device.HardwareId);
+        
+        if (!deviceExists)
+        {
+            throw new CannotFindItemInList(DeviceNotFoundMessage);
+        }         
+        
+        bool roomExists = home.Rooms.Exists(r => r.Id == room.Id);
+        
+        if (!roomExists)
+        {
+            throw new CannotFindItemInList(RoomNotFoundMessage);
+        }   
+    }
 }

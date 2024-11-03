@@ -370,7 +370,7 @@ public class HomeServiceTest
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
-    public void TestAddUnexistentOwnerToHome()
+    public void TestAddNonexistentOwnerToHome()
     {
         HomeOwner role = new HomeOwner();
         User homeOwner = new User()
@@ -384,7 +384,7 @@ public class HomeServiceTest
         
         _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns((User?)null);
         
-        Home homeWithOwner = _homeService.AddOwnerToHome(homeOwner.Id, _defaultHome);
+        _homeService.AddOwnerToHome(homeOwner.Id, _defaultHome);
     }
     
     [TestMethod]
@@ -410,14 +410,11 @@ public class HomeServiceTest
         DeviceUnit device = new DeviceUnit()
         {
             Device = _securityCamera,
-            HardwareId = Guid.NewGuid(),
+            HardwareId = _updatedDevice.HardwareId,
             IsConnected = IsConnectedTrue
         };
 
-        _defaultHome.Devices = new List<DeviceUnit>()
-        {
-            device
-        };
+        _defaultHome.Devices = [device];
         
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
         _mockDeviceRepository.Setup(m => m.GetById(device.Device.Id)).Returns(device.Device);
