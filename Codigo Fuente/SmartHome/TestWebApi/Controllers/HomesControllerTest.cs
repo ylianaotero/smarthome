@@ -624,6 +624,30 @@ public class HomesControllerTest
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestAddRoomToHomeNotFoundStatusCode()
+    {
+        Room room = new Room()
+        {
+            Name = "Living Room"
+        };
+        
+        PostHomeRoomRequest request = new PostHomeRoomRequest()
+        {
+            Name = room.Name
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddRoomToHome(It.IsAny<long>(), It.IsAny<Room>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object);
+
+        ObjectResult? result = _homeController.AddRoomToHome(_home.Id, request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(404, result.StatusCode);
+    }
+    
     private GetHomeResponse DefaultHomeResponse()
     {
         return new GetHomeResponse(_home);
