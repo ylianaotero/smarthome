@@ -23,4 +23,3 @@ export class DeviceFilterRequestModel {
     this.Kind = kind;
   }
 }
-
