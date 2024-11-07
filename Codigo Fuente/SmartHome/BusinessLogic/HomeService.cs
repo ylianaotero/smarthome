@@ -16,7 +16,6 @@ public class HomeService (
 {
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
-    private const string RoomNotFoundMessage = "Room not found";
     private const string UserNotFoundMessage = "Member not found";
     private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
     private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
@@ -24,6 +23,13 @@ public class HomeService (
     private const string HomeIsFullMessage = "The home is full";
     private const string UserDoesNotExistExceptionMessage = "Member not found";
 
+    public void UpdateHome(long homeId)
+    {
+        Home home = GetHomeById(homeId);
+        
+        homeRepository.Update(home);
+    }
+    
     public void CreateHome(Home home)
     {
         try
@@ -62,11 +68,18 @@ public class HomeService (
         return home.Members;
     }
     
-    public List<DeviceUnit> GetDevicesFromHome(int homeId)
+    public List<DeviceUnit> GetDevicesFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
         
         return home.Devices;
+    }
+    
+    public List<Room> GetRoomsFromHome(long homeId)
+    {
+        Home home = GetHomeById(homeId);
+        
+        return home.Rooms;
     }
     
     public Home AddOwnerToHome(long userId, Home home)
@@ -148,60 +161,11 @@ public class HomeService (
         memberRepository.Update(member);
     }
     
-    public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
-    {
-        Home home = GetHomeById(id);
-        
-        DeviceUnit device = home.Devices.Find(d => d.HardwareId == deviceUnit.HardwareId);
-        
-        if (device == null)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-        
-        device.IsConnected = deviceUnit.IsConnected;
-        
-        homeRepository.Update(home);
-    }
-    
     public void UpdateHomeAlias(long id, string alias)
     {
         Home home = GetHomeById(id);
         
         home.Alias = alias;
-        
-        homeRepository.Update(home);
-    }
-    
-    public void UpdateDeviceCustomName(long id, DeviceUnit device, Guid deviceId)
-    {
-        Home home = GetHomeById(id);
-
-        try
-        {
-            DeviceUnit deviceUnit = home.Devices.Find(d => d.HardwareId == deviceId);
-            
-            if (deviceUnit == null)
-            {
-                throw new ElementNotFound(DeviceNotFoundMessage);
-            }
-            
-            deviceUnit.Name = device.Name;
-            homeRepository.Update(home);
-        }
-        catch (ElementNotFound)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-    }
-    
-    public void UpdateDeviceRoom(long id, DeviceUnit device, Room room)
-    {
-        Home home = GetHomeById(id);
-        
-        VerifyDeviceAndRoomExistInHome(home, device, room);
-        
-        device.Room = room;
         
         homeRepository.Update(home);
     }
@@ -264,22 +228,5 @@ public class HomeService (
         }
 
         return (user, role as HomeOwner);
-    }
-    
-    private static void VerifyDeviceAndRoomExistInHome(Home home, DeviceUnit device, Room room)
-    {
-        bool deviceExists = home.Devices.Exists(d => d.HardwareId == device.HardwareId);
-        
-        if (!deviceExists)
-        {
-            throw new CannotFindItemInList(DeviceNotFoundMessage);
-        }         
-        
-        bool roomExists = home.Rooms.Exists(r => r.Id == room.Id);
-        
-        if (!roomExists)
-        {
-            throw new CannotFindItemInList(RoomNotFoundMessage);
-        }   
     }
 }

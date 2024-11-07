@@ -403,54 +403,6 @@ public class HomeServiceTest
         
         _homeService.AddOwnerToHome(user.Id, _defaultHome);
     }
-    
-    [TestMethod]
-    public void TestUpdateDeviceConnectionStatus()
-    {
-        DeviceUnit device = new DeviceUnit()
-        {
-            Device = _securityCamera,
-            HardwareId = _updatedDevice.HardwareId,
-            IsConnected = IsConnectedTrue
-        };
-
-        _defaultHome.Devices = [device];
-        
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        _mockDeviceRepository.Setup(m => m.GetById(device.Device.Id)).Returns(device.Device);
-        
-        _homeService.UpdateDeviceConnectionStatus(_defaultHome.Id, _updatedDevice);
-        
-        _mockHomeRepository.Verify(m => m.Update(_defaultHome), Times.Once);
-        
-        Assert.AreEqual(IsConnectedFalse, _defaultHome.Devices[0].IsConnected);
-    }
-    
-    [TestMethod] 
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestCannotUpdateDeviceStatusBecauseHomeNotFound()
-    {
-        _securityCameraUnit.IsConnected = IsConnectedTrue;
-
-        _defaultHome.Devices = new List<DeviceUnit>()
-        {
-            _securityCameraUnit
-        };
-        
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
-        
-        _homeService.UpdateDeviceConnectionStatus(_defaultHome.Id, _updatedDevice);
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestCannotUpdateDeviceStatusBecauseDeviceNotFound()
-    {
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        _mockDeviceRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns((Device?)null);
-        
-        _homeService.UpdateDeviceConnectionStatus(_defaultHome.Id, _updatedDevice);
-    }
 
     [TestMethod]
     public void TestUpdateHomeAlias()
@@ -469,41 +421,6 @@ public class HomeServiceTest
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
         
         _homeService.UpdateHomeAlias(_defaultHome.Id, UpdatedAlias);
-    }
-    
-    [TestMethod]
-    public void TestUpdateCustomDeviceName()
-    {
-        _defaultHome.Devices = new List<DeviceUnit>()
-        {
-            _securityCameraUnit
-        };
-        
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
-        
-        Assert.AreEqual(_updatedDevice, _defaultHome.Devices[0]);
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestCannotUpdateCustomDeviceNameBecauseHomeNotFound()
-    {
-        _defaultHome.Devices = new List<DeviceUnit>();
-        
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns((Home?)null);
-        
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestCannotUpdateCustomDeviceNameBecauseDeviceUnitNotFound()
-    {
-        _mockHomeRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns((Home?)null);
-        
-        _homeService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, Guid.NewGuid());
     }
     
     [TestMethod]
@@ -542,81 +459,40 @@ public class HomeServiceTest
     }
     
     [TestMethod]
-    public void TestUpdateDeviceRoomInHome()
+    public void TestGetRoomsFromHome()
     {
         Room room = new Room()
         {
             Id = Id,
             Name = RoomName
         };
-
-        _defaultHome.Rooms = [room];
         
-        _defaultHome.Devices = [_securityCameraUnit];
+        _defaultHome.Rooms = new List<Room>(){room};
         
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
         
-        _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        List<Room> rooms = _homeService.GetRoomsFromHome(_defaultHome.Id);
         
-        Assert.AreEqual(room, _defaultHome.Rooms[0]);
+        CollectionAssert.AreEqual(_defaultHome.Rooms, rooms);
     }
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
-    public void TestUpdateDeviceRoomInNonexistentHome()
+    public void TestGetRoomsFromNonexistentHome()
     {
         Room room = new Room()
         {
             Id = Id,
             Name = RoomName
         };
-
-        _defaultHome.Rooms = [room];
         
-        _defaultHome.Devices = [_securityCameraUnit];
+        _defaultHome.Rooms = new List<Room>(){room};
         
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(null as Home);
         
-        _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        _homeService.GetRoomsFromHome(_defaultHome.Id);
     }
     
-    [TestMethod]
-    [ExpectedException(typeof(CannotFindItemInList))]
-    public void TestUpdateDeviceRoomInHomeThatDoesNotHaveDevice()
-    {
-        Room room = new Room()
-        {
-            Id = Id,
-            Name = RoomName
-        };
-
-        _defaultHome.Rooms = [room];
-        
-        _defaultHome.Devices = [];
-        
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        
-        _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(CannotFindItemInList))]
-    public void TestUpdateDeviceRoomInHomeThatDoesNotHaveRoom()
-    {
-        Room room = new Room()
-        {
-            Id = Id,
-            Name = RoomName
-        };
-
-        _defaultHome.Rooms = [];
-        
-        _defaultHome.Devices = [_securityCameraUnit];
-        
-        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
-        
-        _homeService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
-    }
     
     private void SetupDefaultObjects()
     {

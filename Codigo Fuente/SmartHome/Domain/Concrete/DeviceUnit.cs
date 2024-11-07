@@ -36,6 +36,6 @@ public class DeviceUnit
     public override bool Equals(object? obj)
     {
         return obj is DeviceUnit unit &&
-               Device.Id == unit.Device.Id;
+                HardwareId == unit.HardwareId;
     }
 }
