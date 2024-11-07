@@ -34,13 +34,13 @@ export class CompanyService {
           );
      }
 
-     getCompanies(request: GetCompaniesRequest, currentPage?: number, pageSize?: number): Observable<GetCompaniesResponse[]> {
+     getCompanies(request: GetCompaniesRequest, currentPage?: number, pageSize?: number): Observable<GetCompaniesResponse> {
           let params = new HttpParams();
     
           params = request.name ? params.append('name', request.name ) : params;
           params = request.owner ? params.append('owner', request.owner ) : params;
           params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
           params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
-          return this.httpClient.get<GetCompaniesResponse[]>(this.url + '/companies', {params});
+          return this.httpClient.get<GetCompaniesResponse>(this.url + '/companies', {params, headers: {'Authorization': `${this.currentSession?.token}`}});
      }
 }

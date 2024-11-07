@@ -32,6 +32,7 @@
   </a>
 </div>
 
+<!-- Modal para visualizar usuarios -->
 <div class="modal fade" id="myModalShowUsers" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="modalShowUsers" [style.display]="modalShowUsers ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'showUsers')">
@@ -102,13 +103,14 @@
   </div>
 </div>
 
-<div class="modal fade" id="myModalShowUsers" tabindex="-1" role="dialog" aria-hidden="true"
-     [class.show]="modalShowUsers" [style.display]="modalShowUsers ? 'block' : 'none'"
+<!-- Modal para visualizar companies -->
+<div class="modal fade" id="myModalShowCompanies" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="modalShowCompanies" [style.display]="modalShowCompanies ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'showCompanies')">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Visualizar usuarios</h5>
+        <h5 class="modal-title">Visualizar companias</h5>
         <button type="button" class="close" (click)="closeModal('showCompanies')" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -117,11 +119,11 @@
       <div class="modal-body">
         <div class="filter-container row g-3 mb-3">
           <div class="col-12 mb-3">
-            <input type="text" class="form-control" placeholder="Filtrar por nombre completo" [(ngModel)]="selectedFullName">
+            <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedCompanyName">
           </div>
 
           <div class="col-12 mb-3">
-            <input type="text" class="form-control" placeholder="Filtrar por rol" [(ngModel)]="selectedRole">
+            <input type="text" class="form-control" placeholder="Filtrar por dueño" [(ngModel)]="selectedOwner">
           </div>
 
           <div class="col-12 mb-3 d-flex justify-content-end">

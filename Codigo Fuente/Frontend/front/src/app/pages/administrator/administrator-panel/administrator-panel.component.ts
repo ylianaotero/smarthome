@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdministratorService } from '../../../shared/administrator.service';
+import { CompanyService } from '../../../shared/company.service';
+import { GetCompaniesRequest, GetCompaniesResponse, GetCompanyResponse } from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/administrator';
 
 @Component({
@@ -14,22 +16,28 @@ export class AdministratorPanelComponent implements OnInit {
 
   currentPage: number = 1;
   pageSize: number = 1;
+
   totalUsers: number = 0;
+  totalCompanies: number = 0;
 
   selectedFullName: string = '';
   selectedRole: string = '';
+  selectedCompanyName: string = '';
+  selectedOwner: string = '';
 
   users: GetUserResponse[] = [];
+  companies: GetCompanyResponse[] = [];
 
   modalShowUsers: boolean = false;
+  modalShowCompanies: boolean = false;
 
-  constructor(private router: Router, private api: AdministratorService) {
+  constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
     this.getUsers();
-    //this.getCompanies();
+    this.getCompanies();
   }
 
   getUsers(): void {
@@ -43,6 +51,21 @@ export class AdministratorPanelComponent implements OnInit {
         this.users = res.users || [];
         this.totalUsers = res.users.length;
         console.log(this.users);
+      }
+    });
+  }
+
+  getCompanies(): void {
+    const request: GetCompaniesRequest = {
+      name: this.selectedCompanyName,
+      owner: this.selectedOwner
+    };
+
+    this.apiCompany.getCompanies(request).subscribe({
+      next: (res: GetCompaniesResponse) => {
+        this.companies = res.companies || [];
+        this.totalCompanies = res.companies.length;
+        console.log(this.companies);
       }
     });
   }
@@ -76,12 +99,16 @@ export class AdministratorPanelComponent implements OnInit {
   changeSelectedModal(modal: string, showModal: boolean): void{
     if(modal == "showUsers"){
       this.modalShowUsers = showModal;
+    }else if(modal == "showCompanies"){
+      this.modalShowCompanies = showModal;
     }
   }
 
   closeModalBackdrop(event: MouseEvent,modal: string ): void {
     const target = event.target as HTMLElement;
     if (target.id === 'myModalShowUsers') {
+      this.closeModal(modal);
+    }else if(target.id === 'myModalShowCompanies'){
       this.closeModal(modal);
     }
   }
