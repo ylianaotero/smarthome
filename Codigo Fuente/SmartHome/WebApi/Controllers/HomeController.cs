@@ -23,11 +23,13 @@ public class HomeController : ControllerBase
     
     private readonly IHomeService _homeService;
     private readonly IDeviceUnitService _deviceUnitService;
+    private readonly IMemberService _memberService;
     
-    public HomeController(IHomeService homeService, IDeviceUnitService deviceUnitService)
+    public HomeController(IHomeService homeService, IDeviceUnitService deviceUnitService, IMemberService memberService)
     {
         this._homeService = homeService;
         this._deviceUnitService = deviceUnitService;
+        this._memberService = memberService;
     }
 
     [HttpGet]
@@ -47,7 +49,7 @@ public class HomeController : ControllerBase
     {
         try
         {
-            _homeService.UpdateMemberNotificationPermission(request.ToEntity(), id);
+            _memberService.UpdateMemberNotificationPermission(id, request.ToEntity());
             return Ok(UpdatedHomeMessage);
         }
         catch (ElementNotFound)
@@ -135,7 +137,7 @@ public class HomeController : ControllerBase
     {
         try
         {
-            _homeService.AddMemberToHome(id, request.ToEntity());
+            _memberService.AddMemberToHome(id, request.ToEntity());
             return Ok(UpdatedHomeMessage);
         }
         catch (ElementNotFound)

@@ -5,20 +5,21 @@ using Domain.Concrete;
 using IBusinessLogic;
 using IDataAccess;
 using Moq;
+using DeviceUnitService = Domain.Concrete.DeviceUnitService;
 
 namespace TestService;
 
 [TestClass]
-public class DeviceUnitTest
+public class DeviceUnitServiceTest
 {
-    private Mock<IRepository<DeviceUnit>> _mockDeviceUnitRepository;
+    private Mock<IRepository<DeviceUnitService>> _mockDeviceUnitRepository;
     private Mock<IHomeService> _mockHomeService;
     
     private IDeviceUnitService _deviceUnitService;
     private Home _defaultHome;
     private SecurityCamera _securityCamera;
-    private DeviceUnit _securityCameraUnit;
-    private DeviceUnit _updatedDevice;
+    private DeviceUnitService _securityCameraUnitService;
+    private DeviceUnitService _updatedDevice;
     private User _defaultOwner;
     
     private const string Alias = "My Home";
@@ -46,7 +47,7 @@ public class DeviceUnitTest
     [TestMethod]
     public void TestUpdateDeviceConnectionStatus()
     {
-        DeviceUnit device = new DeviceUnit()
+        DeviceUnitService device = new DeviceUnitService()
         {
             Device = _securityCamera,
             HardwareId = _updatedDevice.HardwareId,
@@ -66,11 +67,11 @@ public class DeviceUnitTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotUpdateDeviceStatusBecauseHomeNotFound()
     {
-        _securityCameraUnit.IsConnected = IsConnectedTrue;
+        _securityCameraUnitService.IsConnected = IsConnectedTrue;
 
-        _defaultHome.Devices = new List<DeviceUnit>()
+        _defaultHome.Devices = new List<DeviceUnitService>()
         {
-            _securityCameraUnit
+            _securityCameraUnitService
         };
         
         _mockHomeService
@@ -92,14 +93,14 @@ public class DeviceUnitTest
     [TestMethod]
     public void TestUpdateCustomDeviceName()
     {
-        _defaultHome.Devices = new List<DeviceUnit>()
+        _defaultHome.Devices = new List<DeviceUnitService>()
         {
-            _securityCameraUnit
+            _securityCameraUnitService
         };
         
         _mockHomeService.Setup(m => m.GetDevicesFromHome(_defaultHome.Id)).Returns(_defaultHome.Devices);
         
-        _deviceUnitService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
+        _deviceUnitService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnitService.HardwareId);
         
         Assert.AreEqual(_updatedDevice, _defaultHome.Devices[0]);
     }
@@ -108,11 +109,11 @@ public class DeviceUnitTest
     [ExpectedException(typeof(ElementNotFound))]
     public void TestCannotUpdateCustomDeviceNameBecauseHomeNotFound()
     {
-        _defaultHome.Devices = new List<DeviceUnit>();
+        _defaultHome.Devices = new List<DeviceUnitService>();
         
         _mockHomeService.Setup(m => m.GetHomeById(_defaultHome.Id)).Returns((Home?)null);
         
-        _deviceUnitService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnit.HardwareId);
+        _deviceUnitService.UpdateDeviceCustomName(_defaultHome.Id, _updatedDevice, _securityCameraUnitService.HardwareId);
     }
     
     [TestMethod]
@@ -135,7 +136,7 @@ public class DeviceUnitTest
 
         _defaultHome.Rooms = [room];
         
-        _defaultHome.Devices = [_securityCameraUnit];
+        _defaultHome.Devices = [_securityCameraUnitService];
         
         _mockHomeService
             .Setup(m => m.GetDevicesFromHome(_defaultHome.Id)).Returns(_defaultHome.Devices);
@@ -146,7 +147,7 @@ public class DeviceUnitTest
         _mockHomeService
             .Setup(m => m.GetHomeById(_defaultHome.Id)).Returns(_defaultHome);
         
-        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnitService.HardwareId, room.Id);
         
         Assert.AreEqual(room, _defaultHome.Rooms[0]);
     }
@@ -163,12 +164,12 @@ public class DeviceUnitTest
 
         _defaultHome.Rooms = [room];
         
-        _defaultHome.Devices = [_securityCameraUnit];
+        _defaultHome.Devices = [_securityCameraUnitService];
 
         _mockHomeService
-            .Setup(m => m.GetDevicesFromHome(_defaultHome.Id)).Returns((List<DeviceUnit>)null);
+            .Setup(m => m.GetDevicesFromHome(_defaultHome.Id)).Returns((List<DeviceUnitService>)null);
         
-        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnitService.HardwareId, room.Id);
     }
     
     [TestMethod]
@@ -194,7 +195,7 @@ public class DeviceUnitTest
         _mockHomeService
             .Setup(m => m.GetHomeById(_defaultHome.Id)).Returns(_defaultHome);
         
-        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnitService.HardwareId, room.Id);
     }
     
     [TestMethod]
@@ -209,7 +210,7 @@ public class DeviceUnitTest
 
         _defaultHome.Rooms = [];
         
-        _defaultHome.Devices = [_securityCameraUnit];
+        _defaultHome.Devices = [_securityCameraUnitService];
 
         _mockHomeService
             .Setup(m => m.GetHomeById(_defaultHome.Id)).Returns(_defaultHome);
@@ -221,36 +222,36 @@ public class DeviceUnitTest
             .Setup(m => m.GetRoomsFromHome(_defaultHome.Id))
             .Throws(new CannotFindItemInList(RoomNotFoundMessage));
         
-        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnit, room);
+        _deviceUnitService.UpdateDeviceRoom(_defaultHome.Id, _securityCameraUnitService.HardwareId, room.Id);
     }
     
     private void CreateMocks()
     {
-        _mockDeviceUnitRepository = new Mock<IRepository<DeviceUnit>>();
+        _mockDeviceUnitRepository = new Mock<IRepository<DeviceUnitService>>();
         _mockHomeService = new Mock<IHomeService>();
     }
     
     private void SetupDefaultObjects()
     {
-        _deviceUnitService = new DeviceUnitService(_mockDeviceUnitRepository.Object, _mockHomeService.Object);
+        _deviceUnitService = new BusinessLogic.DeviceUnitService(_mockDeviceUnitRepository.Object, _mockHomeService.Object);
         SetUpDefaultDeviceUnits();
         SetUpDefaultHome();
     }
     
     private void SetUpDefaultDeviceUnits()
     {
-        _securityCameraUnit = new DeviceUnit
+        _securityCameraUnitService = new DeviceUnitService
         {
             Device = _securityCamera,
             HardwareId = Guid.NewGuid(),
             IsConnected = false
         };
         
-        _updatedDevice = new DeviceUnit()
+        _updatedDevice = new DeviceUnitService()
         {
             Name = DeviceName,
             Device = _securityCamera,
-            HardwareId = _securityCameraUnit.HardwareId,
+            HardwareId = _securityCameraUnitService.HardwareId,
             IsConnected = IsConnectedFalse
         };
     }

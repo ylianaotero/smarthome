@@ -11,67 +11,67 @@ public class DeviceUnitService : IDeviceUnitService
     private const string HomeNotFoundMessage = "Home not found";
     private const string RoomNotFoundMessage = "Room not found";
     
-    private readonly IRepository<DeviceUnit> _deviceUnitRepository;
+    private readonly IRepository<Domain.Concrete.DeviceUnitService> _deviceUnitRepository;
     private readonly IHomeService _homeService;
     
-    public DeviceUnitService(IRepository<DeviceUnit> deviceUnitRepository, IHomeService homeService)
+    public DeviceUnitService(IRepository<Domain.Concrete.DeviceUnitService> deviceUnitRepository, IHomeService homeService)
     {
         this._deviceUnitRepository = deviceUnitRepository;
         this._homeService = homeService;
     }
 
-    public void UpdateDeviceCustomName(long id, DeviceUnit updatedDeviceUnit, Guid deviceId)
+    public void UpdateDeviceCustomName(long id, Domain.Concrete.DeviceUnitService updatedDeviceUnitService, Guid deviceId)
     {
-        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(id, deviceId);
+        Domain.Concrete.DeviceUnitService? deviceUnit = GetDeviceUnitFromHome(id, deviceId);
             
         if (deviceUnit == null)
         {
             throw new ElementNotFound(DeviceNotFoundMessage);
         }
             
-        deviceUnit.Name = updatedDeviceUnit.Name;
+        deviceUnit.Name = updatedDeviceUnitService.Name;
             
         _deviceUnitRepository.Update(deviceUnit);
         _homeService.UpdateHome(id);
     }
     
-    public void UpdateDeviceConnectionStatus(long homeId, DeviceUnit updatedDeviceUnit)
+    public void UpdateDeviceConnectionStatus(long homeId, Domain.Concrete.DeviceUnitService updatedDeviceUnitService)
     {
-        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(homeId, updatedDeviceUnit.HardwareId);
+        Domain.Concrete.DeviceUnitService? deviceUnit = GetDeviceUnitFromHome(homeId, updatedDeviceUnitService.HardwareId);
         
         if (deviceUnit == null)
         {
             throw new ElementNotFound(DeviceNotFoundMessage);
         }
             
-        deviceUnit.IsConnected = updatedDeviceUnit.IsConnected;
+        deviceUnit.IsConnected = updatedDeviceUnitService.IsConnected;
             
-        _deviceUnitRepository.Update(updatedDeviceUnit);
+        _deviceUnitRepository.Update(updatedDeviceUnitService);
         _homeService.UpdateHome(homeId);
     }
     
-    public void UpdateDeviceRoom(long homeId, DeviceUnit updatedDeviceUnit, Room room)
+    public void UpdateDeviceRoom(long homeId, Guid deviceId, long roomId)
     {
-        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(homeId, updatedDeviceUnit.HardwareId);
+        Domain.Concrete.DeviceUnitService? deviceUnit = GetDeviceUnitFromHome(homeId, deviceId);
         
         if (deviceUnit == null)
         {
             throw new ElementNotFound(DeviceNotFoundMessage);
         }
         
-        VerifyRoomExistInHome(homeId, room);
+        Room room = GetRoomExistFromHome(homeId, roomId);
+
+        deviceUnit.Room = room;
             
-        deviceUnit.Room = updatedDeviceUnit.Room;
-            
-        _deviceUnitRepository.Update(updatedDeviceUnit);
+        _deviceUnitRepository.Update(deviceUnit);
         _homeService.UpdateHome(homeId);
     }
     
-    private DeviceUnit? GetDeviceUnitFromHome(long homeId, Guid deviceHwId)
+    private Domain.Concrete.DeviceUnitService? GetDeviceUnitFromHome(long homeId, Guid deviceHwId)
     {
         try
         {
-            DeviceUnit? device = _homeService
+            Domain.Concrete.DeviceUnitService? device = _homeService
                 .GetDevicesFromHome(homeId).Find(d => d.HardwareId == deviceHwId);
             
             return device;
@@ -82,13 +82,15 @@ public class DeviceUnitService : IDeviceUnitService
         }
     }
     
-    private void VerifyRoomExistInHome(long homeId, Room room)
+    private Room GetRoomExistFromHome(long homeId, long roomId)
     {
-        bool roomExists = _homeService.GetRoomsFromHome(homeId).Exists(r => r.Id == room.Id);
+        Room? room = _homeService.GetRoomsFromHome(homeId).Find(r => r.Id == roomId);
         
-        if (!roomExists)
+        if (room == null)
         {
             throw new CannotFindItemInList(RoomNotFoundMessage);
-        }   
+        }
+
+        return room;
     }
 }

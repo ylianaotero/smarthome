@@ -5,6 +5,7 @@ using Domain.Concrete;
 using Domain.DTO;
 using IDataAccess;
 using Moq;
+using DeviceUnitService = Domain.Concrete.DeviceUnitService;
 
 namespace TestService;
 
@@ -16,7 +17,7 @@ public class NotificationServiceTest
     private Mock<IRepository<Home>> _mockHomeRepository; 
     
     private Home _defaultHome;
-    private DeviceUnit _deviceUnit; 
+    private DeviceUnitService _deviceUnitService; 
     private User _defaultOwner;
     private Device _device; 
     private Member _member1; 
@@ -53,7 +54,7 @@ public class NotificationServiceTest
         _notificationService = null;
         _mockHomeRepository = null;
         _defaultHome = null;
-        _deviceUnit = null;
+        _deviceUnitService = null;
         _defaultOwner = null;
         _device = null;
         _member1 = null;
@@ -117,7 +118,7 @@ public class NotificationServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
             MaximumMembers = MaxMembers,
-            Devices = new List<DeviceUnit>() {},
+            Devices = new List<DeviceUnitService>() {},
             Members = new List<Member>() {}
         };
         
@@ -172,7 +173,7 @@ public class NotificationServiceTest
             PhotoURLs = new List<string> { DevicePhotoUrl }
         };
         
-        _deviceUnit = new DeviceUnit()
+        _deviceUnitService = new DeviceUnitService()
         {
             Device = _device,
             IsConnected = true,
@@ -201,7 +202,7 @@ public class NotificationServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
             MaximumMembers = MaxMembers,
-            Devices = new List<DeviceUnit>() {_deviceUnit},
+            Devices = new List<DeviceUnitService>() {_deviceUnitService},
             Members = new List<Member>() {_member1}
         };
     }
@@ -211,7 +212,7 @@ public class NotificationServiceTest
         _notificationDto = new NotificationDTO()
         {
             Event = TestEvent,
-            HardwareId = _deviceUnit.HardwareId,
+            HardwareId = _deviceUnitService.HardwareId,
             HomeId = TestHomeId
         };
     }

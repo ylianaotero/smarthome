@@ -5,7 +5,7 @@ using Domain.Abstract;
 
 namespace Domain.Concrete;
 
-public class DeviceUnit
+public class DeviceUnitService
 {
     [Key] 
     public Guid HardwareId { get; set; }
@@ -28,14 +28,14 @@ public class DeviceUnit
     
     private Room? _room { get; set; }
     
-    public DeviceUnit()
+    public DeviceUnitService()
     {
         IsConnected = false;
     }
 
     public override bool Equals(object? obj)
     {
-        return obj is DeviceUnit unit &&
+        return obj is DeviceUnitService unit &&
                 HardwareId == unit.HardwareId;
     }
 }

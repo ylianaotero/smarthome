@@ -6,9 +6,9 @@ public class PatchDeviceUnitRequest
 {
     public string Name { get; set; }
     
-    public DeviceUnit ToEntity()
+    public DeviceUnitService ToEntity()
     {
-        return new DeviceUnit()
+        return new DeviceUnitService()
         {
             Name = Name
         };

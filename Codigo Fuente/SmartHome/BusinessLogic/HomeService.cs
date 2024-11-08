@@ -11,17 +11,13 @@ public class HomeService (
     IRepository<Home> homeRepository, 
     IRepository<Device> deviceRepository, 
     IRepository<User> userRepository, 
-    IRepository<Member> memberRepository,
-    IRepository<DeviceUnit> deviceUnitRepository) : IHomeService
+    IRepository<Domain.Concrete.DeviceUnitService> deviceUnitRepository) : IHomeService
 {
     private const string HomeNotFoundMessage = "Home not found";
     private const string DeviceNotFoundMessage = "Device not found";
     private const string UserNotFoundMessage = "Member not found";
     private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
-    private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
-    private const string HomeIsFullMessage = "The home is full";
-    private const string UserDoesNotExistExceptionMessage = "Member not found";
 
     public void UpdateHome(long homeId)
     {
@@ -68,7 +64,7 @@ public class HomeService (
         return home.Members;
     }
     
-    public List<DeviceUnit> GetDevicesFromHome(long homeId)
+    public List<Domain.Concrete.DeviceUnitService> GetDevicesFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
         
@@ -91,36 +87,6 @@ public class HomeService (
 
         return home;
     }
-
-    public void AddMemberToHome(long homeId, MemberDTO memberDTO)
-    {
-        Home home = GetHomeById(homeId);
-        
-        if (home.Members.Exists(m => m.User.Email == memberDTO.UserEmail))
-        {
-            throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
-        }
-        
-        if (home.Members.Count >= home.MaximumMembers)
-        {
-            throw new CannotAddItem(HomeIsFullMessage);
-        }
-        
-        User user = GetBy(u => u.Email == memberDTO.UserEmail, PageData.Default);
-
-        Member member = new Member()
-        {
-            User = user,
-            Notifications = new List<Notification>(),
-            HasPermissionToAddADevice = memberDTO.HasPermissionToAddADevice,
-            HasPermissionToListDevices = memberDTO.HasPermissionToListDevices,
-            ReceivesNotifications = memberDTO.ReceivesNotifications
-        }; 
-        
-        memberRepository.Add(member);
-        home.AddMember(member);
-        homeRepository.Update(home);
-    }
     
     public void AddRoomToHome(long homeId, Room room)
     {
@@ -134,7 +100,7 @@ public class HomeService (
     {
         Home home = GetHomeById(homeId);
         
-        List<DeviceUnit> devices = new List<DeviceUnit>();
+        List<Domain.Concrete.DeviceUnitService> devices = new List<Domain.Concrete.DeviceUnitService>();
       
         MapDevices(homeDevices, devices);
         
@@ -146,21 +112,6 @@ public class HomeService (
         homeRepository.Update(home);
     }
     
-    public void UpdateMemberNotificationPermission(MemberDTO memberDto, long homeId)
-    {
-        List<Member> listOfMembers = GetMembersFromHome(homeId); 
-        
-        Member member = listOfMembers.Find(m => m.User.Email == memberDto.UserEmail);
-
-        if (member == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
-        
-        member.ReceivesNotifications = memberDto.ReceivesNotifications; 
-        memberRepository.Update(member);
-    }
-    
     public void UpdateHomeAlias(long id, string alias)
     {
         Home home = GetHomeById(id);
@@ -170,19 +121,7 @@ public class HomeService (
         homeRepository.Update(home);
     }
     
-    private User GetBy(Func<User, bool> predicate, PageData pageData)
-    {
-        User user = userRepository.GetByFilter(predicate, pageData).FirstOrDefault(); 
-        
-        if (user == null)
-        {
-            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
-        }
-
-        return user; 
-    }
-    
-    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<Domain.Concrete.DeviceUnitService> devices)
     {
         foreach (var device in homeDevices)
         {
@@ -193,7 +132,7 @@ public class HomeService (
                 throw new ElementNotFound(DeviceNotFoundMessage);
             }
 
-            DeviceUnit deviceUnit = new DeviceUnit()
+            Domain.Concrete.DeviceUnitService deviceUnitService = new Domain.Concrete.DeviceUnitService()
             {
                 Device = deviceEntity,
                 Name = deviceEntity.Name,
@@ -201,9 +140,9 @@ public class HomeService (
                 HardwareId = Guid.NewGuid(),
             };
             
-            devices.Add(deviceUnit);
+            devices.Add(deviceUnitService);
             
-            deviceUnitRepository.Add(deviceUnit);
+            deviceUnitRepository.Add(deviceUnitService);
         }
     }
     

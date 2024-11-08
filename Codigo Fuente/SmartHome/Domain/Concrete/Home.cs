@@ -36,13 +36,13 @@ public class Home
     public double Longitude { get; set; }
     public int MaximumMembers { get; set; }
     public List<Room> Rooms { get; set; }
-    public List<DeviceUnit> Devices { get; set; }
+    public List<DeviceUnitService> Devices { get; set; }
     public List<Member> Members { get; set; }
 
     public Home()
     {
         Members = new List<Member>();
-        Devices = new List<DeviceUnit>();
+        Devices = new List<DeviceUnitService>();
         Rooms = new List<Room>();
     }
     
@@ -85,7 +85,7 @@ public class Home
         return Members.Find(m => m.User.Email == email); 
     }
 
-    public void AddDevice(DeviceUnit device)
+    public void AddDevice(DeviceUnitService device)
     {
         if (!DeviceExists(device.HardwareId))
         {
@@ -97,7 +97,7 @@ public class Home
         }
     }
     
-    public DeviceUnit FindDevice(Guid id)
+    public DeviceUnitService FindDevice(Guid id)
     {
         if (DeviceExists(id))
         {

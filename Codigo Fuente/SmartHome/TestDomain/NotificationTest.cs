@@ -8,7 +8,7 @@ public class NotificationTest
     private User _user;
     private Home _home;
     private Member _member;
-    private DeviceUnit _deviceUnit;
+    private DeviceUnitService _deviceUnitService;
     private Notification _notification; 
 
     
@@ -22,7 +22,7 @@ public class NotificationTest
     public void TestInitialize()
     {
         _notification = new Notification(Event);
-        _deviceUnit = new DeviceUnit();
+        _deviceUnitService = new DeviceUnitService();
         _user = new User();
         _member = new Member(_user);
         _home = new Home();
@@ -34,7 +34,7 @@ public class NotificationTest
         _notification.Id = Id; 
         _notification.Home = _home;
         _notification.Member = _member;
-        _notification.DeviceUnit = _deviceUnit;
+        _notification.DeviceUnitService = _deviceUnitService;
 
         Assert.IsTrue(
             Event == _notification.Event &&
@@ -42,7 +42,7 @@ public class NotificationTest
             _todayDate == _notification.CreatedAt.Date &&
             _minValueDate == _notification.ReadAt &&
             Id == _notification.Id && _home == _notification.Home && _member == _notification.Member &&
-            _deviceUnit.Device == _notification.DeviceUnit.Device
+            _deviceUnitService.Device == _notification.DeviceUnitService.Device
         );
 
     }

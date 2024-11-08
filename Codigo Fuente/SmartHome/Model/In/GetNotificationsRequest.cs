@@ -15,6 +15,6 @@ public class GetNotificationsRequest
                                (UserId == null || notification.Member?.User?.Id == UserId) &&
                                (Read == null || notification.Read == Read) &&
                                (string.IsNullOrEmpty(Kind) 
-                                || notification.DeviceUnit?.Device?.Kind?.ToLower() == Kind.ToLower());
+                                || notification.DeviceUnitService?.Device?.Kind?.ToLower() == Kind.ToLower());
     }
 }

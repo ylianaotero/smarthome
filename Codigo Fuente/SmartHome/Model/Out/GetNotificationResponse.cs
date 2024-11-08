@@ -13,8 +13,8 @@ public class GetNotificationResponse
     
     public GetNotificationResponse(Notification notification)
     {
-        HardwareId = notification.DeviceUnit.HardwareId;
-        DeviceKind = notification.DeviceUnit.Device.Kind;
+        HardwareId = notification.DeviceUnitService.HardwareId;
+        DeviceKind = notification.DeviceUnitService.Device.Kind;
         Event = notification.Event;
         CreatedAt = notification.CreatedAt;
         Read = notification.Read;
