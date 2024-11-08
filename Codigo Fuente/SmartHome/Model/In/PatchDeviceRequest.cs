@@ -7,9 +7,9 @@ public class PatchDeviceRequest
     public Guid HardwareId { get; set; }
     public bool IsConnected { get; set; }
     
-    public DeviceUnitService ToEntity()
+    public DeviceUnit ToEntity()
     {
-        return new DeviceUnitService()
+        return new DeviceUnit()
         {
             HardwareId = HardwareId,
             IsConnected = IsConnected

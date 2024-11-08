@@ -11,7 +11,7 @@ public class GetDeviceUnitResponse
     public string Photo { get; set; }
     public string? RoomName { get; set; }
     
-    public GetDeviceUnitResponse(DeviceUnitService deviceUnitService)
+    public GetDeviceUnitResponse(DeviceUnit deviceUnitService)
     {
         Name = deviceUnitService.Device.Name;
         HardwareId = deviceUnitService.HardwareId;

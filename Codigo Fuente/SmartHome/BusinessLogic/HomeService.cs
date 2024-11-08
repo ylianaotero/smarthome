@@ -1,29 +1,31 @@
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Concrete;
-using Domain.DTO;
 using IBusinessLogic;
 using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (
-    IRepository<Home> homeRepository, 
-    IRepository<Device> deviceRepository, 
-    IRepository<User> userRepository, 
-    IRepository<Domain.Concrete.DeviceUnitService> deviceUnitRepository) : IHomeService
+public class HomeService : IHomeService
 {
     private const string HomeNotFoundMessage = "Home not found";
-    private const string DeviceNotFoundMessage = "Device not found";
-    private const string UserNotFoundMessage = "Member not found";
     private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
     private const string HomeAlreadyExists = "A home with this id already exists";
+    
+    private readonly IRepository<Home> _homeRepository;
+    private readonly IUserService _userService;
+    
+    public HomeService(IRepository<Home> homeRepository, IUserService userService)
+    {
+        this._homeRepository = homeRepository;
+        this._userService = userService;
+    }
 
     public void UpdateHome(long homeId)
     {
         Home home = GetHomeById(homeId);
         
-        homeRepository.Update(home);
+        _homeRepository.Update(home);
     }
     
     public void CreateHome(Home home)
@@ -36,13 +38,13 @@ public class HomeService (
         }
         catch (ElementNotFound)
         {
-            homeRepository.Add(home);
+            _homeRepository.Add(home);
         }
     }
     
     public Home GetHomeById(long id)
     {
-        Home home = homeRepository.GetById(id);
+        Home home = _homeRepository.GetById(id);
 
         if (home == null)
         {
@@ -54,7 +56,7 @@ public class HomeService (
 
     public List<Home> GetHomesByFilter(Func<Home, bool> filter)
     {
-        return homeRepository.GetByFilter(filter, null);
+        return _homeRepository.GetByFilter(filter, null);
     }
     
     public List<Member> GetMembersFromHome(long homeId)
@@ -64,7 +66,7 @@ public class HomeService (
         return home.Members;
     }
     
-    public List<Domain.Concrete.DeviceUnitService> GetDevicesFromHome(long homeId)
+    public List<Domain.Concrete.DeviceUnit> GetDevicesFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
         
@@ -93,66 +95,20 @@ public class HomeService (
         Home home = GetHomeById(homeId);
         
         home.AddRoom(room);
-        homeRepository.Update(home);
+        _homeRepository.Update(home);
     }
-    
-    public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
-    {
-        Home home = GetHomeById(homeId);
-        
-        List<Domain.Concrete.DeviceUnitService> devices = new List<Domain.Concrete.DeviceUnitService>();
-      
-        MapDevices(homeDevices, devices);
-        
-        foreach(var device in devices)
-        {
-            home.Devices.Add(device);
-        }
-        
-        homeRepository.Update(home);
-    }
-    
     public void UpdateHomeAlias(long id, string alias)
     {
         Home home = GetHomeById(id);
         
         home.Alias = alias;
         
-        homeRepository.Update(home);
-    }
-    
-    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<Domain.Concrete.DeviceUnitService> devices)
-    {
-        foreach (var device in homeDevices)
-        {
-            Device deviceEntity = deviceRepository.GetById(device.DeviceId);
-            
-            if (deviceEntity == null)
-            {
-                throw new ElementNotFound(DeviceNotFoundMessage);
-            }
-
-            Domain.Concrete.DeviceUnitService deviceUnitService = new Domain.Concrete.DeviceUnitService()
-            {
-                Device = deviceEntity,
-                Name = deviceEntity.Name,
-                IsConnected = device.IsConnected,
-                HardwareId = Guid.NewGuid(),
-            };
-            
-            devices.Add(deviceUnitService);
-            
-            deviceUnitRepository.Add(deviceUnitService);
-        }
+        _homeRepository.Update(home);
     }
     
     private (User, HomeOwner) GetHomeOwner(long userId)
     {
-        User user = userRepository.GetById(userId);
-        if (user == null)
-        {
-            throw new ElementNotFound(UserNotFoundMessage);
-        }
+        User user = _userService.GetUserById(userId);
          
         List<Role> userRoles = user.Roles;
         if (userRoles == null || userRoles.Count == 0)

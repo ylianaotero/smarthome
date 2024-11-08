@@ -5,7 +5,6 @@ using Domain.Concrete;
 using Domain.DTO;
 using IDataAccess;
 using Moq;
-using DeviceUnitService = Domain.Concrete.DeviceUnitService;
 
 namespace TestService;
 
@@ -17,7 +16,7 @@ public class NotificationServiceTest
     private Mock<IRepository<Home>> _mockHomeRepository; 
     
     private Home _defaultHome;
-    private DeviceUnitService _deviceUnitService; 
+    private DeviceUnit _deviceUnitService; 
     private User _defaultOwner;
     private Device _device; 
     private Member _member1; 
@@ -118,7 +117,7 @@ public class NotificationServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
             MaximumMembers = MaxMembers,
-            Devices = new List<DeviceUnitService>() {},
+            Devices = new List<DeviceUnit>() {},
             Members = new List<Member>() {}
         };
         
@@ -173,7 +172,7 @@ public class NotificationServiceTest
             PhotoURLs = new List<string> { DevicePhotoUrl }
         };
         
-        _deviceUnitService = new DeviceUnitService()
+        _deviceUnitService = new DeviceUnit()
         {
             Device = _device,
             IsConnected = true,
@@ -202,7 +201,7 @@ public class NotificationServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
             MaximumMembers = MaxMembers,
-            Devices = new List<DeviceUnitService>() {_deviceUnitService},
+            Devices = new List<DeviceUnit>() {_deviceUnitService},
             Members = new List<Member>() {_member1}
         };
     }

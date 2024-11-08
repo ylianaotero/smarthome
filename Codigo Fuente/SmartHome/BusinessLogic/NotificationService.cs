@@ -18,7 +18,7 @@ public class NotificationService
   
     public void SendNotifications(NotificationDTO notificationData)
     {
-        (Home home, Domain.Concrete.DeviceUnitService device) = ExtractNotificationDTOObjects(notificationData);
+        (Home home, Domain.Concrete.DeviceUnit device) = ExtractNotificationDTOObjects(notificationData);
 
         if (device.IsConnected)
         {
@@ -40,7 +40,7 @@ public class NotificationService
         }
     }
     
-    private (Home, Domain.Concrete.DeviceUnitService) ExtractNotificationDTOObjects(NotificationDTO notificationData)
+    private (Home, Domain.Concrete.DeviceUnit) ExtractNotificationDTOObjects(NotificationDTO notificationData)
     {
         Home home = homeRepository.GetById(notificationData.HomeId);
         if(home == null)
@@ -48,13 +48,13 @@ public class NotificationService
             throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
         
-        List<Domain.Concrete.DeviceUnitService> devices = home.Devices;
+        List<Domain.Concrete.DeviceUnit> devices = home.Devices;
         if (devices == null)
         {
             throw new ElementNotFound(ElementDoesNotExistExceptionMessage);
         }
 
-        Domain.Concrete.DeviceUnitService device = devices
+        Domain.Concrete.DeviceUnit device = devices
             .FirstOrDefault(d => d.HardwareId.ToString() == notificationData.HardwareId.ToString());
 
         if (device == null)

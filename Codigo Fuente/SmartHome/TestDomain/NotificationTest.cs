@@ -8,7 +8,7 @@ public class NotificationTest
     private User _user;
     private Home _home;
     private Member _member;
-    private DeviceUnitService _deviceUnitService;
+    private DeviceUnit _deviceUnitService;
     private Notification _notification; 
 
     
@@ -22,7 +22,7 @@ public class NotificationTest
     public void TestInitialize()
     {
         _notification = new Notification(Event);
-        _deviceUnitService = new DeviceUnitService();
+        _deviceUnitService = new DeviceUnit();
         _user = new User();
         _member = new Member(_user);
         _home = new Home();

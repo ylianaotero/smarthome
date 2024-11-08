@@ -1,5 +1,7 @@
 using CustomExceptions;
+using Domain.Abstract;
 using Domain.Concrete;
+using Domain.DTO;
 using IBusinessLogic;
 using IDataAccess;
 
@@ -11,48 +13,67 @@ public class DeviceUnitService : IDeviceUnitService
     private const string HomeNotFoundMessage = "Home not found";
     private const string RoomNotFoundMessage = "Room not found";
     
-    private readonly IRepository<Domain.Concrete.DeviceUnitService> _deviceUnitRepository;
+    private readonly IRepository<DeviceUnit> _deviceUnitRepository;
+    private readonly IDeviceService _deviceService;
     private readonly IHomeService _homeService;
     
-    public DeviceUnitService(IRepository<Domain.Concrete.DeviceUnitService> deviceUnitRepository, IHomeService homeService)
+    public DeviceUnitService(IRepository<DeviceUnit> deviceUnitRepository, 
+        IDeviceService deviceService, IHomeService homeService)
     {
         this._deviceUnitRepository = deviceUnitRepository;
         this._homeService = homeService;
+        this._deviceService = deviceService;
+    }
+    
+    public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
+    {
+        Home home = _homeService.GetHomeById(homeId);
+        
+        List<DeviceUnit> devices = new List<DeviceUnit>();
+      
+        MapDevices(homeDevices, devices);
+        
+        foreach(DeviceUnit device in devices)
+        {
+            home.Devices.Add(device);
+        }
+        
+        _homeService.UpdateHome(homeId);
     }
 
-    public void UpdateDeviceCustomName(long id, Domain.Concrete.DeviceUnitService updatedDeviceUnitService, Guid deviceId)
+    public void UpdateDeviceCustomName(long id, DeviceUnit updatedDeviceUnit, Guid deviceId)
     {
-        Domain.Concrete.DeviceUnitService? deviceUnit = GetDeviceUnitFromHome(id, deviceId);
+        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(id, deviceId);
             
         if (deviceUnit == null)
         {
             throw new ElementNotFound(DeviceNotFoundMessage);
         }
             
-        deviceUnit.Name = updatedDeviceUnitService.Name;
+        deviceUnit.Name = updatedDeviceUnit.Name;
             
         _deviceUnitRepository.Update(deviceUnit);
         _homeService.UpdateHome(id);
     }
     
-    public void UpdateDeviceConnectionStatus(long homeId, Domain.Concrete.DeviceUnitService updatedDeviceUnitService)
+    public void UpdateDeviceConnectionStatus(long homeId, DeviceUnit updatedDeviceUnit)
     {
-        Domain.Concrete.DeviceUnitService? deviceUnit = GetDeviceUnitFromHome(homeId, updatedDeviceUnitService.HardwareId);
+        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(homeId, updatedDeviceUnit.HardwareId);
         
         if (deviceUnit == null)
         {
             throw new ElementNotFound(DeviceNotFoundMessage);
         }
             
-        deviceUnit.IsConnected = updatedDeviceUnitService.IsConnected;
+        deviceUnit.IsConnected = updatedDeviceUnit.IsConnected;
             
-        _deviceUnitRepository.Update(updatedDeviceUnitService);
+        _deviceUnitRepository.Update(updatedDeviceUnit);
         _homeService.UpdateHome(homeId);
     }
     
     public void UpdateDeviceRoom(long homeId, Guid deviceId, long roomId)
     {
-        Domain.Concrete.DeviceUnitService? deviceUnit = GetDeviceUnitFromHome(homeId, deviceId);
+        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(homeId, deviceId);
         
         if (deviceUnit == null)
         {
@@ -67,11 +88,36 @@ public class DeviceUnitService : IDeviceUnitService
         _homeService.UpdateHome(homeId);
     }
     
-    private Domain.Concrete.DeviceUnitService? GetDeviceUnitFromHome(long homeId, Guid deviceHwId)
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    {
+        foreach (var device in homeDevices)
+        {
+            Device deviceEntity = _deviceService.GetDeviceById(device.DeviceId);
+            
+            if (deviceEntity == null)
+            {
+                throw new ElementNotFound(DeviceNotFoundMessage);
+            }
+
+            DeviceUnit deviceUnitService = new DeviceUnit()
+            {
+                Device = deviceEntity,
+                Name = deviceEntity.Name,
+                IsConnected = device.IsConnected,
+                HardwareId = Guid.NewGuid(),
+            };
+            
+            devices.Add(deviceUnitService);
+            
+            _deviceUnitRepository.Add(deviceUnitService);
+        }
+    }
+    
+    private DeviceUnit? GetDeviceUnitFromHome(long homeId, Guid deviceHwId)
     {
         try
         {
-            Domain.Concrete.DeviceUnitService? device = _homeService
+            DeviceUnit? device = _homeService
                 .GetDevicesFromHome(homeId).Find(d => d.HardwareId == deviceHwId);
             
             return device;

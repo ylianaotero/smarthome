@@ -5,7 +5,7 @@ public class Notification
     public int Id { get; set; }
     public Home Home { get; set; }
     public Member Member { get; set; }
-    public DeviceUnitService DeviceUnitService { get; set; }
+    public DeviceUnit DeviceUnitService { get; set; }
     public string Event { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool Read { get; set; }

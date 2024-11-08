@@ -121,7 +121,7 @@ public class HomeController : ControllerBase
     {
         try
         {
-            _homeService.AddDevicesToHome(id, request.ToEntity());
+            _deviceUnitService.AddDevicesToHome(id, request.ToEntity());
             return Ok(UpdatedHomeMessage);
         }
         catch (ElementNotFound)

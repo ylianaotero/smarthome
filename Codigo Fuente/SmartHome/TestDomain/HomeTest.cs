@@ -22,7 +22,7 @@ public class HomeTest
 
     private Member _member; 
 
-    private DeviceUnitService _deviceUnitService;
+    private DeviceUnit _deviceUnitService;
     private Room _room;
 
     private Home _home;
@@ -50,7 +50,7 @@ public class HomeTest
             Longitude = Longitude
         };
         
-        _deviceUnitService = new DeviceUnitService()
+        _deviceUnitService = new DeviceUnit()
         {
             HardwareId = Guid.NewGuid(),
             IsConnected = true,
@@ -206,7 +206,7 @@ public class HomeTest
         
         Assert.AreEqual(1, _home.Devices.Count);
         
-        DeviceUnitService device = _home.Devices.Find(d => d.HardwareId == _deviceUnitService.HardwareId);
+        DeviceUnit device = _home.Devices.Find(d => d.HardwareId == _deviceUnitService.HardwareId);
         
         Assert.IsNotNull(device);
     }
@@ -227,7 +227,7 @@ public class HomeTest
     {
         _home.AddDevice(_deviceUnitService);
 
-        DeviceUnitService result = _home.FindDevice(_deviceUnitService.HardwareId); 
+        DeviceUnit result = _home.FindDevice(_deviceUnitService.HardwareId); 
         
         Assert.AreEqual(_deviceUnitService.HardwareId, result.HardwareId);
     }

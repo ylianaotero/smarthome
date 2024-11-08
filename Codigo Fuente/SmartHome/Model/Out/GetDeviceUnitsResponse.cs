@@ -6,7 +6,7 @@ public class GetDeviceUnitsResponse
 {
     public List<GetDeviceUnitResponse> DevicesUnit { get; set; }
     
-    public GetDeviceUnitsResponse(List<DeviceUnitService> devicesUnit)
+    public GetDeviceUnitsResponse(List<DeviceUnit> devicesUnit)
     {
         DevicesUnit = devicesUnit.Select(deviceUnit => new GetDeviceUnitResponse(deviceUnit)).ToList();
     }

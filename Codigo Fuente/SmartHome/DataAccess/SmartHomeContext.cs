@@ -8,7 +8,7 @@ namespace DataAccess
     public class SmartHomeContext : DbContext
     {
         public DbSet<Device> Devices { get; set; }
-        public DbSet<DeviceUnitService> DeviceUnits { get; set; }
+        public DbSet<DeviceUnit> DeviceUnits { get; set; }
         public DbSet<HomeOwner> HomeOwners { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<CompanyOwner> CompanyOwners { get; set; }
@@ -102,14 +102,14 @@ namespace DataAccess
 
         private void ConfigureDeviceUnit(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DeviceUnitService>().HasOne<Device>(du => du.Device);
-            modelBuilder.Entity<DeviceUnitService>().Navigation(du => du.Device).AutoInclude();
+            modelBuilder.Entity<DeviceUnit>().HasOne<Device>(du => du.Device);
+            modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Device).AutoInclude();
 
-            modelBuilder.Entity<DeviceUnitService>().HasOne<Room>(du => du.Room)
+            modelBuilder.Entity<DeviceUnit>().HasOne<Room>(du => du.Room)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DeviceUnitService>().Navigation(du => du.Room).AutoInclude();
+            modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Room).AutoInclude();
         }
 
         private void ConfigureUser(ModelBuilder modelBuilder)
@@ -159,7 +159,7 @@ namespace DataAccess
             modelBuilder.Entity<Home>().Property(h => h.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Home>().HasOne<User>(h => h.Owner);
             modelBuilder.Entity<Home>().HasMany<Member>(h => h.Members);
-            modelBuilder.Entity<Home>().HasMany<DeviceUnitService>(h => h.Devices);
+            modelBuilder.Entity<Home>().HasMany<DeviceUnit>(h => h.Devices);
         }
 
         private void ConfigureMember(ModelBuilder modelBuilder)

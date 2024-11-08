@@ -2,10 +2,9 @@ using BusinessLogic;
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Concrete;
-using Domain.DTO;
+using IBusinessLogic;
 using IDataAccess;
 using Moq;
-using DeviceUnitService = Domain.Concrete.DeviceUnitService;
 
 namespace TestService;
 
@@ -13,22 +12,17 @@ namespace TestService;
 public class HomeServiceTest
 {
     private Mock<IRepository<Home>> _mockHomeRepository;
-    private Mock<IRepository<Device>> _mockDeviceRepository;
-    private Mock<IRepository<User>> _mockUserRepository;
-    private Mock<IRepository<DeviceUnitService>> _mockDeviceUnitRepository;
+    private Mock<IUserService> _mockUserService;
     
     private HomeService _homeService;
     private Home _defaultHome;
     private WindowSensor _windowSensor;
     private SecurityCamera _securityCamera;
-    private DeviceUnitService _windowSensorUnitService;
-    private DeviceUnitService _securityCameraUnitService;
-    private DeviceUnitService _updatedDevice;
+    private DeviceUnit _windowSensorUnit;
+    private DeviceUnit _securityCameraUnit;
     private User _user1;
     private User _user2;
     private User _defaultOwner;
-    private MemberDTO _memberDTO2;
-    private MemberDTO _memberDTO1; 
     private Member _member2;
     private Member _member1; 
     
@@ -44,6 +38,7 @@ public class HomeServiceTest
     private const int Id = 999;
     private const bool IsConnectedFalse = false;
     private const string RoomName = "Living Room";
+    private const string UserNotFoundMessage = "User not found";
 
     
     [TestInitialize]
@@ -94,17 +89,17 @@ public class HomeServiceTest
     [TestMethod]
     public void TestGetDevicesFromHome()
     {
-        List<DeviceUnitService> devices = new List<DeviceUnitService>
+        List<DeviceUnit> devices = new List<DeviceUnit>
         {
-            _windowSensorUnitService,
-            _securityCameraUnitService
+            _windowSensorUnit,
+            _securityCameraUnit
         };
     
         _defaultHome.Devices = devices;
         
         _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_defaultHome);
 
-        List<DeviceUnitService> retrievedDevices = _homeService.GetDevicesFromHome(1);
+        List<DeviceUnit> retrievedDevices = _homeService.GetDevicesFromHome(1);
         CollectionAssert.AreEqual(devices, retrievedDevices);
     }
     
@@ -152,68 +147,6 @@ public class HomeServiceTest
         
         _homeService.GetHomeById(1);
     }
-
-    [TestMethod]
-    public void TestPutDevicesInHome()
-    {
-        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(_defaultHome);
-        _mockDeviceRepository.Setup(x=>x.GetById(_securityCamera.Id)).Returns(_securityCamera);
-        _mockDeviceRepository.Setup(x => x.GetById(_windowSensor.Id)).Returns(_windowSensor);
-        
-        List<DeviceUnitService> homeDevices = new List<DeviceUnitService>
-        {
-            _windowSensorUnitService,
-            _securityCameraUnitService
-        };
-        
-        List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO>
-        {
-            new DeviceUnitDTO
-            {
-                DeviceId = _windowSensor.Id,
-                IsConnected = _windowSensorUnitService.IsConnected
-            },
-            new DeviceUnitDTO
-            {
-                DeviceId = _securityCamera.Id,
-                IsConnected = _securityCameraUnitService.IsConnected
-            }
-        };
-        
-        _homeService.AddDevicesToHome(1, homeDevicesDTO);
-       
-        CollectionAssert.AreEqual(_defaultHome.Devices,homeDevices);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestPutDevicesInHomeThrowsElementNotFound()
-    {
-        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns((Home?)null);
-       
-        List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO> {};
-        
-        _homeService.AddDevicesToHome(1, homeDevicesDTO);
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestPutDevicesInHomeThrowsElementNotFoundBecauseOfDevice()
-    {
-        _mockHomeRepository.Setup(x=>x.GetById(1)).Returns(_defaultHome);
-        _mockDeviceRepository.Setup(x=>x.GetById(_securityCamera.Id)).Returns((Device?)null);
-        
-        List<DeviceUnitDTO> homeDevicesDTO = new List<DeviceUnitDTO>
-        {
-            new DeviceUnitDTO
-            {
-                DeviceId = _securityCamera.Id,
-                IsConnected = _securityCameraUnitService.IsConnected
-            }
-        };
-        
-        _homeService.AddDevicesToHome(1, homeDevicesDTO);
-    }
     
     [TestMethod]
     [ExpectedException(typeof(CannotAddItem))]
@@ -235,7 +168,7 @@ public class HomeServiceTest
             Id = 1,
             Roles = new List<Role>(){role},
         };
-        _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns(homeOwner);
+        _mockUserService.Setup(m => m.GetUserById(homeOwner.Id)).Returns(homeOwner);
         _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
         
         Home homeWithOwner = _homeService.AddOwnerToHome(homeOwner.Id, _defaultHome);
@@ -256,8 +189,10 @@ public class HomeServiceTest
         };
         
         _defaultHome.Owner = null;
-        
-        _mockUserRepository.Setup(m => m.GetById(homeOwner.Id)).Returns((User?)null);
+
+        _mockUserService
+            .Setup(m => m.GetUserById(homeOwner.Id))
+            .Throws(new ElementNotFound(UserNotFoundMessage));
         
         _homeService.AddOwnerToHome(homeOwner.Id, _defaultHome);
     }
@@ -274,7 +209,7 @@ public class HomeServiceTest
         
         
         _defaultHome.Owner = null;
-        _mockUserRepository.Setup(m => m.GetById(user.Id)).Returns(user);
+        _mockUserService.Setup(m => m.GetUserById(user.Id)).Returns(user);
         
         _homeService.AddOwnerToHome(user.Id, _defaultHome);
     }
@@ -371,8 +306,7 @@ public class HomeServiceTest
     
     private void SetupDefaultObjects()
     {
-        _homeService = new HomeService(_mockHomeRepository.Object, _mockDeviceRepository.Object,
-            _mockUserRepository.Object, _mockDeviceUnitRepository.Object);
+        _homeService = new HomeService(_mockHomeRepository.Object, _mockUserService.Object);
         
         SetUpDefaultHome();
         SetUpDefaultDevices();
@@ -401,25 +335,18 @@ public class HomeServiceTest
     
     private void SetUpDefaultDeviceUnits()
     {
-        _windowSensorUnitService = new DeviceUnitService
+        _windowSensorUnit = new DeviceUnit
         {
             Device = _windowSensor,
             HardwareId = Guid.NewGuid(),
             IsConnected = true
         };
         
-        _securityCameraUnitService = new DeviceUnitService
+        _securityCameraUnit = new DeviceUnit
         {
             Device = _securityCamera,
             HardwareId = Guid.NewGuid(),
             IsConnected = false
-        };
-        
-         _updatedDevice = new DeviceUnitService()
-        {
-            Device = _securityCamera,
-            HardwareId = Guid.NewGuid(),
-            IsConnected = IsConnectedFalse
         };
     }
 
@@ -454,15 +381,11 @@ public class HomeServiceTest
         _user2 = new User() {Email = NewEmail2};
         _member1 = new Member(_user1);
         _member2 = new Member(_user2);
-        _memberDTO1 = new MemberDTO() { UserEmail = NewEmail };
-        _memberDTO2 = new MemberDTO() { UserEmail = NewEmail2 }; 
     }
 
     private void CreateRepositoryMocks()
     {
         _mockHomeRepository = new Mock<IRepository<Home>>();
-        _mockDeviceRepository = new Mock<IRepository<Device>>();
-        _mockUserRepository = new Mock<IRepository<User>>();
-        _mockDeviceUnitRepository = new Mock<IRepository<DeviceUnitService>>();
+        _mockUserService = new Mock<IUserService>();
     }
 }

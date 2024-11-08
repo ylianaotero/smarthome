@@ -3,9 +3,9 @@ using Domain.Concrete;
 namespace TestDomain;
 
 [TestClass]
-public class DeviceUnitServiceTest
+public class DeviceUnitTest
 {
-    private DeviceUnitService _deviceUnitService;
+    private DeviceUnit _deviceUnitService;
     private SecurityCamera _securityCamera;
     private Room _room;
     private Guid _deviceHardwareId;
@@ -32,7 +32,7 @@ public class DeviceUnitServiceTest
         
         _deviceHardwareId = Guid.NewGuid();
         
-        _deviceUnitService = new DeviceUnitService() {};
+        _deviceUnitService = new DeviceUnit() {};
         
         _room = new Room()
         {
