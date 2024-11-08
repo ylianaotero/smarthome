@@ -664,11 +664,36 @@ public class HomesControllerTest
             .Setup(service => service.AddRoomToHome(It.IsAny<long>(), It.IsAny<Room>()))
             .Throws(new ElementAlreadyExist(ElementAlreadyExistsMessage));
         
-        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
+        _homeController = new HomeController
+            (_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
 
         ObjectResult? result = _homeController.AddRoomToHome(_home.Id, request) as ConflictObjectResult;
         
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestUpdateDeviceRoomOkStatusCode()
+    {
+        Room newRoom = new Room()
+        {
+            Name = RoomName,
+            Id = 1
+        };
+        
+        PatchDeviceRequest request = new PatchDeviceRequest()
+        {
+            HardwareId = Guid.NewGuid(),
+            RoomId = _defaultRoom.Id,
+        };
+
+        _mockDeviceUnitService
+            .Setup(service => service.UpdateDeviceRoom(_home.Id, request.HardwareId, newRoom.Id));
+
+
+        ObjectResult? result = _homeController.UpdateDeviceRoom(_home.Id, request) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
     
     private GetHomeResponse DefaultHomeResponse()
