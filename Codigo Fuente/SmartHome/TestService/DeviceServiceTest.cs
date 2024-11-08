@@ -138,6 +138,7 @@ public class DeviceServiceTest
             Kind = WindowSensorType
         };
     }
+    
 
     private void CreateMockAndService()
     {

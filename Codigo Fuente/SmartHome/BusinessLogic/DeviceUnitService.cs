@@ -93,11 +93,6 @@ public class DeviceUnitService : IDeviceUnitService
         foreach (var device in homeDevices)
         {
             Device deviceEntity = _deviceService.GetDeviceById(device.DeviceId);
-            
-            if (deviceEntity == null)
-            {
-                throw new ElementNotFound(DeviceNotFoundMessage);
-            }
 
             DeviceUnit deviceUnitService = new DeviceUnit()
             {
@@ -110,6 +105,7 @@ public class DeviceUnitService : IDeviceUnitService
             devices.Add(deviceUnitService);
             
             _deviceUnitRepository.Add(deviceUnitService);
+            _deviceUnitRepository.Update(deviceUnitService);
         }
     }
     

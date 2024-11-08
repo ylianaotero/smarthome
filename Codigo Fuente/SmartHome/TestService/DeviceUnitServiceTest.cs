@@ -230,11 +230,14 @@ public class DeviceUnitServiceTest
     }
     
     [TestMethod]
-    public void TestPutDevicesInHome()
+    public void TestAddDevicesToHome()
     {
         _mockHomeService.Setup(x=>x.GetHomeById(1)).Returns(_defaultHome);
         _mockDeviceService.Setup(x=>x.GetDeviceById(_securityCamera.Id)).Returns(_securityCamera);
         _mockDeviceService.Setup(x => x.GetDeviceById(_windowSensor.Id)).Returns(_windowSensor);
+        _mockDeviceUnitRepository.Setup(x => x.Add(_securityCameraUnit));
+        _mockDeviceUnitRepository.Setup(x => x.Add(_windowSensorUnit));
+        _mockHomeService.Setup(x => x.UpdateHome(_defaultHome.Id));
         
         List<DeviceUnit> homeDevices = new List<DeviceUnit>
         {
@@ -257,13 +260,16 @@ public class DeviceUnitServiceTest
         };
         
         _deviceUnitService.AddDevicesToHome(1, homeDevicesDTO);
+        
+        _windowSensorUnit.HardwareId = _defaultHome.Devices[0].HardwareId;
+        _securityCameraUnit.HardwareId = _defaultHome.Devices[1].HardwareId;
        
         CollectionAssert.AreEqual(_defaultHome.Devices,homeDevices);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
-    public void TestPutDevicesInHomeThrowsElementNotFound()
+    public void TestAddDevicesToHomeThrowsElementNotFound()
     {
         _mockHomeService
             .Setup(x => x.GetHomeById(1))
@@ -276,7 +282,7 @@ public class DeviceUnitServiceTest
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
-    public void TestPutDevicesInHomeThrowsElementNotFoundBecauseOfDevice()
+    public void TestAddDevicesToHomeThrowsElementNotFoundBecauseOfDevice()
     {
         _mockHomeService.Setup(x=>x.GetHomeById(1)).Returns(_defaultHome);
         _mockDeviceService
@@ -306,8 +312,28 @@ public class DeviceUnitServiceTest
     {
         _deviceUnitService = new DeviceUnitService
             (_mockDeviceUnitRepository.Object, _mockDeviceService.Object, _mockHomeService.Object);
+        SetUpDefaultDevices();
         SetUpDefaultDeviceUnits();
         SetUpDefaultHome();
+    }
+    
+    private void SetUpDefaultDevices()
+    {
+        _securityCamera = new SecurityCamera
+        {
+            Id = 1, 
+            Name = "Cámara de seguridad", 
+            Model = "123", 
+            Description = "Cámara para exteriores"
+        };
+        
+        _windowSensor = new WindowSensor
+        {
+            Id = 2, 
+            Name = "Sensor de ventana", 
+            Model = "456", 
+            Description = "Sensor para ventanas"
+        };
     }
     
     private void SetUpDefaultDeviceUnits()
