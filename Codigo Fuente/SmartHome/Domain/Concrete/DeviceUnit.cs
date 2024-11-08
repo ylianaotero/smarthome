@@ -9,10 +9,8 @@ public class DeviceUnit
 {
     [Key] 
     public Guid HardwareId { get; set; }
-    
     public string Name { get; set; }
     public Device Device { get; set; }
-  //  public long? RoomId { get; set; }
     public bool IsConnected { get; set; }
 
     [ForeignKey("RoomId")]
@@ -22,7 +20,6 @@ public class DeviceUnit
         set
         {
             _room = value;
-           // RoomId = value.Id;
         }
     }
     
@@ -36,6 +33,6 @@ public class DeviceUnit
     public override bool Equals(object? obj)
     {
         return obj is DeviceUnit unit &&
-               Device.Id == unit.Device.Id;
+                HardwareId == unit.HardwareId;
     }
 }

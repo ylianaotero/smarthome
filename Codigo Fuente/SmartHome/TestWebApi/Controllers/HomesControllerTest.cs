@@ -18,6 +18,8 @@ public class HomesControllerTest
     private HomeController _homeController;
     private Mock<IHomeService> _mockHomeService;
     private Mock<ISessionService> _mockSessionService;
+    private Mock<IDeviceUnitService> _mockDeviceUnitService;
+    private Mock<IMemberService> _mockMemberService;
     private User _defaultOwner;
     private Member _member1;
     private Member _member2;
@@ -27,6 +29,7 @@ public class HomesControllerTest
     private List<Member> _members;
     private WindowSensor _defaultWindowSensor;
     private Company _defaultCompany;
+    private Room _defaultRoom;
     
     private const string HomeNotFoundExceptionMessage = "Home not found";
     private const string ElementNotFoundMessage = "Element not found";
@@ -39,9 +42,9 @@ public class HomesControllerTest
     private const string Email2 = "jane@example.com";
     private const string Street = "Calle del Sol";
     private const string Street2 = "Avenida Siempre Viva";
-    
     private const string Alias = "Mi Casa";
     private const string CustomName = "Living Camera";
+    private const string RoomName = "Living Room";
     private const int DoorNumber = 2;
     private const string? DoorNumberString = "742";
     private const double Latitude = 34.0207;
@@ -316,9 +319,9 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
         };
 
-        _mockHomeService.Setup(service => service.AddMemberToHome(_home.Id , postHomeMemberRequest.ToEntity()));
+        _mockMemberService.Setup(service => service.AddMemberToHome(_home.Id , postHomeMemberRequest.ToEntity()));
     
-        _homeController = new HomeController(_mockHomeService.Object); 
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object); 
         
         ObjectResult? result = _homeController.AddMemberToHome(_home.Id, postHomeMemberRequest) as OkObjectResult;
 
@@ -336,11 +339,11 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
         };
         
-        _mockHomeService
+        _mockMemberService
             .Setup(service => service.AddMemberToHome(_home.Id, It.IsAny<MemberDTO>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
         
-        _homeController = new HomeController(_mockHomeService.Object); 
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object); 
         
         ObjectResult? result = _homeController.AddMemberToHome(_home.Id, postHomeMemberRequest) as ObjectResult;
     
@@ -359,11 +362,11 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
         };
         
-        _mockHomeService
+        _mockMemberService
             .Setup(service => service.AddMemberToHome(_home.Id, It.IsAny<MemberDTO>()))
             .Throws(new ElementAlreadyExist(ElementAlreadyExistsMessage));
         
-        _homeController = new HomeController(_mockHomeService.Object); 
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object); 
 
         ObjectResult? result = _homeController.AddMemberToHome(_home.Id, postHomeMemberRequest) as ObjectResult;
     
@@ -381,11 +384,11 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
         };
         
-        _mockHomeService
+        _mockMemberService
             .Setup(service => service.AddMemberToHome(_home.Id, It.IsAny<MemberDTO>()))
             .Throws(new CannotAddItem(CannotAddItem));
         
-        _homeController = new HomeController(_mockHomeService.Object); 
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object); 
 
         ObjectResult? result = _homeController.AddMemberToHome(_home.Id, postHomeMemberRequest) as ObjectResult;
         
@@ -395,7 +398,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestCannotAddMemberToHomePreconditionFailed()
     {
-        _mockHomeService
+        _mockMemberService
             .Setup(service => service.AddMemberToHome(It.IsAny<long>(), It.IsAny<MemberDTO>()))
             .Throws(new CannotAddItem(CannotAddItem));
         
@@ -417,7 +420,7 @@ public class HomesControllerTest
         };
         
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
-        _mockHomeService
+        _mockDeviceUnitService
             .Setup(service => service
                 .AddDevicesToHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
         
@@ -441,7 +444,7 @@ public class HomesControllerTest
             }
         };
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
-        _mockHomeService
+        _mockDeviceUnitService
             .Setup(service => service
                 .AddDevicesToHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()));
 
@@ -459,9 +462,9 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
             
         };
-        _mockHomeService
+        _mockMemberService
             .Setup(service => service
-                .UpdateMemberNotificationPermission(It.IsAny<MemberDTO>(), It.IsAny<long>()));
+                .UpdateMemberNotificationPermission( It.IsAny<long>(), It.IsAny<MemberDTO>()));
     
         ObjectResult? result = _homeController.ChangeNotificationPermission(_home.Id,request) as OkObjectResult;
     
@@ -477,9 +480,9 @@ public class HomesControllerTest
             ReceivesNotifications = Permission
             
         };
-        _mockHomeService
+        _mockMemberService
             .Setup(service => service
-                .UpdateMemberNotificationPermission(It.IsAny<MemberDTO>(), It.IsAny<long>())).Throws(new ElementNotFound(ElementNotFoundMessage));
+                .UpdateMemberNotificationPermission(It.IsAny<long>(), It.IsAny<MemberDTO>())).Throws(new ElementNotFound(ElementNotFoundMessage));
     
         ObjectResult? result = _homeController.ChangeNotificationPermission(_home.Id,request) as ObjectResult;
     
@@ -492,7 +495,7 @@ public class HomesControllerTest
     {
         PostHomeDevicesRequest request = new PostHomeDevicesRequest() {};
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
-        _mockHomeService
+        _mockDeviceUnitService
             .Setup(service => service
                 .AddDevicesToHome(It.IsAny<long>(), It.IsAny<List<DeviceUnitDTO>>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
@@ -510,10 +513,13 @@ public class HomesControllerTest
             new DeviceUnit()
             {
                 Device = _defaultWindowSensor,
-                IsConnected = true
+                IsConnected = true,
+                Name = "Window Sensor",
+                HardwareId = Guid.NewGuid()
             }
         };
-        _mockHomeService.Setup(service => service.GetDevicesFromHome(It.IsAny<int>())).Returns(devicesUnit);
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<int>())).Returns(_home); 
+        _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id)).Returns(devicesUnit);
         GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
         
         ObjectResult? result = _homeController.GetDevicesFromHome(1) as OkObjectResult;
@@ -525,7 +531,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetDevicesUnitNotFoundStatusCode()
     {
-        _mockHomeService.Setup(service => service.GetDevicesFromHome(It.IsAny<int>()))
+        _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
         
         IActionResult result = _homeController.GetDevicesFromHome(1);
@@ -542,8 +548,10 @@ public class HomesControllerTest
             IsConnected = true
         };
         
-        _mockHomeService.Setup(service => service.UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>())); 
-        _homeController = new HomeController(_mockHomeService.Object);
+        _mockDeviceUnitService
+            .Setup(service => service
+                .UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>())); 
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
         ObjectResult? result = _homeController.UpdateDeviceConnectionStatus(_home.Id,request) as OkObjectResult;
         
@@ -560,9 +568,11 @@ public class HomesControllerTest
             IsConnected = true
         };
         
-        _mockHomeService.Setup(service => service.UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>()))
+        _mockDeviceUnitService
+            .Setup(service => service
+                .UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
-        _homeController = new HomeController(_mockHomeService.Object);
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
         ObjectResult? result = _homeController.UpdateDeviceConnectionStatus(_home.Id,request) as ObjectResult;
         
@@ -578,8 +588,10 @@ public class HomesControllerTest
             Name = CustomName
         };
         
-        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()));
-        _homeController = new HomeController(_mockHomeService.Object);
+        _mockDeviceUnitService
+            .Setup(service => service
+                .UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()));
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
         ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,new Guid(),request) as OkObjectResult;
         
@@ -594,13 +606,69 @@ public class HomesControllerTest
             Name = CustomName
         };
         
-        _mockHomeService.Setup(service => service.UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()))
+        _mockDeviceUnitService
+            .Setup(service => service
+                .UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
-        _homeController = new HomeController(_mockHomeService.Object);
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
         ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,new Guid(),request) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestAddRoomToHomeOkStatusCode()
+    {
+        PostHomeRoomRequest request = new PostHomeRoomRequest()
+        {
+            Name = _defaultRoom.Name
+        };
+        
+        _mockHomeService.Setup(service => service.AddRoomToHome(It.IsAny<long>(), It.IsAny<Room>()));
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
+        
+        ObjectResult? result = _homeController.AddRoomToHome(_home.Id,request) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestAddRoomToHomeNotFoundStatusCode()
+    {
+        PostHomeRoomRequest request = new PostHomeRoomRequest()
+        {
+            Name = _defaultRoom.Name
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddRoomToHome(It.IsAny<long>(), It.IsAny<Room>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
+
+        ObjectResult? result = _homeController.AddRoomToHome(_home.Id, request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestAddRoomToHomeConflictStatusCode()
+    {
+        PostHomeRoomRequest request = new PostHomeRoomRequest()
+        {
+            Name = _defaultRoom.Name
+        };
+        
+        _mockHomeService
+            .Setup(service => service.AddRoomToHome(It.IsAny<long>(), It.IsAny<Room>()))
+            .Throws(new ElementAlreadyExist(ElementAlreadyExistsMessage));
+        
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
+
+        ObjectResult? result = _homeController.AddRoomToHome(_home.Id, request) as ConflictObjectResult;
+        
+        Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
     
     private GetHomeResponse DefaultHomeResponse()
@@ -615,10 +683,10 @@ public class HomesControllerTest
     
     private void SetupDefaultObjects()
     {
-
         SetupHomes();
         SetupUsers();
         SetupWindowSensor();
+        SetupRoom();
     }
     
     private void SetupUsers()
@@ -679,10 +747,20 @@ public class HomesControllerTest
         };
     }
 
+    private void SetupRoom()
+    {
+        _defaultRoom = new Room()
+        {
+            Name = RoomName
+        };
+    }
+
     private void SetupHomeController()
     {
         _mockSessionService = new Mock<ISessionService>();
         _mockHomeService = new Mock<IHomeService>();
-        _homeController = new HomeController(_mockHomeService.Object);
+        _mockDeviceUnitService = new Mock<IDeviceUnitService>();
+        _mockMemberService = new Mock<IMemberService>();
+        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
     }
 }
