@@ -145,7 +145,7 @@ namespace DataAccess
                 .WithMany(u => u.Notifications)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Notification>().Navigation(n => n.Member).AutoInclude();
-            modelBuilder.Entity<Notification>().Navigation(n => n.DeviceUnitService).AutoInclude();
+            modelBuilder.Entity<Notification>().Navigation(n => n.DeviceUnit).AutoInclude();
             modelBuilder.Entity<Notification>().Navigation(n => n.Home).AutoInclude();
         }
 

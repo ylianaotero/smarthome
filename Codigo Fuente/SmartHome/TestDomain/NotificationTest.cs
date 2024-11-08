@@ -34,7 +34,7 @@ public class NotificationTest
         _notification.Id = Id; 
         _notification.Home = _home;
         _notification.Member = _member;
-        _notification.DeviceUnitService = _deviceUnitService;
+        _notification.DeviceUnit = _deviceUnitService;
 
         Assert.IsTrue(
             Event == _notification.Event &&
@@ -42,7 +42,7 @@ public class NotificationTest
             _todayDate == _notification.CreatedAt.Date &&
             _minValueDate == _notification.ReadAt &&
             Id == _notification.Id && _home == _notification.Home && _member == _notification.Member &&
-            _deviceUnitService.Device == _notification.DeviceUnitService.Device
+            _deviceUnitService.Device == _notification.DeviceUnit.Device
         );
 
     }

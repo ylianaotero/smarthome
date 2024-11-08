@@ -66,7 +66,7 @@ public class HomeService : IHomeService
         return home.Members;
     }
     
-    public List<Domain.Concrete.DeviceUnit> GetDevicesFromHome(long homeId)
+    public List<DeviceUnit> GetDevicesFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
         
