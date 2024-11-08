@@ -192,6 +192,16 @@ public class HomeController : ControllerBase
         }
     }
     
+    [HttpPatch]
+    [Route("{id}/devices")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateDeviceRoom([FromRoute] long id, 
+        [FromBody] PatchDeviceRequest request)
+    {
+        _deviceUnitService.UpdateDeviceRoom(id, request.HardwareId, (long)request.RoomId);
+        return Ok(UpdatedHomeMessage);
+    }
+    
     [HttpGet]
     [Route("{id}/devices")]
     [RestrictToPrivilegedMembers(true, false)]
