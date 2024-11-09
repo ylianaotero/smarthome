@@ -157,10 +157,11 @@ public class HomeController : ControllerBase
     [RestrictToPrivilegedMembers(true, false)]
     public IActionResult GetDevicesFromHome([FromRoute] int id)
     {
-        GetDeviceUnitsResponse getDeviceUnitsResponse;
         try
         {
-            getDeviceUnitsResponse = new GetDeviceUnitsResponse(_homeService.GetDevicesFromHome(id));
+            GetDeviceUnitsResponse getDeviceUnitsResponse = new GetDeviceUnitsResponse
+                (_homeService.GetDevicesFromHome(id));
+            
             return Ok(getDeviceUnitsResponse);
         }
         catch (ElementNotFound)

@@ -538,6 +538,42 @@ public class HomesControllerTest
         
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+    
+    [TestMethod]
+    public void TestGetDevicesUnitFilteredByRoomOkResponse()
+    {
+        Room room = new Room()
+        {
+            Id = 1,
+            Name = RoomName
+        };
+        
+        List<DeviceUnit> devicesUnit = new List<DeviceUnit>
+        {
+            new DeviceUnit()
+            {
+                Device = _defaultWindowSensor,
+                IsConnected = true,
+                Name = "Window Sensor",
+                HardwareId = Guid.NewGuid(),
+                Room = room
+            }
+        };
+        
+        GetDeviceUnitsRequest request = new GetDeviceUnitsRequest()
+        {
+            RoomId = room.Id
+        };
+        
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<int>())).Returns(_home); 
+        _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id)).Returns(devicesUnit);
+        GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
+        
+        ObjectResult? result = _homeController.GetDevicesFromHome(1) as OkObjectResult;
+        GetDeviceUnitsResponse response = (result!.Value as GetDeviceUnitsResponse)!;
+        
+        Assert.AreEqual(expectedResponse, response);
+    }
 
     [TestMethod]
     public void TestUpdateDeviceStatusOkStatusCode()
