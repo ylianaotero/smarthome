@@ -17,7 +17,6 @@ public class HomeController : ControllerBase
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
     private const string SourceAlreadyExistsMessage = "Source Already Exists";
-    private const string UpdatedDeviceNameMessage = "The device custom name was updated successfully.";
     
     private const int PreconditionFailedStatusCode = 412;
     
