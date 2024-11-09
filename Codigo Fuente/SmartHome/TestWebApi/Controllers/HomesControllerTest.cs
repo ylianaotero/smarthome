@@ -569,7 +569,7 @@ public class HomesControllerTest
         _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id)).Returns(devicesUnit);
         GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
         
-        ObjectResult? result = _homeController.GetDevicesFromHome(1) as OkObjectResult;
+        ObjectResult? result = _homeController.GetDevicesFromHome(1, request) as OkObjectResult;
         GetDeviceUnitsResponse response = (result!.Value as GetDeviceUnitsResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
