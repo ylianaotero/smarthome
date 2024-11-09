@@ -482,7 +482,8 @@ public class HomesControllerTest
         };
         _mockMemberService
             .Setup(service => service
-                .UpdateMemberNotificationPermission(It.IsAny<long>(), It.IsAny<MemberDTO>())).Throws(new ElementNotFound(ElementNotFoundMessage));
+                .UpdateMemberNotificationPermission(It.IsAny<long>(), It.IsAny<MemberDTO>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
     
         ObjectResult? result = _homeController.ChangeNotificationPermission(_home.Id,request) as ObjectResult;
     
@@ -522,7 +523,7 @@ public class HomesControllerTest
         _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id)).Returns(devicesUnit);
         GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
         
-        ObjectResult? result = _homeController.GetDevicesFromHome(1) as OkObjectResult;
+        ObjectResult? result = _homeController.GetDevicesFromHome(1, null) as OkObjectResult;
         GetDeviceUnitsResponse response = (result!.Value as GetDeviceUnitsResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
@@ -534,7 +535,7 @@ public class HomesControllerTest
         _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
         
-        IActionResult result = _homeController.GetDevicesFromHome(1);
+        IActionResult result = _homeController.GetDevicesFromHome(1, null);
         
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
@@ -562,11 +563,14 @@ public class HomesControllerTest
         
         GetDeviceUnitsRequest request = new GetDeviceUnitsRequest()
         {
-            RoomId = room.Id
+            RoomId = room.Id,
+            RoomName = room.Name
         };
         
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<int>())).Returns(_home); 
-        _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id)).Returns(devicesUnit);
+        _mockHomeService
+            .Setup(service => service.GetDevicesFromHomeByFilter(_home.Id, request.ToFilter()))
+            .Returns(devicesUnit);
         GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
         
         ObjectResult? result = _homeController.GetDevicesFromHome(1, request) as OkObjectResult;

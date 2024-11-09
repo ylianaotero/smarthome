@@ -24,7 +24,7 @@ public class DeviceUnitService : IDeviceUnitService
         this._homeService = homeService;
         this._deviceService = deviceService;
     }
-    
+  
     public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
     {
         Home home = _homeService.GetHomeById(homeId);

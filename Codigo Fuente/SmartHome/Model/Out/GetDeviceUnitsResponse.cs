@@ -4,10 +4,16 @@ namespace Model.Out;
 
 public class GetDeviceUnitsResponse
 {
-    public List<GetDeviceUnitResponse> DevicesUnit { get; set; }
+    private List<GetDeviceUnitResponse> DevicesUnit { get; set; }
     
-    public GetDeviceUnitsResponse(List<DeviceUnit> devicesUnit)
+    public GetDeviceUnitsResponse(List<DeviceUnit>? devicesUnit)
     {
+        if (devicesUnit == null)
+        {
+            DevicesUnit = new List<GetDeviceUnitResponse>();
+            return;
+        }
+        
         DevicesUnit = devicesUnit.Select(deviceUnit => new GetDeviceUnitResponse(deviceUnit)).ToList();
     }
     
@@ -16,5 +22,4 @@ public class GetDeviceUnitsResponse
         return obj is GetDeviceUnitsResponse response &&
                 DevicesUnit.SequenceEqual(response.DevicesUnit);
     }
-    
 }
