@@ -40,23 +40,6 @@ public class HomeController : ControllerBase
         return Ok(getHomesResponse);
     }
     
-    
-    [HttpPatch]
-    [Route("{id}/members")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] PatchHomeMemberRequest request)
-    {
-        try
-        {
-            _memberService.UpdateMemberNotificationPermission(id, request.ToEntity());
-            return Ok(UpdatedHomeMessage);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound(ResourceNotFoundMessage);
-        }
-    }
-
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult PostHomes([FromBody] PostHomeRequest request)
@@ -80,21 +63,6 @@ public class HomeController : ControllerBase
     }
     
     [HttpGet]
-    [Route("{id}/members")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult GetMembersFromHome([FromRoute] long id)
-    {
-        try
-        {
-            return Ok(new GetMembersResponse(_homeService.GetMembersFromHome(id)));
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound(ResourceNotFoundMessage);
-        }
-    }
-    
-    [HttpGet]
     [Route("{id}")]
     [RolesWithPermissions(RoleWithPermissionToGetAllHomes)]
     public IActionResult GetHomeById([FromRoute] long id)
@@ -112,16 +80,31 @@ public class HomeController : ControllerBase
         
         return Ok(getHomeResponse);
     }
-
-    [HttpPost]
-    [Route("{id}/devices")]
-    [RestrictToPrivilegedMembers(false, true)]
-    public IActionResult AddDevicesToHome([FromRoute] long id, [FromBody] PostHomeDevicesRequest request)
+    
+    [HttpPatch]
+    [Route("{id}")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateHomeAlias([FromRoute] long id, [FromBody] PatchHomeRequest request)
     {
         try
         {
-            _deviceUnitService.AddDevicesToHome(id, request.ToEntity());
+            _homeService.UpdateHomeAlias(id, request.Alias);
             return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    [HttpGet]
+    [Route("{id}/members")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult GetMembersFromHome([FromRoute] long id)
+    {
+        try
+        {
+            return Ok(new GetMembersResponse(_homeService.GetMembersFromHome(id)));
         }
         catch (ElementNotFound)
         {
@@ -150,6 +133,71 @@ public class HomeController : ControllerBase
         catch (CannotAddItem e)
         {
             return StatusCode(PreconditionFailedStatusCode, e.Message);
+        }
+    }
+    
+    [HttpPatch]
+    [Route("{id}/members")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult ChangeNotificationPermission([FromRoute] long id, [FromBody] PatchHomeMemberRequest request)
+    {
+        try
+        {
+            _memberService.UpdateMemberNotificationPermission(id, request.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    [HttpGet]
+    [Route("{id}/devices")]
+    [RestrictToPrivilegedMembers(true, false)]
+    public IActionResult GetDevicesFromHome([FromRoute] int id)
+    {
+        GetDeviceUnitsResponse getDeviceUnitsResponse;
+        try
+        {
+            getDeviceUnitsResponse = new GetDeviceUnitsResponse(_homeService.GetDevicesFromHome(id));
+            return Ok(getDeviceUnitsResponse);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    [HttpPost]
+    [Route("{id}/devices")]
+    [RestrictToPrivilegedMembers(false, true)]
+    public IActionResult AddDevicesToHome([FromRoute] long id, [FromBody] PostHomeDevicesRequest request)
+    {
+        try
+        {
+            _deviceUnitService.AddDevicesToHome(id, request.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
+        }
+    }
+    
+    [HttpPatch]
+    [Route("{id}/devices")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult UpdateDevice([FromRoute] long id, [FromBody] PatchDeviceUnitRequest unitRequest)
+    {
+        try
+        {
+            _deviceUnitService.UpdateDeviceUnit(id, unitRequest.ToEntity());
+            return Ok(UpdatedHomeMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
         }
     }
     
@@ -188,55 +236,6 @@ public class HomeController : ControllerBase
         catch (ElementAlreadyExist)
         {
             return Conflict(SourceAlreadyExistsMessage);
-        }
-    }
-    
-    [HttpPatch]
-    [Route("{id}/devices")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult UpdateDevice([FromRoute] long id, [FromBody] PatchDeviceUnitRequest unitRequest)
-    {
-        try
-        {
-            _deviceUnitService.UpdateDeviceUnit(id, unitRequest.ToEntity());
-            return Ok(UpdatedHomeMessage);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound(ResourceNotFoundMessage);
-        }
-    }
-    
-    [HttpGet]
-    [Route("{id}/devices")]
-    [RestrictToPrivilegedMembers(true, false)]
-    public IActionResult GetDevicesFromHome([FromRoute] int id)
-    {
-        GetDeviceUnitsResponse getDeviceUnitsResponse;
-        try
-        {
-            getDeviceUnitsResponse = new GetDeviceUnitsResponse(_homeService.GetDevicesFromHome(id));
-            return Ok(getDeviceUnitsResponse);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound(ResourceNotFoundMessage);
-        }
-    }
-    
-    [HttpPatch]
-    [Route("{id}")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult UpdateHomeAlias([FromRoute] long id, [FromBody] PatchHomeRequest request)
-    {
-        try
-        {
-            _homeService.UpdateHomeAlias(id, request.Alias);
-            return Ok(UpdatedHomeMessage);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound(ResourceNotFoundMessage);
         }
     }
 }
