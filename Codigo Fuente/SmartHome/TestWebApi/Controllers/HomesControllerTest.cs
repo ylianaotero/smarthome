@@ -719,11 +719,12 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetHomeRoomsNotFoundStatusCode()
     {
-        _mockHomeService
-            .Setup(service => service.GetHomeById(It.IsAny<long>()))
-            .Throws(new ElementNotFound(ElementNotFoundMessage));
-
-        ObjectResult? result = _homeController.GetRooms(_home.Id) as OkObjectResult;
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));  
+        _mockHomeService.Setup(service => service.GetRoomsFromHome(It.IsAny<long>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));  
+        
+        ObjectResult? result = _homeController.GetRooms(_home.Id) as NotFoundObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }

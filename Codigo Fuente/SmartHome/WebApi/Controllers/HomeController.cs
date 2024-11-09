@@ -158,9 +158,16 @@ public class HomeController : ControllerBase
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
     public IActionResult GetRooms([FromRoute] long id)
     {
-        GetRoomsResponse getRoomsResponse = new GetRoomsResponse(_homeService.GetRoomsFromHome(id));
-        
-        return Ok(getRoomsResponse);
+        try
+        {
+            GetRoomsResponse getRoomsResponse = new GetRoomsResponse(_homeService.GetRoomsFromHome(id));
+            
+            return Ok(getRoomsResponse);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound("Not found");
+        }
     }
     
     [HttpPost]
