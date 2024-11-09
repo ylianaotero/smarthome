@@ -695,6 +695,7 @@ public class HomesControllerTest
     public void TestGetHomeRoomsOkStatusCode()
     {
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
+        _mockHomeService.Setup(service => service.GetRoomsFromHome(It.IsAny<long>())).Returns(_home.Rooms);
 
         ObjectResult? result = _homeController.GetRooms(_home.Id) as OkObjectResult;
         
@@ -707,6 +708,7 @@ public class HomesControllerTest
         GetRoomsResponse expectedResponse = new GetRoomsResponse(_home.Rooms);
         
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
+        _mockHomeService.Setup(service => service.GetRoomsFromHome(It.IsAny<long>())).Returns(_home.Rooms);
 
         ObjectResult? result = _homeController.GetRooms(_home.Id) as OkObjectResult;
         GetRoomsResponse response = (result!.Value as GetRoomsResponse)!;
