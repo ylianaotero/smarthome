@@ -1,12 +1,11 @@
-/* Asegura que la página ocupe toda la altura */
+
 html, body {
-    height: 100%; /* Ocupa toda la ventana */
+    height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #082849; /* Fondo azul oscuro */
+    background-color: #082849;
   }
   
-  /* Centrado del contenedor */
   body {
     display: flex;
     justify-content: center;
@@ -16,11 +15,10 @@ html, body {
   }
   
   .btn {
-    width: 200px; /* Ajusta el ancho según sea necesario */
-    margin: 10px; /* Espaciado entre los botones */
+    width: 200px;
+    margin: 10px;
   }
   
-  /* Estilo del contenedor */
   .welcome-container {
     background-color: white;
     padding: 2rem;
@@ -28,16 +26,14 @@ html, body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 320px;
-    position: relative; /* Para posicionar elementos dentro del contenedor */
+    position: relative;
   }
   
-  /* Estilo del título */
   .welcome-title {
     color: #6c5ce7;
     margin-bottom: 20px;
   }
   
-  /* Estilo del botón */
   .btn-create-home {
     background-color: #6c5ce7;
     border-color: #6c5ce7;
@@ -49,12 +45,10 @@ html, body {
     align-items: center;
   }
   
-  /* Espacio para el ícono de la casa */
   .btn-create-home i {
     margin-right: 10px;
   }
   
-  /* Cambio de color en hover */
   .btn-create-home:hover {
     background-color: #5a4ec9;
     border-color: #5a4ec9;
