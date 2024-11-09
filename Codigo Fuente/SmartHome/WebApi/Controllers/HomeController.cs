@@ -166,7 +166,7 @@ public class HomeController : ControllerBase
         }
         catch (ElementNotFound)
         {
-            return NotFound("Not found");
+            return NotFound(ResourceNotFoundMessage);
         }
     }
     
