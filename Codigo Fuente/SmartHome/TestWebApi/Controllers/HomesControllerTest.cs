@@ -676,12 +676,6 @@ public class HomesControllerTest
     [TestMethod]
     public void TestUpdateDeviceRoomOkStatusCode()
     {
-        Room newRoom = new Room()
-        {
-            Name = RoomName,
-            Id = 1
-        };
-        
         PatchDeviceUnitRequest unitRequest = new PatchDeviceUnitRequest()
         {
             HardwareId = Guid.NewGuid(),
@@ -693,6 +687,16 @@ public class HomesControllerTest
 
 
         ObjectResult? result = _homeController.UpdateDevice(_home.Id, unitRequest) as OkObjectResult;
+        
+        Assert.AreEqual(OKStatusCode, result.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestGetHomeRoomsOkStatusCode()
+    {
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
+
+        ObjectResult? result = _homeController.GetRooms(_home.Id) as OkObjectResult;
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
