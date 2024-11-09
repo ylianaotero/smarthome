@@ -153,6 +153,14 @@ public class HomeController : ControllerBase
         }
     }
     
+    [HttpGet]
+    [Route("{id}/rooms")]
+    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
+    public IActionResult GetRooms([FromRoute] long id)
+    {
+        return Ok(_homeService.GetRoomsFromHome(id));
+    }
+    
     [HttpPost]
     [Route("{id}/rooms")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
