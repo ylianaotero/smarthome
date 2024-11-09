@@ -36,10 +36,10 @@ export class AdministratorPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUsers();
+    //this.getUsers();
     this.getCompanies();
   }
-
+  
   getUsers(): void {
     const request: GetUsersRequest = {
       fullName: this.selectedFullName,
@@ -54,6 +54,7 @@ export class AdministratorPanelComponent implements OnInit {
       }
     });
   }
+
 
   getCompanies(): void {
     const request: GetCompaniesRequest = {

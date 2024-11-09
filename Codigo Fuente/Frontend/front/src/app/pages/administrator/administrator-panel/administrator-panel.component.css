@@ -60,4 +60,32 @@ html, body {
     border-color: #5a4ec9;
   }
 
-  
+  .table th, .table td {
+    word-wrap: break-word;
+}
+
+.table td:last-child, .table th:last-child {
+  width: 200px;
+  word-wrap: break-word;
+}
+
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.role-selection label {
+  display: block;
+  margin-bottom: 10px;
+  padding: 7px;
+  margin: 2px;
+}
+
+input[type="radio"] {
+  margin-right: 7px;
+}

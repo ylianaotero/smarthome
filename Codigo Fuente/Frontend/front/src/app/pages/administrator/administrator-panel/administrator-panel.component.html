@@ -33,7 +33,7 @@
 </div>
 
 <!-- Modal para visualizar usuarios -->
-<div class="modal fade" id="myModalShowUsers" tabindex="-1" role="dialog" aria-hidden="true"
+<div class="modal fade" id="myModalShowUsers" tabindex="-1" role="dialog"
      [class.show]="modalShowUsers" [style.display]="modalShowUsers ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'showUsers')">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -51,12 +51,21 @@
             <input type="text" class="form-control" placeholder="Filtrar por nombre completo" [(ngModel)]="selectedFullName">
           </div>
 
-          <div class="col-12 mb-3">
-            <input type="text" class="form-control" placeholder="Filtrar por rol" [(ngModel)]="selectedRole">
+          <div class="role-selection">
+            <p style="padding: 10px; margin: 1px;">Filtrar por rol</p>
+            <label>
+              <input type="radio" name="role" value="administrator" [(ngModel)]="selectedRole"> Administrador
+            </label>
+            <label>
+              <input type="radio" name="role" value="HomeOwner" [(ngModel)]="selectedRole"> Dueño de Empresa
+            </label>
+            <label>
+              <input type="radio" name="role" value="CompanyOwner" [(ngModel)]="selectedRole"> Dueño de Hogar
+            </label>
           </div>
 
           <div class="col-12 mb-3 d-flex justify-content-end">
-            <button type="button" class="btn btn-primary">Buscar</button>
+            <button type="button" class="btn btn-primary" (click)="getUsers()">Buscar</button>
           </div>
         </div>
 
@@ -67,6 +76,7 @@
             <th scope="col" class="text-center">Apellido</th>
             <th scope="col" class="text-center">Nombre Completo</th>
             <th scope="col" class="text-center">Fecha de cuenta</th>
+            <th scope="col" class="text-center">Roles</th>
           </tr>
           </thead>
           <tbody>
@@ -74,7 +84,18 @@
             <td>{{ user.name }}</td>
             <td>{{ user.surname }}</td>
             <td>{{ user.fullName }}</td>
-            <td>{{ user.createdAt }}</td>
+            <td>{{ user.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td>
+              <ul class="list-unstyled">
+                <li *ngFor="let role of user.roles">
+                  <span [ngSwitch]="role.kind">
+                    <span *ngSwitchCase="'Administrator'">Administrador</span>
+                    <span *ngSwitchCase="'HomeOwner'">Propietario de hogar</span>
+                    <span *ngSwitchCase="'CompanyOwner'">Propietario de compañía</span>
+                    <span *ngSwitchDefault>{{ role.kind }}</span>
+                  </span>
+                </li>
+              </ul>
           </tr>
           </tbody>
         </table>
@@ -135,17 +156,13 @@
           <thead>
           <tr>
             <th scope="col" class="text-center">Nombre</th>
-            <th scope="col" class="text-center">Apellido</th>
-            <th scope="col" class="text-center">Nombre Completo</th>
-            <th scope="col" class="text-center">Fecha de cuenta</th>
+            <th scope="col" class="text-center">Dueño</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let user of users">
-            <td>{{ user.name }}</td>
-            <td>{{ user.surname }}</td>
-            <td>{{ user.fullName }}</td>
-            <td>{{ user.createdAt }}</td>
+          <tr *ngFor="let company of companies">
+            <td>{{ company.name }}</td>
+            <td>{{ company.owner }}</td>
           </tr>
           </tbody>
         </table>
