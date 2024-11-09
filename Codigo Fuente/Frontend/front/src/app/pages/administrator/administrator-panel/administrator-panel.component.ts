@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { CompanyService } from '../../../shared/company.service';
 import { GetCompaniesRequest, GetCompaniesResponse, GetCompanyResponse } from '../../../interfaces/companies';
-import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/administrator';
+import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
 
 @Component({
   selector: 'app-administrator-panel',

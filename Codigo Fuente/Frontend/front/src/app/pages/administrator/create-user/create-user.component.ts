@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { createAdministratorModel, createCompanyOwnerModel } from '../../../interfaces/administrator';
+import { createAdministratorModel, createCompanyOwnerModel } from '../../../interfaces/users';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { connect } from 'rxjs';
 
@@ -31,7 +31,6 @@ export class CreateUserComponent {
     if (url == '/administrator/new-admin') {
       this.isNewAdmin = true;
     }
-    console.log(this.isNewAdmin);
   }
 
   goHome(): void {
@@ -41,7 +40,7 @@ export class CreateUserComponent {
   register(name: string, surname: string, email: string, password: string, photo: string): void {
     this.feedback = "Cargando...";
 
-    if (!name || !surname || !email || !password || !photo) {
+    if (!name || !surname || !email || !password || (!photo && this.isNewAdmin)) {
       this.feedback = "Por favor, completa todos los campos obligatorios.";
       return;
     }

@@ -1,6 +1,6 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { sessionModel, sessionRequest } from '../logIn/sessionModel';
-import { createAdministratorModel, GetUsersRequest, GetUsersResponse, PostAdministratorRequest, createCompanyOwnerModel, PostCompanyOwnerRequest} from '../interfaces/administrator';
+import { createAdministratorModel, GetUsersRequest, GetUsersResponse, PostAdministratorRequest, createCompanyOwnerModel, PostCompanyOwnerRequest} from '../interfaces/users';
 import { Injectable } from '@angular/core';
 import {Observable, tap} from 'rxjs';
 
@@ -40,7 +40,7 @@ export class AdministratorService {
     };
 
     postCompanyOwner(data: createCompanyOwnerModel) {
-        return this.httpClient.post<PostCompanyOwnerRequest>(this.url + '/companyOwners', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
+        return this.httpClient.post<PostCompanyOwnerRequest>(this.url + '/company-owners', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
     }
 
     getUsers(request: GetUsersRequest, currentPage?: number, pageSize?: number): Observable<GetUsersResponse> {
