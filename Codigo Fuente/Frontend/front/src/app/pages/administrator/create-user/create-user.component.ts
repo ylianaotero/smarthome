@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { createAdministratorModel } from '../../../interfaces/administrator';
+import { createAdministratorModel, createCompanyOwnerModel } from '../../../interfaces/administrator';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { connect } from 'rxjs';
 
@@ -21,13 +21,24 @@ export class CreateUserComponent {
 
   feedback: string = "";
 
+  isNewAdmin: boolean = false;
+
   constructor(private api: AdministratorService, private router: Router) {}
+
+  ngOnInit(): void {
+    console.log("Create User Component");
+    let url = this.router.url;
+    if (url == '/administrator/new-admin') {
+      this.isNewAdmin = true;
+    }
+    console.log(this.isNewAdmin);
+  }
 
   goHome(): void {
     this.router.navigate(['/administrator']);
   }
 
-  registerAdmin(name: string, surname: string, email: string, password: string, photo: string): void {
+  register(name: string, surname: string, email: string, password: string, photo: string): void {
     this.feedback = "Cargando...";
 
     if (!name || !surname || !email || !password || !photo) {
@@ -38,17 +49,31 @@ export class CreateUserComponent {
     console.log(email);
     console.log(password);
 
-    this.api.postAdministrator(new createAdministratorModel(name, surname, email, password, photo))
+    if(this.isNewAdmin){
+      this.api.postAdministrator(new createAdministratorModel(name, email, password, surname, photo))
       .subscribe({
         next: res => {
           this.feedback = "El administrador fue creado con éxito!";
-          this.router.navigate(['amindistrator-panel']);
+          this.router.navigate(['administrator']);
         },
         error: err => {
           this.handleError(err);
           console.error(err);
         }
       });
+    }else{
+      this.api.postCompanyOwner(new createCompanyOwnerModel(name, email, password, surname))
+      .subscribe({
+        next: res => {
+          this.feedback = "El dueño de empresa fue creado con éxito!";
+          this.router.navigate(['administrator']);
+        },
+        error: err => {
+          this.handleError(err);
+          console.error(err);
+        }
+      });
+    }
   }
 
   private handleError(err: any): void {

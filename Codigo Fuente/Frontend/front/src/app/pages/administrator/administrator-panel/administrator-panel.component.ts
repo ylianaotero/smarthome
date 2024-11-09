@@ -37,7 +37,7 @@ export class AdministratorPanelComponent implements OnInit {
 
   ngOnInit(): void {
     //this.getUsers();
-    this.getCompanies();
+    //this.getCompanies();
   }
   
   getUsers(): void {
@@ -75,7 +75,15 @@ export class AdministratorPanelComponent implements OnInit {
     this.router.navigate(['/administrator/new-admin']);
   }
 
-  //Aca cambio de pagina
+  goCreateCompanyOwner(): void {
+    this.router.navigate(['/administrator/new-companyOwner']);
+  }
+
+  goDeleteAdmin(): void {
+    this.router.navigate(['/administrator/delete-admin']);
+  }
+
+
   changePage(page: number): void {
     this.currentPage = page;
     this.getUsers();
@@ -84,7 +92,6 @@ export class AdministratorPanelComponent implements OnInit {
     return Math.ceil(this.totalUsers / this.pageSize);
   }
 
-  //modales
   openModal(modal: string): void {
     this.changeSelectedModal(modal, true);
     document.body.classList.add('modal-open');

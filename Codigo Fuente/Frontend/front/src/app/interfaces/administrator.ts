@@ -1,4 +1,3 @@
-//Crear un administrador
 export class createAdministratorModel {
     name: string;
     email: string;
@@ -29,7 +28,34 @@ export interface PostAdministratorResponse {
     surname: string;
 }
 
-//Traer lista de usuarios
+export class createCompanyOwnerModel {
+    name: string;
+    email: string;
+    password: string;
+    surname: string;
+
+    constructor(name: string, email: string, password: string, surname: string) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.surname = surname;
+    }
+}
+
+export interface PostCompanyOwnerRequest {
+    name: string;
+    email: string;
+    password: string;
+    surname: string;
+}
+
+export interface PostCompanyOwnerResponse {
+    name: string;
+    email: string;
+    surname: string;
+    role: string;
+}
+
 export interface GetUsersRequest {
     fullName: string | null;
     role: string | null;

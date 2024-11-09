@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AdministratorPanelComponent } from './pages/administrator/administrator-panel/administrator-panel.component';
 import { CreateUserComponent } from './pages/administrator/create-user/create-user.component';
+import { DeleteAdminComponent } from './pages/administrator/delete-admin/delete-admin.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
   { path: 'administrator', component: AdministratorPanelComponent },
   { path: 'administrator/new-admin', component: CreateUserComponent },
-  { path: 'administrator/new-companyOwner', component: AdministratorPanelComponent}
+  { path: 'administrator/new-companyOwner', component: CreateUserComponent },
+  { path: 'administrator/delete-admin', component: DeleteAdminComponent }
 
 ];
 
@@ -47,7 +49,7 @@ const routes: Routes = [
     CreateHomeComponent,
     HomesOfHomeOwnerComponent,
     AdministratorPanelComponent,
-    CreateUserComponent
+    CreateUserComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

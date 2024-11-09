@@ -12,15 +12,19 @@
 <body>
 
 <div class="welcome-container text-center mt-5">
-  <h1 class="welcome-title">¡Hola, Administrador: {{userName}} !!</h1>
+  <h1 class="welcome-title">¡Hola, Administrador: {{userName}}!</h1>
   <p>Bienvenido a la plataforma de gestión de administradores</p>
 
   <a class="btn btn-primary" (click)="goCreateAdmin()">
     <i class="bi bi-person-plus" ></i> Crear Administrador
   </a>
 
-  <a class="btn btn-primary" (click)="goCreateAdmin()">
+  <a class="btn btn-primary" (click)="goCreateCompanyOwner()">
     <i class="bi bi-person-plus" ></i> Crear Dueño de Empresa
+  </a>
+
+  <a class="btn btn-primary" (click)="goDeleteAdmin()">
+    <i class="bi bi-person-dash" ></i> Eliminar Administrador
   </a>
 
   <a class="btn btn-primary" (click)="openModal('showUsers')">
