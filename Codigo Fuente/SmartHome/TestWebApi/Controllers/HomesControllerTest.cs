@@ -716,6 +716,18 @@ public class HomesControllerTest
         Assert.AreEqual(expectedResponse, response);
     }
     
+    [TestMethod]
+    public void TestGetHomeRoomsNotFoundStatusCode()
+    {
+        _mockHomeService
+            .Setup(service => service.GetHomeById(It.IsAny<long>()))
+            .Throws(new ElementNotFound(ElementNotFoundMessage));
+
+        ObjectResult? result = _homeController.GetRooms(_home.Id) as OkObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
+    }
+    
     private GetHomeResponse DefaultHomeResponse()
     {
         return new GetHomeResponse(_home);
