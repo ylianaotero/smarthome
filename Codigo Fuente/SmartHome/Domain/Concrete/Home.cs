@@ -10,10 +10,26 @@ public class Home
     private const string MessageDeviceAlreadyExists = "Device already exists"; 
     private const string MessageDeviceNotFound = "Device not found";
     private const string MessageRoomByNameAlreadyExists = "A room with the same name has already been added to this home";
+    private const string InputNotValidMessage = "Home alias cannot be empty";
+
+    private string _alias;
     
     [Key]
     public long Id { get; set; }
     public User Owner { get; set; }
+    public string Alias
+    {
+        get => _alias;
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new InputNotValid(InputNotValidMessage); 
+            }
+            _alias = value;
+        }
+    }
+
     public string Street { get; set; }
     public int DoorNumber { get; set; }
     public double Latitude { get; set; }
@@ -29,7 +45,7 @@ public class Home
         Devices = new List<DeviceUnit>();
         Rooms = new List<Room>();
     }
-
+    
     public void AddMember(Member member)
     {
         if (MemberExists(member.User.Email))

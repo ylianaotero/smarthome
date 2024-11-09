@@ -15,6 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AdministratorPanelComponent } from './pages/administrator/administrator-panel/administrator-panel.component';
 import { CreateUserComponent } from './pages/administrator/create-user/create-user.component';
 import { DeleteAdminComponent } from './pages/administrator/delete-admin/delete-admin.component';
+import {ImportComponent} from './import/import.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -27,8 +28,15 @@ const routes: Routes = [
   { path: 'administrator', component: AdministratorPanelComponent },
   { path: 'administrator/new-admin', component: CreateUserComponent },
   { path: 'administrator/new-companyOwner', component: CreateUserComponent },
-  { path: 'administrator/delete-admin', component: DeleteAdminComponent }
-
+  { path: 'administrator/delete-admin', component: DeleteAdminComponent },
+  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
+  { path: 'administrator', component: AdministratorPanelComponent },
+  { path: 'administrator/new-admin', component: CreateUserComponent },
+  { path: 'administrator/new-companyOwner', component: CreateUserComponent },
+  { path: 'administrator/delete-admin', component: DeleteAdminComponent },
+  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
+  { path: 'imports', component: ImportComponent },
+  { path: 'imports', component: ImportComponent }
 ];
 
 @NgModule({
@@ -50,6 +58,12 @@ const routes: Routes = [
     HomesOfHomeOwnerComponent,
     AdministratorPanelComponent,
     CreateUserComponent,
+    ImportComponent,
+    HomesOfHomeOwnerComponent,
+    AdministratorPanelComponent,
+    CreateUserComponent,
+    HomesOfHomeOwnerComponent,
+    ImportComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

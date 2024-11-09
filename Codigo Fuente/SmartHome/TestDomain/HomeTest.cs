@@ -13,6 +13,7 @@ public class HomeTest
     private const int Longitude = 34;
     private const string Email1 = "juanperez@gmail.com"; 
     private const string Email2 = "laurasanchez@gmail.com";
+    private const string Alias = "Casa de Juan";
     private const string RoomName = "Living room";
     private const int Id = 11;
     
@@ -21,7 +22,7 @@ public class HomeTest
 
     private Member _member; 
 
-    private DeviceUnit _deviceUnit;
+    private DeviceUnit _deviceUnitService;
     private Room _room;
 
     private Home _home;
@@ -49,7 +50,7 @@ public class HomeTest
             Longitude = Longitude
         };
         
-        _deviceUnit = new DeviceUnit()
+        _deviceUnitService = new DeviceUnit()
         {
             HardwareId = Guid.NewGuid(),
             IsConnected = true,
@@ -71,7 +72,7 @@ public class HomeTest
     {
         _home = null;
         _member = null;
-        _deviceUnit = null;
+        _deviceUnitService = null;
     }
     
     [TestMethod]
@@ -97,6 +98,20 @@ public class HomeTest
             newHome.Devices.Count == 0
         );
 
+    }
+    
+    [TestMethod]
+    public void TestAddAliasToHome()
+    {
+        _home.Alias = Alias;
+        Assert.AreEqual(Alias, _home.Alias);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestAddEmptyAliasToHome()
+    {
+        _home.Alias = "";
     }
     
     [TestMethod]
@@ -187,11 +202,11 @@ public class HomeTest
     [TestMethod]
     public void TestAddDevice()
     {
-        _home.AddDevice(_deviceUnit); 
+        _home.AddDevice(_deviceUnitService); 
         
         Assert.AreEqual(1, _home.Devices.Count);
         
-        DeviceUnit device = _home.Devices.Find(d => d.HardwareId == _deviceUnit.HardwareId);
+        DeviceUnit device = _home.Devices.Find(d => d.HardwareId == _deviceUnitService.HardwareId);
         
         Assert.IsNotNull(device);
     }
@@ -201,42 +216,42 @@ public class HomeTest
     [ExpectedException(typeof(CannotAddItem))]
     public void TestTryToAddExistingDevice()
     {
-        _home.AddDevice(_deviceUnit); 
+        _home.AddDevice(_deviceUnitService); 
         
-        _home.AddDevice(_deviceUnit); 
+        _home.AddDevice(_deviceUnitService); 
     }
     
         
     [TestMethod]
     public void TestFindDevice()
     {
-        _home.AddDevice(_deviceUnit);
+        _home.AddDevice(_deviceUnitService);
 
-        DeviceUnit result = _home.FindDevice(_deviceUnit.HardwareId); 
+        DeviceUnit result = _home.FindDevice(_deviceUnitService.HardwareId); 
         
-        Assert.AreEqual(_deviceUnit.HardwareId, result.HardwareId);
+        Assert.AreEqual(_deviceUnitService.HardwareId, result.HardwareId);
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestCannotFindDevice()
     {
-        _home.FindDevice(_deviceUnit.HardwareId); 
+        _home.FindDevice(_deviceUnitService.HardwareId); 
     }
     
     [TestMethod]
     [ExpectedException(typeof(CannotFindItemInList))]
     public void TestTryToDeleteDevice()
     {
-        _home.DeleteDevice(_deviceUnit.HardwareId); 
+        _home.DeleteDevice(_deviceUnitService.HardwareId); 
     }
     
     [TestMethod]
     public void TestDeleteDevice()
     {
-        _home.AddDevice(_deviceUnit);
+        _home.AddDevice(_deviceUnitService);
         
-        _home.DeleteDevice(_deviceUnit.HardwareId); 
+        _home.DeleteDevice(_deviceUnitService.HardwareId); 
         
         Assert.AreEqual(0, _home.Devices.Count);
     }

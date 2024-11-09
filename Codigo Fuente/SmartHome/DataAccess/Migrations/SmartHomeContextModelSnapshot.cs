@@ -140,6 +140,10 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsConnected")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("RoomId")
                         .HasColumnType("bigint");
 
@@ -161,6 +165,10 @@ namespace DataAccess.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoorNumber")
                         .HasColumnType("int");

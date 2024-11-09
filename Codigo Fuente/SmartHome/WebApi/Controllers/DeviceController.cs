@@ -15,6 +15,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     private const string RoleWithPermissions = "CompanyOwner";
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string CompanyNotFoundMessage = "The company was not found.";
+    private const string ModelIsInvalidMessage = "Model is not valid" ;
 
     [HttpGet] 
     public IActionResult GetDevices([FromQuery] GetDeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
@@ -71,7 +72,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         } 
         catch (InputNotValid)
         {
-            return BadRequest("Model is not valid");
+            return BadRequest(ModelIsInvalidMessage);
         }
         
         return CreatedAtAction(nameof(PostWindowSensors), request);
@@ -92,7 +93,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         }
         catch (InputNotValid)
         {
-            return BadRequest("Model is not valid");
+            return BadRequest(ModelIsInvalidMessage);
         }
         
         return CreatedAtAction(nameof(PostSecurityCameras), request);
@@ -113,7 +114,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         }
         catch (InputNotValid)
         {
-            return BadRequest("Model is not valid");
+            return BadRequest(ModelIsInvalidMessage);
         }
         
         return CreatedAtAction(nameof(PostMotionSensors), request);

@@ -68,16 +68,6 @@ public class DeviceServiceTest
         CollectionAssert.AreEqual(deviceTypes, retrievedDeviceTypes);
     }
     
-    /*
-     [TestMethod]
-       public void TestCreateDevice()
-       {
-           _mockDeviceRepository.Setup(x => x.Add(_defaultWindowSensor));
-           
-           _deviceService.CreateDevice(_defaultWindowSensor);
-           _mockDeviceRepository.Verify(x => x.Add(_defaultWindowSensor), Times.Once);
-       }
-     */
 
     [TestMethod]
     public void TestCreateDeviceWithValidationNumber()
@@ -148,6 +138,7 @@ public class DeviceServiceTest
             Kind = WindowSensorType
         };
     }
+    
 
     private void CreateMockAndService()
     {

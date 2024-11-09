@@ -1,6 +1,3 @@
 namespace CustomExceptions;
 
-public class InputNotValid : Exception
-{
-    public InputNotValid(string message) : base(message){}
-}
+public class InputNotValid(string message) : Exception(message);

@@ -1,6 +1,3 @@
 namespace CustomExceptions;
 
-public class CannotAddItem : Exception
-{
-    public CannotAddItem(string message) : base(message){}
-}
+public class CannotAddItem(string message) : Exception(message);

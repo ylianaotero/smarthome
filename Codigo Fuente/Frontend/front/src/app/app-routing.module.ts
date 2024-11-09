@@ -6,6 +6,7 @@ import { SignUpHomeOwnerComponent } from './signUpHomeOwner/signUpHomeOwner.comp
 import {AccountComponent} from './account/account.component';
 import {CreateHomeComponent} from './createHome/createHome.component';
 import {HomesOfHomeOwnerComponent} from './homesOfHomeOwner/homesOfHomeOwner.component';
+import {ImportComponent} from './import/import.component';
 
 
 export const routes: Routes = [
@@ -15,7 +16,6 @@ export const routes: Routes = [
   { path: 'home-owners', component: SignUpHomeOwnerComponent },
   { path: 'account', component: AccountComponent },
   { path: 'homes', component: CreateHomeComponent },
-  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent }
-
-
+  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
+  { path: 'imports', component: ImportComponent }
 ];

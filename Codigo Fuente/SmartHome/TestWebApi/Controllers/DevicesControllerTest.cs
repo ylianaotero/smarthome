@@ -38,6 +38,7 @@ public class DevicesControllerTest
     private const string SmartLampType = "SmartLamp";
     private const string DeviceNotFoundExceptionMessage = "Device not found";
     private const string CompanyNotFoundExceptionMessage = "Company not found";
+    private const string InvalidExceptionMessage = "Invalid";
     
     private LocationType _locationType;
     private List<Device> _devices;
@@ -293,7 +294,7 @@ public class DevicesControllerTest
         PostWindowSensorRequest request = DefaultWindowSensorRequest();
         _mockIDeviceService
             .Setup(service => service.CreateDevice(It.IsAny<Device>()))
-            .Throws(new InputNotValid("Model is not valid"));
+            .Throws(new InputNotValid(InvalidExceptionMessage));
         
         BadRequestObjectResult? result = _deviceController.PostWindowSensors(request) as BadRequestObjectResult;
         
@@ -332,7 +333,7 @@ public class DevicesControllerTest
         PostSecurityCameraRequest request = DefaultSecurityCameraRequest();
         _mockIDeviceService
             .Setup(service => service.CreateDevice(It.IsAny<Device>()))
-            .Throws(new InputNotValid("Model is not valid"));
+            .Throws(new InputNotValid(InvalidExceptionMessage));
         
         BadRequestObjectResult? result = _deviceController.PostSecurityCameras(request) as BadRequestObjectResult;
         
@@ -346,7 +347,7 @@ public class DevicesControllerTest
         PostMotionSensorRequest request = DefaultMotionSensorRequest();
         _mockIDeviceService
             .Setup(service => service.CreateDevice(It.IsAny<Device>()))
-            .Throws(new InputNotValid("Model is not valid"));
+            .Throws(new InputNotValid(InvalidExceptionMessage));
         
         BadRequestObjectResult? result = _deviceController.PostMotionSensors(request) as BadRequestObjectResult;
         

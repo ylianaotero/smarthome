@@ -22,6 +22,7 @@ export class HomesOfHomeOwnerComponent implements OnInit {
   isLoading: boolean = true;
   selectedHome: home | null = null;
   feedback: string = "";
+  errorMessage: string = "";
 
   newMember = {
     email: '',
@@ -78,15 +79,27 @@ export class HomesOfHomeOwnerComponent implements OnInit {
   }
 
   getDevices(id?: number): void {
-    if(!id){
+    if (!id) {
       return;
     }
     this.api.getDevicesOfHome(id).subscribe({
       next: (res: any) => {
         this.devices = res.devicesUnit || [];
+        this.errorMessage = '';
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          this.errorMessage = 'No se encontraron dispositivos para este hogar.';
+        } else if (err.status === 401) {
+          this.errorMessage = 'No tienes autorización para ver estos dispositivos.';
+        } else {
+          this.errorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
+        }
+        this.devices = [];
       }
     });
   }
+
 
   toggleNotification(member: member): void {
     const confirmation = confirm(`¿Estás seguro de cambiar la notificación de ${member.fullName}?`);
