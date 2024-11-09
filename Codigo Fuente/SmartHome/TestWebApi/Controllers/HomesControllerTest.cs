@@ -701,6 +701,19 @@ public class HomesControllerTest
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestGetHomeRoomsOkResponse()
+    {
+        GetRoomsResponse expectedResponse = new GetRoomsResponse(_home.Rooms);
+        
+        _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<long>())).Returns(_home);
+
+        ObjectResult? result = _homeController.GetRooms(_home.Id) as OkObjectResult;
+        GetRoomsResponse response = (result!.Value as GetRoomsResponse)!;
+        
+        Assert.AreEqual(expectedResponse, response);
+    }
+    
     private GetHomeResponse DefaultHomeResponse()
     {
         return new GetHomeResponse(_home);
