@@ -40,65 +40,59 @@ public class DeviceUnitService : IDeviceUnitService
         
         _homeService.UpdateHome(homeId);
     }
-
-    public void UpdateDeviceCustomName(long id, DeviceUnit updatedDeviceUnit, Guid deviceId)
-    {
-        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(id, deviceId);
-            
-        if (deviceUnit == null)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-            
-        deviceUnit.Name = updatedDeviceUnit.Name;
-            
-        _deviceUnitRepository.Update(deviceUnit);
-        _homeService.UpdateHome(id);
-    }
     
-    public void UpdateDeviceConnectionStatus(long homeId, DeviceUnit updatedDeviceUnit)
+    public void UpdateDeviceUnit(long homeId, DeviceUnitDTO deviceUnitDto)
     {
-        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(homeId, updatedDeviceUnit.HardwareId);
-        
-        if (deviceUnit == null)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-            
-        deviceUnit.IsConnected = updatedDeviceUnit.IsConnected;
-            
-        _deviceUnitRepository.Update(updatedDeviceUnit);
-        _homeService.UpdateHome(homeId);
-    }
-    
-    public void UpdateDeviceRoom(long homeId, Guid deviceId, long roomId)
-    {
-        DeviceUnit? deviceUnit = GetDeviceUnitFromHome(homeId, deviceId);
-        
-        if (deviceUnit == null)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-        
-        Room room = GetRoomExistFromHome(homeId, roomId);
+        DeviceUnit deviceUnit = GetDeviceUnitFromHome(homeId, deviceUnitDto.HardwareId) 
+                                ?? throw new ElementNotFound(DeviceNotFoundMessage);
 
-        deviceUnit.Room = room;
-            
+        UpdateDeviceUnitProperties(homeId, deviceUnit, deviceUnitDto);
+
         _deviceUnitRepository.Update(deviceUnit);
         _homeService.UpdateHome(homeId);
     }
-    
+
+    private void UpdateDeviceUnitProperties(long homeId, DeviceUnit deviceUnit, DeviceUnitDTO deviceUnitDto)
+    {
+        if (deviceUnitDto.IsConnected != null)
+        {
+            deviceUnit.IsConnected = (bool)deviceUnitDto.IsConnected;
+        }
+
+        if (deviceUnitDto.RoomId != null)
+        {
+            Room room = GetRoomExistFromHome(homeId, (long)deviceUnitDto.RoomId);
+            deviceUnit.Room = room;
+        }
+
+        if (deviceUnitDto.Name != null)
+        {
+            deviceUnit.Name = deviceUnitDto.Name;
+        }
+    }
+
     private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
     {
         foreach (var device in homeDevices)
         {
-            Device deviceEntity = _deviceService.GetDeviceById(device.DeviceId);
+            if (device.DeviceId == null)
+            {
+                throw new ElementNotFound(DeviceNotFoundMessage);
+            }
+            
+            Device deviceEntity = _deviceService.GetDeviceById((long)device.DeviceId);
+
+            bool isConnected = false;
+            if (!device.IsConnected == null)
+            {
+                isConnected = (bool)device.IsConnected;
+            }
 
             DeviceUnit deviceUnitService = new DeviceUnit()
             {
                 Device = deviceEntity,
                 Name = deviceEntity.Name,
-                IsConnected = device.IsConnected,
+                IsConnected = isConnected,
                 HardwareId = Guid.NewGuid(),
             };
             

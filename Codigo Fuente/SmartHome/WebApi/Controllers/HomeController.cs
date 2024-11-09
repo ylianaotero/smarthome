@@ -178,28 +178,17 @@ public class HomeController : ControllerBase
     [HttpPatch]
     [Route("{id}/devices")]
     [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult UpdateDeviceConnectionStatus([FromRoute] long id, 
-        [FromBody] PatchDeviceRequest request)
+    public IActionResult UpdateDevice([FromRoute] long id, [FromBody] PatchDeviceUnitRequest unitRequest)
     {
         try
         {
-            _deviceUnitService.UpdateDeviceConnectionStatus(id, request.ToEntity());
+            _deviceUnitService.UpdateDeviceUnit(id, unitRequest.ToEntity());
             return Ok(UpdatedHomeMessage);
         }
         catch (ElementNotFound)
         {
             return NotFound(ResourceNotFoundMessage);
         }
-    }
-    
-    [HttpPatch]
-    [Route("{id}/devices")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult UpdateDeviceRoom([FromRoute] long id, 
-        [FromBody] PatchDeviceRequest request)
-    {
-        _deviceUnitService.UpdateDeviceRoom(id, request.HardwareId, (long)request.RoomId);
-        return Ok(UpdatedHomeMessage);
     }
     
     [HttpGet]
@@ -234,21 +223,4 @@ public class HomeController : ControllerBase
             return NotFound(ResourceNotFoundMessage);
         }
     }
-    
-    [HttpPatch]
-    [Route("{homeId}/devices/{deviceId}")]
-    [RolesWithPermissions(RoleWithPermissionToUpdateHome)]
-    public IActionResult UpdateCustomDeviceName([FromRoute] long homeId, [FromRoute] Guid deviceId, [FromBody] PatchDeviceUnitRequest request)
-    {
-        try
-        {
-            _deviceUnitService.UpdateDeviceCustomName(homeId, request.ToEntity(), deviceId);
-            return Ok(UpdatedDeviceNameMessage);
-        }
-        catch (ElementNotFound)
-        {
-            return NotFound(ResourceNotFoundMessage);
-        }
-    }
-
 }

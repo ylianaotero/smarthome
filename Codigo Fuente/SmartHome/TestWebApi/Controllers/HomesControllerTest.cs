@@ -542,7 +542,7 @@ public class HomesControllerTest
     [TestMethod]
     public void TestUpdateDeviceStatusOkStatusCode()
     {
-        PatchDeviceRequest request = new PatchDeviceRequest()
+        PatchDeviceUnitRequest unitRequest = new PatchDeviceUnitRequest()
         {
             HardwareId = new Guid(),
             IsConnected = true
@@ -550,34 +550,32 @@ public class HomesControllerTest
         
         _mockDeviceUnitService
             .Setup(service => service
-                .UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>())); 
+                .UpdateDeviceUnit(It.IsAny<long>(), unitRequest.ToEntity())); 
         _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
-        ObjectResult? result = _homeController.UpdateDeviceConnectionStatus(_home.Id,request) as OkObjectResult;
+        ObjectResult? result = _homeController.UpdateDevice(_home.Id, unitRequest) as OkObjectResult;
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
-        
     }
     
     [TestMethod]
     public void TestUpdateDeviceStatusNotFoundStatusCode()
     {
-        PatchDeviceRequest request = new PatchDeviceRequest()
+        PatchDeviceUnitRequest unitRequest = new PatchDeviceUnitRequest()
         {
-            HardwareId = new Guid(),
+            HardwareId = Guid.NewGuid(),
             IsConnected = true
         };
         
         _mockDeviceUnitService
             .Setup(service => service
-                .UpdateDeviceConnectionStatus(It.IsAny<long>(),It.IsAny<DeviceUnit>()))
+                .UpdateDeviceUnit(It.IsAny<long>(),It.IsAny<DeviceUnitDTO>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
         _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
-        ObjectResult? result = _homeController.UpdateDeviceConnectionStatus(_home.Id,request) as ObjectResult;
+        ObjectResult? result = _homeController.UpdateDevice(_home.Id, unitRequest) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
-        
     }
 
     [TestMethod]
@@ -590,10 +588,11 @@ public class HomesControllerTest
         
         _mockDeviceUnitService
             .Setup(service => service
-                .UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()));
-        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
+                .UpdateDeviceUnit(It.IsAny<long>(), request.ToEntity()));
+        _homeController = new HomeController
+            (_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
-        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,new Guid(),request) as OkObjectResult;
+        ObjectResult? result = _homeController.UpdateDevice(_home.Id, request) as OkObjectResult;
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
@@ -603,16 +602,18 @@ public class HomesControllerTest
     {
         PatchDeviceUnitRequest request = new PatchDeviceUnitRequest()
         {
+            HardwareId = Guid.NewGuid(),
             Name = CustomName
         };
         
         _mockDeviceUnitService
             .Setup(service => service
-                .UpdateDeviceCustomName(It.IsAny<long>(),It.IsAny<DeviceUnit>(),It.IsAny<Guid>()))
+                .UpdateDeviceUnit(It.IsAny<long>(), It.IsAny<DeviceUnitDTO>()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
-        _homeController = new HomeController(_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
+        _homeController = new HomeController
+            (_mockHomeService.Object, _mockDeviceUnitService.Object, _mockMemberService.Object);
         
-        ObjectResult? result = _homeController.UpdateCustomDeviceName(_home.Id,new Guid(),request) as ObjectResult;
+        ObjectResult? result = _homeController.UpdateDevice(_home.Id, request) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
@@ -681,17 +682,17 @@ public class HomesControllerTest
             Id = 1
         };
         
-        PatchDeviceRequest request = new PatchDeviceRequest()
+        PatchDeviceUnitRequest unitRequest = new PatchDeviceUnitRequest()
         {
             HardwareId = Guid.NewGuid(),
             RoomId = _defaultRoom.Id,
         };
 
         _mockDeviceUnitService
-            .Setup(service => service.UpdateDeviceRoom(_home.Id, request.HardwareId, newRoom.Id));
+            .Setup(service => service.UpdateDeviceUnit(_home.Id, unitRequest.ToEntity()));
 
 
-        ObjectResult? result = _homeController.UpdateDeviceRoom(_home.Id, request) as OkObjectResult;
+        ObjectResult? result = _homeController.UpdateDevice(_home.Id, unitRequest) as OkObjectResult;
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }

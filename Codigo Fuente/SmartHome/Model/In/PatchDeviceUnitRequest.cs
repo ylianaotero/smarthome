@@ -1,17 +1,22 @@
-using Domain.Concrete;
+using Domain.DTO;
 
 namespace Model.In;
 
 public class PatchDeviceUnitRequest
 {
-    public string Name { get; set; }
+    public Guid HardwareId { get; set; }
+    public bool? IsConnected { get; set; }
+    public long? RoomId { get; set; }
+    public string? Name { get; set; }
     
-    public DeviceUnit ToEntity()
+    public DeviceUnitDTO ToEntity()
     {
-        return new DeviceUnit()
+        return new DeviceUnitDTO()
         {
+            HardwareId = HardwareId,
+            IsConnected = IsConnected,
+            RoomId = RoomId,
             Name = Name
         };
     }
-
 }
