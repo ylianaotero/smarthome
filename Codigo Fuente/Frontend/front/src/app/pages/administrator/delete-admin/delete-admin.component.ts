@@ -41,7 +41,7 @@ export class DeleteAdminComponent {
     });
   }
 
-  deleteAdmin(user: GetUserResponse): void {
+  /*deleteAdmin(user: GetUserResponse): void {
     this.feedback = "Cargando...";
     
     if (user.roles.length === 1 && user.roles[0].kind === 'administrator') {
@@ -59,10 +59,10 @@ export class DeleteAdminComponent {
         // Si el usuario tiene más roles, solo elimina el rol "Administrador"
         //Hacer el remove por rol
     }
-}
+  }*/
 
 
-  /*
+    
   deleteAdmin(id:number): void {
     this.feedback = "Cargando...";
     this.api.deleteAdministrator(id).subscribe({
@@ -75,7 +75,7 @@ export class DeleteAdminComponent {
         console.error(err);
       }
     });
-  }*/
+  }
 
   private handleError(err: any): void {
     switch (err.status) {

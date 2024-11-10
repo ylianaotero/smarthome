@@ -16,6 +16,7 @@ import { AdministratorPanelComponent } from './pages/administrator/administrator
 import { CreateUserComponent } from './pages/administrator/create-user/create-user.component';
 import { DeleteAdminComponent } from './pages/administrator/delete-admin/delete-admin.component';
 import {ImportComponent} from './import/import.component';
+import { UserPanelComponent } from './pages/user-panel/user-panel.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -29,7 +30,8 @@ const routes: Routes = [
   { path: 'administrator/new-admin', component: CreateUserComponent },
   { path: 'administrator/new-companyOwner', component: CreateUserComponent },
   { path: 'administrator/delete-admin', component: DeleteAdminComponent },
-  { path: 'imports', component: ImportComponent }
+  { path: 'imports', component: ImportComponent },
+  { path: 'home/user-panel', component: UserPanelComponent }
 ];
 
 @NgModule({
@@ -57,7 +59,8 @@ const routes: Routes = [
     CreateUserComponent,
     HomesOfHomeOwnerComponent,
     ImportComponent,
-    DeleteAdminComponent
+    DeleteAdminComponent,
+    UserPanelComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
