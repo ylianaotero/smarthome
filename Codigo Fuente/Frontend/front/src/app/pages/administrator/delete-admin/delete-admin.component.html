@@ -19,9 +19,30 @@
         </button>
       </div>
       <h1 class="text-center text-primary">Eliminación de Administradores</h1>
-      <!--<p class="feedback" [ngClass]="{'feedback-error': feedback === 'Por favor, completa todos los campos obligatorios.', 'feedback-success': feedback !== 'Por favor, completa todos los campos obligatorios.' && feedback !== ''}">
+
+      <table class="table table-striped mt-4">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Nombre</th>
+            <th scope="col" class="text-center">Apellido</th>
+            <th scope="col" class="text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td class="text-center">{{ user.name }}</td>
+            <td class="text-center">{{ user.surname }}</td>
+            <td class="text-center">
+              <button class="btn btn-danger" (click)="deleteAdmin(user.id)">
+                <i class="bi bi-person-dash"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="feedback" [ngClass]="{'feedback-error': feedback === 'Por favor, completa todos los campos obligatorios.', 'feedback-success': feedback !== 'Por favor, completa todos los campos obligatorios.' && feedback !== ''}">
         {{ feedback }}
-      </p>-->
+      </p>
     </div>
   </div>
 </div>

@@ -53,4 +53,8 @@ export class AdministratorService {
         return this.httpClient.get<GetUsersResponse>(this.url + '/users', {params , headers: {'Authorization': `${this.currentSession?.token}`}});
     }
 
+    deleteAdministrator(id: number) {
+        return this.httpClient.delete(this.url + `/administrators/${id}`, {headers: {'Authorization': `${this.currentSession?.token}`}});
+    } 
+
 }

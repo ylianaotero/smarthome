@@ -29,13 +29,6 @@ const routes: Routes = [
   { path: 'administrator/new-admin', component: CreateUserComponent },
   { path: 'administrator/new-companyOwner', component: CreateUserComponent },
   { path: 'administrator/delete-admin', component: DeleteAdminComponent },
-  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
-  { path: 'administrator', component: AdministratorPanelComponent },
-  { path: 'administrator/new-admin', component: CreateUserComponent },
-  { path: 'administrator/new-companyOwner', component: CreateUserComponent },
-  { path: 'administrator/delete-admin', component: DeleteAdminComponent },
-  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
-  { path: 'imports', component: ImportComponent },
   { path: 'imports', component: ImportComponent }
 ];
 
@@ -63,7 +56,8 @@ const routes: Routes = [
     AdministratorPanelComponent,
     CreateUserComponent,
     HomesOfHomeOwnerComponent,
-    ImportComponent
+    ImportComponent,
+    DeleteAdminComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
