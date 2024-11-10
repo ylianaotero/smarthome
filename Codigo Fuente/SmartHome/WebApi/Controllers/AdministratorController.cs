@@ -1,5 +1,6 @@
 using CustomExceptions;
 using IBusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
 using Model.Out;
