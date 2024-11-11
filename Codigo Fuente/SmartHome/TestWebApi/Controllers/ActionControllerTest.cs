@@ -61,4 +61,25 @@ public class ActionControllerTest
         
         Assert.AreEqual(NotFoundCode, result.StatusCode);
     }
+    
+    [TestMethod]
+    public void TestPostActionBadRequestStatusCode()
+    {
+        ActionController controller = new ActionController(_actionServiceMock.Object);
+
+        PostActionRequest request = new PostActionRequest()
+        {
+            HomeId = 1,
+            HardwareId = Guid.NewGuid(),
+            Functionality = "OnOff"
+        };
+
+        _actionServiceMock
+            .Setup(x => x.PostAction(request.HomeId, request.HardwareId, request.Functionality))
+            .Throws(new InputNotValid("Functionality not supported for this device"));
+
+        ObjectResult result = controller.PostAction(request) as NotFoundObjectResult;
+        
+        Assert.AreEqual(400, result.StatusCode);
+    }
 }
