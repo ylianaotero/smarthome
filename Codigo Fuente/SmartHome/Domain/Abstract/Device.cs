@@ -16,4 +16,38 @@ public abstract class Device
     public abstract string Kind { get; set; }
 
     public abstract void ValidateStatus(string status);
+    
+    public string RunFunctionality(string functionality, string currentStatus)
+    {
+        if (Kind == "WindowSensor")
+        {
+            if (functionality != "OpenClosed")
+            {
+                throw new InputNotValid("Functionality not supported for this device");
+            }
+
+            return SwitchStatus(currentStatus);
+        }
+
+        return currentStatus;
+    }
+    
+    public string SwitchStatus(string currentStatus)
+    {
+        ValidateStatus(currentStatus);
+        
+        if (Kind == "WindowSensor")
+        {
+            if (currentStatus == "Open")
+            {
+                return "Closed";
+            }
+            else
+            {
+                return "Open";
+            }
+        }
+        
+        return currentStatus;
+    }
 }

@@ -44,17 +44,7 @@ public class DeviceUnit
 
     public void ExecuteAction(string relatedFunctionality)
     {
-        if (Device.Kind == "WindowSensor")
-        {
-            if (relatedFunctionality == "OpenClosed")
-            {
-                Status = "Closed";
-            }
-            else
-            {
-                throw new InputNotValid("Functionality not supported for this device");
-            }
-        }
+        Status = Device.RunFunctionality(relatedFunctionality, Status);
     }
     
     public override bool Equals(object? obj)
