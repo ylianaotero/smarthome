@@ -519,11 +519,14 @@ public class HomesControllerTest
                 HardwareId = Guid.NewGuid()
             }
         };
+        GetDeviceUnitsRequest request = new GetDeviceUnitsRequest();
         _mockHomeService.Setup(service => service.GetHomeById(It.IsAny<int>())).Returns(_home); 
-        _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id)).Returns(devicesUnit);
+        _mockHomeService
+            .Setup(service => service.GetDevicesFromHomeByFilter(_home.Id, request.ToFilter()))
+            .Returns(devicesUnit);
         GetDeviceUnitsResponse expectedResponse = new GetDeviceUnitsResponse(devicesUnit);
         
-        ObjectResult? result = _homeController.GetDevicesFromHome(1, null) as OkObjectResult;
+        ObjectResult? result = _homeController.GetDevicesFromHome(1, request) as OkObjectResult;
         GetDeviceUnitsResponse response = (result!.Value as GetDeviceUnitsResponse)!;
         
         Assert.AreEqual(expectedResponse, response);
@@ -532,10 +535,12 @@ public class HomesControllerTest
     [TestMethod]
     public void TestGetDevicesUnitNotFoundStatusCode()
     {
-        _mockHomeService.Setup(service => service.GetDevicesFromHome(_home.Id))
+        GetDeviceUnitsRequest request = new GetDeviceUnitsRequest();
+        _mockHomeService
+            .Setup(service => service.GetDevicesFromHomeByFilter(_home.Id, request.ToFilter()))
             .Throws(new ElementNotFound(ElementNotFoundMessage));
         
-        IActionResult result = _homeController.GetDevicesFromHome(1, null);
+        IActionResult result = _homeController.GetDevicesFromHome(1, request);
         
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
