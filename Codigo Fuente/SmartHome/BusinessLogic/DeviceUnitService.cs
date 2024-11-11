@@ -56,7 +56,7 @@ public class DeviceUnitService : IDeviceUnitService
     {
         DeviceUnit deviceUnit = _deviceUnitRepository
             .GetByFilter(d => d.HardwareId == hardwareId, PageData.Default)
-            .FirstOrDefault();
+            .FirstOrDefault() ?? throw new ElementNotFound(DeviceNotFoundMessage);
         
         deviceUnit.ExecuteAction(functionality);
         
