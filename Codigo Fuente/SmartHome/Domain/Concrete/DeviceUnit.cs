@@ -44,7 +44,13 @@ public class DeviceUnit
 
     public void ExecuteAction(string relatedFunctionality)
     {
-        Status = "Closed";
+        if (Device.Kind == "WindowSensor")
+        {
+            if (relatedFunctionality == "OpenClosed")
+            {
+                Status = "Closed";
+            }
+        }
     }
     
     public override bool Equals(object? obj)
