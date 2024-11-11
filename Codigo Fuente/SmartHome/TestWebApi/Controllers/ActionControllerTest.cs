@@ -79,7 +79,7 @@ public class ActionControllerTest
             .Setup(x => x.PostAction(request.HomeId, request.HardwareId, request.Functionality))
             .Throws(new InputNotValid("Functionality not supported for this device"));
 
-        ObjectResult result = controller.PostAction(request) as NotFoundObjectResult;
+        ObjectResult result = controller.PostAction(request) as BadRequestObjectResult;
         
         Assert.AreEqual(BadRequestCode, result.StatusCode);
     }
