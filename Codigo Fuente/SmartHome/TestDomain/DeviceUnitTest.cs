@@ -407,5 +407,56 @@ public class DeviceUnitTest
         deviceUnit.ExecuteAction(relatedFunctionality);
     }
     
+    [TestMethod]
+    public void TestExecuteMotionSensorAction()
+    {
+        string relatedFunctionality = "MotionDetection";
+        string previousStatus = "";
+        string newStatus = "";
+        
+        MotionSensor motionSensor = new MotionSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = motionSensor,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+        
+        Assert.AreEqual(newStatus, deviceUnit.Status);
+    }
     
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestExecuteMotionSensorActionFails()
+    {
+        string relatedFunctionality = "HumanDetection";
+        string previousStatus = "";
+        
+        MotionSensor motionSensor = new MotionSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = motionSensor,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+    }
+
 }
