@@ -19,6 +19,11 @@ public class DeviceUnit
         get => _status;
         set
         {
+            if (value == null)
+            {
+                value = "";
+            }
+            
             Device.ValidateStatus(value);
             _status = value;
         }
