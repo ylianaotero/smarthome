@@ -14,7 +14,7 @@ public class DeviceUnit
     public Device Device { get; set; }
     public bool IsConnected { get; set; }
     
-    public string Status
+    public string? Status
     {
         get => _status;
         set
