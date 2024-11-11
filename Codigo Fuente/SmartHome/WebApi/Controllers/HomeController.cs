@@ -155,23 +155,12 @@ public class HomeController : ControllerBase
     [HttpGet]
     [Route("{id}/devices")]
     [RestrictToPrivilegedMembers(true, false)]
-    public IActionResult GetDevicesFromHome([FromRoute] int id, [FromQuery] GetDeviceUnitsRequest? request)
+    public IActionResult GetDevicesFromHome([FromRoute] int id, [FromQuery] GetDeviceUnitsRequest request)
     {
         try
         {
-            GetDeviceUnitsResponse getDeviceUnitsResponse;
-            
-            if (request == null)
-            {
-                getDeviceUnitsResponse = new GetDeviceUnitsResponse(_homeService.GetDevicesFromHome(id));
-            }
-            else
-            {
-                getDeviceUnitsResponse = new GetDeviceUnitsResponse
-                    (_homeService.GetDevicesFromHomeByFilter(id, request.ToFilter()));
-            }
-            
-            return Ok(getDeviceUnitsResponse);
+            return Ok(new GetDeviceUnitsResponse
+                (_homeService.GetDevicesFromHomeByFilter(id, request.ToFilter())));
         }
         catch (ElementNotFound)
         {

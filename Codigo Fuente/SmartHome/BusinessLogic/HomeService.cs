@@ -69,8 +69,9 @@ public class HomeService : IHomeService
     public List<DeviceUnit>? GetDevicesFromHomeByFilter(long homeId, Func<DeviceUnit, bool> filter)
     {
         List<DeviceUnit> devices = GetDevicesFromHome(homeId);
+       // return devices;
 
-        return devices.Where(filter) as List<DeviceUnit>;
+        return devices.Where(filter).ToList() as List<DeviceUnit>;
     }
     
     public List<DeviceUnit> GetDevicesFromHome(long homeId)

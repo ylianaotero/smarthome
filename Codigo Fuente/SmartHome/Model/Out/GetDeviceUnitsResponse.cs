@@ -4,17 +4,11 @@ namespace Model.Out;
 
 public class GetDeviceUnitsResponse
 {
-    private List<GetDeviceUnitResponse> DevicesUnit { get; set; }
+    public List<GetDeviceUnitResponse> DevicesUnit { get; set; }
     
-    public GetDeviceUnitsResponse(List<DeviceUnit>? devicesUnit)
+    public GetDeviceUnitsResponse(List<DeviceUnit> devicesUnit)
     {
-        if (devicesUnit == null)
-        {
-            DevicesUnit = new List<GetDeviceUnitResponse>();
-            return;
-        }
-        
-        DevicesUnit = devicesUnit.Select(deviceUnit => new GetDeviceUnitResponse(deviceUnit)).ToList();
+      DevicesUnit = devicesUnit.Select(deviceUnit => new GetDeviceUnitResponse(deviceUnit)).ToList();
     }
     
     public override bool Equals(object? obj)
