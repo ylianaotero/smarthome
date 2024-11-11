@@ -8,6 +8,8 @@ namespace Domain.Concrete;
 public class SmartLamp : Device
 {
     private const string SmartLampStatusMessage = "SmartLamp status can only be on or off.";
+    private const string SmartLampFunctionalityMessage = "Functionality not supported for this device.";
+    
     public List<SmartLampFunctionality>? Functionalities { get; set; }
     public sealed override string Kind { get; set; }
     
@@ -22,6 +24,53 @@ public class SmartLamp : Device
         {
             throw new InputNotValid(SmartLampStatusMessage);
         }
+    }
+    
+    public override string RunFunctionality(string functionality, string currentStatus)
+    {
+        if (!FunctionalityIsValid(functionality))
+        {
+            throw new InputNotValid(SmartLampFunctionalityMessage);
+        }
+            
+        return SwitchStatus(currentStatus);
+    }
+    
+    private bool FunctionalityIsValid(string functionality)
+    {
+        bool isValid = false;
+
+        if (Functionalities != null)
+        {
+            isValid = FunctionalityIsSupportedByDevice(functionality);
+        }
+
+        return isValid;
+    }
+    
+    private bool FunctionalityIsSupportedByDevice(string functionality)
+    {
+        bool isSupported = false;
+
+        foreach (SmartLampFunctionality item in Functionalities)
+        {
+            if (item.ToString() == functionality)
+            {
+                isSupported = true;
+            }
+        }
+
+        return isSupported;
+    }
+    
+    private string SwitchStatus(string currentStatus)
+    {
+        if (currentStatus == "On")
+        {
+            return "Off";
+        }
+        
+        return "On";
     }
 
     public override bool Equals(object? obj)

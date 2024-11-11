@@ -1,5 +1,6 @@
 using CustomExceptions;
 using Domain.Concrete;
+using Domain.Enum;
 
 namespace TestDomain;
 
@@ -237,7 +238,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -264,7 +266,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -289,7 +292,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -316,7 +320,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -341,7 +346,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -368,7 +374,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.HumanDetection }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -395,7 +402,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<SecurityCameraFunctionality>() { SecurityCameraFunctionality.MotionDetection }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -420,7 +428,8 @@ public class DeviceUnitTest
             Name = SmartLampName,
             Model = DeviceModel,
             Description = DeviceDescription,
-            PhotoURLs = new List<string> { DevicePhotoUrl }
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<MotionSensorFunctionality> { MotionSensorFunctionality.MotionDetection }
         };
         
         DeviceUnit deviceUnit = new DeviceUnit()
@@ -440,7 +449,33 @@ public class DeviceUnitTest
     {
         string relatedFunctionality = "HumanDetection";
         string previousStatus = "";
+
+        MotionSensor motionSensor = new MotionSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+            Functionalities = new List<MotionSensorFunctionality> { MotionSensorFunctionality.MotionDetection }
+        };
         
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = motionSensor,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestExecuteMotionSensorActionFailsBecauseFunctionalityIsNotSupported()
+    {
+        string relatedFunctionality = "MotionDetection";
+        string previousStatus = "";
+
         MotionSensor motionSensor = new MotionSensor()
         {
             Id = 1,
