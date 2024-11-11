@@ -15,26 +15,5 @@ public abstract class Device
     public Company? Company { get; set; }
     public abstract string Kind { get; set; }
 
-    public void ValidateStatus(string status)
-    {
-        if (Kind == "SmartLamp" && (status != "On" && status != "Off"))
-        {
-            throw new InputNotValid("SmartLamp status can only be on or off.");
-        }
-        
-        if (Kind == "WindowSensor" && (status != "Open" && status != "Closed"))
-        {
-            throw new InputNotValid("WindowSensor status can only be open or closed.");
-        }
-
-        if (Kind == "MotionSensor")
-        {
-            throw new InputNotValid("MotionSensor status cannot be set.");
-        }
-        
-        if (Kind == "SecurityCamera")
-        {
-            throw new InputNotValid("SecurityCamera status cannot be set.");
-        }
-    }
+    public abstract void ValidateStatus(string status);
 }
