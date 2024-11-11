@@ -1,6 +1,7 @@
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Enum;
+using Microsoft.VisualBasic;
 
 namespace Domain.Concrete;
 
@@ -17,7 +18,10 @@ public class MotionSensor : Device
     
     public override void ValidateStatus(string status)
     {
-        throw new InputNotValid(MotionSensorStatusMessage);
+        if (!String.IsNullOrEmpty(status))
+        {
+            throw new InputNotValid(MotionSensorStatusMessage);
+        }
     }
 
     public override bool Equals(object? obj)

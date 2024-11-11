@@ -17,7 +17,7 @@ public class WindowSensor : Device
     
     public override void ValidateStatus(string status)
     {
-        if (status != "Open" && status != "Closed")
+        if (status != "Open" && status != "Closed" && !String.IsNullOrEmpty(status))
         {
             throw new InputNotValid(WindowSensorStatusMessage);
         }

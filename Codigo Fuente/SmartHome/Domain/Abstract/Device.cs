@@ -38,6 +38,16 @@ public abstract class Device
             
             return SwitchStatus(currentStatus);
         }
+        
+        if (Kind == "SecurityCamera")
+        {
+            if (functionality != "MotionDetection" && functionality != "HumanDetection")
+            {
+                throw new InputNotValid("Functionality not supported for this device");
+            }
+            
+            return SwitchStatus(currentStatus);
+        }
 
         return currentStatus;
     }
@@ -68,6 +78,11 @@ public abstract class Device
             {
                 return "On";
             }
+        }
+        
+        if (Kind == "SecurityCamera")
+        {
+            return "";
         }
         
         return currentStatus;

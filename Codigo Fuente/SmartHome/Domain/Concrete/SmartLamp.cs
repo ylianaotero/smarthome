@@ -1,6 +1,7 @@
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Enum;
+using Microsoft.VisualBasic;
 
 namespace Domain.Concrete;
 
@@ -17,7 +18,7 @@ public class SmartLamp : Device
     
     public override void ValidateStatus(string status)
     {
-        if (status != "On" && status != "Off")
+        if (status != "On" && status != "Off" && !String.IsNullOrEmpty(status))
         {
             throw new InputNotValid(SmartLampStatusMessage);
         }

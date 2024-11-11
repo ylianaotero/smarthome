@@ -19,7 +19,10 @@ public class SecurityCamera : Device
     
     public override void ValidateStatus(string status)
     {
-        throw new InputNotValid(SecurityCameraStatusMessage);
+        if (!String.IsNullOrEmpty(status))
+        {
+            throw new InputNotValid(SecurityCameraStatusMessage);
+        }
     }
     
     public override bool Equals(object? obj)
