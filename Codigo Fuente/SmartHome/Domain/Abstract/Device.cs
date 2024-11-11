@@ -42,7 +42,7 @@ public abstract class Device
         return currentStatus;
     }
     
-    public string SwitchStatus(string currentStatus)
+    private string SwitchStatus(string currentStatus)
     {
         ValidateStatus(currentStatus);
         
