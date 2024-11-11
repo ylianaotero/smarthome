@@ -62,10 +62,7 @@ public abstract class Device
             {
                 return "Closed";
             }
-            else
-            {
-                return "Open";
-            }
+            return "Open";
         }
         
         if (Kind == "SmartLamp")
@@ -74,10 +71,7 @@ public abstract class Device
             {
                 return "Off";
             }
-            else
-            {
-                return "On";
-            }
+            return "On";
         }
         
         if (Kind == "SecurityCamera")
