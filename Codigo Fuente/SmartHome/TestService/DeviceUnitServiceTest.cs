@@ -1,8 +1,10 @@
+using System.Linq.Expressions;
 using BusinessLogic;
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DTO;
+using Domain.Enum;
 using IBusinessLogic;
 using IDataAccess;
 using Moq;
@@ -361,6 +363,31 @@ public class DeviceUnitServiceTest
         
         _deviceUnitService.AddDevicesToHome(1, homeDevicesDTO);
     }
+
+    [TestMethod] 
+    public void TestExecuteFunctionality()
+    {
+        DeviceUnit device = new DeviceUnit()
+        {
+            Device = _windowSensor,
+            HardwareId = _updatedDevice.HardwareId,
+            IsConnected = IsConnectedTrue,
+            Status = "Open"
+        };
+        
+        _defaultHome.Devices = [device];
+
+        string functionality = "OpenClosed";   
+        Func<DeviceUnit, bool> filter = x => x.HardwareId == device.HardwareId;
+        
+        _mockDeviceUnitRepository
+            .Setup(x => x.GetByFilter(filter, null))
+            .Returns(new List<DeviceUnit> {device});
+        
+        _deviceUnitService.ExecuteFuncionality(device.HardwareId, functionality);
+        
+        Assert.AreEqual("Closed", _defaultHome.Devices[0].Status);
+    }
     
     private void CreateMocks()
     {
@@ -385,7 +412,8 @@ public class DeviceUnitServiceTest
             Id = 1, 
             Name = "Cámara de seguridad", 
             Model = "123", 
-            Description = "Cámara para exteriores"
+            Description = "Cámara para exteriores",
+            Functionalities = new List<SecurityCameraFunctionality>() {SecurityCameraFunctionality.HumanDetection}
         };
         
         _windowSensor = new WindowSensor
@@ -393,7 +421,8 @@ public class DeviceUnitServiceTest
             Id = 2, 
             Name = "Sensor de ventana", 
             Model = "456", 
-            Description = "Sensor para ventanas"
+            Description = "Sensor para ventanas",
+            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed }
         };
     }
     
