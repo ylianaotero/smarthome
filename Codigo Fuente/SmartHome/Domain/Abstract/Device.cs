@@ -21,5 +21,10 @@ public abstract class Device
         {
             throw new InputNotValid("SmartLamp status can only be on or off.");
         }
+        
+        if (Kind == "WindowSensor" && (status != "Open" && status != "Closed"))
+        {
+            throw new InputNotValid("WindowSensor status can only be open or closed.");
+        }
     }
 }
