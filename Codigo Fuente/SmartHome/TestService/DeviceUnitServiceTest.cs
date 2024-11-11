@@ -1,8 +1,10 @@
+using System.Linq.Expressions;
 using BusinessLogic;
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DTO;
+using Domain.Enum;
 using IBusinessLogic;
 using IDataAccess;
 using Moq;
@@ -361,6 +363,55 @@ public class DeviceUnitServiceTest
         
         _deviceUnitService.AddDevicesToHome(1, homeDevicesDTO);
     }
+
+    [TestMethod] 
+    public void TestExecuteFunctionalityChangesStatus()
+    {
+        DeviceUnit device = new DeviceUnit()
+        {
+            Device = _windowSensor,
+            HardwareId = _updatedDevice.HardwareId,
+            IsConnected = IsConnectedTrue,
+            Status = "Open"
+        };
+        
+        _defaultHome.Devices = [device];
+
+        string functionality = "OpenClosed";  
+        
+        _mockDeviceUnitRepository
+            .Setup(x => x
+                .GetByFilter(It.IsAny<Func<DeviceUnit, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<DeviceUnit> {device});
+        
+        _deviceUnitService.ExecuteFunctionality(device.HardwareId, functionality);
+        
+        Assert.AreEqual("Closed", _defaultHome.Devices[0].Status);
+    }
+    
+    [TestMethod] 
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestExecuteFunctionalityFailsBecauseDeviceIsNotFound()
+    {
+        DeviceUnit device = new DeviceUnit()
+        {
+            Device = _windowSensor,
+            HardwareId = _updatedDevice.HardwareId,
+            IsConnected = IsConnectedTrue,
+            Status = "Open"
+        };
+        
+        _defaultHome.Devices = [device];
+
+        string functionality = "OpenClosed";  
+        
+        _mockDeviceUnitRepository
+            .Setup(x => x
+                .GetByFilter(It.IsAny<Func<DeviceUnit, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<DeviceUnit>());
+        
+        _deviceUnitService.ExecuteFunctionality(device.HardwareId, functionality);
+    }
     
     private void CreateMocks()
     {
@@ -385,7 +436,8 @@ public class DeviceUnitServiceTest
             Id = 1, 
             Name = "Cámara de seguridad", 
             Model = "123", 
-            Description = "Cámara para exteriores"
+            Description = "Cámara para exteriores",
+            Functionalities = new List<SecurityCameraFunctionality>() {SecurityCameraFunctionality.HumanDetection}
         };
         
         _windowSensor = new WindowSensor
@@ -393,7 +445,8 @@ public class DeviceUnitServiceTest
             Id = 2, 
             Name = "Sensor de ventana", 
             Model = "456", 
-            Description = "Sensor para ventanas"
+            Description = "Sensor para ventanas",
+            Functionalities = new List<WindowSensorFunctionality>() { WindowSensorFunctionality.OpenClosed }
         };
     }
     

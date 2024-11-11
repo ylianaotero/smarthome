@@ -7,6 +7,7 @@ namespace Domain.Concrete;
 public class SecurityCamera : Device
 {
     private const string SecurityCameraStatusMessage = "SecurityCamera status cannot be set.";
+    private const string SecurityCameraFunctionalityMessage = "Functionality not supported for this device.";
     
     public LocationType? LocationType { get; set; }
     public List<SecurityCameraFunctionality>? Functionalities { get; set; }
@@ -19,7 +20,47 @@ public class SecurityCamera : Device
     
     public override void ValidateStatus(string status)
     {
-        throw new InputNotValid(SecurityCameraStatusMessage);
+        if (!String.IsNullOrEmpty(status))
+        {
+            throw new InputNotValid(SecurityCameraStatusMessage);
+        }
+    }
+    
+    public override string RunFunctionality(string functionality, string currentStatus)
+    {
+        if (!FunctionalityIsValid(functionality))
+        {
+            throw new InputNotValid(SecurityCameraFunctionalityMessage);
+        }
+            
+        return currentStatus;
+    }
+    
+    private bool FunctionalityIsValid(string functionality)
+    {
+        bool isValid = false;
+
+        if (Functionalities != null)
+        {
+            isValid = FunctionalityIsSupportedByDevice(functionality);
+        }
+
+        return isValid;
+    }
+    
+    private bool FunctionalityIsSupportedByDevice(string functionality)
+    {
+        bool isSupported = false;
+
+        foreach (SecurityCameraFunctionality item in Functionalities)
+        {
+            if (item.ToString() == functionality)
+            {
+                isSupported = true;
+            }
+        }
+
+        return isSupported;
     }
     
     public override bool Equals(object? obj)

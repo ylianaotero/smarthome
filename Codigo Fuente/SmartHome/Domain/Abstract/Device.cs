@@ -16,4 +16,5 @@ public abstract class Device
     public abstract string Kind { get; set; }
 
     public abstract void ValidateStatus(string status);
+    public abstract string RunFunctionality(string functionality, string currentStatus);
 }

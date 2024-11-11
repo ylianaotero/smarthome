@@ -52,6 +52,17 @@ public class DeviceUnitService : IDeviceUnitService
         _homeService.UpdateHome(homeId);
     }
 
+    public void ExecuteFunctionality(Guid hardwareId, string functionality)
+    {
+        DeviceUnit deviceUnit = _deviceUnitRepository
+            .GetByFilter(d => d.HardwareId == hardwareId, PageData.Default)
+            .FirstOrDefault() ?? throw new ElementNotFound(DeviceNotFoundMessage);
+        
+        deviceUnit.ExecuteAction(functionality);
+        
+        _deviceUnitRepository.Update(deviceUnit);
+    }
+
     private void UpdateDeviceUnitProperties(long homeId, DeviceUnit deviceUnit, DeviceUnitDTO deviceUnitDto)
     {
         if (deviceUnitDto.IsConnected != null)

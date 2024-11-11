@@ -7,6 +7,8 @@ namespace Domain.Concrete;
 public class MotionSensor : Device
 {
     private const string MotionSensorStatusMessage = "MotionSensor status cannot be set.";
+    private const string MotionSensorFunctionalityMessage = "Functionality not supported for this device.";
+    
     public sealed override string Kind { get; set; }
     public List<MotionSensorFunctionality>? Functionalities { get; set; }
     
@@ -17,7 +19,47 @@ public class MotionSensor : Device
     
     public override void ValidateStatus(string status)
     {
-        throw new InputNotValid(MotionSensorStatusMessage);
+        if (!String.IsNullOrEmpty(status))
+        {
+            throw new InputNotValid(MotionSensorStatusMessage);
+        }
+    }
+
+    public override string RunFunctionality(string functionality, string currentStatus)
+    {
+        if (!FunctionalityIsValid(functionality))
+        {
+            throw new InputNotValid(MotionSensorFunctionalityMessage);
+        }
+            
+        return currentStatus;
+    }
+    
+    private bool FunctionalityIsValid(string functionality)
+    {
+        bool isValid = false;
+
+        if (Functionalities != null)
+        {
+            isValid = FunctionalityIsSupportedByDevice(functionality);
+        }
+
+        return isValid;
+    }
+    
+    private bool FunctionalityIsSupportedByDevice(string functionality)
+    {
+        bool isSupported = false;
+
+        foreach (MotionSensorFunctionality item in Functionalities)
+        {
+            if (item.ToString() == functionality)
+            {
+                isSupported = true;
+            }
+        }
+
+        return isSupported;
     }
 
     public override bool Equals(object? obj)

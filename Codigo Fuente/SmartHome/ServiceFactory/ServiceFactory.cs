@@ -21,6 +21,7 @@ public static class ServiceFactory
         serviceCollection.AddScoped<IDeviceUnitService, DeviceUnitService>();
         serviceCollection.AddScoped<IMemberService, MemberService>();
         serviceCollection.AddScoped<INotificationService, NotificationService>();
+        serviceCollection.AddScoped<IActionService, ActionService>();
         serviceCollection.AddScoped<IImporter.IImporter, ImporterLogic>();
     }
     
