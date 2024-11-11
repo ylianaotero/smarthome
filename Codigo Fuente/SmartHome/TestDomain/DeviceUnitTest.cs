@@ -80,4 +80,13 @@ public class DeviceUnitTest
         
         Assert.AreEqual(_deviceUnitService.Room, _room);
     }
+    
+    
+    [TestMethod]
+    public void TestSetDeviceUnitStatus()
+    {
+        _deviceUnitService.Status = "On";
+        
+        Assert.AreEqual("On", _deviceUnitService.Status);
+    }
 }
