@@ -1,9 +1,12 @@
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Model.In;
 using Moq;
+using WebApi.Controllers;
 
 namespace TestWebApi.Controllers;
 
+[TestClass]
 public class ActionControllerTest
 {
     [TestMethod]
