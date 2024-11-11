@@ -1,3 +1,4 @@
+using BusinessLogic;
 using Domain.Concrete;
 using Domain.Enum;
 using IBusinessLogic;
@@ -36,7 +37,7 @@ public class ActionServiceTest
         User user = new User()
         {
             Id = 1,
-            Password = "Password",
+            Password = "Password1#",
             Email = "user@gmail.com",
             Name = "User",
             Surname = "User",
