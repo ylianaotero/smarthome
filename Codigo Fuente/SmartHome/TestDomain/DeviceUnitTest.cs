@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain.Concrete;
 
 namespace TestDomain;
@@ -90,4 +91,13 @@ public class DeviceUnitTest
         
         Assert.AreEqual(status, _deviceUnit.Status);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSetSmartLampStatusFails()
+    {
+        string status = "Open";
+        _deviceUnit.Status = status;
+    }
+    
 }
