@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain.Abstract;
 using Domain.Enum;
 
@@ -5,12 +6,21 @@ namespace Domain.Concrete;
 
 public class SmartLamp : Device
 {
+    private const string SmartLampStatusMessage = "SmartLamp status can only be on or off.";
     public List<SmartLampFunctionality>? Functionalities { get; set; }
     public sealed override string Kind { get; set; }
     
     public SmartLamp()
     {
         Kind = GetType().Name;
+    }
+    
+    public override void ValidateStatus(string status)
+    {
+        if (status != "On" && status != "Off")
+        {
+            throw new InputNotValid(SmartLampStatusMessage);
+        }
     }
 
     public override bool Equals(object? obj)

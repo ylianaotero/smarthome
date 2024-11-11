@@ -1,6 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CustomExceptions;
 using Domain.Abstract;
 
 namespace Domain.Concrete;
@@ -12,7 +13,17 @@ public class DeviceUnit
     public string Name { get; set; }
     public Device Device { get; set; }
     public bool IsConnected { get; set; }
-
+    
+    public string? Status
+    {
+        get => _status;
+        set
+        {
+            Device.ValidateStatus(value);
+            _status = value;
+        }
+    }
+        
     [ForeignKey("RoomId")]
     public Room? Room
     {
@@ -23,6 +34,7 @@ public class DeviceUnit
         }
     }
     
+    private string? _status { get; set; }
     private Room? _room { get; set; }
     
     public DeviceUnit()
