@@ -7,6 +7,7 @@ public interface IHomeService
     void CreateHome(Home home);
     Home GetHomeById(long id);
     List<Home> GetHomesByFilter(Func<Home, bool> filter);
+    List<DeviceUnit>? GetDevicesFromHomeByFilter(long homeId, Func<DeviceUnit, bool> filter);
     List<DeviceUnit> GetDevicesFromHome(long homeId);
     List<Member> GetMembersFromHome(long homeId);
     List<Room> GetRoomsFromHome(long homeId);

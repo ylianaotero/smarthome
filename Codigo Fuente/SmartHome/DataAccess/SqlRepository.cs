@@ -27,7 +27,13 @@ public class SqlRepository<T> : IRepository<T> where T : class
     
     public T? GetById(long id)
     {
-        return _entities.Find(id);
+        T entity = _entities.Find(id);
+        
+        List<T> entities = new List<T> { entity };
+        
+        LoadEntities(entities);
+        
+        return entities.First();
     }
     
     public List<T> GetAll(PageData? pageData)

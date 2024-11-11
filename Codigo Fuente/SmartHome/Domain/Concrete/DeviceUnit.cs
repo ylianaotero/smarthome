@@ -14,7 +14,7 @@ public class DeviceUnit
     public bool IsConnected { get; set; }
 
     [ForeignKey("RoomId")]
-    public Room Room
+    public Room? Room
     {
         get => _room;
         set
