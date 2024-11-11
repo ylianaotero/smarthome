@@ -9,11 +9,20 @@ namespace TestWebApi.Controllers;
 [TestClass]
 public class ActionControllerTest
 {
+    private const int OkCode = 200;
+    
+    private Mock<IActionService> _actionServiceMock;
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _actionServiceMock = new Mock<IActionService>();
+    }
+    
     [TestMethod]
     public void TestPostActionOkStatusCode()
     {
-        Mock<IActionService> actionServiceMock = new Mock<IActionService>();
-        ActionController controller = new ActionController(actionServiceMock.Object);
+        ActionController controller = new ActionController(_actionServiceMock.Object);
 
         PostActionRequest request = new PostActionRequest()
         {
@@ -22,10 +31,11 @@ public class ActionControllerTest
             Functionality = "OnOff"
         };
         
-        actionServiceMock.Setup(x => x.PostAction(request.HomeId, request.HardwareId, request.Functionality)).Returns("Success");
+        _actionServiceMock
+            .Setup(x => x.PostAction(request.HomeId, request.HardwareId, request.Functionality));
 
         ObjectResult result = controller.PostAction(request) as OkObjectResult;
         
-        Assert.AreEqual(200, result.StatusCode);
+        Assert.AreEqual(OkCode, result.StatusCode);
     }
 }
