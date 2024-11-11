@@ -178,4 +178,50 @@ public class DeviceUnitTest
         deviceUnit.Status = status;
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSetMotionSensorStatusFails()
+    {
+        string status = "On";
+        
+        MotionSensor motionSensor = new MotionSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = motionSensor
+        };
+        
+        deviceUnit.Status = status;
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSetSecurityCameraStatusFails()
+    {
+        string status = "On";
+        
+        SecurityCamera securityCamera = new SecurityCamera()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = securityCamera
+        };
+        
+        deviceUnit.Status = status;
+    }
+    
 }
