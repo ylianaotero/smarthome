@@ -29,6 +29,16 @@ public abstract class Device
             return SwitchStatus(currentStatus);
         }
 
+        if (Kind == "SmartLamp")
+        {
+            if (functionality != "OnOff")
+            {
+                throw new InputNotValid("Functionality not supported for this device");
+            }
+            
+            return SwitchStatus(currentStatus);
+        }
+
         return currentStatus;
     }
     
@@ -45,6 +55,18 @@ public abstract class Device
             else
             {
                 return "Open";
+            }
+        }
+        
+        if (Kind == "SmartLamp")
+        {
+            if (currentStatus == "On")
+            {
+                return "Off";
+            }
+            else
+            {
+                return "On";
             }
         }
         
