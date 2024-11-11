@@ -50,6 +50,10 @@ public class DeviceUnit
             {
                 Status = "Closed";
             }
+            else
+            {
+                throw new InputNotValid("Functionality not supported for this device");
+            }
         }
     }
     
