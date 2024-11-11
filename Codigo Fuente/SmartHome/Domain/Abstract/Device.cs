@@ -26,5 +26,15 @@ public abstract class Device
         {
             throw new InputNotValid("WindowSensor status can only be open or closed.");
         }
+
+        if (Kind == "MotionSensor")
+        {
+            throw new InputNotValid("MotionSensor status cannot be set.");
+        }
+        
+        if (Kind == "SecurityCamera")
+        {
+            throw new InputNotValid("SecurityCamera status cannot be set.");
+        }
     }
 }
