@@ -224,4 +224,31 @@ public class DeviceUnitTest
         deviceUnit.Status = status;
     }
     
+    [TestMethod]
+    public void TestExecuteWindowSensorAction()
+    {
+        string relatedFunctionality = "OpenClosed";
+        string previousStatus = "Open";
+        string newStatus = "Closed";
+        
+        WindowSensor windowSensor = new WindowSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = windowSensor,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+        
+        Assert.AreEqual(newStatus, deviceUnit.Status);
+    }
+    
 }
