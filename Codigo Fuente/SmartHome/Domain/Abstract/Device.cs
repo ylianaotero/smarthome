@@ -49,6 +49,16 @@ public abstract class Device
             return SwitchStatus(currentStatus);
         }
 
+        if (Kind == "MotionSensor")
+        {
+            if (functionality != "MotionDetection")
+            {
+                throw new InputNotValid("Functionality not supported for this device");
+            }
+            
+            return SwitchStatus(currentStatus);
+        }
+
         return currentStatus;
     }
     
