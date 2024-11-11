@@ -11,6 +11,7 @@ namespace TestWebApi.Controllers;
 public class ActionControllerTest
 {
     private const int OkCode = 200;
+    private const int NotFoundCode = 404;
     
     private Mock<IActionService> _actionServiceMock;
     
@@ -58,6 +59,6 @@ public class ActionControllerTest
 
         ObjectResult result = controller.PostAction(request) as NotFoundObjectResult;
         
-        Assert.AreEqual(404, result.StatusCode);
+        Assert.AreEqual(NotFoundCode, result.StatusCode);
     }
 }
