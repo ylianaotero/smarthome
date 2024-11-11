@@ -12,6 +12,7 @@ public class ActionControllerTest
 {
     private const int OkCode = 200;
     private const int NotFoundCode = 404;
+    private const int BadRequestCode = 400;
     
     private Mock<IActionService> _actionServiceMock;
     
@@ -80,6 +81,6 @@ public class ActionControllerTest
 
         ObjectResult result = controller.PostAction(request) as NotFoundObjectResult;
         
-        Assert.AreEqual(400, result.StatusCode);
+        Assert.AreEqual(BadRequestCode, result.StatusCode);
     }
 }
