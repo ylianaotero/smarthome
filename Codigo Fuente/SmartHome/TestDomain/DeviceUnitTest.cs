@@ -155,4 +155,27 @@ public class DeviceUnitTest
         Assert.AreEqual(status, deviceUnit.Status);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSetWindowSensorStatusFails()
+    {
+        string status = "On";
+        
+        WindowSensor windowSensor = new WindowSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = windowSensor
+        };
+        
+        deviceUnit.Status = status;
+    }
+    
 }
