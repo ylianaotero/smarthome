@@ -1,3 +1,4 @@
+using CustomExceptions;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Model.In;
@@ -18,9 +19,16 @@ public class ActionController : ControllerBase
     [HttpPost]
     public IActionResult PostAction([FromBody] PostActionRequest request)
     {
-        string result = _actionService.PostAction(request.HomeId, request.HardwareId, request.Functionality);
-        
-        return Ok(result);
+        try
+        {
+            string result = _actionService.PostAction(request.HomeId, request.HardwareId, request.Functionality);
+
+            return Ok(result);
+        }
+        catch (ElementNotFound e)
+        {
+            return NotFound(e.Message);
+        }
     }
     
     

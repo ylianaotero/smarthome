@@ -56,7 +56,7 @@ public class ActionControllerTest
             .Setup(x => x.PostAction(request.HomeId, request.HardwareId, request.Functionality))
             .Throws(new ElementNotFound("Device not found"));
 
-        ObjectResult result = controller.PostAction(request) as OkObjectResult;
+        ObjectResult result = controller.PostAction(request) as NotFoundObjectResult;
         
         Assert.AreEqual(404, result.StatusCode);
     }
