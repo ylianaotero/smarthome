@@ -88,9 +88,24 @@ public class DeviceUnitTest
     public void TestSetDeviceUnitStatus()
     {
         string status = "On";
-        _deviceUnit.Status = status;
         
-        Assert.AreEqual(status, _deviceUnit.Status);
+        SmartLamp smartLamp1 = new SmartLamp()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = smartLamp1
+        };
+        
+        deviceUnit.Status = status;
+        
+        Assert.AreEqual(status, deviceUnit.Status);
     }
 
     [TestMethod]

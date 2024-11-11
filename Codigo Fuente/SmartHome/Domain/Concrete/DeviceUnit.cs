@@ -19,10 +19,7 @@ public class DeviceUnit
         get => _status;
         set
         {
-            if (Device.Kind == "SmartLamp")
-            {
-                throw new InputNotValid("SmartLamp cannot be turned off.");
-            }
+            Device.ValidateStatus(value);
             _status = value;
         }
     }
