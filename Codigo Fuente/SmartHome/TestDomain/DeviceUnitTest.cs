@@ -327,4 +327,85 @@ public class DeviceUnitTest
         
         deviceUnit.ExecuteAction(relatedFunctionality);
     }
+    
+    [TestMethod]
+    public void TestExecuteSecurityCameraMotionDetectionAction()
+    {
+        string relatedFunctionality = "MotionDetection";
+        string previousStatus = "";
+        string newStatus = "";
+        
+        SecurityCamera securityCamera = new SecurityCamera()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = securityCamera,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+        
+        Assert.AreEqual(newStatus, deviceUnit.Status);
+    }
+    
+    [TestMethod]
+    public void TestExecuteSecurityCameraHumanDetectionAction()
+    {
+        string relatedFunctionality = "HumanDetection";
+        string previousStatus = "";
+        string newStatus = "";
+        
+        SecurityCamera securityCamera = new SecurityCamera()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = securityCamera,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+        
+        Assert.AreEqual(newStatus, deviceUnit.Status);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestExecuteSecurityCameraActionFails()
+    {
+        string relatedFunctionality = "OnOff";
+        string previousStatus = "";
+        
+        SecurityCamera securityCamera = new SecurityCamera()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = securityCamera,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+    }
+    
+    
 }
