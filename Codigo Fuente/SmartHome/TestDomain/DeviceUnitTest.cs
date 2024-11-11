@@ -275,4 +275,56 @@ public class DeviceUnitTest
         
         deviceUnit.ExecuteAction(relatedFunctionality);
     }
+    
+    [TestMethod]
+    public void TestExecuteSmartLampAction()
+    {
+        string relatedFunctionality = "OnOff";
+        string previousStatus = "On";
+        string newStatus = "Off";
+        
+        SmartLamp smartLamp = new SmartLamp()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = smartLamp,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+        
+        Assert.AreEqual(newStatus, deviceUnit.Status);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestExecuteSmartLampActionFails()
+    {
+        string relatedFunctionality = "MotionDetection";
+        string previousStatus = "On";
+        
+        SmartLamp smartLamp = new SmartLamp()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = smartLamp,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+    }
 }
