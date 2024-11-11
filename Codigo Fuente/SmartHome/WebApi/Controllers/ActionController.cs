@@ -29,6 +29,10 @@ public class ActionController : ControllerBase
         {
             return NotFound(e.Message);
         }
+        catch (InputNotValid e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     
