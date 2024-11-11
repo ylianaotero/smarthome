@@ -42,6 +42,11 @@ public class DeviceUnit
         IsConnected = false;
     }
 
+    public void ExecuteAction(string relatedFunctionality)
+    {
+        Status = "Closed";
+    }
+    
     public override bool Equals(object? obj)
     {
         return obj is DeviceUnit unit &&
