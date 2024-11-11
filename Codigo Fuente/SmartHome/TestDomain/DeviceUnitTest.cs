@@ -5,7 +5,7 @@ namespace TestDomain;
 [TestClass]
 public class DeviceUnitTest
 {
-    private DeviceUnit _deviceUnitService;
+    private DeviceUnit _deviceUnit;
     private SecurityCamera _securityCamera;
     private Room _room;
     private Guid _deviceHardwareId;
@@ -32,7 +32,7 @@ public class DeviceUnitTest
         
         _deviceHardwareId = Guid.NewGuid();
         
-        _deviceUnitService = new DeviceUnit() {};
+        _deviceUnit = new DeviceUnit() {};
         
         _room = new Room()
         {
@@ -44,49 +44,50 @@ public class DeviceUnitTest
     [TestMethod]
     public void TestConnectDeviceUnit()
     {
-        _deviceUnitService.IsConnected = DeviceIsConnected;
+        _deviceUnit.IsConnected = DeviceIsConnected;
         
-        Assert.IsTrue(_deviceUnitService.IsConnected);
+        Assert.IsTrue(_deviceUnit.IsConnected);
     }
     
     [TestMethod]
     public void TestAddDeviceToUnit()
     {
-        _deviceUnitService.Device = _securityCamera;
+        _deviceUnit.Device = _securityCamera;
         
-        Assert.AreEqual(_securityCamera, _deviceUnitService.Device);
+        Assert.AreEqual(_securityCamera, _deviceUnit.Device);
     }
     
     [TestMethod]
     public void TestAddHardwareIdToDeviceUnit()
     {
-        _deviceUnitService.HardwareId = _deviceHardwareId;
+        _deviceUnit.HardwareId = _deviceHardwareId;
         
-        Assert.AreEqual(_deviceHardwareId, _deviceUnitService.HardwareId);
+        Assert.AreEqual(_deviceHardwareId, _deviceUnit.HardwareId);
     }
     
     [TestMethod]
     public void TestAddNameToDeviceUnit()
     {
-        _deviceUnitService.Name = CameraCustomName;
+        _deviceUnit.Name = CameraCustomName;
         
-        Assert.AreEqual(CameraCustomName, _deviceUnitService.Name);
+        Assert.AreEqual(CameraCustomName, _deviceUnit.Name);
     }
     
     [TestMethod]
     public void TestAddRoomToDeviceUnit()
     {
-        _deviceUnitService.Room = _room;
+        _deviceUnit.Room = _room;
         
-        Assert.AreEqual(_deviceUnitService.Room, _room);
+        Assert.AreEqual(_deviceUnit.Room, _room);
     }
     
     
     [TestMethod]
     public void TestSetDeviceUnitStatus()
     {
-        _deviceUnitService.Status = "On";
+        string status = "On";
+        _deviceUnit.Status = status;
         
-        Assert.AreEqual("On", _deviceUnitService.Status);
+        Assert.AreEqual(status, _deviceUnit.Status);
     }
 }
