@@ -381,10 +381,11 @@ public class DeviceUnitServiceTest
         Func<DeviceUnit, bool> filter = x => x.HardwareId == device.HardwareId;
         
         _mockDeviceUnitRepository
-            .Setup(x => x.GetByFilter(filter, null))
+            .Setup(x => x
+                .GetByFilter(It.IsAny<Func<DeviceUnit, bool>>(), It.IsAny<PageData>()))
             .Returns(new List<DeviceUnit> {device});
         
-        _deviceUnitService.ExecuteFuncionality(device.HardwareId, functionality);
+        _deviceUnitService.ExecuteFunctionality(device.HardwareId, functionality);
         
         Assert.AreEqual("Closed", _defaultHome.Devices[0].Status);
     }
