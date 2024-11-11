@@ -12,6 +12,7 @@ public class DeviceUnitTest
     private Guid _deviceHardwareId;
     
     private const string CameraName = "My Security Camera";
+    private const string SmartLampName = "My Smart Lamp";
     private const string CameraCustomName = "Front Door Camera";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
@@ -97,7 +98,22 @@ public class DeviceUnitTest
     public void TestSetSmartLampStatusFails()
     {
         string status = "Open";
-        _deviceUnit.Status = status;
+        
+        SmartLamp smartLamp1 = new SmartLamp()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = smartLamp1
+        };
+        
+        deviceUnit.Status = status;
     }
     
 }
