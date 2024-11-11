@@ -365,7 +365,7 @@ public class DeviceUnitServiceTest
     }
 
     [TestMethod] 
-    public void TestExecuteFunctionality()
+    public void TestExecuteFunctionalityChangesStatus()
     {
         DeviceUnit device = new DeviceUnit()
         {
@@ -387,6 +387,30 @@ public class DeviceUnitServiceTest
         _deviceUnitService.ExecuteFunctionality(device.HardwareId, functionality);
         
         Assert.AreEqual("Closed", _defaultHome.Devices[0].Status);
+    }
+    
+    [TestMethod] 
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestExecuteFunctionalityFailsBecauseDeviceIsNotFound()
+    {
+        DeviceUnit device = new DeviceUnit()
+        {
+            Device = _windowSensor,
+            HardwareId = _updatedDevice.HardwareId,
+            IsConnected = IsConnectedTrue,
+            Status = "Open"
+        };
+        
+        _defaultHome.Devices = [device];
+
+        string functionality = "OpenClosed";  
+        
+        _mockDeviceUnitRepository
+            .Setup(x => x
+                .GetByFilter(It.IsAny<Func<DeviceUnit, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<DeviceUnit>());
+        
+        _deviceUnitService.ExecuteFunctionality(device.HardwareId, functionality);
     }
     
     private void CreateMocks()
