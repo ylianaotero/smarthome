@@ -1,5 +1,6 @@
 using BusinessLogic;
 using Domain.Concrete;
+using Domain.DTO;
 using Domain.Enum;
 using IBusinessLogic;
 using Moq;
@@ -9,32 +10,47 @@ namespace TestService;
 [TestClass]
 public class ActionServiceTest
 {
+    private Mock<INotificationService> notificationServiceMock;
+    private Mock<IDeviceUnitService> deviceUnitServiceMock;
+
+    private SmartLamp smartLamp;
+    private DeviceUnit deviceUnit;
+    private User user;
+    private Home home;
+        
+        
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        notificationServiceMock = new Mock<INotificationService>();
+        deviceUnitServiceMock = new Mock<IDeviceUnitService>();
+        SetupDefaultObjects();
+    }
+    
     [TestMethod]
     public void TestPostAction()
     {
-        Mock<INotificationService> notificationServiceMock = new Mock<INotificationService>();
-        Mock<IDeviceUnitService> deviceUnitServiceMock = new Mock<IDeviceUnitService>();
-        
         ActionService actionService = new ActionService(notificationServiceMock.Object, deviceUnitServiceMock.Object);
-
-        SmartLamp smartLamp = new SmartLamp()
-        {
-            Id = 1,
-            Name = "Smart Lamp",
-            Model = "SL-1",
-            Description = "Smart Lamp",
-            PhotoURLs = new List<string>() { "example.png" },
-            Functionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff }
-        };
+       
+        string functionality = "OnOff";
         
-        DeviceUnit deviceUnit = new DeviceUnit()
-        {
-            HardwareId = Guid.NewGuid(),
-            Device = smartLamp,
-            Status = "Off"
-        };
-
-        User user = new User()
+        notificationServiceMock
+            .Setup(n => n.SendNotifications(It.IsAny<NotificationDTO>()));
+        deviceUnitServiceMock
+            .Setup(d => d.ExecuteFunctionality(deviceUnit.HardwareId, functionality));
+        
+        string result = actionService.PostAction(home.Id, deviceUnit.HardwareId, functionality);
+        string expectedResult = "The functionality " + functionality + " has been executed in device " +
+                                deviceUnit.HardwareId + " from home " + home.Id + ".";
+        
+        Assert.AreEqual(expectedResult, result);
+    }
+    
+    private void SetupDefaultObjects()
+    {
+        SetupDefaultDevices();
+        
+        user = new User()
         {
             Id = 1,
             Password = "Password1#",
@@ -43,7 +59,7 @@ public class ActionServiceTest
             Surname = "User",
         };
         
-        Home home = new Home()
+        home = new Home()
         {
             Id = 1,
             Devices = new List<DeviceUnit>() { deviceUnit },
@@ -55,13 +71,25 @@ public class ActionServiceTest
             Latitude = 1234.56,
             MaximumMembers = 2,
         };
+    }
+    
+    private void SetupDefaultDevices()
+    {
+        smartLamp = new SmartLamp()
+        {
+            Id = 1,
+            Name = "Smart Lamp",
+            Model = "SL-1",
+            Description = "Smart Lamp",
+            PhotoURLs = new List<string>() { "example.png" },
+            Functionalities = new List<SmartLampFunctionality>() { SmartLampFunctionality.OnOff }
+        };
         
-        string functionality = "OnOff";
-        
-        string result = actionService.PostAction(home.Id, deviceUnit.HardwareId, functionality);
-        string expectedResult = "The functionality " + functionality + " has been executed in device " +
-                                deviceUnit.HardwareId + " from home " + home.Id + ". Status has been changed to On";
-        
-        Assert.AreEqual(expectedResult, result);
+        deviceUnit = new DeviceUnit()
+        {
+            HardwareId = Guid.NewGuid(),
+            Device = smartLamp,
+            Status = "Off"
+        };
     }
 }
