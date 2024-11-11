@@ -85,7 +85,7 @@ public class DeviceUnitTest
     
     
     [TestMethod]
-    public void TestSetDeviceUnitStatus()
+    public void TestSetSmartLampStatus()
     {
         string status = "On";
         
@@ -129,6 +129,30 @@ public class DeviceUnitTest
         };
         
         deviceUnit.Status = status;
+    }
+    
+    [TestMethod]
+    public void TestSetWindowSensorStatus()
+    {
+        string status = "Open";
+        
+        WindowSensor windowSensor = new WindowSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl },
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = windowSensor
+        };
+        
+        deviceUnit.Status = status;
+        
+        Assert.AreEqual(status, deviceUnit.Status);
     }
     
 }
