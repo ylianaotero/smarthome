@@ -251,4 +251,28 @@ public class DeviceUnitTest
         Assert.AreEqual(newStatus, deviceUnit.Status);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestExecuteWindowSensorActionFails()
+    {
+        string relatedFunctionality = "MotionDetection";
+        string previousStatus = "Open";
+        
+        WindowSensor windowSensor = new WindowSensor()
+        {
+            Id = 1,
+            Name = SmartLampName,
+            Model = DeviceModel,
+            Description = DeviceDescription,
+            PhotoURLs = new List<string> { DevicePhotoUrl }
+        };
+        
+        DeviceUnit deviceUnit = new DeviceUnit()
+        {
+            Device = windowSensor,
+            Status = previousStatus
+        };
+        
+        deviceUnit.ExecuteAction(relatedFunctionality);
+    }
 }
