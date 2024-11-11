@@ -377,8 +377,7 @@ public class DeviceUnitServiceTest
         
         _defaultHome.Devices = [device];
 
-        string functionality = "OpenClosed";   
-        Func<DeviceUnit, bool> filter = x => x.HardwareId == device.HardwareId;
+        string functionality = "OpenClosed";  
         
         _mockDeviceUnitRepository
             .Setup(x => x
