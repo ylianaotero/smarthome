@@ -8,6 +8,7 @@ public class PatchDeviceUnitRequest
     public bool? IsConnected { get; set; }
     public long? RoomId { get; set; }
     public string? Name { get; set; }
+    public string? Status { get; set; }
     
     public DeviceUnitDTO ToEntity()
     {
@@ -16,7 +17,8 @@ public class PatchDeviceUnitRequest
             HardwareId = HardwareId,
             IsConnected = IsConnected,
             RoomId = RoomId,
-            Name = Name
+            Name = Name,
+            Status = Status
         };
     }
 }

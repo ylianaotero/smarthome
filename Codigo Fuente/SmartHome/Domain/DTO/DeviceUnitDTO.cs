@@ -7,4 +7,5 @@ public class DeviceUnitDTO
     public Guid HardwareId { get; set; }
     public long? RoomId { get; set; }
     public string? Name { get; set; }
+    public string? Status { get; set; }
 }

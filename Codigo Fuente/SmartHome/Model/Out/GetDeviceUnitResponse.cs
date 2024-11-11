@@ -10,6 +10,7 @@ public class GetDeviceUnitResponse
     public string Model { get; set; }
     public string Photo { get; set; }
     public string? RoomName { get; set; }
+    public string? Status { get; set; }
     
     public GetDeviceUnitResponse(DeviceUnit deviceUnitService)
     {
@@ -22,6 +23,10 @@ public class GetDeviceUnitResponse
         {
             RoomName = deviceUnitService.Room.Name;
         }
+        if (!String.IsNullOrEmpty(deviceUnitService.Status))
+        {
+            Status = deviceUnitService.Status;
+        }
     }
 
     public override bool Equals(object? obj)
@@ -32,6 +37,8 @@ public class GetDeviceUnitResponse
                IsConnected == response.IsConnected &&
                Model == response.Model &&
                RoomName == response.RoomName &&
-               Photo == response.Photo;
+               Photo == response.Photo &&
+               Status == response.Status;
+               
     }
 }
