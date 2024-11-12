@@ -1,168 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio</title>
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="./user-panel.component.css">
 </head>
+
 <body>
 
-<div class="welcome-container text-center mt-5">
-  <h1 class="welcome-title">¡Hola: {{userName}}!</h1>
-  <p>Bienvenido, ¿Qué deseas hacer hoy?</p>
+  <div class="welcome-container text-center mt-5">
+    <h1 class="welcome-title">¡Hola: {{userName}}!</h1>
+    <p>Bienvenido, ¿Qué deseas hacer hoy?</p>
 
-  <a class="btn btn-primary" (click)="openModal('showDevices')">
-    <i class="bi bi-list-ul" ></i> Listar Dispositivos
-  </a>
+    <a class="btn btn-primary" (click)="openModal('showDevices')">
+      <i class="bi bi-list-ul"></i> Listar Dispositivos
+    </a>
 
-  <a class="btn btn-primary" (click)="openModal('showDevicesTypes')">
-    <i class="bi bi-list-ul"></i> Listar Dispositivos Soportados
-  </a>
+    <a class="btn btn-primary" (click)="openModal('showDevicesTypes')">
+      <i class="bi bi-list-ul"></i> Listar Dispositivos Soportados
+    </a>
 
-<div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
-     [class.show]="modalShowDevices" [style.display]="modalShowDevices ? 'block' : 'none'"
-     (click)="closeModalBackdrop($event, 'showDevices')">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
+    <div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
+      [class.show]="modalShowDevices" [style.display]="modalShowDevices ? 'block' : 'none'"
+      (click)="closeModalBackdrop($event, 'showDevices')">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
             <h5 class="modal-title">Visualizar Dispositivos</h5>
             <button type="button" class="close" (click)="closeModal('showDevices')" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">&times;</span>
             </button>
-        </div>
-
-      <div class="modal-body">
-        <div class="filter-container row g-3 mb-3">
-          <div class="col-12 mb-3">
-            <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName">
           </div>
 
-          <div class="col-12 mb-3">
-            <input type="text" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel">
-          </div>
+          <div class="modal-body">
+            <div class="filter-container row g-3 mb-3">
+              <div class="col-12 mb-3">
+                <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName">
+              </div>
 
-          <div class="col-12 mb-3">
-            <input type="text" class="form-control" placeholder="Filtrar por compañía" [(ngModel)]="selectedCompany">
-          </div>
+              <div class="col-12 mb-3">
+                <input type="text" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel">
+              </div>
 
-          <div class="kind-selection">
-            <p style="padding: 10px; margin: 1px;">Filtrar por tipo</p>
-            <label>
-              <input type="radio" name="kind" value="SecurityCamera" [(ngModel)]="selectedKind"> Camara de Seguridad
-            </label>
-            <label>
-              <input type="radio" name="kind" value="WindowSensor" [(ngModel)]="selectedKind"> Sensor de Ventana
-            </label>
-            <label>
-              <input type="radio" name="kind" value="SmartLamp" [(ngModel)]="selectedKind"> Lampara Inteligente
-            </label>
-            <label>
-                <input type="radio" name="kind" value="MotionSensor" [(ngModel)]="selectedKind"> Dueño de Hogar
-            </label>
-          </div>
+              <div class="col-12 mb-3">
+                <input type="text" class="form-control" placeholder="Filtrar por compañía"
+                  [(ngModel)]="selectedCompany">
+              </div>
 
-          <div class="col-12 mb-3 d-flex justify-content-end">
-            <button type="button" class="btn btn-primary" (click)="getDevices()">Buscar</button>
-          </div>
-        </div>
+              <div class="kind-selection">
+                <p style="padding: 10px; margin: 1px;">Filtrar por tipo</p>
+                <label>
+                  <input type="radio" name="kind" value="SecurityCamera" [(ngModel)]="selectedKind"> Camara de Seguridad
+                </label>
+                <label>
+                  <input type="radio" name="kind" value="WindowSensor" [(ngModel)]="selectedKind"> Sensor de Ventana
+                </label>
+                <label>
+                  <input type="radio" name="kind" value="SmartLamp" [(ngModel)]="selectedKind"> Lampara Inteligente
+                </label>
+                <label>
+                  <input type="radio" name="kind" value="MotionSensor" [(ngModel)]="selectedKind"> Dueño de Hogar
+                </label>
+              </div>
 
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col" class="text-center">Nombre</th>
-            <th scope="col" class="text-center">Modelo</th>
-            <th scope="col" class="text-center">Foto</th>
-            <th scope="col" class="text-center">Compañia</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let device of devices">
-            <td class="text-center">{{ device.name }}</td>
-            <td class="text-center">{{ device.model }}</td>
-            <td class="text-center">{{ device.photoUrl }}</td>
-            <td class="text-center">{{ device.companyName }}</td>
-          </tr>
-          </tbody>
-        </table>
-        <p *ngIf="deviceTypes.length==0">No hay dispositivos para mostrar</p>
-      </div>
+              <div class="col-12 mb-3 d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" (click)="getDevices()">Buscar</button>
+              </div>
+            </div>
 
-      <div class="modal-footer d-flex flex-column align-items-center">
-        <nav aria-label="Page navigation" class="mb-2">
-          <ul class="pagination justify-content-center mb-0">
-            <li class="page-item" [class.disabled]="currentPage === 1">
-              <button class="page-link" (click)="changePage(currentPage - 1)">Anterior</button>
-            </li>
-            <li class="page-item disabled">
-              <span class="page-link">Página {{ currentPage }} de {{ totalPages }}</span>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <button class="page-link" (click)="changePage(currentPage + 1)">Siguiente</button>
-            </li>
-          </ul>
-        </nav>
-
-        <button type="button" class="btn btn-secondary" (click)="closeModal('showDevices')">Cerrar</button>
-      </div>
-
-
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="myModalShowDevicesTypes" tabindex="-1" role="dialog" aria-hidden="true"
-[class.show]="modalShowDevicesTypes" [style.display]="modalShowDevicesTypes ? 'block' : 'none'"
-(click)="closeModalBackdrop($event, 'showDevicesTypes')">
-<div class="modal-dialog modal-dialog-centered" role="document">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">Visualizar Dispositivos</h5>
-        <button type="button" class="close" (click)="closeModal('showDevicesTypes')" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-center">Nombre</th>
+                  <th scope="col" class="text-center">Modelo</th>
+                  <th scope="col" class="text-center">Foto</th>
+                  <th scope="col" class="text-center">Compañia</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let device of devices">
+                  <td class="text-center">{{ device.name }}</td>
+                  <td class="text-center">{{ device.model }}</td>
+                  <td class="text-center">{{ device.photoUrl }}</td>
+                  <td class="text-center">{{ device.companyName }}</td>
+                </tr>
+              </tbody>
+            </table>
             <p *ngIf="deviceTypes.length==0">No hay dispositivos para mostrar</p>
-            <ul>
-                <li *ngFor="let type of deviceTypes">{{ type }}</li>
-            </ul>
+          </div>
+
+          <div class="modal-footer d-flex flex-column align-items-center">
+            <nav aria-label="Page navigation" class="mb-2">
+              <ul class="pagination justify-content-center mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="changePage(currentPage - 1)">Anterior</button>
+                </li>
+                <li class="page-item disabled">
+                  <span class="page-link">Página {{ currentPage }} de {{ totalPages }}</span>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button class="page-link" (click)="changePage(currentPage + 1)">Siguiente</button>
+                </li>
+              </ul>
+            </nav>
+
+            <button type="button" class="btn btn-secondary" (click)="closeModal('showDevices')">Cerrar</button>
+          </div>
+
+
         </div>
-</div>
+      </div>
+    </div>
 
-<div class="modal-footer d-flex flex-column align-items-center">
-   <nav aria-label="Page navigation" class="mb-2">
-     <ul class="pagination justify-content-center mb-0">
-       <li class="page-item" [class.disabled]="currentPage === 1">
-         <button class="page-link" (click)="changePage(currentPage - 1)">Anterior</button>
-       </li>
-       <li class="page-item disabled">
-         <span class="page-link">Página {{ currentPage }} de {{ totalPages }}</span>
-       </li>
-       <li class="page-item" [class.disabled]="currentPage === totalPages">
-         <button class="page-link" (click)="changePage(currentPage + 1)">Siguiente</button>
-       </li>
-     </ul>
-   </nav>
+    <div class="modal fade" id="myModalShowDevicesTypes" tabindex="-1" role="dialog" aria-hidden="true"
+      [class.show]="modalShowDevicesTypes" [style.display]="modalShowDevicesTypes ? 'block' : 'none'"
+      (click)="closeModalBackdrop($event, 'showDevicesTypes')">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Visualizar Dispositivos</h5>
+            <button type="button" class="close" (click)="closeModal('showDevicesTypes')" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-body">
+              <p *ngIf="deviceTypes.length==0">No hay dispositivos para mostrar</p>
+              <ul>
+                <li *ngFor="let type of deviceTypes">{{ type }}</li>
+              </ul>
+            </div>
+          </div>
 
-   <button type="button" class="btn btn-secondary" (click)="closeModal('showDevicesTypes')">Cerrar</button>
-</div>
+          <div class="modal-footer d-flex flex-column align-items-center">
+            <nav aria-label="Page navigation" class="mb-2">
+              <ul class="pagination justify-content-center mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="changePage(currentPage - 1)">Anterior</button>
+                </li>
+                <li class="page-item disabled">
+                  <span class="page-link">Página {{ currentPage }} de {{ totalPages }}</span>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button class="page-link" (click)="changePage(currentPage + 1)">Siguiente</button>
+                </li>
+              </ul>
+            </nav>
+
+            <button type="button" class="btn btn-secondary" (click)="closeModal('showDevicesTypes')">Cerrar</button>
+          </div>
 
 
-</div>
-</div>
-</div>
+        </div>
+      </div>
+    </div>
 
-</div>
-
-<!-- Enlace a Bootstrap JS y jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </div>
 
 </body>
+
 </html>
