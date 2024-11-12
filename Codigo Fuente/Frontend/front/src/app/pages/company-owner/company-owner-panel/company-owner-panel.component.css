@@ -5,7 +5,7 @@ html, body {
     padding: 0;
     background-color: #082849;
   }
-
+  
   body {
     display: flex;
     justify-content: center;
@@ -13,12 +13,12 @@ html, body {
     height: 100vh;
     background: linear-gradient(135deg, #74b9ff, #a29bfe);
   }
-
+  
   .btn {
     width: 200px;
     margin: 10px;
   }
-
+  
   .welcome-container {
     background-color: white;
     padding: 2rem;
@@ -28,12 +28,12 @@ html, body {
     width: 320px;
     position: relative;
   }
-
+  
   .welcome-title {
     color: #6c5ce7;
     margin-bottom: 20px;
   }
-
+  
   .btn-create-home {
     background-color: #6c5ce7;
     border-color: #6c5ce7;
@@ -44,11 +44,11 @@ html, body {
     display: inline-flex;
     align-items: center;
   }
-
+  
   .btn-create-home i {
     margin-right: 10px;
   }
-
+  
   .btn-create-home:hover {
     background-color: #5a4ec9;
     border-color: #5a4ec9;
@@ -82,30 +82,4 @@ html, body {
 
 input[type="radio"] {
   margin-right: 7px;
-}
-
-.modal-content {
-  border-radius: 10px;
-}
-
-.modal-header {
-  border-bottom: none;
-}
-
-.modal-header h5 {
-  font-weight: bold;
-}
-
-.company-details p {
-  font-size: 1.1rem;
-  color: #333;
-}
-
-.modal-body {
-  padding: 2rem;
-}
-
-.modal-footer {
-  padding: 1rem 2rem;
-  border-top: none;
 }

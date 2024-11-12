@@ -49,7 +49,7 @@ export class LogInComponent {
       if (hasHomeOwnerRole) {
         this.router.navigate(['account']);
       } else if (hasCompanyOwnerRole) {
-        this.router.navigate(['/imports']);
+        this.router.navigate(['home/company-owner-panel']);
       } else {
         // Manejo si no tiene ninguno de los roles requeridos
       }
