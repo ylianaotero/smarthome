@@ -290,6 +290,39 @@ public class UserServiceTest
     }
     
     [TestMethod]
+    public void TestDeleteUserWithMultipleRoles()
+    {
+        _user.Roles = new List<Role>{_administrator,_homeOwner};
+        _listOfUsers.Add(_user);
+
+        _mockUserRepository
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(_listOfUsers);
+        
+        _userService.DeleteUser(1);
+        
+        _mockUserRepository
+            .Verify(repo => repo
+                .Delete(It.Is<User>(u => u == _user)), Times.Once);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestDeleteUserWithNoRoles()
+    {
+        _user.Roles = new List<Role>();
+        _mockUserRepository
+            .Setup(v => v
+                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(_listOfUsers);
+        
+        _userService.DeleteUser(1);
+        
+        _mockUserRepository.Verify();
+    }
+    
+    [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]
     public void TestDeleteUserNotFound()
     {
