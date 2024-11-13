@@ -9,6 +9,8 @@
 /* Body Background */
 body {
   background: linear-gradient(135deg, #74b9ff, #a29bfe);
+  color: #333;
+  padding: 20px 0;
 }
 
 /* Header Styling */
@@ -40,9 +42,50 @@ body {
   color: #6200ea;
 }
 
-/* Card Styling */
+/* Card Container */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual Cards */
 .card {
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer; /* Makes the entire card clickable */
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Adds a subtle hover effect */
+}
+
+.card-title {
+  font-weight: bold;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.card-body {
+  flex-grow: 1;
+  padding: 1.5rem;
+  cursor: pointer; /* Ensures the text part is also clickable */
+}/*
+.card {
+  border-radius: 12px;
   overflow: hidden;
   background-color: white;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
@@ -58,13 +101,14 @@ body {
 }
 
 /* Card Body */
+/*
 .card-body {
   padding: 1.5rem;
 }
 .card-title {
   font-weight: bold;
   font-size: 1.25rem;
-  color: #007bff; /* Your blue color */
+  color: #007bff;
   margin-bottom: 0.5rem;
 }
 .card-text {
@@ -72,6 +116,8 @@ body {
   color: #6c757d;
   margin-bottom: 0.75rem;
 }
+
+*/
 
 /* Container Padding */
 .container {

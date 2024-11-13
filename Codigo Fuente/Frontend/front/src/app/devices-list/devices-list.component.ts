@@ -126,13 +126,21 @@ export class DevicesListComponent {
     },
   ];
 
-  doNothing() {
-    console.log('Doing nothing');
+  modalImage: string | null = null;
+  isModalOpen = false;
+
+  // Open modal and set image
+  openModal(imageUrl: string) {
+    this.modalImage = imageUrl;
+    this.isModalOpen = true;
   }
 
-  selectedPhotoUrl: string = '';
+  // Close modal
+  closeModal() {
+    this.isModalOpen = false;
+  }
 
-  openModal(photoUrl: string): void {
-    this.selectedPhotoUrl = photoUrl;
+  doNothing() {
+    // Do nothing
   }
 }
