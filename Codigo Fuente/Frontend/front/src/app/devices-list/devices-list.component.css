@@ -1,0 +1,96 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Body Background */
+body {
+  background: linear-gradient(135deg, #74b9ff, #a29bfe);
+}
+
+/* Header Styling */
+.header {
+  background-color: #6200ea; /* Accent color for professionalism */
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+.header-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Back Button */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+}
+.back-btn button {
+  font-size: 1.25rem;
+  color: #333;
+  transition: color 0.2s ease;
+  background-color: transparent;
+  border: none;
+}
+.back-btn button:hover {
+  color: #6200ea;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  height: 100%;
+}
+.card:hover {
+  transform: scale(1.02);
+}
+.card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Card Body */
+.card-body {
+  padding: 1.5rem;
+}
+.card-title {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #007bff; /* Your blue color */
+  margin-bottom: 0.5rem;
+}
+.card-text {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+}
+
+/* Container Padding */
+.container {
+  padding-top: 1rem;
+}
+
+/* Adjusted Global Text */
+h1 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: white;
+}
+p {
+  font-weight: 300;
+  color: #666;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 15px;
+}

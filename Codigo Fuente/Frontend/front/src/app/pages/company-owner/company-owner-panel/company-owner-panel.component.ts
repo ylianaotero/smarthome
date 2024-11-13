@@ -109,47 +109,4 @@ export class CompanyOwnerPanelComponent implements OnInit {
       this.closeModal(modal);
     }
   }
-  /*
-
-  openModal(modal: string): void {
-    this.changeSelectedModal(modal, true);
-    document.body.classList.add('modal-open');
-    this.createBackdrop();
-  }
-
-  closeModal(modal: string): void {
-    this.changeSelectedModal(modal, false);
-    document.body.classList.remove('modal-open');
-    this.removeBackdrop();
-  }
-
-  changeSelectedModal(modal: string, showModal: boolean): void{
-    if(modal == "showUsers"){
-      this.modalShowUsers = showModal;
-    }else if(modal == "showCompanies"){
-      this.modalShowCompanies = showModal;
-    }
-  }
-
-  closeModalBackdrop(event: MouseEvent,modal: string ): void {
-    const target = event.target as HTMLElement;
-    if (target.id === 'myModalShowUsers') {
-      this.closeModal(modal);
-    }else if(target.id === 'myModalShowCompanies'){
-      this.closeModal(modal);
-    }
-  }
-
-  private createBackdrop(): void {
-    const backdrop = document.createElement('div');
-    backdrop.className = 'modal-backdrop fade show';
-    document.body.appendChild(backdrop);
-  }
-
-  private removeBackdrop(): void {
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      document.body.removeChild(backdrop);
-    }
-  }*/
 }
