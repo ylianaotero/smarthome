@@ -23,7 +23,7 @@
   <!-- Card container holding the cards -->
   <div class="card-container">
     <!-- Device card template -->
-    <div class="card shadow-sm h-100" *ngFor="let device of devices" (click)="openModal(device.photoUrl)">
+    <div class="card shadow-sm h-100" *ngFor="let device of devices" (click)="openModal(device.photoUrl, device.name)">
       <img [src]="device.photoUrl" alt="{{ device.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
       <div class="card-body">
         <h5 class="card-title">{{ device.name }}</h5>
@@ -39,7 +39,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="imageModalLabel">Device Image</h5>
+        <h5 class="card-title" id="imageModalLabel">{{modalDevice}}</h5>
         <button type="button" class="close" (click)="closeModal()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
