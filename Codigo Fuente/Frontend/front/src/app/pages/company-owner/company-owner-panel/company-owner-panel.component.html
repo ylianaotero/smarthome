@@ -18,7 +18,7 @@
   <a *ngIf="ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalShowCompanies')">
     <i class="bi bi-list-ul" ></i> Ver empresa
   </a>
-  <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalShowCompanies')">
+  <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalCreateCompany')">
     <i class="bi bi-list-ul" ></i> Crear empresa
   </a>
 
@@ -62,9 +62,6 @@
       </div>
     </div>
   </div>
-
-
-
 
 
 

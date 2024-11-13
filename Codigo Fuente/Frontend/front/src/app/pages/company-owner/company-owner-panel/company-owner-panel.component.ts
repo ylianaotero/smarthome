@@ -17,11 +17,8 @@ export class CompanyOwnerPanelComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 1;
 
-  totalUsers: number = 0;
   totalCompanies: number = 0;
 
-  selectedFullName: string = '';
-  selectedRole: string = '';
   selectedCompanyName: string = '';
   selectedOwner: string = '';
   selectedRUT: string = '';
@@ -31,7 +28,6 @@ export class CompanyOwnerPanelComponent implements OnInit {
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
 
-  modalShowUsers: boolean = false;
   modalShowCompanies: boolean = false;
 
   constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
@@ -39,7 +35,6 @@ export class CompanyOwnerPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.getUsers();
     this.getCompany();
   }
 
@@ -68,14 +63,6 @@ export class CompanyOwnerPanelComponent implements OnInit {
     });
   }
 
-  goCreateCompany(): void {
-    this.router.navigate(['/administrator/new-admin']);
-  }
-
-  goViewCompany(): void {
-    this.router.navigate(['/administrator/new-admin']);
-  }
-
   goViewDevices(): void {
     this.router.navigate(['home/devices-list']);
   }
@@ -84,13 +71,6 @@ export class CompanyOwnerPanelComponent implements OnInit {
     this.router.navigate(['/administrator/new-admin']);
   }
 
-
-  changePage(page: number): void {
-    this.currentPage = page;
-  }
-  get totalPages(): number {
-    return Math.ceil(this.totalUsers / this.pageSize);
-  }
 
   openModal(modal: string) {
     if (modal === 'modalShowCompanies') {
