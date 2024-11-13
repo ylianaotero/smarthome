@@ -76,8 +76,8 @@ export class CompanyOwnerPanelComponent implements OnInit {
     this.router.navigate(['/administrator/new-admin']);
   }
 
-  goViewCompanyDevices(): void {
-    this.router.navigate(['/administrator/new-admin']);
+  goViewDevices(): void {
+    this.router.navigate(['home/devices-list']);
   }
 
   goCreateDevices(): void {

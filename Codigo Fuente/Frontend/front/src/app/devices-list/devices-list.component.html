@@ -32,7 +32,6 @@
         <input type="text" class="form-control" placeholder="Filtrar por empresa" [(ngModel)]="selectedCompany" name="company">
       </div>
       <div class="col">
-        <!-- Dropdown for Device Types -->
         <select class="form-control" [(ngModel)]="selectedKind" name="kind">
           <option value="">Filtrar por tipo</option>
           <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
@@ -44,9 +43,7 @@
     </div>
   </form>
 
-  <!-- Card container holding the cards -->
   <div class="card-container">
-    <!-- Device card template -->
     <div class="card shadow-sm h-100" *ngFor="let device of devices" (click)="openModal(device.photoUrl, device.name)">
       <img [src]="device.photoUrl" alt="{{ device.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
       <div class="card-body">
@@ -58,7 +55,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" [ngClass]="{'show': isModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isModalOpen">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
