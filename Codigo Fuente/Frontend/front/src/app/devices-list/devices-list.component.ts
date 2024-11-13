@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse} from '../interfaces/devices';
 import { Router } from '@angular/router';
+import { GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse } from '../interfaces/devices';
 import { AdministratorService } from '../shared/administrator.service';
 import { DevicesService } from '../shared/devices.service';
 
@@ -35,7 +35,6 @@ export class DevicesListComponent implements OnInit {
     this.getDevicesTypes();
   }
 
-  // Fetch devices based on current filter values
   getDevices(): void {
     const request: GetDeviceRequest = {
       name: this.selectedName,
@@ -62,18 +61,17 @@ export class DevicesListComponent implements OnInit {
     });
   }
 
-  // Modal management
-  openModal(imageUrl: string | null, device: string | null) {
+  openModal(imageUrl: string | null, device: string | null): void {
     this.modalDevice = device;
     this.modalImage = imageUrl;
     this.isModalOpen = true;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.isModalOpen = false;
   }
 
-  doNothing() {
+  doNothing(): void {
     // Placeholder function
   }
 }
