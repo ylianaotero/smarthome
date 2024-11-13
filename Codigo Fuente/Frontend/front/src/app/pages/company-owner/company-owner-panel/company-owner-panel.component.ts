@@ -13,29 +13,42 @@ import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../inte
 export class CompanyOwnerPanelComponent implements OnInit {
 
   userName: string;
+  userEmail: string;
 
   currentPage: number = 1;
   pageSize: number = 1;
-
   totalCompanies: number = 0;
 
+  // Modal state for showing company details and creating company
+  modalShowCompanies: boolean = false;
+  modalCreateCompany: boolean = false;
+
+  // Data for the selected company
   selectedCompanyName: string = '';
   selectedOwner: string = '';
   selectedRUT: string = '';
   selectedEmail: string = '';
   selectedPhotoURL: string | null = '';
 
+  // New company data
+  newCompany = {
+    name: '',
+    rut: '',
+    logoUrl: '',
+    ownerId: 0 // This will be set to the current user's ID
+  };
+
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
 
-  modalShowCompanies: boolean = false;
-
   constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
+    this.userEmail = this.api.currentSession?.user?.email || '';
   }
 
   ngOnInit(): void {
     this.getCompany();
+    this.setOwnerId(); // Set the ownerId when the component initializes
   }
 
   ownerHasCompany(): boolean {
@@ -45,7 +58,8 @@ export class CompanyOwnerPanelComponent implements OnInit {
   getCompany(): void {
     const request: GetCompaniesRequest = {
       name: "",
-      owner: this.userName
+      owner: this.userName,
+      ownerEmail: this.userEmail
     };
 
     this.apiCompany.getCompanies(request).subscribe({
@@ -63,6 +77,11 @@ export class CompanyOwnerPanelComponent implements OnInit {
     });
   }
 
+  // Set the ownerId to the current user's ID
+  setOwnerId(): void {
+    this.newCompany.ownerId = this.api.currentSession?.user?.id || 0;
+  }
+
   goViewDevices(): void {
     this.router.navigate(['home/devices-list']);
   }
@@ -71,22 +90,44 @@ export class CompanyOwnerPanelComponent implements OnInit {
     this.router.navigate(['/administrator/new-admin']);
   }
 
-
+  // Open modal for creating a new company
   openModal(modal: string) {
+    if (modal === 'modalCreateCompany') {
+      this.modalCreateCompany = true;
+    }
     if (modal === 'modalShowCompanies') {
       this.modalShowCompanies = true;
     }
   }
 
+  // Close modal
   closeModal(modal: string) {
+    if (modal === 'createCompany') {
+      this.modalCreateCompany = false;
+    }
     if (modal === 'showCompanies') {
       this.modalShowCompanies = false;
     }
   }
 
+  // Close modal when clicking outside the modal (backdrop)
   closeModalBackdrop(event: MouseEvent, modal: string) {
     if ((event.target as HTMLElement).classList.contains('modal')) {
       this.closeModal(modal);
     }
+  }
+
+  // Handle the company creation form submission
+  createCompany(): void {
+    this.apiCompany.createCompany(this.newCompany).subscribe({
+      next: (response) => {
+        console.log('Company created successfully', response);
+        this.closeModal('createCompany');
+        this.getCompany(); // Refresh the list of companies
+      },
+      error: (err) => {
+        console.error('Error creating company', err);
+      }
+    });
   }
 }

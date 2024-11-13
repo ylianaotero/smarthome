@@ -24,6 +24,7 @@ export class AdministratorPanelComponent implements OnInit {
   selectedRole: string = '';
   selectedCompanyName: string = '';
   selectedOwner: string = '';
+  selectedEmail: string = '';
 
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
@@ -39,7 +40,7 @@ export class AdministratorPanelComponent implements OnInit {
     //this.getUsers();
     //this.getCompanies();
   }
-  
+
   getUsers(): void {
     const request: GetUsersRequest = {
       fullName: this.selectedFullName,
@@ -59,7 +60,8 @@ export class AdministratorPanelComponent implements OnInit {
   getCompanies(): void {
     const request: GetCompaniesRequest = {
       name: this.selectedCompanyName,
-      owner: this.selectedOwner
+      owner: this.selectedOwner,
+      ownerEmail: this.selectedEmail
     };
 
     this.apiCompany.getCompanies(request).subscribe({
