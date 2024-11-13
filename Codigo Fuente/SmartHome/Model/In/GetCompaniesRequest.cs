@@ -6,6 +6,7 @@ public class GetCompaniesRequest
 {
     public string? Name { get; set; }
     public string? Owner { get; set; }
+    public string? OwnerEmail { get; set; }
     
     private const string EmptyString = "";
     private const char SpaceChar = ' ';
@@ -51,7 +52,9 @@ public class GetCompaniesRequest
         return company => (string.IsNullOrEmpty(name) || 
                         company.Owner.Name.ToLower().Contains(name.ToLower()) || 
                         company.Owner.Surname.ToLower().Contains(name.ToLower())) &&
-                          (string.IsNullOrEmpty(Name) || company.Name.ToLower().Contains(Name.ToLower()));
+                          (string.IsNullOrEmpty(Name) || company.Name.ToLower().Contains(Name.ToLower())) && 
+                          (string.IsNullOrEmpty(OwnerEmail) || company.Owner.Email.ToLower().Equals(OwnerEmail.ToLower()));
+                          
     }
     
     private Func<Company, bool> FilterWithFullName(string name, string surname)
@@ -61,6 +64,7 @@ public class GetCompaniesRequest
 
         return company => (company.Owner.Name.ToLower().Contains(lowerCaseName) &&
                         company.Owner.Surname.ToLower().Contains(lowerCaseSurname)) &&
-                          (string.IsNullOrEmpty(Name) || company.Name.ToLower().Contains(Name.ToLower()));
+                          (string.IsNullOrEmpty(Name) || company.Name.ToLower().Contains(Name.ToLower())) && 
+                          (string.IsNullOrEmpty(OwnerEmail) || company.Owner.Email.ToLower().Equals(OwnerEmail.ToLower()));
     }
 }
