@@ -327,13 +327,10 @@ public class UserServiceTest
     public void TestDeleteUserNotFound()
     {
         _mockUserRepository
-            .Setup(v => v
-                .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
-            .Returns(_listOfUsers);
-        
-        _userService.DeleteUser(1);
-        
-        _mockUserRepository.Verify();
+            .Setup(repo => repo.GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<User>());
+
+        _userService.DeleteUser(999);
     }
     
     [TestMethod]
