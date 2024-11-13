@@ -137,30 +137,23 @@ testem.log
 Thumbs.db
 
 # Ignorar la carpeta node_modules
-../Frontend/front/node_modules/
+Codigo Fuente/Frontend/front/node_modules/
 
-../Frontend/front/.angular/cache/
+Codigo Fuente/Frontend/front/.angular/cache/
 
-../Frontend/front/dist/front/browser/
+Codigo Fuente/Frontend/front/dist/front/browser/
 
 .idea/.idea.SmartHome/.idea/workspace.xml
 
-../Frontend/front/.angular/
+Codigo Fuente/Frontend/front/.angular/
 
-../Frontend/front/dist/
+Codigo Fuente/Frontend/front/dist/
 
-../Frontend/front/node_modules/
+Codigo Fuente/Frontend/front/node_modules/
 
 # Ignorar carpetas de Angular y dist
-../Frontend/front/.angular/
-../Frontend/front/dist/
-
-# Ignorar node_modules
-node_modules/
-
-# Ignorar archivos de configuración de npm
-package-lock.json
-package.json
+Codigo Fuente/Frontend/front/.angular/
+Codigo Fuente/Frontend/front/dist/
 
 
 
