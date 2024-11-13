@@ -1,57 +1,48 @@
-import { Component } from '@angular/core';
-import {GetDeviceRequest, GetDeviceResponse, GetDevicesResponse} from '../interfaces/devices';
-import {Router} from '@angular/router';
-import {AdministratorService} from '../shared/administrator.service';
-import {DevicesService} from '../shared/devices.service';
-
-interface Device {
-  name: string;
-  model: string;
-  photoUrl: string;
-  companyName: string;
-}
+import { Component, OnInit } from '@angular/core';
+import {GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse} from '../interfaces/devices';
+import { Router } from '@angular/router';
+import { AdministratorService } from '../shared/administrator.service';
+import { DevicesService } from '../shared/devices.service';
 
 @Component({
   selector: 'app-devices-list',
   templateUrl: './devices-list.component.html',
   styleUrls: ['./devices-list.component.css']
 })
-
-
-export class DevicesListComponent {
-  ngOnInit(): void {
-    this.getDevices();
-  }
-
+export class DevicesListComponent implements OnInit {
   userName: string;
-  constructor(private router: Router, private api: AdministratorService, private apiDevices : DevicesService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
-  }
-
-
   devices: GetDeviceResponse[] = [];
-
-  modalDevice: string | null = '';
-
-  modalImage: string | null = null;
-  isModalOpen = false;
+  deviceTypes: string[] = [];
+  totalDevices: number = 0;
+  currentPage: number = 1;
+  pageSize: number = 1;
 
   selectedName: string = '';
   selectedModel: string = '';
   selectedCompany: string = '';
   selectedKind: string = '';
 
-  totalDevices: number = 0;
-  currentPage: number = 1;
-  pageSize: number = 1;
+  modalDevice: string | null = '';
+  modalImage: string | null = null;
+  isModalOpen = false;
 
+  constructor(private router: Router, private api: AdministratorService, private apiDevices: DevicesService) {
+    this.userName = this.api.currentSession?.user?.name || 'Usuario';
+  }
+
+  ngOnInit(): void {
+    this.getDevices();
+    this.getDevicesTypes();
+  }
+
+  // Fetch devices based on current filter values
   getDevices(): void {
     const request: GetDeviceRequest = {
       name: this.selectedName,
       model: this.selectedModel,
       company: this.selectedCompany,
       kind: this.selectedKind
-    }
+    };
 
     this.apiDevices.getDevices(request).subscribe({
       next: (res: GetDevicesResponse) => {
@@ -62,19 +53,27 @@ export class DevicesListComponent {
     });
   }
 
-  // Open modal and set image
+  getDevicesTypes(): void {
+    this.apiDevices.getDeviceTypes().subscribe({
+      next: (res: GetDeviceTypesResponse) => {
+        this.deviceTypes = res.deviceTypes || [];
+        console.log(res.deviceTypes);
+      }
+    });
+  }
+
+  // Modal management
   openModal(imageUrl: string | null, device: string | null) {
     this.modalDevice = device;
     this.modalImage = imageUrl;
     this.isModalOpen = true;
   }
 
-  // Close modal
   closeModal() {
     this.isModalOpen = false;
   }
 
   doNothing() {
-    // Do nothing
+    // Placeholder function
   }
 }

@@ -20,6 +20,31 @@
   </div>
   <h1 class="text-center mb-4">Lista de dispositivos</h1>
 
+  <!-- Filter Form -->
+  <form class="mb-4">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName" name="name">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel" name="model">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por empresa" [(ngModel)]="selectedCompany" name="company">
+      </div>
+      <div class="col">
+        <!-- Dropdown for Device Types -->
+        <select class="form-control" [(ngModel)]="selectedKind" name="kind">
+          <option value="">Filtrar por tipo</option>
+          <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      <div class="col">
+        <button type="button" class="btn btn-primary" (click)="getDevices()">Update</button>
+      </div>
+    </div>
+  </form>
+
   <!-- Card container holding the cards -->
   <div class="card-container">
     <!-- Device card template -->

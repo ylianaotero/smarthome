@@ -1,4 +1,3 @@
-/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -6,16 +5,24 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Body Background */
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   background: linear-gradient(135deg, #74b9ff, #a29bfe);
   color: #333;
-  padding: 20px 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* Header Styling */
+
 .header {
-  background-color: #6200ea; /* Accent color for professionalism */
+  background-color: #6200ea;
   color: white;
   padding: 1.5rem;
   text-align: center;
@@ -25,7 +32,6 @@ body {
   font-weight: 700;
 }
 
-/* Back Button */
 .back-btn {
   position: absolute;
   top: 20px;
@@ -42,7 +48,6 @@ body {
   color: #6200ea;
 }
 
-/* Card Container */
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -52,20 +57,21 @@ body {
   border-radius: 12px;
   background-color: white;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  min-width: 300px;
 }
 
-/* Individual Cards */
 .card {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  cursor: pointer; /* Makes the entire card clickable */
+  cursor: pointer;
   transition: transform 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-5px); /* Adds a subtle hover effect */
+  transform: translateY(-5px);
 }
 
 .card-title {
@@ -82,61 +88,30 @@ body {
 .card-body {
   flex-grow: 1;
   padding: 1.5rem;
-  cursor: pointer; /* Ensures the text part is also clickable */
-}/*
-.card {
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: white;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-  height: 100%;
-}
-.card:hover {
-  transform: scale(1.02);
-}
-.card-img-top {
-  height: 180px;
-  object-fit: cover;
+  cursor: pointer;
 }
 
-/* Card Body */
-/*
-.card-body {
-  padding: 1.5rem;
-}
-.card-title {
-  font-weight: bold;
-  font-size: 1.25rem;
-  color: #007bff;
-  margin-bottom: 0.5rem;
-}
-.card-text {
-  font-size: 14px;
-  color: #6c757d;
-  margin-bottom: 0.75rem;
-}
-
-*/
-
-/* Container Padding */
 .container {
   padding-top: 1rem;
 }
 
-/* Adjusted Global Text */
 h1 {
   font-weight: 600;
   margin-bottom: 1rem;
   color: white;
 }
+
 p {
   font-weight: 300;
   color: #666;
 }
 
-/* Button Group */
 .button-group {
   display: flex;
   gap: 15px;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
 }
