@@ -3,11 +3,13 @@ import { sessionModel, sessionRequest } from '../logIn/sessionModel';
 import { Injectable } from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {
+  CreateCompanyRequest,
   GetCompaniesRequest,
   GetCompaniesResponse,
   PostCompaniesRequest,
   PostCompaniesResponse
 } from '../interfaces/companies';
+import {PostAdministratorRequest} from '../interfaces/users';
 
 @Injectable({
     providedIn: 'root'
@@ -52,15 +54,13 @@ export class CompanyService {
             {params, headers: {'Authorization': `${this.currentSession?.token}`}});
      }
 
-     createCompany(request: PostCompaniesRequest): Observable<PostCompaniesResponse> {
+     createCompany(request: CreateCompanyRequest): Observable<PostCompaniesResponse> {
        let params = new HttpParams();
-        params = request.name ? params.append('name', request.name ) : params;
-        params = request.rut ? params.append('rut', request.rut ) : params;
-        params = request.logoUrl ? params.append('logoUrl', request.logoUrl ) : params;
-        params = request.ownerId ? params.append('ownerId', request.ownerId.toString() ) : params;
-        return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', params,
-          {headers: {'Authorization': `${this.currentSession?.token}`}});
+       return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', request, {headers: {'Authorization': `${this.currentSession?.token}`}});
+
      }
+
+
 
 
 }

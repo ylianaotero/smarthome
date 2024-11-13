@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { CompanyService } from '../../../shared/company.service';
-import { GetCompaniesRequest, GetCompaniesResponse, GetCompanyResponse } from '../../../interfaces/companies';
+import {
+  CreateCompanyRequest,
+  GetCompaniesRequest,
+  GetCompaniesResponse,
+  GetCompanyResponse
+} from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
 
 @Component({
@@ -29,6 +34,10 @@ export class CompanyOwnerPanelComponent implements OnInit {
   selectedRUT: string = '';
   selectedEmail: string = '';
   selectedPhotoURL: string | null = '';
+
+  newCompanyName: string = '';
+  newCompanyRUT: string = '';
+  newCompanyLogoURL: string = '';
 
   // New company data
   newCompany = {
@@ -90,27 +99,22 @@ export class CompanyOwnerPanelComponent implements OnInit {
     this.router.navigate(['/administrator/new-admin']);
   }
 
-  // Open modal for creating a new company
   openModal(modal: string) {
-    if (modal === 'modalCreateCompany') {
-      this.modalCreateCompany = true;
-    }
     if (modal === 'modalShowCompanies') {
       this.modalShowCompanies = true;
+    } else if (modal === 'modalCreateCompany') {
+      this.modalCreateCompany = true;
     }
   }
 
-  // Close modal
   closeModal(modal: string) {
-    if (modal === 'createCompany') {
-      this.modalCreateCompany = false;
-    }
     if (modal === 'showCompanies') {
       this.modalShowCompanies = false;
+    } else if (modal === 'createCompany') {
+      this.modalCreateCompany = false;
     }
   }
 
-  // Close modal when clicking outside the modal (backdrop)
   closeModalBackdrop(event: MouseEvent, modal: string) {
     if ((event.target as HTMLElement).classList.contains('modal')) {
       this.closeModal(modal);
@@ -119,7 +123,12 @@ export class CompanyOwnerPanelComponent implements OnInit {
 
   // Handle the company creation form submission
   createCompany(): void {
-    this.apiCompany.createCompany(this.newCompany).subscribe({
+    this.newCompany.name = this.newCompanyName;
+    this.newCompany.rut = this.newCompanyRUT;
+    this.newCompany.logoUrl = this.newCompanyLogoURL;
+
+
+    this.apiCompany.createCompany(new CreateCompanyRequest(this.newCompanyName, this.newCompanyRUT, this.newCompanyLogoURL, this.newCompany.ownerId)).subscribe({
       next: (response) => {
         console.log('Company created successfully', response);
         this.closeModal('createCompany');
@@ -127,6 +136,10 @@ export class CompanyOwnerPanelComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error creating company', err);
+        console.log("Name: ", this.newCompanyName);
+        console.log("RUT: ", this.newCompanyRUT);
+        console.log("Logo URL: ", this.newCompanyLogoURL);
+        console.log("Owner ID: ", this.newCompany.ownerId);
       }
     });
   }
