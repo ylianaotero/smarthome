@@ -12,6 +12,9 @@
 <body>
 
 <div class="welcome-container text-center mt-5">
+  <div *ngIf="feedback" class="alert" [ngClass]="{'alert-success': companyCreatedCorrectly, 'alert-danger': !companyCreatedCorrectly}">
+    {{ feedback }}
+  </div>
   <h1 class="welcome-title">¡Hola, {{userName}}!</h1>
   <p>Bienvenido a la plataforma de gestión de empresas para dispositivos inteligentes</p>
 
@@ -78,6 +81,10 @@
         </div>
 
         <div class="modal-body p-4">
+          <div *ngIf="feedback" class="alert alert-warning mt-2">
+            {{ feedback }}
+          </div>
+
           <form (submit)="createCompany()">
             <div class="form-group">
               <label for="companyName">Nombre de la Empresa</label>
@@ -85,7 +92,7 @@
             </div>
             <div class="form-group">
               <label for="companyRUT">RUT</label>
-              <input type="text" id="companyRUT" class="form-control" [(ngModel)]="newCompanyRUT" name="rut" required>
+              <input type="number" id="companyRUT" class="form-control" [(ngModel)]="newCompanyRUT" name="rut" required>
             </div>
             <div class="form-group">
               <label for="companyLogoUrl">URL del Logo</label>

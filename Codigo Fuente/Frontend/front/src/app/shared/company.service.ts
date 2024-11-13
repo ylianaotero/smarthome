@@ -6,10 +6,8 @@ import {
   CreateCompanyRequest,
   GetCompaniesRequest,
   GetCompaniesResponse,
-  PostCompaniesRequest,
   PostCompaniesResponse
 } from '../interfaces/companies';
-import {PostAdministratorRequest} from '../interfaces/users';
 
 @Injectable({
     providedIn: 'root'
@@ -55,9 +53,8 @@ export class CompanyService {
      }
 
      createCompany(request: CreateCompanyRequest): Observable<PostCompaniesResponse> {
-       let params = new HttpParams();
-       return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', request, {headers: {'Authorization': `${this.currentSession?.token}`}});
-
+       return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', request,
+         {headers: {'Authorization': `${this.currentSession?.token}`}});
      }
 
 

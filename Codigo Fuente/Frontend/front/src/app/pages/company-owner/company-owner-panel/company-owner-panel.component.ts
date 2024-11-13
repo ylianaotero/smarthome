@@ -8,7 +8,7 @@ import {
   GetCompaniesResponse,
   GetCompanyResponse
 } from '../../../interfaces/companies';
-import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
+import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
 
 @Component({
   selector: 'app-company-owner-panel',
@@ -16,19 +16,17 @@ import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../inte
   styleUrl: './company-owner-panel.component.css'
 })
 export class CompanyOwnerPanelComponent implements OnInit {
-
   userName: string;
   userEmail: string;
+  userId: number;
 
   currentPage: number = 1;
   pageSize: number = 1;
   totalCompanies: number = 0;
 
-  // Modal state for showing company details and creating company
   modalShowCompanies: boolean = false;
   modalCreateCompany: boolean = false;
 
-  // Data for the selected company
   selectedCompanyName: string = '';
   selectedOwner: string = '';
   selectedRUT: string = '';
@@ -39,25 +37,20 @@ export class CompanyOwnerPanelComponent implements OnInit {
   newCompanyRUT: string = '';
   newCompanyLogoURL: string = '';
 
-  // New company data
-  newCompany = {
-    name: '',
-    rut: '',
-    logoUrl: '',
-    ownerId: 0 // This will be set to the current user's ID
-  };
-
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
+
+  feedback: string = '';
+  companyCreatedCorrectly: boolean = false;
 
   constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
     this.userEmail = this.api.currentSession?.user?.email || '';
+    this.userId = this.api.currentSession?.user?.id || 0;
   }
 
   ngOnInit(): void {
     this.getCompany();
-    this.setOwnerId(); // Set the ownerId when the component initializes
   }
 
   ownerHasCompany(): boolean {
@@ -86,11 +79,6 @@ export class CompanyOwnerPanelComponent implements OnInit {
     });
   }
 
-  // Set the ownerId to the current user's ID
-  setOwnerId(): void {
-    this.newCompany.ownerId = this.api.currentSession?.user?.id || 0;
-  }
-
   goViewDevices(): void {
     this.router.navigate(['home/devices-list']);
   }
@@ -99,48 +87,82 @@ export class CompanyOwnerPanelComponent implements OnInit {
     this.router.navigate(['/administrator/new-admin']);
   }
 
-  openModal(modal: string) {
+  openModal(modal: string): void {
     if (modal === 'modalShowCompanies') {
       this.modalShowCompanies = true;
     } else if (modal === 'modalCreateCompany') {
       this.modalCreateCompany = true;
     }
+    document.body.classList.add('modal-open');
+    this.createBackdrop();
   }
 
-  closeModal(modal: string) {
+  closeModal(modal: string): void {
     if (modal === 'showCompanies') {
       this.modalShowCompanies = false;
     } else if (modal === 'createCompany') {
       this.modalCreateCompany = false;
     }
+    this.feedback = '';
+    document.body.classList.remove('modal-open');
+    this.removeBackdrop();
   }
 
-  closeModalBackdrop(event: MouseEvent, modal: string) {
+  closeModalBackdrop(event: MouseEvent, modal: string): void {
     if ((event.target as HTMLElement).classList.contains('modal')) {
       this.closeModal(modal);
     }
   }
 
-  // Handle the company creation form submission
   createCompany(): void {
-    this.newCompany.name = this.newCompanyName;
-    this.newCompany.rut = this.newCompanyRUT;
-    this.newCompany.logoUrl = this.newCompanyLogoURL;
+    if (this.newCompanyName === '' || this.newCompanyRUT === '' || this.newCompanyLogoURL === '') {
+      this.feedback = 'Por favor, completa todos los campos obligatorios.';
+      return
+    }
 
-
-    this.apiCompany.createCompany(new CreateCompanyRequest(this.newCompanyName, this.newCompanyRUT, this.newCompanyLogoURL, this.newCompany.ownerId)).subscribe({
+    this.apiCompany
+      .createCompany(new CreateCompanyRequest
+      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.userId))
+      .subscribe({
       next: (response) => {
         console.log('Company created successfully', response);
         this.closeModal('createCompany');
-        this.getCompany(); // Refresh the list of companies
+        this.getCompany();
+        this.feedback = 'La empresa fue creada con éxito.';
+        this.companyCreatedCorrectly = true;
       },
       error: (err) => {
         console.error('Error creating company', err);
-        console.log("Name: ", this.newCompanyName);
-        console.log("RUT: ", this.newCompanyRUT);
-        console.log("Logo URL: ", this.newCompanyLogoURL);
-        console.log("Owner ID: ", this.newCompany.ownerId);
+        if (err.status === 400) {
+          this.feedback = 'Por favor, completa todos los campos obligatorios.';
+          return
+        }
+        if (err.status === 401 || err.status === 403) {
+          this.feedback = 'No tienes permisos para realizar esta acción.';
+          return
+        }
+        if (err.status === 404) {
+          this.feedback = 'No eres dueño de empresa o ya tienes una empresa asociada.';
+          return
+        }
+        if (err.status === 415) {
+          this.feedback = 'El formato no es válido.';
+          return
+        }
       }
     });
+  }
+
+  private createBackdrop(): void {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop fade show';
+    document.body.appendChild(backdrop);
+  }
+
+  private removeBackdrop(): void {
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+      document.body.removeChild(backdrop);
+    }
   }
 }

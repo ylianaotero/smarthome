@@ -16,13 +16,6 @@ export interface GetCompanyResponse {
     logoURL: string | null;
 }
 
-export interface PostCompaniesRequest {
-  name: string | null;
-  rut: string | null;
-  logoUrl: string | null;
-  ownerId: number | null;
-}
-
 export class CreateCompanyRequest {
   name: string | null;
   rut: string | null;
