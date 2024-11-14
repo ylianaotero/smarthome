@@ -1,9 +1,10 @@
-/* Background and basic styling */
 html, body {
   height: 100%;
 }
 
-/* Flex centering for content */
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
 }
