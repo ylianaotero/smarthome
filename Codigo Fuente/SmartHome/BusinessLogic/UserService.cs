@@ -63,8 +63,12 @@ public class UserService(IRepository<User> userRepository) : IUserService
         if(user.Roles.Count > 1)
         {
             user.DeleteRole(user.Roles.Find(r => r is Administrator));
+            userRepository.Update(user);
         }
-        userRepository.Delete(user);
+        else
+        {
+            userRepository.Delete(user);
+        }
     }
     
     public void UpdateUser(long id, User user)
