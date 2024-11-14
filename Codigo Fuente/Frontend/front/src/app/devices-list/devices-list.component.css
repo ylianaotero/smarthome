@@ -20,6 +20,26 @@ body {
   min-height: 100vh;
 }
 
+.btn-update {
+  width: 200px;
+  padding: 9px 20px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  background-color: #6c5ce7;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-update:hover {
+  background-color: #5a4ec9;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  font-palette: light;
+}
 
 .header {
   background-color: #6200ea;
@@ -32,22 +52,6 @@ body {
   font-weight: 700;
 }
 
-.back-btn {
-  position: absolute;
-  top: 20px;
-  left: 25px;
-}
-.back-btn button {
-  font-size: 1.25rem;
-  color: #333;
-  transition: color 0.2s ease;
-  background-color: transparent;
-  border: none;
-}
-.back-btn button:hover {
-  color: #6200ea;
-}
-
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -57,7 +61,7 @@ body {
   border-radius: 12px;
   background-color: white;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
+  max-width: 100%;
   min-width: 300px;
 }
 
@@ -111,7 +115,3 @@ p {
   gap: 15px;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-}

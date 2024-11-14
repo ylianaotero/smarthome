@@ -13,7 +13,7 @@ import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../int
 @Component({
   selector: 'app-company-owner-panel',
   templateUrl: './company-owner-panel.component.html',
-  styleUrl: './company-owner-panel.component.css'
+  styleUrls: ['./company-owner-panel.component.css' , '../../../../styles.css']
 })
 export class CompanyOwnerPanelComponent implements OnInit {
   userName: string;

@@ -13,11 +13,6 @@
 </head>
 <body>
 <div class="container my-5">
-  <div class="back-btn">
-    <button (click)="doNothing()" class="btn btn-light border rounded-circle shadow-sm">
-      <i class="bi bi-arrow-left"></i>
-    </button>
-  </div>
   <h1 class="text-center mb-4">Lista de dispositivos</h1>
 
   <form class="mb-4">
@@ -38,7 +33,7 @@
         </select>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-primary" (click)="getDevices()">Update</button>
+        <button type="button" class="btn-update" (click)="getDevices()">Update</button>
       </div>
     </div>
   </form>
