@@ -28,7 +28,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 320px;
-  position: relative; /* Para posicionar elementos dentro del contenedor */
+  position: fixed; /* Para posicionar elementos dentro del contenedor */
 }
 
 /* Estilo del título */
