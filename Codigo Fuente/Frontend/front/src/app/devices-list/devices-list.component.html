@@ -9,33 +9,32 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="devices-list.component.css">
 </head>
 <body>
 <div class="container my-5">
-  <h1 class="text-center mb-4">Lista de dispositivos</h1>
+  <h1 class="page-title">Lista de dispositivos</h1>
 
   <form class="mb-4">
-    <div class="form-row">
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName" name="name">
+      <div class="form-row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName" name="name">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel" name="model">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Filtrar por empresa" [(ngModel)]="selectedCompany" name="company">
+        </div>
+        <div class="col">
+          <select class="form-control" [(ngModel)]="selectedKind" name="kind">
+            <option value="">Filtrar por tipo</option>
+            <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <button type="button" class="input-btn" (click)="getDevices()">Update</button>
+        </div>
       </div>
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel" name="model">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Filtrar por empresa" [(ngModel)]="selectedCompany" name="company">
-      </div>
-      <div class="col">
-        <select class="form-control" [(ngModel)]="selectedKind" name="kind">
-          <option value="">Filtrar por tipo</option>
-          <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
-        </select>
-      </div>
-      <div class="col">
-        <button type="button" class="btn-update" (click)="getDevices()">Update</button>
-      </div>
-    </div>
   </form>
 
   <div class="card-container">
