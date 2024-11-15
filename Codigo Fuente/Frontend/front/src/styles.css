@@ -133,6 +133,7 @@ body {
 }
 
 .back-btn {
+  width: 10px;
   top: 0px;
   left: 0px;
   background-color: transparent;
@@ -186,4 +187,8 @@ body {
 
 .input-btn:hover {
   background-color: #4b4edb;
+}
+
+.feedback-error {
+  color: #b20808;
 }
