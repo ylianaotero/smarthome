@@ -62,12 +62,34 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: fixed;
   height: 80vh;
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
 }
 
 .welcome-container:hover {
   transform: translate(-50%, -50%) translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
+
+.welcome-container p {
+  color: #201f1f;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.button-container {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+}
+
 
 /* Title styling */
 .welcome-title {
@@ -76,6 +98,7 @@ body {
   font-weight: bold;
   margin-bottom: 1.5rem;
 }
+
 
 /* Modal backdrop for focus effect */
 .modal-backdrop {

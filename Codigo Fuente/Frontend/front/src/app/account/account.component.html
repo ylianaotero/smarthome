@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="./account.component.css">
+
 </head>
 <body>
 
@@ -15,19 +15,21 @@
   <h1 class="welcome-title">¡Hola, Home Owner: {{ userName }}!!</h1>
   <p>Bienvenido a la plataforma de gestión de hogares.</p>
 
-  <a class="btn btn-primary" (click)="goCreateHome()">
-    <i class="bi bi-house-door-fill"></i> Crear un Hogar
-  </a>
-  <a class="btn btn-primary" (click)="goHomesOfHomeOwner()">
-    <i class="bi bi-list-ul"></i> Listar Hogares
-  </a>
-  <a class="btn btn-primary" (click)="openModal('showDevices')">
-    <i class="bi bi-display"></i> Listar Dispositivos
-  </a>
+  <div class="button-container" >
+    <a class="btn btn-primary" (click)="goCreateHome()">
+      <i class="bi bi-house-door-fill"></i> Crear un Hogar
+    </a>
+    <a class="btn btn-primary" (click)="goHomesOfHomeOwner()">
+      <i class="bi bi-list-ul"></i> Listar Hogares
+    </a>
+    <a class="btn btn-primary" (click)="openModal('showDevices')">
+      <i class="bi bi-display"></i> Listar Dispositivos
+    </a>
 
-  <a class="btn btn-primary" (click)="openModal('showSupportedDevices')">
-    <i class="bi bi-gear"></i> Listar Dispositivos Soportados
-  </a>
+    <a class="btn btn-primary" (click)="openModal('showSupportedDevices')">
+      <i class="bi bi-gear"></i> Listar Dispositivos Soportados
+    </a>
+  </div>
 
 </div>
 

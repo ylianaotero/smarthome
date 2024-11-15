@@ -7,7 +7,7 @@ import {DeviceFilterRequestModel, deviceModel} from './deviceModels';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css']
+  styleUrls: ['../../styles.css']
 })
 export class AccountComponent implements OnInit {
 
