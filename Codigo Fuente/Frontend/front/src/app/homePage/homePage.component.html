@@ -8,12 +8,14 @@
   <link rel="stylesheet" href="homePage.component.css">
 </head>
 <body>
-<div class="home-container">
+<div class="welcome-container">
+  <h1 class="welcome-title">Bienvenido a SmartHome</h1>
   <h1>Bienvenido a SmartHome</h1>
-  <p>¿Qué deseas hacer?</p>
-  <div class="button-group">
-    <button class="action-btn login-btn" (click)="goToLogin()">Iniciar Sesión</button>
-    <button class="action-btn register-btn" (click)="goToRegister()">Registrarse como Dueño de Hogar</button>
+  <div class="button-container">
+    <img alt="Logo de SmartHome" ngSrc="https://i.postimg.cc/kG8wN875/smarthomelogo.png" width="200" height="200">
+    <p>¿Qué deseas hacer?</p>
+    <button class="btn" (click)="goToLogin()">Iniciar Sesión</button>
+    <button class="btn" (click)="goToRegister()">Registrarse como Dueño de Hogar</button>
   </div>
 </div>
 </body>

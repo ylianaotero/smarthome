@@ -19,6 +19,7 @@ import {ImportComponent} from './import/import.component';
 import { UserPanelComponent } from './pages/user-panel/user-panel.component';
 import { CompanyOwnerPanelComponent } from './pages/company-owner/company-owner-panel/company-owner-panel.component';
 import {DevicesListComponent} from './devices-list/devices-list.component';
+import {NgOptimizedImage} from '@angular/common';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -46,7 +47,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     NgbModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgOptimizedImage
   ],
   declarations: [
     AppComponent,

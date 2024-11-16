@@ -92,6 +92,18 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+.welcome-container img {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  position: absolute;
+  left: 25%;
+  top: 120px;
+  display: block;
+}
+
 .button-container {
   margin-top: 1.5rem;
   display: flex;
@@ -103,7 +115,6 @@ body {
   font-family: 'Poppins', sans-serif;
 
 }
-
 
 
 /* Title styling */

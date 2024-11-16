@@ -70,8 +70,4 @@ export class DevicesListComponent implements OnInit {
   closeModal(): void {
     this.isModalOpen = false;
   }
-
-  doNothing(): void {
-    // Placeholder function
-  }
 }
