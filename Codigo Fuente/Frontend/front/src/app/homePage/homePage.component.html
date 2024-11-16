@@ -9,14 +9,21 @@
 </head>
 <body>
 <div class="welcome-container">
-  <h1 class="welcome-title">Bienvenido a SmartHome</h1>
-  <h1>Bienvenido a SmartHome</h1>
-  <div class="button-container">
-    <img alt="Logo de SmartHome" ngSrc="https://i.postimg.cc/kG8wN875/smarthomelogo.png" width="200" height="200">
-    <p>¿Qué deseas hacer?</p>
-    <button class="btn" (click)="goToLogin()">Iniciar Sesión</button>
-    <button class="btn" (click)="goToRegister()">Registrarse como Dueño de Hogar</button>
-  </div>
+  <table class="table">
+    <tr>
+      <td>
+        <h1>Bienvenido a SmartHome</h1>
+      </td>
+        <tr>
+          <td>
+            <div class="button-container">
+              <img alt="Logo de SmartHome" ngSrc="https://i.postimg.cc/kG8wN875/smarthomelogo.png" width="200" height="200">
+              <button class="btn" (click)="goToLogin()">Iniciar Sesión</button>
+              <button class="btn" (click)="goToRegister()">Registrarse como Dueño de Hogar</button>
+            </div>
+          </td>
+        </tr>
+  </table>
 </div>
 </body>
 </html>
