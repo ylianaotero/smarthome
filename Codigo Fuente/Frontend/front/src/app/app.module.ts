@@ -24,20 +24,19 @@ import {NgOptimizedImage} from '@angular/common';
 const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'login', component: LogInComponent },
-  { path: 'home-owners', component: SignUpHomeOwnerComponent },
+  { path: 'devices', component: DevicesListComponent },
+  { path: 'administrators', component: AdministratorPanelComponent },
+  { path: 'administrators/create-user', component: CreateUserComponent },
+  { path: 'administrators/delete-admin', component: DeleteAdminComponent },
+  { path: 'home-owners/create', component: SignUpHomeOwnerComponent },
+  { path: 'home-owner/homes', component: HomesOfHomeOwnerComponent },
+  { path: 'home-owner/homes/create', component: CreateHomeComponent },
+  { path: 'company-owners/create', component: CreateUserComponent },
+  { path: 'company-owners/imports', component: ImportComponent },
+
   { path: 'account', component: AccountComponent },
   { path: 'home', component: HomePageComponent },
-  { path: 'homes', component: CreateHomeComponent },
-  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
-  { path: 'administrator', component: AdministratorPanelComponent },
-  { path: 'administrator/new-admin', component: CreateUserComponent },
-  { path: 'administrator/new-companyOwner', component: CreateUserComponent },
-  { path: 'administrator/delete-admin', component: DeleteAdminComponent },
-  { path: 'imports', component: ImportComponent },
   { path: 'home/user-panel', component: UserPanelComponent },
-  { path: 'home/company-owner-panel', component: CompanyOwnerPanelComponent },
-  { path: 'home/devices-list', component: DevicesListComponent }
-
 ];
 
 @NgModule({
