@@ -10,46 +10,37 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="homesOfHomeOwner.component.css">
 </head>
 <body>
 
-<div class="container mt-4">
-  <div class="back-button">
-    <button (click)="goHome()" class="btn btn-white">
-      <i class="bi bi-arrow-left"></i>
-    </button>
-  </div>
-  <h1 class="text-center mb-4">Lista de mis hogares</h1>
-  <div class="row">
-    <div class="col-md-6 mb-4" *ngFor="let home of homes">
-      <div class="card shadow-sm d-flex flex-column h-100">
-        <div class="card-body flex-grow-1">
-          <h5 class="card-title">Home ID: {{ home.id }}</h5>
-          <p class="card-text">Dirección: {{ home.street }}</p>
-          <p class="card-text">Número de Puerta: {{ home.doorNumber }}</p>
-          <div class="mt-auto">
-            <button class="btn btn-primary btn-block mb-2" (click)="openModal(home, 'addMembers')">
-              <i class="fas fa-user-plus"></i> Agregar Miembro
-            </button>
-            <button class="btn btn-secondary btn-block mb-2" (click)="openModal(home, 'addDevice')">
-              <i class="fas fa-plug"></i> Asociar Dispositivo
-            </button>
-            <button class="btn btn-info btn-block mb-2"  (click)="openModal(home, 'showMembers')">
-              <i class="fas fa-users"></i> Listar Miembros
-            </button>
+<div class="container my-5">
+  <h1 class="page-title">Mis hogares</h1>
+  <div class="card-container">
+    <div class="card shadow-sm h-100" *ngFor="let home of homes">
+      <div class="card-body">
+        <h5 class="card-title">Home ID: {{ home.id }}</h5>
+        <p class="card-text">Dirección: {{ home.street }}</p>
+        <p class="card-text">Número de Puerta: {{ home.doorNumber }}</p>
+        <div class="mt-auto">
+          <button class="btn btn-primary btn-block mb-2" (click)="openModal(home, 'addMembers')">
+            <i class="fas fa-user-plus"></i> Agregar Miembro
+          </button>
+          <button class="btn btn-secondary btn-block mb-2" (click)="openModal(home, 'addDevice')">
+            <i class="fas fa-plug"></i> Asociar Dispositivo
+          </button>
+          <button class="btn btn-info btn-block mb-2"  (click)="openModal(home, 'showMembers')">
+            <i class="fas fa-users"></i> Listar Miembros
+          </button>
 
-            <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'showDevices')">
-              <i class="fas fa-tablet-alt"></i> Listar Dispositivos
-            </button>
-
-          </div>
+          <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'showDevices')">
+            <i class="fas fa-tablet-alt"></i> Listar Dispositivos
+          </button>
         </div>
-      </div>
     </div>
     <ng-template #noHomes>
       <p class="text-center">No se encontraron casas para este propietario.</p>
     </ng-template>
+    </div>
   </div>
 </div>
 
