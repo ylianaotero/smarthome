@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creación de empresa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="welcome-container">
+  <button (click)="goBack()" class="back-btn">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+  <h1 class="welcome-title">Creación de Empresa</h1>
+  <form (ngSubmit)="createCompany()" #createCompanyForm="ngForm" novalidate>
+    <div class="input-group">
+      <label for="name">Nombre</label>
+      <input type="text" id="name" name="name" [(ngModel)]="newCompanyName" #name="ngModel" required placeholder="Ingresa un nombre">
+      <div *ngIf="name.invalid && (name.touched || createCompanyForm.submitted)" class="error-message">
+        <p>El nombre es obligatorio.</p>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="rut">RUT</label>
+      <input type="number" id="rut" name="rut" [(ngModel)]="newCompanyRUT" #rut="ngModel" required placeholder="Ingresa un RUT">
+      <div *ngIf="rut.invalid && (rut.touched || createCompanyForm.submitted)" class="error-message">
+        <p>El RUT es obligatorio.</p>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="logo">Logo</label>
+      <input type="text" id="logo" name="logo" [(ngModel)]="newCompanyLogoURL" #logo="ngModel" required placeholder="Ingresa la URL del logo">
+      <div *ngIf="logo.invalid && (logo.touched || createCompanyForm.submitted)" class="error-message">
+        <p>El logo es obligatorio.</p>
+      </div>
+    </div>
+    <button type="submit" class="input-btn" [disabled]="createCompanyForm.invalid">Crear empresa</button>
+  </form>
+  <p class="feedback">{{ feedback }}</p>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -23,6 +23,7 @@ import {NgOptimizedImage} from '@angular/common';
 import {ListUsersComponent} from './pages/administrators/list-users/list-users.component';
 import {ListCompaniesComponent} from './pages/administrators/list-companies/list-companies.component';
 import {CreateDeviceComponent} from './pages/company-owners/create-device/create-device.component';
+import {CreateCompanyComponent} from './pages/company-owners/create-company/create-company.component';
 
 const routes: Routes = [
   { path: '', component: HomePanelComponent },
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'company-owners', component: CompanyOwnersPanelComponent },
   { path: 'company-owners/import-device', component: ImportDeviceComponent },
   { path: 'company-owners/create-device', component: CreateDeviceComponent },
+  { path: 'company-owners/create-company', component: CreateCompanyComponent },
   { path: 'home', component: HomePanelComponent },
   { path: 'home/user-panel', component: UserPanelComponent },
 ];
@@ -75,7 +77,8 @@ const routes: Routes = [
     DevicesPanelComponent,
     ListUsersComponent,
     ListCompaniesComponent,
-    CreateDeviceComponent
+    CreateDeviceComponent,
+    CreateCompanyComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

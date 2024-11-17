@@ -21,7 +21,7 @@
     <a *ngIf="ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalShowCompanies')">
       <i class="bi bi-list-ul" ></i> Ver empresa
     </a>
-    <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalCreateCompany')">
+    <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="goCreateCompany()">
       <i class="bi bi-list-ul" ></i> Crear empresa
     </a>
 
@@ -66,48 +66,6 @@
 
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary" (click)="closeModal('showCompanies')">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" id="createCompanyModal" tabindex="-1" role="dialog" aria-hidden="true"
-     [class.show]="modalCreateCompany" [style.display]="modalCreateCompany ? 'block' : 'none'"
-     (click)="closeModalBackdrop($event, 'createCompany')">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content rounded shadow-lg">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Crear Empresa</h5>
-        <button type="button" class="close text-white" (click)="closeModal('createCompany')" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body p-4">
-        <div *ngIf="feedback" class="alert alert-warning mt-2">
-          {{ feedback }}
-        </div>
-
-        <form (submit)="createCompany()">
-          <div class="form-group">
-            <label for="companyName">Nombre de la Empresa</label>
-            <input type="text" id="companyName" class="form-control" [(ngModel)]="newCompanyName" name="name" required>
-          </div>
-          <div class="form-group">
-            <label for="companyRUT">RUT</label>
-            <input type="number" id="companyRUT" class="form-control" [(ngModel)]="newCompanyRUT" name="rut" required>
-          </div>
-          <div class="form-group">
-            <label for="companyLogoUrl">URL del Logo</label>
-            <input type="url" id="companyLogoUrl" class="form-control" [(ngModel)]="newCompanyLogoURL" name="logoUrl">
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-primary" (click)="createCompany()">Crear</button>
-        <button type="button" class="btn btn-secondary" (click)="closeModal('createCompany')">Cancelar</button>
       </div>
     </div>
   </div>

@@ -91,6 +91,10 @@ export class CompanyOwnersPanelComponent implements OnInit {
     this.router.navigate(['company-owners/import-device']);
   }
 
+  goCreateCompany(): void {
+    this.router.navigate(['company-owners/create-company']);
+  }
+
   openModal(modal: string): void {
     if (modal === 'modalShowCompanies') {
       this.modalShowCompanies = true;
