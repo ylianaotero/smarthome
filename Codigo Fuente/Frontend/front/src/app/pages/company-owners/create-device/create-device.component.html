@@ -19,6 +19,12 @@
   <h2>Registrarse</h2>
   <form (ngSubmit)="createDevice(deviceName, deviceType, deviceModel, deviceDescription, deviceFunctionalities, deviceLocationType, devicePhotoUrls)" #signupForm="ngForm" novalidate>
 
+    <p>¿Qué tipo de dispositivo deseas crear?</p>
+    <select class="form-control" [(ngModel)]="deviceType" name="kind" id="kind">
+      <option value="" disabled selected>Selecciona un tipo</option>
+      <option *ngFor="let type of possibleDeviceTypes" [value]="type">{{ type }}</option>
+    </select>
+
     <div class="input-group">
       <label for="name">Nombre</label>
       <input type="text" id="name" name="name" [(ngModel)]="deviceName" #name="ngModel" required placeholder="Ingresa un nombre">

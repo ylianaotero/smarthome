@@ -39,7 +39,6 @@ const routes: Routes = [
   { path: 'home-owners/homes/create', component: CreateHomeComponent },
   { path: 'company-owners', component: CompanyOwnersPanelComponent },
   { path: 'company-owners/import-device', component: ImportDeviceComponent },
-  { path: 'company-owners/create-device', component: ImportDeviceComponent },
   { path: 'company-owners/create-device', component: CreateDeviceComponent },
   { path: 'home', component: HomePanelComponent },
   { path: 'home/user-panel', component: UserPanelComponent },

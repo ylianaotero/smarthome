@@ -29,12 +29,13 @@ export class PostWindowSensorRequest {
   functionalities: string[];
   photoUrls: string[];
 
-  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[]) {
+  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[], company: number | null) {
     this.name = name;
     this.model = model;
     this.description = description;
     this.functionalities = functionalities;
     this.photoUrls = photoUrls;
+    this.company = company;
   }
 }
 
@@ -47,13 +48,14 @@ export class PostSecurityCameraRequest {
   photoUrls: string[];
   locationType: string | null;
 
-  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[], locationType: string | null) {
+  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[], locationType: string | null, company: number | null) {
     this.name = name;
     this.model = model;
     this.description = description;
     this.functionalities = functionalities;
     this.photoUrls = photoUrls;
     this.locationType = locationType;
+    this.company = company;
   }
 }
 
@@ -65,12 +67,13 @@ export class PostSmartLampRequest {
   functionalities: string[];
   photoUrls: string[];
 
-  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[]) {
+  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[], company: number | null) {
     this.name = name;
     this.model = model;
     this.description = description;
     this.functionalities = functionalities;
     this.photoUrls = photoUrls;
+    this.company = company;
   }
 }
 
@@ -82,11 +85,12 @@ export class PostMotionSensorRequest {
   functionalities: string[];
   photoUrls: string[];
 
-  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[]) {
+  constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[], company: number | null) {
     this.name = name;
     this.model = model;
     this.description = description;
     this.functionalities = functionalities;
     this.photoUrls = photoUrls;
+    this.company = company;
   }
 }

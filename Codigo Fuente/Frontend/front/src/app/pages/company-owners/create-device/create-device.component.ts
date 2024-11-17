@@ -3,11 +3,12 @@ import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import { DevicesService } from '../../../shared/devices.service';
 import {
-  GetDeviceResponse,
   GetDeviceTypesResponse, PostMotionSensorRequest, PostSecurityCameraRequest,
   PostSmartLampRequest,
   PostWindowSensorRequest
 } from '../../../interfaces/devices';
+import {GetCompaniesRequest, GetCompaniesResponse} from '../../../interfaces/companies';
+import { CompanyService } from '../../../shared/company.service';
 
 @Component({
   selector: 'app-create-device',
@@ -17,6 +18,9 @@ import {
 export class CreateDeviceComponent {
 
   feedback: string = "";
+
+  companyOwnerName: string = '';
+  companyOwnerEmail: string = '';
 
   deviceName: string = '';
   deviceType: string = '';
@@ -34,7 +38,31 @@ export class CreateDeviceComponent {
 
   possibleDeviceTypes: string[];
 
-  constructor(private api: ApiService, private router: Router, private apiDevices: DevicesService) {}
+  constructor(private api: ApiService, private router: Router, private apiDevices: DevicesService, private apiCompany: CompanyService) {
+    this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
+    this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
+    this.deviceCompanyId = -1;
+  }
+
+  ngOnInit(): void {
+    this.getDevicesTypes();
+    this.getCompanyId();
+  }
+
+  getCompanyId(): void {
+    const request: GetCompaniesRequest = {
+      name: "",
+      owner: this.companyOwnerName,
+      ownerEmail: this.companyOwnerEmail
+    };
+
+    this.apiCompany.getCompanies(request).subscribe({
+      next: (res: GetCompaniesResponse) => {
+        let company = res.companies || [];
+        this.deviceCompanyId = company[0].id;
+      }
+    });
+  }
 
   goToLogin(): void {
     this.router.navigate(['/login']);
@@ -53,13 +81,20 @@ export class CreateDeviceComponent {
   }
 
   createDevice(name : string, type : string, model : string, description : string, functionalities : string[], locationType : string, photoUrls : string[]): void {
-    if (name === '' || type === '' || model === '' || description === '' || functionalities === []) {
+    if (name === '' || type === '' || model === '' || description === '' || functionalities.length === 0 || photoUrls === 0) {
       this.feedback = 'Por favor, rellene todos los campos.';
       return;
     }
 
     if (type === 'SecurityCamera' && locationType === '') {
       this.feedback = 'Por favor, rellene todos los campos.';
+      return;
+    }
+
+    this.getCompanyId();
+
+    if (this.deviceCompanyId === -1) {
+      this.feedback = 'No se ha podido obtener el ID de la compañía. Si aun no ha creado una compañía, por favor, hágalo primero.';
       return;
     }
 
@@ -70,7 +105,7 @@ export class CreateDeviceComponent {
       }
 
       this.apiDevices.postWindowSensor(
-        new PostWindowSensorRequest(name, model, description, functionalities, photoUrls)
+        new PostWindowSensorRequest(name, model, description, functionalities, photoUrls, this.deviceCompanyId)
       ).subscribe({
         next: res => {
           this.feedback = 'Dispositivo creado correctamente.';
@@ -88,7 +123,7 @@ export class CreateDeviceComponent {
       }
 
       this.apiDevices.postSmartLamp(
-        new PostSmartLampRequest(name, model, description, functionalities, photoUrls)
+        new PostSmartLampRequest(name, model, description, functionalities, photoUrls, this.deviceCompanyId)
       ).subscribe({
         next: res => {
           this.feedback = 'Dispositivo creado correctamente.';
@@ -106,7 +141,7 @@ export class CreateDeviceComponent {
       }
 
       this.apiDevices.postSecurityCamera(
-        new PostSecurityCameraRequest(name, model, description, functionalities, photoUrls, locationType)
+        new PostSecurityCameraRequest(name, model, description, functionalities, photoUrls, locationType, this.deviceCompanyId)
       ).subscribe({
         next: res => {
           this.feedback = 'Dispositivo creado correctamente.';
@@ -124,7 +159,7 @@ export class CreateDeviceComponent {
       }
 
       this.apiDevices.postMotionSensor(
-        new PostMotionSensorRequest(name, model, description, functionalities, photoUrls)
+        new PostMotionSensorRequest(name, model, description, functionalities, photoUrls, this.deviceCompanyId)
       ).subscribe({
         next: res => {
           this.feedback = 'Dispositivo creado correctamente.';
