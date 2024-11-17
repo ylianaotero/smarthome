@@ -10,23 +10,22 @@
 <body>
 
 <div class="container my-5">
-  <button (click)="goHome()" class="back-btn">
-    <i class="bi bi-arrow-left"></i>
-  </button>
   <h1 class="page-title">Administradores</h1>
 
   <form class="mb-4">
     <div class="form-row">
       <div class="col">
-        <input type="text" class="form-control" placeholder="Filtrar por nombre completo" [(ngModel)]="selectedName" name="name">
+        <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName" name="name">
       </div>
+    </div>
+    <div class="form-row">
       <div class="col">
-        <button type="button" class="input-btn" (click)="getUsers()">Update</button>
+        <button type="button" class="input-btn" (click)="getUsers()">Buscar</button>
       </div>
     </div>
   </form>
 
-  <div *ngIf="users.length > 0" class="card-container">
+  <div class="card-container">
     <div class="card shadow-sm h-100" *ngFor="let user of users">
       <img [src]=userPhotoUrl(user) alt="{{ user.fullName }}" class="card-img-top" style="height: 200px; object-fit: cover;" (click)="openPhotoModal(userPhotoUrl(user), user.fullName)">
       <div class="card-body">
@@ -39,9 +38,6 @@
         </button>
       </div>
     </div>
-  </div>
-  <div *ngIf="users.length == 0" class="welcome-container">
-    <p>No hay administradores registrados.</p>
   </div>
 </div>
 
