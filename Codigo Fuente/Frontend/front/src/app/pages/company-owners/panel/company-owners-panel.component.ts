@@ -8,7 +8,7 @@ import {
   GetCompaniesResponse,
   GetCompanyResponse
 } from '../../../interfaces/companies';
-import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
+import { GetUserResponse } from '../../../interfaces/users';
 
 @Component({
   selector: 'app-company-owner-panel',

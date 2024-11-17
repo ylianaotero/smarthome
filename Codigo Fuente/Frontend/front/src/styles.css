@@ -251,6 +251,54 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+/* Styling the dropdown for functionalities with custom width and height */
+.form-control[multiple] {
+  width: 100%; /* Full width of the container */
+  max-width: 500px; /* Sets a maximum width to avoid stretching too far */
+  height: auto;
+  min-height: 80px; /* Minimum height */
+  max-height: 120px; /* Restrict height for a compact look */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f7fc;
+  color: #333;
+  overflow-y: auto;
+  outline: none;
+}
+
+/* Option styling for improved readability */
+.form-control option {
+  padding: 5px;
+  background-color: #fff;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+/* Highlight selected options */
+.form-control option:checked {
+  background-color: #6c5ce7;
+  color: #fff;
+}
+
+/* Hover effect for options */
+.form-control option:hover {
+  background-color: #ddd;
+}
+
+
+/* Make the functionalities label stand out */
+.input-group label[for="functionalities"] {
+  font-size: 1rem;
+  color: #6c5ce7;
+  font-weight: 600;
+}
+
+
+
+
 .feedback-error {
   color: #b20808;
 }

@@ -31,10 +31,12 @@ export class CreateDeviceComponent {
   deviceLocationType: string = '';
   devicePhotoUrls: string[] = [];
 
-  possibleFunctionalitiesWindowSensor: string[] = ['OpenClosed'];
-  possibleFunctionalitiesSmartLamp: string[] = ['OnOff'];
-  possibleFunctionalitiesSecurityCamera: string[] = ['MotionDetection', 'HumanDetection'];
-  possibleFunctionalitiesMotionSensor: string[] = ['MotionDetection'];
+  functionalitiesByType: { [key: string]: string[] } = {
+    WindowSensor: ['OpenClosed'],
+    SecurityCamera: ['MotionDetection', 'HumanDetection'],
+    SmartLamp: ['OnOff'],
+    MotionSensor: ['MotionDetection']
+  };
 
   possibleDeviceTypes: string[];
 
@@ -100,7 +102,7 @@ export class CreateDeviceComponent {
     }
 
     if (type === 'WindowSensor') {
-      if (!functionalities.every(f => this.possibleFunctionalitiesWindowSensor.includes(f)) || functionalities.length === 0) {
+      if (!functionalities.every(f => this.functionalitiesByType['WindowSensor'].includes(f)) || functionalities.length === 0) {
         this.feedback = 'Por favor, seleccione funcionalidades válidas.';
         return;
       }
@@ -118,7 +120,7 @@ export class CreateDeviceComponent {
       });
 
     } else if (type === 'SmartLamp') {
-      if (!functionalities.every(f => this.possibleFunctionalitiesSmartLamp.includes(f)) || functionalities.length === 0) {
+      if (!functionalities.every(f => this.functionalitiesByType['SmartLamp'].includes(f)) || functionalities.length === 0) {
         this.feedback = 'Por favor, seleccione funcionalidades válidas.';
         return;
       }
@@ -136,7 +138,7 @@ export class CreateDeviceComponent {
       });
 
     } else if (type === 'SecurityCamera') {
-      if (!functionalities.every(f => this.possibleFunctionalitiesSecurityCamera.includes(f)) || functionalities.length === 0) {
+      if (!functionalities.every(f => this.functionalitiesByType['SecurityCamera'].includes(f)) || functionalities.length === 0) {
         this.feedback = 'Por favor, seleccione funcionalidades válidas.';
         return;
       }
@@ -154,7 +156,7 @@ export class CreateDeviceComponent {
       });
 
     } else if (type === 'MotionSensor') {
-      if (!functionalities.every(f => this.possibleFunctionalitiesMotionSensor.includes(f)) || functionalities.length === 0) {
+      if (!functionalities.every(f => this.functionalitiesByType['MotionSensor'].includes(f)) || functionalities.length === 0) {
         this.feedback = 'Por favor, seleccione funcionalidades válidas.';
         return;
       }
