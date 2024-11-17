@@ -6,7 +6,7 @@ import {sessionModel, sessionRequest} from './sessionModel';
 @Component({
   selector: 'app-log-in',
   templateUrl: './login-panel.component.html',
-  styleUrls: ['./login-panel.component.css', '../../../../styles.css']
+  styleUrls: ['../../../../styles.css']
 })
 export class LoginPanelComponent {
   feedback: string = "";
@@ -59,7 +59,7 @@ export class LoginPanelComponent {
   }
 
   goToRegister(): void {
-    this.router.navigate(['/home-owners']);
+    this.router.navigate(['/home-owners/create']);
   }
 
   isValidEmail(email: string): boolean {
