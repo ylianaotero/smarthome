@@ -67,7 +67,6 @@ export class HomeOwnersPanelComponent implements OnInit {
     });
   }
 
-
   changePage(page: number): void {
     this.currentPage = page;
     this.getDevices();
@@ -76,16 +75,18 @@ export class HomeOwnersPanelComponent implements OnInit {
     return Math.ceil(this.totalDevices / this.pageSize);
   }
 
-
-
-
   goCreateHome(): void {
-    this.router.navigate(['/homes']);
+    this.router.navigate(['/home-owners/homes/create']);
   }
 
   goHomesOfHomeOwner(): void {
-    this.router.navigate(['/homes-home-owner']);
+    this.router.navigate(['/home-owners/homes']);
   }
+
+  goViewDevices(): void {
+    this.router.navigate(['devices']);
+  }
+
 
   openModal(modal: string): void {
     this.changeSelectedModal(modal, true);
