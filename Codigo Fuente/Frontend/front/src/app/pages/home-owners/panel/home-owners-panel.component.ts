@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../shared/api.service';
-import {deviceUnit, home, member} from '../homesOfHomeOwner/homeModels';
+import { ApiService } from '../../../shared/api.service';
+import {deviceUnit, home, member} from '../homes/panel/homeModels';
 import {DeviceFilterRequestModel, deviceModel} from './deviceModels';
 
 @Component({
   selector: 'app-account',
-  templateUrl: './account.component.html',
+  templateUrl: './home-owners-panel.component.html',
   styleUrls: ['../../styles.css']
 })
-export class AccountComponent implements OnInit {
+export class HomeOwnersPanelComponent implements OnInit {
 
   userName: string;
 

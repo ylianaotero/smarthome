@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse } from '../interfaces/devices';
-import { AdministratorService } from '../shared/administrator.service';
-import { DevicesService } from '../shared/devices.service';
+import { GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse } from '../../../interfaces/devices';
+import { AdministratorService } from '../../../shared/administrator.service';
+import { DevicesService } from '../../../shared/devices.service';
 
 @Component({
   selector: 'app-devices-list',
-  templateUrl: './devices-list.component.html',
-  styleUrls: ['./devices-list.component.css', '../../styles.css']
+  templateUrl: './devices-panel.component.html',
+  styleUrls: ['./devices-panel.component.css', '../../styles.css']
 })
-export class DevicesListComponent implements OnInit {
+export class DevicesPanelComponent implements OnInit {
   userName: string;
   devices: GetDeviceResponse[] = [];
   deviceTypes: string[] = [];

@@ -1,4 +1,4 @@
-import {userRetrieveModel} from '../signUpHomeOwner/signUpUserModel';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 export interface sessionModel{
   token: string;

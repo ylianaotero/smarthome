@@ -12,10 +12,10 @@ import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../int
 
 @Component({
   selector: 'app-company-owner-panel',
-  templateUrl: './company-owner-panel.component.html',
-  styleUrls: ['./company-owner-panel.component.css' , '../../../../styles.css']
+  templateUrl: './company-owners-panel.component.html',
+  styleUrls: ['./company-owners-panel.component.css' , '../../../../styles.css']
 })
-export class CompanyOwnerPanelComponent implements OnInit {
+export class CompanyOwnersPanelComponent implements OnInit {
   userName: string;
   userEmail: string;
   userId: number;

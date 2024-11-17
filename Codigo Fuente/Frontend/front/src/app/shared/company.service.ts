@@ -1,5 +1,5 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { sessionModel, sessionRequest } from '../logIn/sessionModel';
+import { sessionModel, sessionRequest } from '../pages/login/panel/sessionModel';
 import { Injectable } from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {

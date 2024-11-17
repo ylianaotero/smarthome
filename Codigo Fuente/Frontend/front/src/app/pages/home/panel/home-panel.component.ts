@@ -3,11 +3,11 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
-  templateUrl: './homePage.component.html',
-  styleUrls: ['./homePage.component.css', '../../styles.css']
+  templateUrl: './home-panel.component.html',
+  styleUrls: ['./home-panel.component.css', '../../styles.css']
 })
 
-export class HomePageComponent {
+export class HomePanelComponent {
   title = 'app';
 
   constructor(private router: Router) {}

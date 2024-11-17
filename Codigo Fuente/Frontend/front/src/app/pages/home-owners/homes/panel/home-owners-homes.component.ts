@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../shared/api.service';
+import { ApiService } from '../../../../shared/api.service';
 import {
   addDeviceRequest,
   addMemberRequest,
@@ -12,10 +12,10 @@ import {
 
 @Component({
   selector: 'app-homes-home-owner',
-  templateUrl: './homesOfHomeOwner.component.html',
+  templateUrl: './home-owners-homes.component.html',
   styleUrls: ['../../styles.css']
 })
-export class HomesOfHomeOwnerComponent implements OnInit {
+export class HomeOwnersHomesComponent implements OnInit {
   homes!: home[];
   members!: member[];
   devices!: deviceUnit[];

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../shared/api.service';
+import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import { userRegistrationInstance } from './signUpUserModel';
 
 @Component({
   selector: 'app-sign-up-home-owner',
-  templateUrl: './signUpHomeOwner.component.html',
+  templateUrl: './create-home-owner.component.html',
   styleUrls: ['../../styles.css']
 })
-export class SignUpHomeOwnerComponent {
+export class CreateHomeOwnerComponent {
 
   feedback: string = "";
   userName: string = '';

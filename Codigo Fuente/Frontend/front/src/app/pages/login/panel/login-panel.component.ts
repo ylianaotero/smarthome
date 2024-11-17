@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../shared/api.service';
+import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {sessionModel, sessionRequest} from './sessionModel';
 
 @Component({
   selector: 'app-log-in',
-  templateUrl: './logIn.component.html',
-  styleUrls: ['./logIn.component.css']
+  templateUrl: './login-panel.component.html',
+  styleUrls: ['./login-panel.component.css']
 })
-export class LogInComponent {
+export class LoginPanelComponent {
   feedback: string = "";
   userEmail: string = '';
   userPassword: string = '';

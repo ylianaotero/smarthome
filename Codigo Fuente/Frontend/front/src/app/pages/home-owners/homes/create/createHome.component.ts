@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 
-import {ApiService} from '../shared/api.service';
+import {ApiService} from '../../../../shared/api.service';
 import {createHomeModel} from './createHomeModel';
 
 @Component({

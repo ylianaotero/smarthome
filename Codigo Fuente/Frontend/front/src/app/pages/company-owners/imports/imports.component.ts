@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../shared/api.service';
+import { ApiService } from '../../../shared/api.service';
 import { ImportDevicesRequest, importer } from './importerModels';
 
 @Component({
   selector: 'app-import',
-  templateUrl: './import.component.html',
-  styleUrls: ['./import.component.css', '../../styles.css']
+  templateUrl: './imports.component.html',
+  styleUrls: ['./imports.component.css', '../../styles.css']
 })
-export class ImportComponent implements OnInit {
+export class ImportsComponent implements OnInit {
   importers!: importer[];
   importRequest: ImportDevicesRequest = new ImportDevicesRequest('', '', '');
   feedback: string = '';

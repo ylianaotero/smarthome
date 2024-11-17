@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { createAdministratorModel, createCompanyOwnerModel } from '../../../interfaces/users';
 import { AdministratorService } from '../../../shared/administrator.service';
-import { connect } from 'rxjs';
-
 
 @Component({
   selector: 'app-create-user',
