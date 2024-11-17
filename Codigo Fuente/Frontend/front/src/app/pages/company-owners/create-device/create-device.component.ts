@@ -39,6 +39,7 @@ export class CreateDeviceComponent {
   };
 
   possibleDeviceTypes: string[];
+  possibleLocationTypes: string[] = ['Indoor', 'Outdoor'];
 
   constructor(private api: ApiService, private router: Router, private apiDevices: DevicesService, private apiCompany: CompanyService) {
     this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
@@ -91,6 +92,11 @@ export class CreateDeviceComponent {
 
     if (type === 'SecurityCamera' && locationType === '') {
       this.feedback = 'Por favor, rellene todos los campos.';
+      return;
+    }
+
+    if (type === 'SecurityCamera' && locationType !== 'Indoor' && locationType !== 'Outdoor') {
+      this.feedback = 'Por favor, seleccione un tipo de ubicación válido.';
       return;
     }
 

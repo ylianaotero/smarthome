@@ -15,11 +15,13 @@
   </button>
   <h1 class="welcome-title">Creación de Dispositivo</h1>
   <form (ngSubmit)="createDevice(deviceName, deviceType, deviceModel, deviceDescription, deviceFunctionalities, deviceLocationType, devicePhotoUrls)" #createDeviceForm="ngForm" novalidate>
-    <p>¿Qué tipo de dispositivo deseas crear?</p>
-    <select class="form-control" [(ngModel)]="deviceType" name="kind" id="kind">
-      <option value="" disabled selected>Selecciona un tipo</option>
-      <option *ngFor="let type of possibleDeviceTypes" [value]="type">{{ type }}</option>
-    </select>
+    <div class="input-group">
+      <label for="kind">Tipo de dispositivo</label>
+      <select class="form-control" [(ngModel)]="deviceType" name="kind" id="kind">
+        <option value="" disabled selected>Selecciona un tipo</option>
+        <option *ngFor="let type of possibleDeviceTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
 
     <div class="input-group">
       <label for="name">Nombre</label>
@@ -51,6 +53,13 @@
         <option *ngFor="let functionality of functionalitiesByType[deviceType]" [value]="functionality">
           {{ functionality }}
         </option>
+      </select>
+    </div>
+
+    <div class="input-group" *ngIf="deviceType === 'SecurityCamera'">
+      <select class="form-control" [(ngModel)]="deviceLocationType" name="location" id="location">
+        <option value="" disabled selected>Selecciona un tipo de ubicación</option>
+        <option *ngFor="let location of possibleLocationTypes" [value]="location">{{ location }}</option>
       </select>
     </div>
 
