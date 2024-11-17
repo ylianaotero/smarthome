@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="container my-5">
-  <h1 class="page-title">Lista de dispositivos</h1>
+  <h1 class="page-title">Dispositivos</h1>
 
   <form class="mb-4">
       <div class="form-row">
@@ -31,10 +31,12 @@
             <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
           </select>
         </div>
-        <div class="col">
-          <button type="button" class="input-btn" (click)="getDevices()">Update</button>
-        </div>
       </div>
+    <div class="form-row">
+      <div class="col">
+        <button type="button" class="input-btn" (click)="getDevices()">Buscar</button>
+      </div>
+    </div>
   </form>
 
   <div class="card-container">

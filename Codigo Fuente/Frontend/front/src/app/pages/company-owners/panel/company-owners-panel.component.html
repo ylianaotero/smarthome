@@ -10,30 +10,35 @@
 </head>
 <body>
 
-<div class="welcome-container text-center mt-5">
+<div class="welcome-container">
   <div *ngIf="feedback" class="alert" [ngClass]="{'alert-success': companyCreatedCorrectly, 'alert-danger': !companyCreatedCorrectly}">
     {{ feedback }}
   </div>
   <h1 class="welcome-title">¡Hola, {{userName}}!</h1>
-  <p>Bienvenido a la plataforma de gestión de empresas para dispositivos inteligentes</p>
+  <p>Bienvenido al menú de dueños de empresa</p>
 
-  <a *ngIf="ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalShowCompanies')">
-    <i class="bi bi-list-ul" ></i> Ver empresa
-  </a>
-  <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalCreateCompany')">
-    <i class="bi bi-list-ul" ></i> Crear empresa
-  </a>
+  <div class="button-container" >
+    <a *ngIf="ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalShowCompanies')">
+      <i class="bi bi-list-ul" ></i> Ver empresa
+    </a>
+    <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="goCreateCompany()">
+      <i class="bi bi-list-ul" ></i> Crear empresa
+    </a>
 
-  <a class="btn btn-primary" (click)="goViewDevices()">
-    <i class="bi bi-person-plus" ></i> Ver dispositivos
-  </a>
+    <a class="btn btn-primary" (click)="goViewDevices()">
+      <i class="bi bi-person-plus" ></i> Ver dispositivos
+    </a>
 
-  <a class="btn btn-primary" (click)="goCreateDevices()">
-    <i class="bi bi-person-dash" ></i> Crear dispositivos
-  </a>
+    <a class="btn btn-primary" (click)="goCreateDevices()">
+      <i class="bi bi-person-dash" ></i> Crear dispositivos
+    </a>
+
+    <a class="btn btn-primary" (click)="goImportDevices()">
+      <i class="bi bi-person-dash" ></i> Importar dispositivos
+    </a>
+  </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="modalShowCompanies" [style.display]="modalShowCompanies ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'showCompanies')">
@@ -66,51 +71,7 @@
   </div>
 </div>
 
-  <!-- Modal Create Company -->
-  <div class="modal fade" id="createCompanyModal" tabindex="-1" role="dialog" aria-hidden="true"
-       [class.show]="modalCreateCompany" [style.display]="modalCreateCompany ? 'block' : 'none'"
-       (click)="closeModalBackdrop($event, 'createCompany')">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content rounded shadow-lg">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Crear Empresa</h5>
-          <button type="button" class="close text-white" (click)="closeModal('createCompany')" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <div class="modal-body p-4">
-          <div *ngIf="feedback" class="alert alert-warning mt-2">
-            {{ feedback }}
-          </div>
-
-          <form (submit)="createCompany()">
-            <div class="form-group">
-              <label for="companyName">Nombre de la Empresa</label>
-              <input type="text" id="companyName" class="form-control" [(ngModel)]="newCompanyName" name="name" required>
-            </div>
-            <div class="form-group">
-              <label for="companyRUT">RUT</label>
-              <input type="number" id="companyRUT" class="form-control" [(ngModel)]="newCompanyRUT" name="rut" required>
-            </div>
-            <div class="form-group">
-              <label for="companyLogoUrl">URL del Logo</label>
-              <input type="url" id="companyLogoUrl" class="form-control" [(ngModel)]="newCompanyLogoURL" name="logoUrl">
-            </div>
-          </form>
-        </div>
-
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-secondary" (click)="closeModal('createCompany')">Cancelar</button>
-          <button type="button" class="btn btn-primary" (click)="createCompany()">Crear</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-  <!-- Enlace a Bootstrap JS y jQuery -->
+<!-- Enlace a Bootstrap JS y jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

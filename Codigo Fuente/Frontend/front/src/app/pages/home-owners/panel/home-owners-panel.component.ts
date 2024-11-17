@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../shared/api.service';
-import {deviceUnit, home, member} from '../homes/panel/homeModels';
 import {DeviceFilterRequestModel, deviceModel} from './deviceModels';
 
 @Component({
@@ -67,7 +66,6 @@ export class HomeOwnersPanelComponent implements OnInit {
     });
   }
 
-
   changePage(page: number): void {
     this.currentPage = page;
     this.getDevices();
@@ -76,21 +74,16 @@ export class HomeOwnersPanelComponent implements OnInit {
     return Math.ceil(this.totalDevices / this.pageSize);
   }
 
-
-
-
   goCreateHome(): void {
-    this.router.navigate(['/homes']);
+    this.router.navigate(['/home-owners/homes/create']);
   }
 
   goHomesOfHomeOwner(): void {
-    this.router.navigate(['/homes-home-owner']);
+    this.router.navigate(['/home-owners/homes']);
   }
 
-  openModal(modal: string): void {
-    this.changeSelectedModal(modal, true);
-    document.body.classList.add('modal-open');
-    this.createBackdrop();
+  goViewDevices(): void {
+    this.router.navigate(['/devices']);
   }
 
   closeModal(modal: string): void {
@@ -107,19 +100,6 @@ export class HomeOwnersPanelComponent implements OnInit {
         this.isModalOfListOfDevicesOpen = bool;
       }
     }
-  }
-
-  closeModalBackdrop(event: MouseEvent,modal: string ): void {
-    const target = event.target as HTMLElement;
-    if (target.id === 'myModalShowSupportedDevices' || target.id === 'myModalShowDevices') {
-      this.closeModal(modal);
-    }
-  }
-
-  private createBackdrop(): void {
-    const backdrop = document.createElement('div');
-    backdrop.className = 'modal-backdrop fade show';
-    document.body.appendChild(backdrop);
   }
 
   private removeBackdrop(): void {

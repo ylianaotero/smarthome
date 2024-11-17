@@ -15,7 +15,7 @@ import {
 import {createHomeModel, homeRetrieveModel} from '../pages/home-owners/homes/create/createHomeModel';
 import {Observable, tap} from 'rxjs';
 import {DeviceFilterRequestModel, deviceModel} from '../pages/home-owners/panel/deviceModels';
-import {ImportDevicesRequest, importer} from '../pages/company-owners/imports/importerModels';
+import {ImportDevicesRequest, importer} from '../pages/company-owners/import-device/importerModels';
 
 @Injectable({
   providedIn: 'root'

@@ -70,8 +70,10 @@ export interface GetUserResponse {
     name: string;
     surname: string;
     fullName: string;
+    email: string;
     createdAt: string;
     roles: Role[];
+    photoUrl: string;
 }
 
 export interface Role {

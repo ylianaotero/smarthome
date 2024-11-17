@@ -8,12 +8,12 @@ import {
   GetCompaniesResponse,
   GetCompanyResponse
 } from '../../../interfaces/companies';
-import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
+import { GetUserResponse } from '../../../interfaces/users';
 
 @Component({
   selector: 'app-company-owner-panel',
   templateUrl: './company-owners-panel.component.html',
-  styleUrls: ['./company-owners-panel.component.css' , '../../../../styles.css']
+  styleUrls: ['../../../../styles.css']
 })
 export class CompanyOwnersPanelComponent implements OnInit {
   userName: string;
@@ -80,11 +80,19 @@ export class CompanyOwnersPanelComponent implements OnInit {
   }
 
   goViewDevices(): void {
-    this.router.navigate(['home/devices-list']);
+    this.router.navigate(['devices']);
   }
 
   goCreateDevices(): void {
-    this.router.navigate(['/administrator/new-admin']);
+    this.router.navigate(['company-owners/create-device']);
+  }
+
+  goImportDevices(): void {
+    this.router.navigate(['company-owners/import-device']);
+  }
+
+  goCreateCompany(): void {
+    this.router.navigate(['company-owners/create-company']);
   }
 
   openModal(modal: string): void {

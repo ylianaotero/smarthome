@@ -49,7 +49,7 @@ export class CreateHomeOwnerComponent {
           this.api.postSession({ email: email, password: password }).subscribe({
             next: (sessionInfo) => {
               this.api.currentSession = sessionInfo;
-              this.router.navigate(['account']);
+              this.router.navigate(['/home-owners']);
             }
           })
         },

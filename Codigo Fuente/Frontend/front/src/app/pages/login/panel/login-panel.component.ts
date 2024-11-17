@@ -6,7 +6,7 @@ import {sessionModel, sessionRequest} from './sessionModel';
 @Component({
   selector: 'app-log-in',
   templateUrl: './login-panel.component.html',
-  styleUrls: ['./login-panel.component.css', '../../../../styles.css']
+  styleUrls: ['../../../../styles.css']
 })
 export class LoginPanelComponent {
   feedback: string = "";
@@ -47,9 +47,9 @@ export class LoginPanelComponent {
       const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
 
       if (hasHomeOwnerRole) {
-        this.router.navigate(['account']);
+        this.router.navigate(['/home-owners']);
       } else if (hasCompanyOwnerRole) {
-        this.router.navigate(['home/company-owner-panel']);
+        this.router.navigate(['/company-owners']);
       } else {
         // Manejo si no tiene ninguno de los roles requeridos
       }
@@ -59,7 +59,7 @@ export class LoginPanelComponent {
   }
 
   goToRegister(): void {
-    this.router.navigate(['/home-owners']);
+    this.router.navigate(['/home-owners/create']);
   }
 
   isValidEmail(email: string): boolean {

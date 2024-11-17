@@ -6,7 +6,7 @@ import { AdministratorService } from '../../../shared/administrator.service';
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css'],
+  styleUrls: ['../../../../styles.css'],
 })
 
 export class CreateUserComponent {
@@ -19,34 +19,24 @@ export class CreateUserComponent {
 
   feedback: string = "";
 
-  isNewAdmin: boolean = false;
+  roleTypes: string[] = ['Administrador', 'Dueño de Empresa'];
+  selectedRole: string = '';
 
   constructor(private api: AdministratorService, private router: Router) {}
 
-  ngOnInit(): void {
-    console.log("Create User Component");
-    let url = this.router.url;
-    if (url == '/administrator/new-admin') {
-      this.isNewAdmin = true;
-    }
-  }
-
   goHome(): void {
-    this.router.navigate(['/administrator']);
+    this.router.navigate(['/administrators']);
   }
 
   register(name: string, surname: string, email: string, password: string, photo: string): void {
     this.feedback = "Cargando...";
 
-    if (!name || !surname || !email || !password || (!photo && this.isNewAdmin)) {
-      this.feedback = "Por favor, completa todos los campos obligatorios.";
+    if (!name || !surname || !email || !password || !this.selectedRole || (!photo && this.selectedRole === 'Administrador')) {
+      this.feedback = "Por favor, completa todos los campos.";
       return;
     }
 
-    console.log(email);
-    console.log(password);
-
-    if(this.isNewAdmin){
+    if(this.selectedRole === 'Administrador'){
       this.api.postAdministrator(new createAdministratorModel(name, email, password, surname, photo))
       .subscribe({
         next: res => {
@@ -85,10 +75,10 @@ export class CreateUserComponent {
         this.feedback = "Precondition failed: " + err.error;
         break;
       case 0:
-        this.feedback = "No se ha podido conectar con el servidro. Por favor, inténtalo de nuevo.";
+        this.feedback = "No se ha podido conectar con el servidor. Por favor, inténtalo de nuevo.";
         break;
       default:
-        this.feedback = "A ocurrido un error inesperado. Por favor, inténtalo de nuevo.";
+        this.feedback = "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.";
     }
   }
 }

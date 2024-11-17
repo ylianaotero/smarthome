@@ -5,10 +5,10 @@ import { ImportDevicesRequest, importer } from './importerModels';
 
 @Component({
   selector: 'app-import',
-  templateUrl: './imports.component.html',
-  styleUrls: ['./imports.component.css', '../../../../styles.css']
+  templateUrl: './import-device.component.html',
+  styleUrls: ['../../../../styles.css']
 })
-export class ImportsComponent implements OnInit {
+export class ImportDeviceComponent implements OnInit {
   importers!: importer[];
   importRequest: ImportDevicesRequest = new ImportDevicesRequest('', '', '');
   feedback: string = '';

@@ -17,6 +17,6 @@ export class HomePanelComponent {
   }
 
   goToRegister(): void {
-    this.router.navigate(['/home-owners']);
+    this.router.navigate(['/home-owners/create']);
   }
 }

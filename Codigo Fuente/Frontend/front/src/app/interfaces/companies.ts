@@ -14,6 +14,7 @@ export interface GetCompanyResponse {
     name: string;
     rut: string;
     logoURL: string | null;
+    id: number;
 }
 
 export class CreateCompanyRequest {

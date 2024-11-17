@@ -3,19 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Creación de Administradores</title>
+  <title>Usuarios</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
 </head>
 <body>
 
 <div class="container my-5">
-  <h1 class="page-title">Administradores</h1>
+  <h1 class="page-title">Usuarios</h1>
 
   <form class="mb-4">
     <div class="form-row">
       <div class="col">
         <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName" name="name">
+      </div>
+      <div class="col">
+        <select class="form-control" [(ngModel)]="selectedRole" name="kind">
+          <option value="">Filtrar por rol</option>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
       </div>
     </div>
     <div class="form-row">
@@ -33,9 +39,7 @@
         <p class="card-text"><strong>Id:</strong> {{ user.id }}</p>
         <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
         <p class="card-text"><strong>Fecha de creación:</strong> {{ formatDate(user.createdAt) }}</p>
-        <button class="btn btn-primary btn-sm" (click)="openConfirmationModal(user.id, user.fullName)">
-          <i class="bi bi-person-dash"></i> Eliminar
-        </button>
+        <p class="card-text"><strong>Roles:</strong> {{ formatRoles(user.roles) }}</p>
       </div>
     </div>
   </div>
@@ -57,25 +61,8 @@
   </div>
 </div>
 
-<div class="modal fade" [ngClass]="{'show': isConfirmationModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isConfirmationModalOpen">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <p>¿Estás seguro que deseas eliminar a {{modalUser}}?</p>
-        <p>Esta acción no tiene vuelta atrás.</p>
-        <div class="button-container">
-          <button class="btn btn-danger" (click)="deleteAdmin(modalUserId)">Aceptar</button>
-          <button class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-

@@ -2,29 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { CompanyService } from '../../../shared/company.service';
-import { GetCompaniesRequest, GetCompaniesResponse, GetCompanyResponse } from '../../../interfaces/companies';
+import { GetCompanyResponse } from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
 
 @Component({
   selector: 'app-administrator-panel',
   templateUrl: './administrator-panel.component.html',
-  styleUrl: './administrator-panel.component.css'
+  styleUrls: ['../../../../styles.css']
 })
 export class AdministratorPanelComponent implements OnInit {
-
   userName: string;
 
   currentPage: number = 1;
   pageSize: number = 1;
 
   totalUsers: number = 0;
-  totalCompanies: number = 0;
 
   selectedFullName: string = '';
   selectedRole: string = '';
-  selectedCompanyName: string = '';
-  selectedOwner: string = '';
-  selectedEmail: string = '';
 
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
@@ -37,8 +32,7 @@ export class AdministratorPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.getUsers();
-    //this.getCompanies();
+    this.getUsers();
   }
 
   getUsers(): void {
@@ -56,48 +50,24 @@ export class AdministratorPanelComponent implements OnInit {
     });
   }
 
-
-  getCompanies(): void {
-    const request: GetCompaniesRequest = {
-      name: this.selectedCompanyName,
-      owner: this.selectedOwner,
-      ownerEmail: this.selectedEmail
-    };
-
-    this.apiCompany.getCompanies(request).subscribe({
-      next: (res: GetCompaniesResponse) => {
-        this.companies = res.companies || [];
-        this.totalCompanies = res.companies.length;
-        console.log(this.companies);
-      }
-    });
+  goCreateUser(): void {
+    this.router.navigate(['/administrators/create-user']);
   }
 
-  goCreateAdmin(): void {
-    this.router.navigate(['/administrator/new-admin']);
-  }
-
-  goCreateCompanyOwner(): void {
-    this.router.navigate(['/administrator/new-companyOwner']);
+  goListUsers(): void {
+    this.router.navigate(['/administrators/list-users']);
   }
 
   goDeleteAdmin(): void {
-    this.router.navigate(['/administrator/delete-admin']);
+    this.router.navigate(['/administrators/delete-admin']);
   }
 
-
-  changePage(page: number): void {
-    this.currentPage = page;
-    this.getUsers();
+  goListCompanies(): void {
+    this.router.navigate(['/administrators/list-companies']);
   }
+
   get totalPages(): number {
     return Math.ceil(this.totalUsers / this.pageSize);
-  }
-
-  openModal(modal: string): void {
-    this.changeSelectedModal(modal, true);
-    document.body.classList.add('modal-open');
-    this.createBackdrop();
   }
 
   closeModal(modal: string): void {
@@ -112,21 +82,6 @@ export class AdministratorPanelComponent implements OnInit {
     }else if(modal == "showCompanies"){
       this.modalShowCompanies = showModal;
     }
-  }
-
-  closeModalBackdrop(event: MouseEvent,modal: string ): void {
-    const target = event.target as HTMLElement;
-    if (target.id === 'myModalShowUsers') {
-      this.closeModal(modal);
-    }else if(target.id === 'myModalShowCompanies'){
-      this.closeModal(modal);
-    }
-  }
-
-  private createBackdrop(): void {
-    const backdrop = document.createElement('div');
-    backdrop.className = 'modal-backdrop fade show';
-    document.body.appendChild(backdrop);
   }
 
   private removeBackdrop(): void {
