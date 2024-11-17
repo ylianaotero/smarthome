@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Dispositivos</title>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1 class="page-title">Lista de dispositivos</h1>
+
+  <form class="mb-4">
+      <div class="form-row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedName" name="name">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Filtrar por modelo" [(ngModel)]="selectedModel" name="model">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Filtrar por empresa" [(ngModel)]="selectedCompany" name="company">
+        </div>
+        <div class="col">
+          <select class="form-control" [(ngModel)]="selectedKind" name="kind">
+            <option value="">Filtrar por tipo</option>
+            <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <button type="button" class="input-btn" (click)="getDevices()">Update</button>
+        </div>
+      </div>
+  </form>
+
+  <div class="card-container">
+    <div class="card shadow-sm h-100" *ngFor="let device of devices" (click)="openModal(device.photoUrl, device.name)">
+      <img [src]="device.photoUrl" alt="{{ device.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+      <div class="card-body">
+        <h5 class="card-title">{{ device.name }}</h5>
+        <p class="card-text"><strong>Modelo:</strong> {{ device.model }}</p>
+        <p class="card-text"><strong>Empresa:</strong> {{ device.companyName }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" [ngClass]="{'show': isModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isModalOpen">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="card-title" id="imageModalLabel">{{modalDevice}}</h5>
+        <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img [src]="modalImage" alt="{{modalDevice}}" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

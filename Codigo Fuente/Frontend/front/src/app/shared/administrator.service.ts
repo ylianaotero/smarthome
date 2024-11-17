@@ -1,5 +1,5 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { sessionModel, sessionRequest } from '../logIn/sessionModel';
+import { sessionModel, sessionRequest } from '../pages/login/panel/sessionModel';
 import { createAdministratorModel, GetUsersRequest, GetUsersResponse, PostAdministratorRequest, createCompanyOwnerModel, PostCompanyOwnerRequest} from '../interfaces/users';
 import { Injectable } from '@angular/core';
 import {Observable, tap} from 'rxjs';
@@ -17,7 +17,7 @@ export class AdministratorService {
   url: string = 'http://localhost:5217/api/v1';
 
   currentSession: sessionModel | undefined = undefined;
-  
+
     updateSession() {
         if (!this.currentSession) {
         const userSession = localStorage.getItem('user');
@@ -55,6 +55,6 @@ export class AdministratorService {
 
     deleteAdministrator(id: number) {
         return this.httpClient.delete(this.url + `/administrators/${id}`, {headers: {'Authorization': `${this.currentSession?.token}`}});
-    } 
+    }
 
 }
