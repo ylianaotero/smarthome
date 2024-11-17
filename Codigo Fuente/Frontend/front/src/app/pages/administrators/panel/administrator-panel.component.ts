@@ -8,7 +8,7 @@ import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../inte
 @Component({
   selector: 'app-administrator-panel',
   templateUrl: './administrator-panel.component.html',
-  styleUrl: './administrator-panel.component.css'
+  styleUrls: ['../../../../styles.css']
 })
 export class AdministratorPanelComponent implements OnInit {
 
