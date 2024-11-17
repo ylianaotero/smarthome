@@ -33,7 +33,6 @@ const routes: Routes = [
   { path: 'home-owners/homes', component: HomeOwnersHomesComponent },
   { path: 'home-owners/homes/create', component: CreateHomeComponent },
   { path: 'company-owners', component: CompanyOwnersPanelComponent },
-  { path: 'company-owners/create', component: CreateUserComponent },
   { path: 'company-owners/imports', component: ImportsComponent },
 
   { path: 'home', component: HomePanelComponent },

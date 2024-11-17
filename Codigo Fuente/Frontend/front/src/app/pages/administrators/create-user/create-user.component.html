@@ -6,63 +6,60 @@
   <title>Creación de Administradores</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="./create-user.component.css">
 </head>
 <body>
 
-<div class="container mt-5">
-  <div class="card shadow">
-    <div class="card-body">
-      <div class="back-button">
-        <button (click)="goHome()" class="btn btn-white">
-          <i class="bi bi-arrow-left"></i>
-        </button>
-      </div>
-      <h1 class="text-center text-primary" *ngIf="isNewAdmin">Creación de Administrador</h1>
-      <h1 class="text-center text-primary" *ngIf="!isNewAdmin">Creación de Dueño de Empresa</h1>
-      <form  id="create-admin-form" (ngSubmit)="register(nameValue, surnameValue, emailValue, passwordValue, photoValue)" #adminForm="ngForm">
-        <div class="form-group">
+<div class="welcome-container">
+  <button (click)="goHome()" class="back-btn">
+    <i class="bi bi-arrow-left"></i>
+  </button>
+  <h1 class="welcome-title">Creación de Usuario</h1>
+  <form  id="create-admin-form" (ngSubmit)="register(nameValue, surnameValue, emailValue, passwordValue, photoValue)" #adminForm="ngForm">
+    <p>¿Qué tipo de usuario deseas crear?</p>
+    <select class="form-control" [(ngModel)]="selectedRole" name="kind" id="kind">
+      <option value="" disabled selected>Selecciona un rol</option>
+      <option *ngFor="let type of roleTypes" [value]="type">{{ type }}</option>
+    </select>
 
-          <label for="name">Nombre:</label>
-          <input
-            type="text" class="form-control" id="name" name="name" #name="ngModel" [(ngModel)]="nameValue" placeholder="Ingresa el nombre">
-        </div>
-
-        <div class="form-group">
-            <label for="name">Apellido:</label>
-            <input
-              type="text" class="form-control" id="surname" name="surname" #surname="ngModel" [(ngModel)]="surnameValue" placeholder="Ingresa el apellido">
-        </div>
-
-        <div class="form-group">
-            <label for="name">Email:</label>
-            <input
-              type="text" class="form-control" id="email" name="email" #email="ngModel" [(ngModel)]="emailValue" placeholder="Ingresa el mail">
-          </div>
-
-        <div class="form-group">
-            <label for="name">Contraseña:</label>
-            <input
-              type="password" class="form-control" id="password" name="password" #password="ngModel" [(ngModel)]="passwordValue" placeholder="Ingresa la contraseña">
-        </div>
-
-        <div class="form-group" *ngIf="isNewAdmin">
-            <label for="name">Imagen:</label>
-            <input
-              type="text" class="form-control" id="photo" name="photo" #photo="ngModel" [(ngModel)]="photoValue" placeholder="Ingresa tu imagen">
-        </div>
-
-        <br>
-        <button type="submit" class="btn btn-primary btn-block" [disabled]="adminForm.invalid">Registrar Usuario</button>
-        <br>
-      </form>
-      <p class="feedback" [ngClass]="{'feedback-error': feedback === 'Por favor, completa todos los campos obligatorios.', 'feedback-success': feedback !== 'Por favor, completa todos los campos obligatorios.' && feedback !== ''}">
-        {{ feedback }}
-      </p>
+    <div class="input-group">
+      <label for="name">Nombre:</label>
+      <input
+        type="text" class="form-control" id="name" name="name" #name="ngModel" [(ngModel)]="nameValue" placeholder="Ingresa el nombre">
     </div>
-  </div>
-</div>
 
+    <div class="input-group">
+        <label for="surname">Apellido:</label>
+        <input
+          type="text" class="form-control" id="surname" name="surname" #surname="ngModel" [(ngModel)]="surnameValue" placeholder="Ingresa el apellido">
+    </div>
+
+    <div class="input-group">
+        <label for="email">Email:</label>
+        <input
+          type="text" class="form-control" id="email" name="email" #email="ngModel" [(ngModel)]="emailValue" placeholder="Ingresa el mail">
+      </div>
+
+    <div class="input-group">
+        <label for="password">Contraseña:</label>
+        <input
+          type="password" class="form-control" id="password" name="password" #password="ngModel" [(ngModel)]="passwordValue" placeholder="Ingresa la contraseña">
+    </div>
+
+
+    <div class="input-group" *ngIf="selectedRole === 'Administrador'">
+        <label for="name">Imagen:</label>
+        <input
+          type="text" class="form-control" id="photo" name="photo" #photo="ngModel" [(ngModel)]="photoValue" placeholder="Ingresa tu imagen">
+    </div>
+
+    <br>
+    <button type="submit" class="input-btn" [disabled]="adminForm.invalid">Crear Usuario</button>
+    <br>
+  </form>
+  <p class="feedback-error" [ngClass]="{'feedback-error': feedback === 'Por favor, completa todos los campos obligatorios.', 'feedback-success': feedback !== 'Por favor, completa todos los campos obligatorios.' && feedback !== ''}">
+    {{ feedback }}
+  </p>
+</div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
