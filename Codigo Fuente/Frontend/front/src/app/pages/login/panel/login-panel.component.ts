@@ -47,9 +47,9 @@ export class LoginPanelComponent {
       const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
 
       if (hasHomeOwnerRole) {
-        this.router.navigate(['account']);
+        this.router.navigate(['/home-owners']);
       } else if (hasCompanyOwnerRole) {
-        this.router.navigate(['home/company-owner-panel']);
+        this.router.navigate(['/company-owners']);
       } else {
         // Manejo si no tiene ninguno de los roles requeridos
       }

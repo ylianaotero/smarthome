@@ -23,7 +23,7 @@ export class CreateHomeComponent {
   constructor(private api: ApiService, private router: Router) {}
 
   goHome(): void {
-    this.router.navigate(['/account']);
+    this.router.navigate(['/home-owners']);
   }
 
   registerHome(street: string, doorNumber: number, latitude: number, longitude: number, maximumMembers: number): void {
@@ -45,7 +45,7 @@ export class CreateHomeComponent {
       .subscribe({
         next: res => {
           this.feedback = "Home created successfully!";
-          this.router.navigate(['account']);
+          this.router.navigate(['/home-owners/homes']);
         },
         error: err => {
           this.handleError(err);
