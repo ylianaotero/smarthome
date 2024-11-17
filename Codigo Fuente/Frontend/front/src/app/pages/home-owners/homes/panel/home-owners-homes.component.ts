@@ -13,7 +13,7 @@ import {
 @Component({
   selector: 'app-homes-home-owner',
   templateUrl: './home-owners-homes.component.html',
-  styleUrls: ['../../styles.css']
+  styleUrls: ['../../../../../styles.css']
 })
 export class HomeOwnersHomesComponent implements OnInit {
   homes!: home[];

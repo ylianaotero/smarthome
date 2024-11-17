@@ -6,7 +6,7 @@ import { userRegistrationInstance } from './signUpUserModel';
 @Component({
   selector: 'app-sign-up-home-owner',
   templateUrl: './create-home-owner.component.html',
-  styleUrls: ['../../styles.css']
+  styleUrls: ['../../../../styles.css']
 })
 export class CreateHomeOwnerComponent {
 

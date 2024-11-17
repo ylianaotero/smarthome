@@ -6,7 +6,7 @@ import {sessionModel, sessionRequest} from './sessionModel';
 @Component({
   selector: 'app-log-in',
   templateUrl: './login-panel.component.html',
-  styleUrls: ['./login-panel.component.css']
+  styleUrls: ['./login-panel.component.css', '../../../../styles.css']
 })
 export class LoginPanelComponent {
   feedback: string = "";

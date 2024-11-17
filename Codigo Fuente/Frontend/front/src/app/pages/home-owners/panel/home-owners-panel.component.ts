@@ -7,7 +7,7 @@ import {DeviceFilterRequestModel, deviceModel} from './deviceModels';
 @Component({
   selector: 'app-account',
   templateUrl: './home-owners-panel.component.html',
-  styleUrls: ['../../styles.css']
+  styleUrls: ['../../../../styles.css']
 })
 export class HomeOwnersPanelComponent implements OnInit {
 

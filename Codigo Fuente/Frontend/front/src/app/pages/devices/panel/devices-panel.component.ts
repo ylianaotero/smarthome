@@ -7,7 +7,7 @@ import { DevicesService } from '../../../shared/devices.service';
 @Component({
   selector: 'app-devices-list',
   templateUrl: './devices-panel.component.html',
-  styleUrls: ['./devices-panel.component.css', '../../styles.css']
+  styleUrls: ['./devices-panel.component.css', '../../../../styles.css']
 })
 export class DevicesPanelComponent implements OnInit {
   userName: string;

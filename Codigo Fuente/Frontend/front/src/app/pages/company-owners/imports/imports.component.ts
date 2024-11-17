@@ -6,7 +6,7 @@ import { ImportDevicesRequest, importer } from './importerModels';
 @Component({
   selector: 'app-import',
   templateUrl: './imports.component.html',
-  styleUrls: ['./imports.component.css', '../../styles.css']
+  styleUrls: ['./imports.component.css', '../../../../styles.css']
 })
 export class ImportsComponent implements OnInit {
   importers!: importer[];

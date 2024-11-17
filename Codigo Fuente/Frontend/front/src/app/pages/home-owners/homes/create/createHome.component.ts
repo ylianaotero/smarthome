@@ -7,7 +7,7 @@ import {createHomeModel} from './createHomeModel';
 @Component({
   selector: 'app-create-home',
   templateUrl: './createHome.component.html',
-  styleUrls: ['../../styles.css']
+  styleUrls: ['../../../../../styles.css']
 })
 
 export class CreateHomeComponent {
