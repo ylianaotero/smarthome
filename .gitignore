@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/dotnetcore,rider
 # Edit at https://www.toptal.com/developers/gitignore?templates=dotnetcore,rider
 Codigo Fuente/Frontend/front/.vscode
+Codigo Fuente/Frontend/front/.angular
 **/SmartHome/SmartHome.sln.DotSettings.user
 Codigo Fuente/SmartHome/SmartHome.sln.DotSettings.user
 ### DotnetCore ###
