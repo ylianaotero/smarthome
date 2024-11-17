@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de dueño de hogar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="welcome-container">
+
+  <button (click)="goBack()" class="back-btn">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+
+  <h2>Registrarse</h2>
+  <form (ngSubmit)="createDevice(deviceName, deviceType, deviceModel, deviceDescription, deviceFunctionalities, deviceLocationType, devicePhotoUrls)" #signupForm="ngForm" novalidate>
+
+    <div class="input-group">
+      <label for="name">Nombre</label>
+      <input type="text" id="name" name="name" [(ngModel)]="deviceName" #name="ngModel" required placeholder="Ingresa un nombre">
+      <div *ngIf="name.invalid && (name.touched || signupForm.submitted)" class="error-message">
+        <p>El nombre es obligatorio.</p>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="model">Modelo</label>
+      <input type="text" id="model" name="model" [(ngModel)]="deviceModel" #model="ngModel" required placeholder="Ingresa un modelo">
+      <div *ngIf="model.invalid && (model.touched || signupForm.submitted)" class="error-message">
+        <p>El modelo es obligatorio.</p>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="description">Descripción</label>
+      <input type="description" id="description" name="description" [(ngModel)]="deviceDescription" #description="ngModel" required placeholder="Ingresa una descripción">
+      <div *ngIf="description.invalid && (description.touched || signupForm.submitted)" class="error-message">
+        <p>Ingresa una descripción válida.</p>
+      </div>
+    </div>
+
+
+    <button type="submit" class="input-btn" [disabled]="signupForm.invalid">Registrarse</button>
+  </form>
+  <p>¿Ya tienes una cuenta?
+    <button (click)="goToLogin()" class="link-button">Inicia Sesión</button>
+  </p>
+  <p class="feedback">{{ feedback }}</p>
+</div>
+</body>
+</html>

@@ -15,13 +15,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AdministratorPanelComponent } from './pages/administrators/panel/administrator-panel.component';
 import { CreateUserComponent } from './pages/administrators/create-user/create-user.component';
 import { DeleteAdminComponent } from './pages/administrators/delete-admin/delete-admin.component';
-import { ImportsComponent } from './pages/company-owners/imports/imports.component';
+import { ImportDeviceComponent } from './pages/company-owners/import-device/import-device.component';
 import { UserPanelComponent } from './pages/user-panel/user-panel.component';
 import { CompanyOwnersPanelComponent } from './pages/company-owners/panel/company-owners-panel.component';
 import {DevicesPanelComponent} from './pages/devices/panel/devices-panel.component';
 import {NgOptimizedImage} from '@angular/common';
 import {ListUsersComponent} from './pages/administrators/list-users/list-users.component';
 import {ListCompaniesComponent} from './pages/administrators/list-companies/list-companies.component';
+import {CreateDeviceComponent} from './pages/company-owners/create-device/create-device.component';
 
 const routes: Routes = [
   { path: '', component: HomePanelComponent },
@@ -37,8 +38,9 @@ const routes: Routes = [
   { path: 'home-owners/homes', component: HomeOwnersHomesComponent },
   { path: 'home-owners/homes/create', component: CreateHomeComponent },
   { path: 'company-owners', component: CompanyOwnersPanelComponent },
-  { path: 'company-owners/imports', component: ImportsComponent },
-
+  { path: 'company-owners/import-device', component: ImportDeviceComponent },
+  { path: 'company-owners/create-device', component: ImportDeviceComponent },
+  { path: 'company-owners/create-device', component: CreateDeviceComponent },
   { path: 'home', component: HomePanelComponent },
   { path: 'home/user-panel', component: UserPanelComponent },
 ];
@@ -63,7 +65,7 @@ const routes: Routes = [
     HomeOwnersHomesComponent,
     AdministratorPanelComponent,
     CreateUserComponent,
-    ImportsComponent,
+    ImportDeviceComponent,
     HomeOwnersHomesComponent,
     AdministratorPanelComponent,
     CreateUserComponent,
@@ -73,7 +75,8 @@ const routes: Routes = [
     CompanyOwnersPanelComponent,
     DevicesPanelComponent,
     ListUsersComponent,
-    ListCompaniesComponent
+    ListCompaniesComponent,
+    CreateDeviceComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
