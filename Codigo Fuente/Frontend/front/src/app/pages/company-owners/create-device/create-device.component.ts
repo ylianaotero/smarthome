@@ -42,6 +42,7 @@ export class CreateDeviceComponent {
     this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
     this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
     this.deviceCompanyId = -1;
+    this.possibleDeviceTypes = [];
   }
 
   ngOnInit(): void {
@@ -81,7 +82,7 @@ export class CreateDeviceComponent {
   }
 
   createDevice(name : string, type : string, model : string, description : string, functionalities : string[], locationType : string, photoUrls : string[]): void {
-    if (name === '' || type === '' || model === '' || description === '' || functionalities.length === 0 || photoUrls === 0) {
+    if (name === '' || type === '' || model === '' || description === '' || functionalities.length === 0 || photoUrls.length === 0) {
       this.feedback = 'Por favor, rellene todos los campos.';
       return;
     }
