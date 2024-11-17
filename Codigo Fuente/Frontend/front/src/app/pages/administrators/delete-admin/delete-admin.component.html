@@ -6,43 +6,72 @@
   <title>Creación de Administradores</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="./delete-admin.component.css">
 </head>
 <body>
 
-<div class="container mt-5">
-  <div class="card shadow">
-    <div class="card-body">
-      <div class="back-button">
-        <button (click)="goHome()" class="btn btn-white">
-          <i class="bi bi-arrow-left"></i>
+<div class="container my-5">
+  <button (click)="goHome()" class="back-btn">
+    <i class="bi bi-arrow-left"></i>
+  </button>
+  <h1 class="page-title">Administradores</h1>
+
+  <form class="mb-4">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por nombre completo" [(ngModel)]="selectedName" name="name">
+      </div>
+      <div class="col">
+        <button type="button" class="input-btn" (click)="getUsers()">Update</button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="users.length > 0" class="card-container">
+    <div class="card shadow-sm h-100" *ngFor="let user of users">
+      <img [src]=userPhotoUrl(user) alt="{{ user.fullName }}" class="card-img-top" style="height: 200px; object-fit: cover;" (click)="openPhotoModal(userPhotoUrl(user), user.fullName)">
+      <div class="card-body">
+        <h5 class="card-title">{{ user.fullName}}</h5>
+        <p class="card-text"><strong>Id:</strong> {{ user.id }}</p>
+        <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+        <p class="card-text"><strong>Fecha de creación:</strong> {{ formatDate(user.createdAt) }}</p>
+        <button class="btn btn-primary btn-sm" (click)="openConfirmationModal(user.id, user.fullName)">
+          <i class="bi bi-person-dash"></i> Eliminar
         </button>
       </div>
-      <h1 class="text-center text-primary">Eliminación de Administradores</h1>
+    </div>
+  </div>
+  <div *ngIf="users.length == 0" class="welcome-container">
+    <p>No hay administradores registrados.</p>
+  </div>
+</div>
 
-      <table class="table table-striped mt-4">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Nombre</th>
-            <th scope="col" class="text-center">Apellido</th>
-            <th scope="col" class="text-center">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td class="text-center">{{ user.name }}</td>
-            <td class="text-center">{{ user.surname }}</td>
-            <td class="text-center">
-              <button class="btn btn-danger" (click)="deleteAdmin(user.id)">
-                <i class="bi bi-person-dash"></i> Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="feedback" [ngClass]="{'feedback-error': feedback === 'Por favor, completa todos los campos obligatorios.', 'feedback-success': feedback !== 'Por favor, completa todos los campos obligatorios.' && feedback !== ''}">
-        {{ feedback }}
-      </p>
+<div class="modal fade" [ngClass]="{'show': isPhotoModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isPhotoModalOpen">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="card-title" id="imageModalLabel">{{modalUser}}</h5>
+        <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img [src]="modalImage" alt="{{modalUser}}" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" [ngClass]="{'show': isConfirmationModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isConfirmationModalOpen">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>¿Estás seguro que deseas eliminar a {{modalUser}}?</p>
+        <p>Esta acción no tiene vuelta atrás.</p>
+        <div class="button-container">
+          <button class="btn btn-danger" (click)="deleteAdmin(modalUserId)">Aceptar</button>
+          <button class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
