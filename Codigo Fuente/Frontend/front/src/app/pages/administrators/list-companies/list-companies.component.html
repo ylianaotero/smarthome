@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div class="container my-5">
+  <h1 class="page-title">Empresas</h1>
+
+  <form class="mb-4">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por nombre" [(ngModel)]="selectedCompanyName" name="name">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por nombre del dueño" [(ngModel)]="selectedOwnerName" name="ownerName">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Filtrar por email del dueño" [(ngModel)]="selectedOwnerEmail" name="ownerEmail">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <button type="button" class="input-btn" (click)="getCompanies()">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="card-container">
+    <div class="card shadow-sm h-100" *ngFor="let company of companies">
+      <img [src]=userPhotoUrl(company) alt="{{ company.name }}" class="card-img-top" style="height: 200px; object-fit: cover;" (click)="openPhotoModal(userPhotoUrl(company), company.name)">
+      <div class="card-body">
+        <h5 class="card-title">{{ company.name }}</h5>
+        <p class="card-text"><strong>Id:</strong> {{ company.id }}</p>
+        <p class="card-text"><strong>RUT:</strong> {{ company.rut }}</p>
+        <p class="card-text"><strong>Nombre del dueño:</strong> {{ company.owner }}</p>
+        <p class="card-text"><strong>Email del dueño:</strong> {{ company.ownerEmail }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" [ngClass]="{'show': isPhotoModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isPhotoModalOpen">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="card-title" id="imageModalLabel">{{modalCompany}}</h5>
+        <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img [src]="modalImage" alt="{{modalCompany}}" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

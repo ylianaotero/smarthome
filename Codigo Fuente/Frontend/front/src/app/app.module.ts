@@ -20,6 +20,8 @@ import { UserPanelComponent } from './pages/user-panel/user-panel.component';
 import { CompanyOwnersPanelComponent } from './pages/company-owners/panel/company-owners-panel.component';
 import {DevicesPanelComponent} from './pages/devices/panel/devices-panel.component';
 import {NgOptimizedImage} from '@angular/common';
+import {ListUsersComponent} from './pages/administrators/list-users/list-users.component';
+import {ListCompaniesComponent} from './pages/administrators/list-companies/list-companies.component';
 
 const routes: Routes = [
   { path: '', component: HomePanelComponent },
@@ -28,6 +30,8 @@ const routes: Routes = [
   { path: 'administrators', component: AdministratorPanelComponent },
   { path: 'administrators/create-user', component: CreateUserComponent },
   { path: 'administrators/delete-admin', component: DeleteAdminComponent },
+  { path: 'administrators/list-users', component: ListUsersComponent },
+  { path: 'administrators/list-companies', component: ListCompaniesComponent },
   { path: 'home-owners', component: HomeOwnersPanelComponent },
   { path: 'home-owners/create', component: CreateHomeOwnerComponent },
   { path: 'home-owners/homes', component: HomeOwnersHomesComponent },
@@ -67,7 +71,9 @@ const routes: Routes = [
     DeleteAdminComponent,
     UserPanelComponent,
     CompanyOwnersPanelComponent,
-    DevicesPanelComponent
+    DevicesPanelComponent,
+    ListUsersComponent,
+    ListCompaniesComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,6 +4,7 @@ namespace Model.Out;
 
 public class GetCompanyResponse
 {
+    public long Id { get; set; }
     public string Owner { get; set; }
     public string OwnerEmail { get; set; }
     public string Name { get; set;  }
@@ -17,6 +18,7 @@ public class GetCompanyResponse
         LogoURL = company.LogoURL ?? string.Empty;
         Owner = company.Owner.Name + " " + company.Owner.Surname;
         OwnerEmail = company.Owner.Email;
+        Id = company.Id;
     }
     
     public override bool Equals(object? obj)
@@ -26,6 +28,7 @@ public class GetCompanyResponse
                RUT == response.RUT &&
                LogoURL == response.LogoURL &&
                Owner == response.Owner &&
-                OwnerEmail == response.OwnerEmail;
+                OwnerEmail == response.OwnerEmail &&
+               Id == response.Id;
     }
 }

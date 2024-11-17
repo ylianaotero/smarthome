@@ -6,7 +6,7 @@ import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../int
 @Component({
   selector: 'app-delete-admin',
   templateUrl: './delete-admin.component.html',
-  styleUrls: ['../../../../styles.css', 'delete-admin.component.css'],
+  styleUrls: ['../../../../styles.css'],
 })
 export class DeleteAdminComponent {
 
@@ -28,14 +28,10 @@ export class DeleteAdminComponent {
     this.getUsers();
   }
 
-  goHome(): void {
-    this.router.navigate(['/administrator']);
-  }
-
   getUsers(): void {
     const request: GetUsersRequest = {
       fullName: this.selectedName,
-      role: ""
+      role: "administrator"
     };
 
     this.api.getUsers(request).subscribe({
@@ -66,7 +62,6 @@ export class DeleteAdminComponent {
         //Hacer el remove por rol
     }
   }*/
-
 
 
   deleteAdmin(id:number): void {
