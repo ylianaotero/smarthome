@@ -12,6 +12,14 @@ namespace BusinessLogic
         {
             Console.WriteLine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
             string[] filePaths = Directory.GetFiles(ImportersDirectory); 
+            
+            string[] dllFiles = filePaths.Where(file => FileIsDll(file)).ToArray();
+            
+            if (dllFiles.Length == 0)
+            {
+                throw new FileNotFoundException($"No se encontraron archivos DLL en el directorio '{ImportersDirectory}'.");
+            }
+            
             List<IModelValidator> availableImporters = new List<IModelValidator>();
 
             foreach (string file in filePaths)

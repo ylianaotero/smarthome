@@ -14,6 +14,8 @@ public class CompanyController(ICompanyService companyService, IUserService user
     private const string RoleWithPermissionsToGetCompanies = "Administrator";
     private const string RoleWithPermissionsToPostCompany = "CompanyOwner";
     private const string CompanyOwnerNotFound = "CompanyOwner was not found.";
+    private const string UpdatedCompanyMessage = "The company was updated successfully.";
+    private const string ResourceNotFoundMessage = "The requested resource was not found.";
 
     [HttpGet]
     [RolesWithPermissions(RoleWithPermissionsToGetCompanies)]
@@ -38,6 +40,22 @@ public class CompanyController(ICompanyService companyService, IUserService user
         catch (ElementNotFound)
         {
             return NotFound(CompanyOwnerNotFound);
+        }
+    }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
+    public IActionResult UpdateValidationMethod([FromRoute] long id, [FromBody] PatchCompanyRequest request)
+    {
+        try
+        {
+            companyService.UpdateValidationMethod(id, request.ValidationMethod);
+            return Ok(UpdatedCompanyMessage);
+        }
+        catch (ElementNotFound)
+        {
+            return NotFound(ResourceNotFoundMessage);
         }
     }
 }

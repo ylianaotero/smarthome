@@ -10,26 +10,57 @@ public class DeviceService : IDeviceService
 {
     private const string ModelValidatorError = "Model is not valid";
     private const string DeviceNotFoundMessage = "Device not found";
+    private const string ValidationMethodNotFoundMessage = "Validation method not found";
+
     private const string ValidatorNumber = "ValidatorNumber";
     private const string ValidatorLetter = "ValidatorLetter";
     
     private readonly IRepository<Device> _deviceRepository;
-    private IModelValidator _modelValidator;
     
     public DeviceService(IRepository<Device> deviceRepository)
     {
         this._deviceRepository = deviceRepository;
     }
     
+    /*
     public void CreateDevice(Device device)
     {
         Company deviceCompany = device.Company;
-        bool validateNumber = deviceCompany.ValidateNumber;
+
+        string? validationMethod = deviceCompany.ValidationMethod;
+
+        if (!string.IsNullOrEmpty(validationMethod))
+        {
+            validationMethod = validationMethod.ToUpper();
+            Modelo deviceModel = new Modelo();
+            deviceModel.set_Value(device.Model);
+
+            if (!ModelIsValid(deviceModel, validationMethod))
+            {
+                throw new InputNotValid(ModelValidatorError);
+            }
+        }
+
+        _deviceRepository.Add(device);
+    }
+    */
+
+    
+    public void CreateDevice(Device device)
+    {
+        Company deviceCompany = device.Company;
+        
+        string? validationMethod = deviceCompany.ValidationMethod;
+
+        if (validationMethod != null)
+        {
+            validationMethod = validationMethod.ToUpper();
+        }
         
         Modelo deviceModel = new Modelo();
         deviceModel.set_Value(device.Model);
         
-        if (ModelIsValid(deviceModel, validateNumber))
+        if (ModelIsValid(deviceModel, validationMethod))
         {
             _deviceRepository.Add(device);
         }
@@ -66,18 +97,32 @@ public class DeviceService : IDeviceService
         return deviceTypes;
     }
     
-    private bool ModelIsValid(Modelo deviceModel, bool validateNumber)
+    private bool ModelIsValid(Modelo deviceModel, string? validationMethod)
     {
-        bool isValid = false;
+        IModelValidator _modelValidator;
+        bool isValid;
         
-        if (_modelValidator == null)
+        if (validationMethod != null)
         {
-            string modelValidatorName = validateNumber ? ValidatorNumber : ValidatorLetter;
-            
-            _modelValidator = new ModelValidatorLogic()
-                .GetAllValidators().Find(v => v.GetType().Name == modelValidatorName);
-            
+            if(validationMethod == "VALIDATORNUMBER")
+            {
+                _modelValidator = new ModelValidatorLogic()
+                    .GetAllValidators().Find(v => v.GetType().Name == ValidatorNumber);
+            }
+            else if(validationMethod == "VALIDATORLETTER")
+            {
+                _modelValidator = new ModelValidatorLogic()
+                    .GetAllValidators().Find(v => v.GetType().Name == ValidatorLetter);
+            }
+            else
+            {
+                throw new ElementNotFound(ValidationMethodNotFoundMessage);
+            }
             isValid = _modelValidator.EsValido(deviceModel);
+        }
+        else
+        {
+            isValid = true;
         }
 
         return isValid;

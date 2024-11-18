@@ -39,4 +39,17 @@ public class CompanyService(IRepository<Company> companyRepository) : ICompanySe
     {
         return companyRepository.GetByFilter(s => s.Owner.Id == userId, null);
     }
+    
+    public void UpdateValidationMethod(long companyId, string validationMethod)
+    {
+        Company company = companyRepository.GetById(companyId);
+        
+        if (company == null)
+        {
+            throw new ElementNotFound(CompanyNotFound);
+        }
+        
+        company.ValidationMethod = validationMethod;
+        companyRepository.Update(company);
+    }
 }

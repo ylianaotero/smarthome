@@ -11,7 +11,7 @@ public class Company
     public string RUT { get; set; }
     public string LogoURL { get; set; }
     
-    public bool ValidateNumber {get; set;}
+    public string ValidationMethod { get; set; }
     
     public override bool Equals(object? obj)
     {
@@ -20,6 +20,6 @@ public class Company
                Name == company.Name &&
                RUT == company.RUT &&
                LogoURL == company.LogoURL &&
-               ValidateNumber == company.ValidateNumber;
+               ValidationMethod == company.ValidationMethod;
     }
 }
