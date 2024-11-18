@@ -111,7 +111,6 @@ public class CompanyControllerTest
             LogoURL = LogoURL,
             OwnerId = _defaultUser.Id,
             ValidationMethod = ValidationMethodNumber
-            //ValidateNumber = ValidateNumberTrue
         };
 
         _mockIUserService
@@ -134,7 +133,6 @@ public class CompanyControllerTest
             LogoURL = LogoURL,
             OwnerId = _defaultUser.Id,
             ValidationMethod = ValidationMethodNumber
-            //ValidateNumber = ValidateNumberTrue
         };
 
         _mockIUserService.
@@ -143,6 +141,37 @@ public class CompanyControllerTest
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
         ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result?.StatusCode);
+    }
+
+    [TestMethod]
+    public void TestUpdateCompanyValidationMethod()
+    {
+        PatchCompanyRequest request = new PatchCompanyRequest()
+        {
+            ValidationMethod = ValidationMethodNumber
+        };
+        
+        _mockICompanyService.Setup(service => service.UpdateValidationMethod(Id, ValidationMethodNumber));
+        
+        ObjectResult? result = _companyController.UpdateValidationMethod(Id, request) as ObjectResult;
+        
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestUpdateCompanyValidationMethodNotFound()
+    {
+        PatchCompanyRequest request = new PatchCompanyRequest()
+        {
+            ValidationMethod = ValidationMethodNumber
+        };
+        
+        _mockICompanyService.Setup(service => service.UpdateValidationMethod(Id, ValidationMethodNumber))
+            .Throws(new ElementNotFound("Company not found"));
+        
+        ObjectResult? result = _companyController.UpdateValidationMethod(Id, request) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result?.StatusCode);
     }
@@ -183,7 +212,6 @@ public class CompanyControllerTest
             LogoURL = LogoURL,
             Owner = _defaultUser,
             ValidationMethod = ValidationMethodNumber
-            //ValidateNumber = ValidateNumberTrue
         };
         
         _defaultCompany2 = new Company()
@@ -194,7 +222,6 @@ public class CompanyControllerTest
             LogoURL = LogoURL,
             Owner = _defaultUser,
             ValidationMethod = ValidationMethodNumber
-            //ValidateNumber = ValidateNumberTrue
         };
         
         _companies = new List<Company>
