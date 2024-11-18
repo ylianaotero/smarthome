@@ -56,19 +56,29 @@ public class UserService(IRepository<User> userRepository) : IUserService
     public void DeleteUser(long id)
     {
         User user = GetBy(u => u.Id == id, PageData.Default);
-        if(user == null)
+        if (user == null)
         {
             throw new ElementNotFound(UserDoesNotExistExceptionMessage);
         }
-        if(user.Roles.Count > 1)
+
+        if (user.Roles.Count > 1)
         {
-            user.DeleteRole(user.Roles.Find(r => r is Administrator));
-            userRepository.Update(user);
+            DeleteUserRoles(user);
         }
         else
         {
             userRepository.Delete(user);
         }
+    }
+
+    private void DeleteUserRoles(User user)
+    {
+        Role adminRole = user.Roles.FirstOrDefault(role => role is Administrator);
+        if (adminRole != null)
+        {
+            user.DeleteRole(adminRole);
+        }
+        userRepository.Update(user);
     }
     
     public void UpdateUser(long id, User user)
