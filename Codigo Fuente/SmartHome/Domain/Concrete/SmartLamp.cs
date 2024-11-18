@@ -26,6 +26,11 @@ public class SmartLamp : Device
         }
     }
     
+    public override string DefaultStatus()
+    {
+        return "Off";
+    }
+    
     public override string RunFunctionality(string functionality, string currentStatus)
     {
         if (!FunctionalityIsValid(functionality))

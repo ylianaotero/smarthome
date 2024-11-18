@@ -19,10 +19,11 @@ public class DeviceUnit
         get => _status;
         set
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value) || Device == null)
             {
-                value = "";
-            }
+                _status = "";
+                return;
+            } 
             
             Device.ValidateStatus(value);
             _status = value;
@@ -45,6 +46,7 @@ public class DeviceUnit
     public DeviceUnit()
     {
         IsConnected = false;
+        Status = "";
     }
 
     public void ExecuteAction(string relatedFunctionality)
