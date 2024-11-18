@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div class="welcome-container">
+  <div *ngIf="feedback" class="alert" [ngClass]="{'alert-success': companyCreatedCorrectly, 'alert-danger': !companyCreatedCorrectly}">
+    {{ feedback }}
+  </div>
+  <h1 class="welcome-title">¡Hola, {{userName}}!</h1>
+  <p>Bienvenido al menú de dueños de empresa</p>
+
+  <div class="button-container" >
+    <a *ngIf="ownerHasCompany()" class="btn btn-primary" (click)="openModal('modalShowCompanies')">
+      <i class="bi bi-list-ul" ></i> Ver empresa
+    </a>
+    <a *ngIf="!ownerHasCompany()" class="btn btn-primary" (click)="goCreateCompany()">
+      <i class="bi bi-list-ul" ></i> Crear empresa
+    </a>
+
+    <a class="btn btn-primary" (click)="goViewDevices()">
+      <i class="bi bi-person-plus" ></i> Ver dispositivos
+    </a>
+
+    <a class="btn btn-primary" (click)="goCreateDevices()">
+      <i class="bi bi-person-dash" ></i> Crear dispositivos
+    </a>
+
+    <a class="btn btn-primary" (click)="goImportDevices()">
+      <i class="bi bi-person-dash" ></i> Importar dispositivos
+    </a>
+  </div>
+</div>
+
+<div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="modalShowCompanies" [style.display]="modalShowCompanies ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'showCompanies')">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content rounded shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Datos de la Empresa</h5>
+        <button type="button" class="close text-white" (click)="closeModal('showCompanies')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div class="text-center mb-3">
+          <img [src]="selectedPhotoURL" alt="Logo de la Empresa" class="img-fluid rounded-circle border" style="width: 150px; height: 150px;">
+        </div>
+
+        <div class="company-details text-center">
+          <p class="mb-2"><strong>Nombre:</strong> {{selectedCompanyName}}</p>
+          <p class="mb-2"><strong>Propietario:</strong> {{selectedOwner}}</p>
+          <p class="mb-2"><strong>Email del Propietario:</strong> {{selectedEmail}}</p>
+          <p class="mb-2"><strong>RUT:</strong> {{selectedRUT}}</p>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('showCompanies')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Enlace a Bootstrap JS y jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+

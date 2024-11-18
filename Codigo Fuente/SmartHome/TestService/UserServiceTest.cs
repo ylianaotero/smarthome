@@ -15,6 +15,7 @@ public class UserServiceTest
     private const string NewEmail = "juan.perez@example.com";
     private const string NewPassword = "contraseñaSegura1@";
     private const string NewSurname = "Pérez";
+    private const string InvalidRole = "InvalidTole";
     
     private Mock<IRepository<User>> _mockUserRepository;
     private IUserService _userService;
@@ -329,6 +330,76 @@ public class UserServiceTest
             .Returns(_listOfUsers);
         
         _userService.UpdateUser(1, _user);
+        
+        _mockUserRepository.Verify();
+    }
+
+    [TestMethod]
+    public void TestAssignRoleToUser()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        User user = _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.IsTrue(user.Roles.Exists(r => r.Kind == _homeOwner.Kind));
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotAddItem))]
+    public void TestAssignRoleThatIsNotAllowedForExistingUsers()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        _userService.AssignRoleToUser(_user.Id, _administrator.Kind);
+        
+        _mockUserRepository.Verify();
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestAssignInvalidRoleToUser()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        _userService.AssignRoleToUser(_user.Id, InvalidRole);
+        
+        _mockUserRepository.Verify();
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementAlreadyExist))]
+    public void TestAssignRoleToUserThatAlreadyHasIt()
+    {
+        _user.Roles.Add(_homeOwner);
+        
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
+        
+        _mockUserRepository.Verify();
+    }
+    
+    [TestMethod]
+    public void TestGetUserById()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns(_user);
+        
+        User response = _userService.GetUserById(_user.Id);
+        
+        _mockUserRepository.Verify();
+        
+        Assert.AreEqual(_user, response);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestGetUserByIdNotFound()
+    {
+        _mockUserRepository.Setup(v => v.GetById(_user.Id)).Returns((User?)null);
+        
+        _userService.GetUserById(_user.Id);
         
         _mockUserRepository.Verify();
     }

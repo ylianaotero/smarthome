@@ -256,4 +256,35 @@ public class SessionServiceTest
 
         Assert.IsTrue(response);
     }
+    
+    
+    [TestMethod]
+    public void TestGetUserId()
+    {
+        _mockSessionRepository
+            .Setup(logic => logic
+                .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<Session> { _session });
+
+        _sessionService = new SessionService(_mockUserRepository.Object, _mockSessionRepository.Object); 
+        
+        long response = _sessionService.GetUserId(new Guid());
+
+        Assert.AreEqual(_session.User.Id, response);
+    }
+    
+    
+    [TestMethod]
+    [ExpectedException(typeof(CannotFindItemInList))]
+    public void TestGetUserIdThrowsException()
+    {
+        _mockSessionRepository
+            .Setup(logic => logic
+                .GetByFilter(It.IsAny<Func<Session, bool>>(), It.IsAny<PageData>()))
+            .Returns(new List<Session>());
+
+        _sessionService = new SessionService(_mockUserRepository.Object, _mockSessionRepository.Object); 
+        
+        _sessionService.GetUserId(new Guid());
+    }
 }

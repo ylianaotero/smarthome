@@ -1,28 +1,33 @@
 using CustomExceptions;
 using Domain.Abstract;
 using Domain.Concrete;
-using Domain.DTO;
 using IBusinessLogic;
 using IDataAccess;
 
 namespace BusinessLogic;
 
-public class HomeService (
-    IRepository<Home> homeRepository, 
-    IRepository<Device> deviceRepository, 
-    IRepository<User> userRepository, 
-    IRepository<Member> memberRepository,
-    IRepository<DeviceUnit> deviceUnitRepository) : IHomeService
+public class HomeService : IHomeService
 {
     private const string HomeNotFoundMessage = "Home not found";
-    private const string DeviceNotFoundMessage = "Device not found";
-    private const string UserNotFoundMessage = "Member not found";
     private const string UserIsNotHomeOwnerMessage = "Member is not a home owner";
-    private const string MemberAlreadyExistsMessage = "A member with this email already exists on this home";
     private const string HomeAlreadyExists = "A home with this id already exists";
-    private const string HomeIsFullMessage = "The home is full";
-    private const string UserDoesNotExistExceptionMessage = "Member not found";
+    
+    private readonly IRepository<Home> _homeRepository;
+    private readonly IUserService _userService;
+    
+    public HomeService(IRepository<Home> homeRepository, IUserService userService)
+    {
+        this._homeRepository = homeRepository;
+        this._userService = userService;
+    }
 
+    public void UpdateHome(long homeId)
+    {
+        Home home = GetHomeById(homeId);
+        
+        _homeRepository.Update(home);
+    }
+    
     public void CreateHome(Home home)
     {
         try
@@ -33,13 +38,13 @@ public class HomeService (
         }
         catch (ElementNotFound)
         {
-            homeRepository.Add(home);
+            _homeRepository.Add(home);
         }
     }
     
     public Home GetHomeById(long id)
     {
-        Home home = homeRepository.GetById(id);
+        Home home = _homeRepository.GetById(id);
 
         if (home == null)
         {
@@ -51,19 +56,35 @@ public class HomeService (
 
     public List<Home> GetHomesByFilter(Func<Home, bool> filter)
     {
-        return homeRepository.GetByFilter(filter, null);
+        return _homeRepository.GetByFilter(filter, null);
     }
     
     public List<Member> GetMembersFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
+        
         return home.Members;
     }
     
-    public List<DeviceUnit> GetDevicesFromHome(int homeId)
+    public List<DeviceUnit>? GetDevicesFromHomeByFilter(long homeId, Func<DeviceUnit, bool> filter)
+    {
+        List<DeviceUnit> devices = GetDevicesFromHome(homeId);
+
+        return devices.Where(filter).ToList();
+    }
+    
+    public List<DeviceUnit> GetDevicesFromHome(long homeId)
     {
         Home home = GetHomeById(homeId);
+        
         return home.Devices;
+    }
+    
+    public List<Room> GetRoomsFromHome(long homeId)
+    {
+        Home home = GetHomeById(homeId);
+        
+        return home.Rooms;
     }
     
     public Home AddOwnerToHome(long userId, Home home)
@@ -75,130 +96,26 @@ public class HomeService (
 
         return home;
     }
-
-    public void AddMemberToHome(long homeId, MemberDTO memberDTO)
+    
+    public void AddRoomToHome(long homeId, Room room)
     {
         Home home = GetHomeById(homeId);
-        if (home.Members.Any(m => m.User.Email == memberDTO.UserEmail))
-        {
-            throw new ElementAlreadyExist(MemberAlreadyExistsMessage);
-        }
         
-        if (home.Members.Count >= home.MaximumMembers)
-        {
-            throw new CannotAddItem(HomeIsFullMessage);
-        }
-        
-        User user = GetBy(u => u.Email == memberDTO.UserEmail, PageData.Default);
-
-        Member member = new Member()
-        {
-            User = user,
-            Notifications = new List<Notification>(),
-            HasPermissionToAddADevice = memberDTO.HasPermissionToAddADevice,
-            HasPermissionToListDevices = memberDTO.HasPermissionToListDevices,
-            ReceivesNotifications = memberDTO.ReceivesNotifications
-        }; 
-        
-        memberRepository.Add(member);
-        home.AddMember(member);
-        homeRepository.Update(home);
+        home.AddRoom(room);
+        _homeRepository.Update(home);
     }
-    
-    public void UpdateMemberNotificationPermission(MemberDTO memberDto, long homeId)
+    public void UpdateHomeAlias(long id, string alias)
     {
-        List<Member> listOfMembers = GetMembersFromHome(homeId); 
+        Home home = GetHomeById(id);
         
-        Member member = listOfMembers.FirstOrDefault(m => m.User.Email == memberDto.UserEmail);
-
-        if (member == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
-
-        member.ReceivesNotifications = memberDto.ReceivesNotifications; 
-        memberRepository.Update(member);
-    }
-    
-    public void AddDevicesToHome(long homeId, List<DeviceUnitDTO> homeDevices)
-    {
-        Home home = homeRepository.GetById(homeId);
-        if (home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
+        home.Alias = alias;
         
-        List<DeviceUnit> devices = new List<DeviceUnit>();
-      
-        MapDevices(homeDevices, devices);
-        
-        home.Devices = devices;
-        
-        homeRepository.Update(home);
-    }
-    
-    public void UpdateDeviceConnectionStatus(long id, DeviceUnit deviceUnit)
-    {
-        Home home = homeRepository.GetById(id);
-        if(home == null)
-        {
-            throw new ElementNotFound(HomeNotFoundMessage);
-        }
-        DeviceUnit device = home.Devices.FirstOrDefault(d => d.HardwareId == deviceUnit.HardwareId);
-        
-        if (device == null)
-        {
-            throw new ElementNotFound(DeviceNotFoundMessage);
-        }
-        
-        device.IsConnected = deviceUnit.IsConnected;
-        
-        homeRepository.Update(home);
-    }
-    
-    private User GetBy(Func<User, bool> predicate, PageData pageData)
-    {
-        User user = userRepository.GetByFilter(predicate, pageData).FirstOrDefault(); 
-        
-        if (user == null)
-        {
-            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
-        }
-
-        return user; 
-    }
-    
-    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
-    {
-        foreach (var device in homeDevices)
-        {
-            Device deviceEntity = deviceRepository.GetById(device.DeviceId);
-            
-            if (deviceEntity == null)
-            {
-                throw new ElementNotFound(DeviceNotFoundMessage);
-            }
-
-            DeviceUnit deviceUnit = new DeviceUnit()
-            {
-                Device = deviceEntity,
-                IsConnected = device.IsConnected,
-                HardwareId = Guid.NewGuid(),
-            };
-            
-            devices.Add(deviceUnit);
-            
-            deviceUnitRepository.Add(deviceUnit);
-        }
+        _homeRepository.Update(home);
     }
     
     private (User, HomeOwner) GetHomeOwner(long userId)
     {
-        User user = userRepository.GetById(userId);
-        if (user == null)
-        {
-            throw new ElementNotFound(UserNotFoundMessage);
-        }
+        User user = _userService.GetUserById(userId);
          
         List<Role> userRoles = user.Roles;
         if (userRoles == null || userRoles.Count == 0)
@@ -206,7 +123,7 @@ public class HomeService (
             throw new CannotAddItem(UserIsNotHomeOwnerMessage);
         }
 
-        Role role = userRoles.FirstOrDefault(r => r is HomeOwner);
+        Role role = userRoles.Find(r => r is HomeOwner);
         if (role == null)
         {
             throw new CannotAddItem(UserIsNotHomeOwnerMessage);

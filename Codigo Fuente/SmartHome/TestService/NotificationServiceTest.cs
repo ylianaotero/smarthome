@@ -16,7 +16,7 @@ public class NotificationServiceTest
     private Mock<IRepository<Home>> _mockHomeRepository; 
     
     private Home _defaultHome;
-    private DeviceUnit _deviceUnit; 
+    private DeviceUnit _deviceUnitService; 
     private User _defaultOwner;
     private Device _device; 
     private Member _member1; 
@@ -25,7 +25,7 @@ public class NotificationServiceTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    private const long DeviceModel = 1345354616346;
+    private const string DeviceModel = "1345354616346";
     private const string EventName = "New event";
     private const string Street = "Calle del Sol";
     private const int DoorNumber = 23;
@@ -53,7 +53,7 @@ public class NotificationServiceTest
         _notificationService = null;
         _mockHomeRepository = null;
         _defaultHome = null;
-        _deviceUnit = null;
+        _deviceUnitService = null;
         _defaultOwner = null;
         _device = null;
         _member1 = null;
@@ -172,7 +172,7 @@ public class NotificationServiceTest
             PhotoURLs = new List<string> { DevicePhotoUrl }
         };
         
-        _deviceUnit = new DeviceUnit()
+        _deviceUnitService = new DeviceUnit()
         {
             Device = _device,
             IsConnected = true,
@@ -201,7 +201,7 @@ public class NotificationServiceTest
             Latitude = Latitude,
             Longitude = Longitude,
             MaximumMembers = MaxMembers,
-            Devices = new List<DeviceUnit>() {_deviceUnit},
+            Devices = new List<DeviceUnit>() {_deviceUnitService},
             Members = new List<Member>() {_member1}
         };
     }
@@ -211,7 +211,7 @@ public class NotificationServiceTest
         _notificationDto = new NotificationDTO()
         {
             Event = TestEvent,
-            HardwareId = _deviceUnit.HardwareId,
+            HardwareId = _deviceUnitService.HardwareId,
             HomeId = TestHomeId
         };
     }

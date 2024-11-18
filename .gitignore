@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/dotnetcore,rider
 # Edit at https://www.toptal.com/developers/gitignore?templates=dotnetcore,rider
-SmartHome/SmartHome.sln.DotSettings.user
+Codigo Fuente/Frontend/front/.vscode
+Codigo Fuente/Frontend/front/.angular
+**/SmartHome/SmartHome.sln.DotSettings.user
+Codigo Fuente/SmartHome/SmartHome.sln.DotSettings.user
 ### DotnetCore ###
 # .NET Core build folders
 bin/
@@ -20,6 +23,10 @@ obj/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/
+.idea/**
+SmartHome/.idea/
+SmartHome/.idea/**
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -42,7 +49,7 @@ obj/
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
+# since they will be recreated, and may cause churn. Uncomment if using
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
@@ -61,7 +68,6 @@ cmake-build-*/
 
 # File-based project format
 *.iws
-
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -90,4 +96,73 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,rider
 .DS_Store
 
-SmartHome/SmartHome.sln.DotSettings.user
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+.connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+Thumbs.db
+
+# Ignorar la carpeta node_modules
+../Frontend/front/node_modules/
+
+../Frontend/front/.angular/cache/
+
+../Frontend/front/dist/front/browser/
+
+.idea/.idea.SmartHome/.idea/workspace.xml
+
+../Frontend/front/.angular/
+
+../Frontend/front/dist/
+
+../Frontend/front/node_modules/
+
+# Ignorar carpetas de Angular y dist
+../Frontend/front/.angular/
+../Frontend/front/dist/
+
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos de configuración de npm
+package-lock.json
+package.json
+
+
+

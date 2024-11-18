@@ -14,8 +14,10 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.0" />
         <ProjectReference Include="..\IBusinessLogic\IBusinessLogic.csproj" />
         <ProjectReference Include="..\CustomExceptions\CustomExceptions.csproj" />
+        <ProjectReference Include="..\IImporter\IImporter.csproj" />
         <ProjectReference Include="..\Model\Model.csproj" />
         <ProjectReference Include="..\ServiceFactory\ServiceFactory.csproj" />
     </ItemGroup>

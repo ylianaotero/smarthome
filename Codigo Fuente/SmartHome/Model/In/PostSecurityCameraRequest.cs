@@ -1,11 +1,12 @@
 using Domain.Concrete;
+using Domain.Enum;
 
 namespace Model.In;
 
 public class PostSecurityCameraRequest
 {
     public string Name { get; set; }
-    public long Model { get; set; }
+    public string Model { get; set; }
     public string Description { get; set; }
     public List<string> PhotoUrls { get; set; }
     public string? LocationType { get; set; }

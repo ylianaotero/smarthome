@@ -1,0 +1,28 @@
+{
+  "dispositivos": [{
+    "id": "69508433-1569-47a4-9591-447c3c4bdcbd",
+    "tipo": "camera",
+    "nombre": "Business G235",
+    "modelo": "G235",
+    "fotos": [
+      {
+        "path": "https://http2.mlstatic.com/D_NQ_NP_2X_787853-MLU71131483530_082023-F.webp",
+        "es_principal": false
+      },
+      {
+        "path": "https://http2.mlstatic.com/D_NQ_NP_2X_603102-MLU71171145159_082023-F.webp",
+        "es_principal": true
+      },
+      {
+        "path": "https://http2.mlstatic.com/D_NQ_NP_2X_600987-MLU71170963657_082023-F.webp",
+        "es_principal": false
+      },
+      {
+        "path": "https://http2.mlstatic.com/D_NQ_NP_2X_953692-MLU71132034844_082023-F.webp",
+        "es_principal": false
+      }
+    ],
+    "person_detection": false,
+    "movement_detection": true
+  }]
+}

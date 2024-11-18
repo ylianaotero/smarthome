@@ -5,7 +5,7 @@ namespace Model.Out;
 public class GetDeviceResponse
 {
     public string Name { get; set;  }
-    public long Model { get; set;  }
+    public string Model { get; set;  }
     public string? PhotoUrl { get; set;  }
     public string? CompanyName { get; set;  }
     

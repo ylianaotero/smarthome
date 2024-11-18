@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+
+</head>
+<body>
+
+<div class="welcome-container">
+  <h1 class="welcome-title">¡Hola, {{ userName }}!</h1>
+  <p>Bienvenido al menú de dueños de hogares.</p>
+
+  <div class="button-container" >
+    <a class="btn btn-primary" (click)="goCreateHome()">
+      <i class="bi bi-house-door-fill"></i> Crear un Hogar
+    </a>
+    <a class="btn btn-primary" (click)="goHomesOfHomeOwner()">
+      <i class="bi bi-list-ul"></i> Listar Hogares
+    </a>
+    <a class="btn btn-primary" (click)="goViewDevices()">
+      <i class="bi bi-display"></i> Listar Dispositivos
+    </a>
+
+  </div>
+
+</div>
+
+<!-- Enlace a Bootstrap JS y jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+

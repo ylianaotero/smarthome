@@ -2,6 +2,7 @@
 using DataAccess;
 using IBusinessLogic;
 using IDataAccess;
+using ImportersLogic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +18,11 @@ public static class ServiceFactory
         serviceCollection.AddScoped<ISessionService, SessionService>();
         serviceCollection.AddScoped<IHomeService, HomeService>();
         serviceCollection.AddScoped<ICompanyService, CompanyService>();
+        serviceCollection.AddScoped<IDeviceUnitService, DeviceUnitService>();
+        serviceCollection.AddScoped<IMemberService, MemberService>();
         serviceCollection.AddScoped<INotificationService, NotificationService>();
+        serviceCollection.AddScoped<IActionService, ActionService>();
+        serviceCollection.AddScoped<IImporter.IImporter, ImporterLogic>();
     }
     
     public static void AddConnectionString(this IServiceCollection serviceCollection, string connectionString)

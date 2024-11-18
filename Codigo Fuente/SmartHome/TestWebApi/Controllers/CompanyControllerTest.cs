@@ -32,6 +32,7 @@ public class CompanyControllerTest
     private int CreatedStatusCode = 201;
     private int NotFoundStatusCode = 404;
     private string LogoURL = "https://www.logo.com";
+    private bool ValidateNumberTrue = true;
     
     private const string UserName =  "John";
     private const string UserSurname = "Doe";
@@ -56,7 +57,8 @@ public class CompanyControllerTest
         GetCompaniesRequest request = new GetCompaniesRequest()
         {
             Name = Name,
-            Owner = _defaultUser.Name + " " + _defaultUser.Surname
+            Owner = _defaultUser.Name + " " + _defaultUser.Surname,
+            OwnerEmail = _defaultUser.Email
         };
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         
@@ -107,7 +109,8 @@ public class CompanyControllerTest
             Name = Name,
             RUT = RUT,
             LogoURL = LogoURL,
-            OwnerId = _defaultUser.Id
+            OwnerId = _defaultUser.Id,
+            ValidateNumber = ValidateNumberTrue
         };
 
         _mockIUserService
@@ -128,7 +131,8 @@ public class CompanyControllerTest
             Name = Name,
             RUT = RUT,
             LogoURL = LogoURL,
-            OwnerId = _defaultUser.Id
+            OwnerId = _defaultUser.Id,
+            ValidateNumber = ValidateNumberTrue
         };
 
         _mockIUserService.
@@ -175,7 +179,8 @@ public class CompanyControllerTest
             Name = Name,
             RUT = RUT,
             LogoURL = LogoURL,
-            Owner = _defaultUser
+            Owner = _defaultUser,
+            ValidateNumber = ValidateNumberTrue
         };
         
         _defaultCompany2 = new Company()
@@ -184,7 +189,8 @@ public class CompanyControllerTest
             Name = Name2,
             RUT = RUT,
             LogoURL = LogoURL,
-            Owner = _defaultUser
+            Owner = _defaultUser,
+            ValidateNumber = ValidateNumberTrue
         };
         
         _companies = new List<Company>
