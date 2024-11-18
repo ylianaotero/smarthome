@@ -99,7 +99,7 @@ public class UserControllerTest
         ObjectResult result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
         GetUsersResponse getUsersResponse = result.Value as GetUsersResponse;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(expectedResponse, getUsersResponse);
     }
@@ -133,7 +133,7 @@ public class UserControllerTest
         
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(OkStatusCode, result.StatusCode);
     }
@@ -154,7 +154,7 @@ public class UserControllerTest
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as OkObjectResult;
         GetUserResponse getUserResponse = result.Value as GetUserResponse;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(expectedResponse, getUserResponse);
     }
@@ -173,7 +173,7 @@ public class UserControllerTest
         
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as NotFoundObjectResult;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
@@ -192,7 +192,7 @@ public class UserControllerTest
         
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as BadRequestObjectResult;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
@@ -211,7 +211,7 @@ public class UserControllerTest
 
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as ObjectResult;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
     }
@@ -230,7 +230,7 @@ public class UserControllerTest
         
         ObjectResult result = _userController.PostUserRole(_user_1_example.Id, request) as ConflictObjectResult;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
 
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
