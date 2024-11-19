@@ -10,8 +10,15 @@ namespace WebApi.Controllers;
 [Route("api/v1/company-owners")]
 [ApiController]
 [RolesWithPermissions(RoleWithPermissions)]
-public class CompanyOwnerController(IUserService userService) : ControllerBase
+public class CompanyOwnerController : ControllerBase
 {
+    private readonly IUserService _userService;
+    
+    public CompanyOwnerController(IUserService userService)
+    {
+        this._userService = userService;
+    }
+    
     private const string RoleWithPermissions = "Administrator";
     
     [HttpPost]
@@ -19,7 +26,7 @@ public class CompanyOwnerController(IUserService userService) : ControllerBase
     {
         try
         {
-            userService.CreateUser(postCompanyOwnerRequest.ToEntity());
+            _userService.CreateUser(postCompanyOwnerRequest.ToEntity());
             PostCompanyOwnerResponse response = new PostCompanyOwnerResponse(postCompanyOwnerRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateCompanyOwner), response);

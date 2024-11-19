@@ -11,8 +11,15 @@ namespace WebApi.Controllers;
 [Route("api/v1/administrators")]
 [ApiController]
 [RolesWithPermissions(RoleWithPermissions)]
-public class AdministratorController(IUserService userService) : ControllerBase
+public class AdministratorController : ControllerBase
 {
+    private readonly IUserService _userService;
+    
+    public AdministratorController(IUserService userService)
+    {
+        this._userService = userService;
+    }
+    
     private const string RoleWithPermissions = "Administrator";
     
     [HttpPost]
@@ -20,7 +27,7 @@ public class AdministratorController(IUserService userService) : ControllerBase
     {
         try
         {
-            userService.CreateUser(postAdministratorRequest.ToEntity());
+            _userService.CreateUser(postAdministratorRequest.ToEntity());
             PostAdministratorResponse userResponse = new PostAdministratorResponse(postAdministratorRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateAdministrator), userResponse);
@@ -41,7 +48,7 @@ public class AdministratorController(IUserService userService) : ControllerBase
     {
         try
         {
-            userService.DeleteUser(id);
+            _userService.DeleteUser(id);
         }
         catch (ElementNotFound)
         {

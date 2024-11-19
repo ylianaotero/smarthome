@@ -18,7 +18,7 @@ public class HomeController : ControllerBase
     private const string HomeOwnerNotFoundMessage = "The home owner was not found.";
     private const string SourceAlreadyExistsMessage = "Source Already Exists";
     
-    private const int PreconditionFailedStatusCode = 412;
+    private const int BadRequestStatusCode = 400;
     
     private readonly IHomeService _homeService;
     private readonly IDeviceUnitService _deviceUnitService;
@@ -132,7 +132,7 @@ public class HomeController : ControllerBase
         }
         catch (CannotAddItem e)
         {
-            return StatusCode(PreconditionFailedStatusCode, e.Message);
+            return StatusCode(BadRequestStatusCode, e.Message);
         }
     }
     
