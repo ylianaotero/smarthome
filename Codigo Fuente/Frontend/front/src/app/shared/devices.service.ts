@@ -1,7 +1,7 @@
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import {GetDeviceRequest, GetDevicesResponse, GetDeviceTypesResponse } from '../interfaces/devices';
+import { GetDeviceRequest, GetDevicesResponse, GetDeviceTypesResponse, PostSmartLampRequest, PostMotionSensorRequest, PostWindowSensorRequest, PostSecurityCameraRequest } from '../interfaces/devices';
 
 
 @Injectable({
@@ -30,4 +30,44 @@ export class DevicesService {
     return this.httpClient.get<GetDeviceTypesResponse>(this.url + `/devices/types`);
   }
 
+  postWindowSensor(request: PostWindowSensorRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/window-sensors', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities
+    });
+  }
+
+  postSmartLamp(request: PostSmartLampRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/smart-lamps', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities
+    });
+  }
+
+  postSecurityCamera(request: PostSecurityCameraRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/security-cameras', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities,
+      locationType: request.locationType
+    });
+  }
+
+  postMotionSensor(request: PostMotionSensorRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/motion-sensors', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities
+    });
+  }
 }

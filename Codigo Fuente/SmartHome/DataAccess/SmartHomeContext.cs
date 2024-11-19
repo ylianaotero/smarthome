@@ -108,7 +108,7 @@ namespace DataAccess
             modelBuilder.Entity<DeviceUnit>().HasOne<Room>(du => du.Room)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-
+            
             modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Room).AutoInclude();
         }
 

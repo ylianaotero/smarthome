@@ -26,6 +26,11 @@ public class SecurityCamera : Device
         }
     }
     
+    public override string DefaultStatus()
+    {
+        return "";
+    }
+    
     public override string RunFunctionality(string functionality, string currentStatus)
     {
         if (!FunctionalityIsValid(functionality))
@@ -33,7 +38,7 @@ public class SecurityCamera : Device
             throw new InputNotValid(SecurityCameraFunctionalityMessage);
         }
             
-        return currentStatus;
+        return DefaultStatus();
     }
     
     private bool FunctionalityIsValid(string functionality)

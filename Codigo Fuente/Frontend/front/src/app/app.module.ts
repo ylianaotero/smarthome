@@ -3,35 +3,47 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { LogInComponent } from './logIn/logIn.component';
-import { HomePageComponent } from './homePage/homePage.component';
-import { SignUpHomeOwnerComponent } from './signUpHomeOwner/signUpHomeOwner.component';
-import { AccountComponent } from './account/account.component';
+import { LoginPanelComponent } from './pages/login/panel/login-panel.component';
+import { HomePanelComponent } from './pages/home/panel/home-panel.component';
+import { CreateHomeOwnerComponent } from './pages/home-owners/create/create-home-owner.component';
+import { HomeOwnersPanelComponent } from './pages/home-owners/panel/home-owners-panel.component';
 import { HttpClientModule } from '@angular/common/http';
-import {CreateHomeComponent} from './createHome/createHome.component';
-import {HomesOfHomeOwnerComponent} from './homesOfHomeOwner/homesOfHomeOwner.component';
+import {CreateHomeComponent} from './pages/home-owners/homes/create/createHome.component';
+import {HomeOwnersHomesComponent} from './pages/home-owners/homes/panel/home-owners-homes.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { AdministratorPanelComponent } from './pages/administrator/administrator-panel/administrator-panel.component';
-import { CreateUserComponent } from './pages/administrator/create-user/create-user.component';
-import { DeleteAdminComponent } from './pages/administrator/delete-admin/delete-admin.component';
-import {ImportComponent} from './import/import.component';
+import { AdministratorPanelComponent } from './pages/administrators/panel/administrator-panel.component';
+import { CreateUserComponent } from './pages/administrators/create-user/create-user.component';
+import { DeleteAdminComponent } from './pages/administrators/delete-admin/delete-admin.component';
+import { ImportDeviceComponent } from './pages/company-owners/import-device/import-device.component';
 import { UserPanelComponent } from './pages/user-panel/user-panel.component';
+import { CompanyOwnersPanelComponent } from './pages/company-owners/panel/company-owners-panel.component';
+import {DevicesPanelComponent} from './pages/devices/panel/devices-panel.component';
+import {NgOptimizedImage} from '@angular/common';
+import {ListUsersComponent} from './pages/administrators/list-users/list-users.component';
+import {ListCompaniesComponent} from './pages/administrators/list-companies/list-companies.component';
+import {CreateDeviceComponent} from './pages/company-owners/create-device/create-device.component';
+import {CreateCompanyComponent} from './pages/company-owners/create-company/create-company.component';
 
 const routes: Routes = [
-  { path: '', component: HomePageComponent },
-  { path: 'login', component: LogInComponent },
-  { path: 'home-owners', component: SignUpHomeOwnerComponent },
-  { path: 'account', component: AccountComponent },
-  { path: 'home', component: HomePageComponent },
-  { path: 'homes', component: CreateHomeComponent },
-  { path: 'homes-home-owner', component: HomesOfHomeOwnerComponent },
-  { path: 'administrator', component: AdministratorPanelComponent },
-  { path: 'administrator/new-admin', component: CreateUserComponent },
-  { path: 'administrator/new-companyOwner', component: CreateUserComponent },
-  { path: 'administrator/delete-admin', component: DeleteAdminComponent },
-  { path: 'imports', component: ImportComponent },
-  { path: 'home/user-panel', component: UserPanelComponent }
+  { path: '', component: HomePanelComponent },
+  { path: 'login', component: LoginPanelComponent },
+  { path: 'devices', component: DevicesPanelComponent },
+  { path: 'administrators', component: AdministratorPanelComponent },
+  { path: 'administrators/create-user', component: CreateUserComponent },
+  { path: 'administrators/delete-admin', component: DeleteAdminComponent },
+  { path: 'administrators/list-users', component: ListUsersComponent },
+  { path: 'administrators/list-companies', component: ListCompaniesComponent },
+  { path: 'home-owners', component: HomeOwnersPanelComponent },
+  { path: 'home-owners/create', component: CreateHomeOwnerComponent },
+  { path: 'home-owners/homes', component: HomeOwnersHomesComponent },
+  { path: 'home-owners/homes/create', component: CreateHomeComponent },
+  { path: 'company-owners', component: CompanyOwnersPanelComponent },
+  { path: 'company-owners/import-device', component: ImportDeviceComponent },
+  { path: 'company-owners/create-device', component: CreateDeviceComponent },
+  { path: 'company-owners/create-company', component: CreateCompanyComponent },
+  { path: 'home', component: HomePanelComponent },
+  { path: 'home/user-panel', component: UserPanelComponent },
 ];
 
 @NgModule({
@@ -41,26 +53,32 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     NgbModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgOptimizedImage
   ],
   declarations: [
     AppComponent,
-    LogInComponent,
-    HomePageComponent,
-    SignUpHomeOwnerComponent,
-    AccountComponent,
+    LoginPanelComponent,
+    HomePanelComponent,
+    CreateHomeOwnerComponent,
+    HomeOwnersPanelComponent,
     CreateHomeComponent,
-    HomesOfHomeOwnerComponent,
+    HomeOwnersHomesComponent,
     AdministratorPanelComponent,
     CreateUserComponent,
-    ImportComponent,
-    HomesOfHomeOwnerComponent,
+    ImportDeviceComponent,
+    HomeOwnersHomesComponent,
     AdministratorPanelComponent,
     CreateUserComponent,
-    HomesOfHomeOwnerComponent,
-    ImportComponent,
+    HomeOwnersHomesComponent,
     DeleteAdminComponent,
-    UserPanelComponent
+    UserPanelComponent,
+    CompanyOwnersPanelComponent,
+    DevicesPanelComponent,
+    ListUsersComponent,
+    ListCompaniesComponent,
+    CreateDeviceComponent,
+    CreateCompanyComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

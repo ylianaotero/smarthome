@@ -94,23 +94,24 @@ public class DeviceUnitService : IDeviceUnitService
             Device deviceEntity = _deviceService.GetDeviceById((long)device.DeviceId);
 
             bool isConnected = false;
-            if (!device.IsConnected == null)
+            if (device.IsConnected != null)
             {
                 isConnected = (bool)device.IsConnected;
             }
 
-            DeviceUnit deviceUnitService = new DeviceUnit()
+            DeviceUnit deviceUnit = new DeviceUnit()
             {
                 Device = deviceEntity,
                 Name = deviceEntity.Name,
                 IsConnected = isConnected,
                 HardwareId = Guid.NewGuid(),
+                Status = deviceEntity.DefaultStatus()
             };
             
-            devices.Add(deviceUnitService);
+            devices.Add(deviceUnit);
             
-            _deviceUnitRepository.Add(deviceUnitService);
-            _deviceUnitRepository.Update(deviceUnitService);
+            _deviceUnitRepository.Add(deviceUnit);
+            _deviceUnitRepository.Update(deviceUnit);
         }
     }
     

@@ -24,6 +24,11 @@ public class MotionSensor : Device
             throw new InputNotValid(MotionSensorStatusMessage);
         }
     }
+    
+    public override string DefaultStatus()
+    {
+        return "";
+    }
 
     public override string RunFunctionality(string functionality, string currentStatus)
     {
@@ -31,8 +36,8 @@ public class MotionSensor : Device
         {
             throw new InputNotValid(MotionSensorFunctionalityMessage);
         }
-            
-        return currentStatus;
+
+        return DefaultStatus();
     }
     
     private bool FunctionalityIsValid(string functionality)

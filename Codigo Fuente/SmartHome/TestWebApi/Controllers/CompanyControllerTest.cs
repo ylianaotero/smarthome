@@ -57,7 +57,8 @@ public class CompanyControllerTest
         GetCompaniesRequest request = new GetCompaniesRequest()
         {
             Name = Name,
-            Owner = _defaultUser.Name + " " + _defaultUser.Surname
+            Owner = _defaultUser.Name + " " + _defaultUser.Surname,
+            OwnerEmail = _defaultUser.Email
         };
         ObjectResult? result = _companyController.GetCompanies(request, DefaultPageDataRequest()) as ObjectResult;
         

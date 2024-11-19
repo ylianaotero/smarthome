@@ -12,20 +12,20 @@ public class GetDeviceUnitResponse
     public string? RoomName { get; set; }
     public string? Status { get; set; }
     
-    public GetDeviceUnitResponse(DeviceUnit deviceUnitService)
+    public GetDeviceUnitResponse(DeviceUnit deviceUnit)
     {
-        Name = deviceUnitService.Device.Name;
-        HardwareId = deviceUnitService.HardwareId;
-        IsConnected = deviceUnitService.IsConnected;
-        Model = deviceUnitService.Device.Model;
-        Photo = deviceUnitService.Device.PhotoURLs[0];
-        if (deviceUnitService.Room != null)
+        Name = deviceUnit.Device.Name;
+        HardwareId = deviceUnit.HardwareId;
+        IsConnected = deviceUnit.IsConnected;
+        Model = deviceUnit.Device.Model;
+        Photo = deviceUnit.Device.PhotoURLs[0];
+        if (deviceUnit.Room != null)
         {
-            RoomName = deviceUnitService.Room.Name;
+            RoomName = deviceUnit.Room.Name;
         }
-        if (!String.IsNullOrEmpty(deviceUnitService.Status))
+        if (!String.IsNullOrEmpty(deviceUnit.Status))
         {
-            Status = deviceUnitService.Status;
+            Status = deviceUnit.Status;
         }
     }
 
@@ -39,6 +39,5 @@ public class GetDeviceUnitResponse
                RoomName == response.RoomName &&
                Photo == response.Photo &&
                Status == response.Status;
-               
     }
 }
