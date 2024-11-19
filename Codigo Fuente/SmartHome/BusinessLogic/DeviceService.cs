@@ -22,29 +22,6 @@ public class DeviceService : IDeviceService
         this._deviceRepository = deviceRepository;
     }
     
-    /*
-    public void CreateDevice(Device device)
-    {
-        Company deviceCompany = device.Company;
-
-        string? validationMethod = deviceCompany.ValidationMethod;
-
-        if (!string.IsNullOrEmpty(validationMethod))
-        {
-            validationMethod = validationMethod.ToUpper();
-            Modelo deviceModel = new Modelo();
-            deviceModel.set_Value(device.Model);
-
-            if (!ModelIsValid(deviceModel, validationMethod))
-            {
-                throw new InputNotValid(ModelValidatorError);
-            }
-        }
-
-        _deviceRepository.Add(device);
-    }
-    */
-
     
     public void CreateDevice(Device device)
     {
@@ -102,7 +79,11 @@ public class DeviceService : IDeviceService
         IModelValidator _modelValidator;
         bool isValid;
         
-        if (validationMethod != null)
+        if (validationMethod == "")
+        {
+            isValid = true;
+        }
+        else
         {
             if(validationMethod == "VALIDATORNUMBER")
             {
@@ -119,10 +100,6 @@ public class DeviceService : IDeviceService
                 throw new ElementNotFound(ValidationMethodNotFoundMessage);
             }
             isValid = _modelValidator.EsValido(deviceModel);
-        }
-        else
-        {
-            isValid = true;
         }
 
         return isValid;
