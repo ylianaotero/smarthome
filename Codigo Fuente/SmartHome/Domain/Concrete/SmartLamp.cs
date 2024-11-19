@@ -28,7 +28,12 @@ public class SmartLamp : Device
     
     public override string DefaultStatus()
     {
-        return "Off";
+        if (Functionalities != null)
+        {
+            return "Off";
+        }
+        
+        return "";
     }
     
     public override string RunFunctionality(string functionality, string currentStatus)

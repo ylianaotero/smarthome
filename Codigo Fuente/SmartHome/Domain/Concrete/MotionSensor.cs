@@ -36,8 +36,8 @@ public class MotionSensor : Device
         {
             throw new InputNotValid(MotionSensorFunctionalityMessage);
         }
-            
-        return currentStatus;
+
+        return DefaultStatus();
     }
     
     private bool FunctionalityIsValid(string functionality)

@@ -38,7 +38,7 @@ public class SecurityCamera : Device
             throw new InputNotValid(SecurityCameraFunctionalityMessage);
         }
             
-        return currentStatus;
+        return DefaultStatus();
     }
     
     private bool FunctionalityIsValid(string functionality)
