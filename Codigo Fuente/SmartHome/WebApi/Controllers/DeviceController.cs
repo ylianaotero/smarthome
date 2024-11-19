@@ -10,9 +10,17 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/devices")]
 [ApiController]
-public class DeviceController(IDeviceService deviceService, ICompanyService companyService)
-    : ControllerBase
+public class DeviceController : ControllerBase
 {
+    private readonly IDeviceService _deviceService;
+    private readonly ICompanyService _companyService;
+    
+    public DeviceController(IDeviceService deviceService, ICompanyService companyService)
+    {
+        this._deviceService = deviceService;
+        this._companyService = companyService;
+    }
+    
     private const string RoleWithPermissions = "CompanyOwner";
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string CompanyNotFoundMessage = "The company was not found.";
@@ -21,9 +29,9 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [HttpGet] 
     public IActionResult GetDevices([FromQuery] GetDeviceRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        int count = deviceService.GetDevicesByFilter(request.ToFilter(), null).Count; 
+        int count = _deviceService.GetDevicesByFilter(request.ToFilter(), null).Count; 
         GetDevicesResponse getDevicesResponse = new GetDevicesResponse
-            (deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
+            (_deviceService.GetDevicesByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
         
         return Ok(getDevicesResponse);
     }
@@ -36,7 +44,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
         
         try
         {
-            getDeviceResponse = new GetDeviceResponse(deviceService.GetDeviceById(id));
+            getDeviceResponse = new GetDeviceResponse(_deviceService.GetDeviceById(id));
         }
         catch (ElementNotFound)
         {
@@ -51,7 +59,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     [Route("types")]
     public IActionResult GetDeviceTypes()
     {
-        List<string> deviceTypes = deviceService.GetDeviceTypes();
+        List<string> deviceTypes = _deviceService.GetDeviceTypes();
         
         GetDeviceTypesResponse getDeviceTypesResponse = GetDeviceTypesResponse(deviceTypes);
         
@@ -65,7 +73,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     {
         try
         {
-            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         } 
         catch (ElementNotFound)
         {
@@ -86,7 +94,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     {
         try
         {
-            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         }
         catch (ElementNotFound)
         {
@@ -107,7 +115,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     {
         try
         {
-            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         }
         catch (ElementNotFound)
         {
@@ -128,7 +136,7 @@ public class DeviceController(IDeviceService deviceService, ICompanyService comp
     {
         try
         {
-            deviceService.CreateDevice(companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
+            _deviceService.CreateDevice(_companyService.AddCompanyToDevice(request.Company, request.ToEntity()));
         }
         catch (ElementNotFound)
         {
