@@ -5,6 +5,7 @@ export class createHomeModel {
   Latitude: number;
   Longitude: number;
   MaximumMembers: number;
+  Alias: string;
 
   constructor(
     OwnerId: number,
@@ -12,14 +13,16 @@ export class createHomeModel {
     DoorNumber: number,
     Latitude: number,
     Longitude: number,
-    MaximumMembers: number
-  ) {
+    MaximumMembers: number,
+    Alias: string
+) {
     this.OwnerId = OwnerId;
     this.Street = Street;
     this.DoorNumber = DoorNumber;
     this.Latitude = Latitude;
     this.Longitude = Longitude;
     this.MaximumMembers = MaximumMembers;
+    this.Alias = Alias;
   }
 }
 
@@ -28,5 +31,6 @@ export interface homeRetrieveModel{
   DoorNumber: number;
   Latitude: number;
   Longitude: number;
+  Alias: string;
 }
 

@@ -23,51 +23,11 @@ export class DevicesService {
     params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
     params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
 
-    return this.httpClient.get<GetDevicesResponse>(this.url + '/devices', {params});
+    return this.httpClient.get<GetDevicesResponse>(this.url + '/devices', {params}); //necesita el header
   }
 
   getDeviceTypes(): Observable<GetDeviceTypesResponse> {
     return this.httpClient.get<GetDeviceTypesResponse>(this.url + `/devices/types`);
   }
 
-  postWindowSensor(request: PostWindowSensorRequest): Observable<any> {
-    return this.httpClient.post(this.url + '/devices/window-sensors', {
-      name: request.name,
-      model: request.model,
-      description: request.description,
-      company: request.company,
-      functionalities: request.functionalities
-    });
-  }
-
-  postSmartLamp(request: PostSmartLampRequest): Observable<any> {
-    return this.httpClient.post(this.url + '/devices/smart-lamps', {
-      name: request.name,
-      model: request.model,
-      description: request.description,
-      company: request.company,
-      functionalities: request.functionalities
-    });
-  }
-
-  postSecurityCamera(request: PostSecurityCameraRequest): Observable<any> {
-    return this.httpClient.post(this.url + '/devices/security-cameras', {
-      name: request.name,
-      model: request.model,
-      description: request.description,
-      company: request.company,
-      functionalities: request.functionalities,
-      locationType: request.locationType
-    });
-  }
-
-  postMotionSensor(request: PostMotionSensorRequest): Observable<any> {
-    return this.httpClient.post(this.url + '/devices/motion-sensors', {
-      name: request.name,
-      model: request.model,
-      description: request.description,
-      company: request.company,
-      functionalities: request.functionalities
-    });
-  }
 }

@@ -14,8 +14,14 @@ import {
 } from '../pages/home-owners/homes/panel/homeModels';
 import {createHomeModel, homeRetrieveModel} from '../pages/home-owners/homes/create/createHomeModel';
 import {Observable, tap} from 'rxjs';
-import {DeviceFilterRequestModel, deviceModel} from '../pages/home-owners/panel/deviceModels';
-import {ImportDevicesRequest, importer} from '../pages/company-owners/import-device/importerModels';
+import {DeviceFilterRequestModel, deviceModel} from '../pages/devices/panel/model-device';
+import {ImportDevicesRequest, importer, ImporterPath} from '../pages/company-owners/import-device/importerModels';
+import {
+  GetDeviceTypesResponse, PostMotionSensorRequest,
+  PostSecurityCameraRequest,
+  PostSmartLampRequest,
+  PostWindowSensorRequest
+} from '../interfaces/devices';
 
 @Injectable({
   providedIn: 'root'
@@ -82,11 +88,15 @@ export class ApiService {
   }
 
   getSupportedDevices() {
-    return this.httpClient.get(this.url + '/devices' + '/types', {headers: {'Authorization': `${this.currentSession?.token}`}});
+    return this.httpClient.get<GetDeviceTypesResponse>(this.url + '/devices' + '/types', {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   getImporters() {
     return this.httpClient.get<importer[]>(this.url + '/imports', {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  postImporter(data : ImporterPath) {
+    return this.httpClient.post(this.url + '/imports/new', data ,{headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   importDevices(data: ImportDevicesRequest) {
@@ -99,7 +109,7 @@ export class ApiService {
     if (modelIn.Name) {
       params = params.set('Name', modelIn.Name);
     }
-    if (modelIn.Model !== undefined && modelIn.Model !== null && !isNaN(modelIn.Model)) {
+    if (modelIn.Model) {
       params = params.set('Model', modelIn.Model);
     }
 
@@ -118,4 +128,55 @@ export class ApiService {
       headers: { 'Authorization': `${this.currentSession?.token}` }
     });
   }
+
+  postWindowSensor(request: PostWindowSensorRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/window-sensors', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities
+    }, {
+      headers: { 'Authorization': `${this.currentSession?.token}` }
+    });
+  }
+
+  postSmartLamp(request: PostSmartLampRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/smart-lamps', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities
+    }, {
+      headers: { 'Authorization': `${this.currentSession?.token}` }
+    });
+  }
+
+  postSecurityCamera(request: PostSecurityCameraRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/security-cameras', {
+      name: request.name,
+      Model: request.Model,
+      PhotoUrls: request.PhotoUrls,
+      Description: request.Description,
+      Functionalities: request.Functionalities,
+      LocationType: request.LocationType,
+      Company: request.Company
+    }, {
+      headers: { 'Authorization': `${this.currentSession?.token}` }
+    });
+  }
+
+  postMotionSensor(request: PostMotionSensorRequest): Observable<any> {
+    return this.httpClient.post(this.url + '/devices/motion-sensors', {
+      name: request.name,
+      model: request.model,
+      description: request.description,
+      company: request.company,
+      functionalities: request.functionalities
+    }, {
+      headers: { 'Authorization': `${this.currentSession?.token}` }
+    });
+  }
+
 }

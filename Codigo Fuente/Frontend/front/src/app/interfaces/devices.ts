@@ -41,21 +41,21 @@ export class PostWindowSensorRequest {
 
 export class PostSecurityCameraRequest {
   name: string | null;
-  model: string | null;
-  company: number | null;
-  description: string | null;
-  functionalities: string[];
-  photoUrls: string[];
-  locationType: string | null;
+  Model: string | null;
+  Company: number | null;
+  Description: string | null;
+  Functionalities: string[];
+  PhotoUrls: string[];
+  LocationType: string | null;
 
   constructor(name: string | null, model: string | null, description: string | null, functionalities: string[], photoUrls: string[], locationType: string | null, company: number | null) {
     this.name = name;
-    this.model = model;
-    this.description = description;
-    this.functionalities = functionalities;
-    this.photoUrls = photoUrls;
-    this.locationType = locationType;
-    this.company = company;
+    this.Model = model;
+    this.Description = description;
+    this.Functionalities = functionalities;
+    this.PhotoUrls = photoUrls;
+    this.LocationType = locationType;
+    this.Company = company;
   }
 }
 

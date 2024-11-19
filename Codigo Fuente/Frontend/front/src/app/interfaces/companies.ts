@@ -1,20 +1,15 @@
-export interface GetCompaniesRequest {
-    name: string | null;
-    owner: string | null;
-    ownerEmail: string | null;
-}
 
 export interface GetCompaniesResponse {
     companies: GetCompanyResponse[];
 }
 
 export interface GetCompanyResponse {
+    id: number;
     owner: string;
     ownerEmail: string;
     name: string;
     rut: string;
     logoURL: string | null;
-    id: number;
 }
 
 export class CreateCompanyRequest {
@@ -22,12 +17,14 @@ export class CreateCompanyRequest {
   rut: string | null;
   logoUrl: string | null;
   ownerId: number | null;
+  ValidationMethod: string | null;
 
-  constructor(name: string, rut: string, logoUrl: string, ownerId: number) {
+  constructor(name: string, rut: string, logoUrl: string, ownerId: number, validation: string) {
     this.name = name;
     this.rut = rut;
     this.logoUrl = logoUrl;
     this.ownerId = ownerId;
+    this.ValidationMethod = validation;
   }
 }
 
@@ -36,5 +33,6 @@ export interface PostCompaniesResponse {
   rut: string | null;
   logoUrl: string | null;
   ownerId: number | null;
-  validateNumber: boolean | null;
+  ValidationMethod: string | null;
+
 }

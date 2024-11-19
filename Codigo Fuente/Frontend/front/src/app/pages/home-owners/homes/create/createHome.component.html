@@ -14,10 +14,14 @@
     <i class="bi bi-arrow-left"></i>
   </button>
   <h1 class="welcome-title">Creación de Hogares</h1>
-  <form id="create-home-form" (ngSubmit)="registerHome(streetValue, doorNumberValue, latitudeValue, longitudeValue, maximumMembersValue)" #homeForm="ngForm">
+  <form id="create-home-form" (ngSubmit)="registerHome(streetValue, doorNumberValue, latitudeValue, longitudeValue, maximumMembersValue, aliasValue)" #homeForm="ngForm">
     <div class="input-group">
     <label for="street">Calle Principal:</label>
       <input type="text" id="street" name="street" #street="ngModel" [(ngModel)]="streetValue" placeholder="Ingresa la calle">
+    </div>
+    <div class="input-group">
+      <label for="alias">Alias:</label>
+      <input type="text" id="alias" name="alias" #street="ngModel" [(ngModel)]="aliasValue" placeholder="Ingresa el alias">
     </div>
     <div class="input-group">
     <label for="door-number">Número de Puerta:</label>

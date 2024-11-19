@@ -195,7 +195,7 @@
           <tr *ngFor="let member of members">
             <td>{{ member.fullName }}</td>
             <td>
-              <button class="btn" (click)="toggleNotification(member)">
+              <button class="btn" (click)="toggleNotification(member)" style="background-color: transparent;">
                 <i
                   class="fas"
                   [ngClass]="{
@@ -204,6 +204,7 @@
                     }"
                 ></i>
               </button>
+
             </td>
           </tr>
           </tbody>

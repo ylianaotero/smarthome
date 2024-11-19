@@ -3,7 +3,6 @@ import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {
   CreateCompanyRequest,
-  GetCompaniesRequest,
   GetCompaniesResponse,
   GetCompanyResponse
 } from '../../../interfaces/companies';
@@ -23,6 +22,8 @@ export class CreateCompanyComponent {
   companyOwnerEmail: string = '';
   companyOwnerId: number;
 
+  validation : string = '';
+
   newCompanyName: string = '';
   newCompanyRUT: string = '';
   newCompanyLogoURL: string = '';
@@ -40,13 +41,8 @@ export class CreateCompanyComponent {
   }
 
   getCompany(): void {
-    const request: GetCompaniesRequest = {
-      name: "",
-      owner: this.companyOwnerName,
-      ownerEmail: this.companyOwnerEmail
-    };
 
-    this.apiCompany.getCompanies(request).subscribe({
+    this.apiCompany.getCompanies(this.companyOwnerEmail).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
       }
@@ -65,7 +61,7 @@ export class CreateCompanyComponent {
 
     this.apiCompany
       .createCompany(new CreateCompanyRequest
-      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.companyOwnerId))
+      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.companyOwnerId, this.validation))
       .subscribe({
         next: (response) => {
           this.getCompany();

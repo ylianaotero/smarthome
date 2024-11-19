@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../shared/api.service';
-import {DeviceFilterRequestModel, deviceModel} from './deviceModels';
+import {DeviceFilterRequestModel, deviceModel} from '../../devices/panel/model-device';
+import {GetDeviceResponse, GetDeviceTypesResponse} from '../../../interfaces/devices';
 
 @Component({
   selector: 'app-account',
@@ -20,59 +21,32 @@ export class HomeOwnersPanelComponent implements OnInit {
   selectedName: string = "";
   selectedCompany: string = "";
   selectedKind: string = "";
-  selectedModel?: number;
+  selectedModel: string = "";
 
 
-  isModalOfListOfSupportedDevicesOpen: boolean = false;
+  modalShowDevices: boolean = false;
+  modalShowDevicesTypes: boolean = false;
 
-  isModalOfListOfDevicesOpen: boolean = false;
+  deviceTypes: string[] = [];
+
   constructor(private api: ApiService, private router: Router) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
-    this.getSupportedDevices();
-    this.getDevices();
+    this.getDevicesTypes();
   }
 
-  getSupportedDevices(): void {
+  getDevicesTypes(): void {
     this.api.getSupportedDevices().subscribe({
-      next: (res: any) => {
-        this.supportedDevices = res.deviceTypes || [];
+      next: (res: GetDeviceTypesResponse) => {
+        console.log(res)
+        this.deviceTypes = res.deviceTypes || [];
+        console.log(res.deviceTypes);
       }
     });
   }
 
-  currentPage: number = 1;
-  pageSize: number = 2; //cuantos se van a ver por pagina
-  totalDevices: number = 0;
-
-  getDevices(): void {
-    const filters: DeviceFilterRequestModel = {
-      Name: this.selectedName,
-      Model: this.selectedModel,
-      Company: this.selectedCompany,
-      Kind: this.selectedKind
-    };
-
-    this.api.getDevices(filters, this.currentPage, this.pageSize).subscribe({
-      next: (res: any) => {
-        this.devices = res.devices || [];
-        this.totalDevices =  res.totalCount || 0;
-      },
-      error: (err) => {
-        console.error('Error al obtener dispositivos', err);
-      }
-    });
-  }
-
-  changePage(page: number): void {
-    this.currentPage = page;
-    this.getDevices();
-  }
-  get totalPages(): number {
-    return Math.ceil(this.totalDevices / this.pageSize);
-  }
 
   goCreateHome(): void {
     this.router.navigate(['/home-owners/homes/create']);
@@ -86,20 +60,39 @@ export class HomeOwnersPanelComponent implements OnInit {
     this.router.navigate(['/devices']);
   }
 
+  openModal(modal: string): void {
+    this.changeSelectedModal(modal, true);
+    document.body.classList.add('modal-open');
+    this.createBackdrop();
+  }
+
   closeModal(modal: string): void {
     this.changeSelectedModal(modal, false);
     document.body.classList.remove('modal-open');
     this.removeBackdrop();
   }
 
-  changeSelectedModal(modal: string, bool: boolean): void{
-    if(modal == "showSupportedDevices"){
-      this.isModalOfListOfSupportedDevicesOpen = bool;
-    }else{
-      if(modal == "showDevices"){
-        this.isModalOfListOfDevicesOpen = bool;
-      }
+  changeSelectedModal(modal: string, showModal: boolean): void{
+    if(modal == "showDevices"){
+      this.modalShowDevices = showModal;
+    }else if(modal == "showDevicesTypes"){
+      this.modalShowDevicesTypes = showModal;
     }
+  }
+
+  closeModalBackdrop(event: MouseEvent,modal: string ): void {
+    const target = event.target as HTMLElement;
+    if (target.id === 'myModalShowDevices') {
+      this.closeModal(modal);
+    }else if(target.id === 'myModalShowDevicesTypes'){
+      this.closeModal(modal);
+    }
+  }
+
+  private createBackdrop(): void {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop fade show';
+    document.body.appendChild(backdrop);
   }
 
   private removeBackdrop(): void {
@@ -108,5 +101,6 @@ export class HomeOwnersPanelComponent implements OnInit {
       document.body.removeChild(backdrop);
     }
   }
+
 
 }
