@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { Router } from '@angular/router';
 import {GetUsersRequest, GetUsersResponse, GetUserResponse, Role} from '../../../interfaces/users';
+import {ApiService} from '../../../shared/api.service';
 
 @Component({
   selector: 'app-list-users',
@@ -21,7 +22,7 @@ export class ListUsersComponent {
   modalImage: string | null = null;
   isPhotoModalOpen = false;
 
-  constructor(private api: AdministratorService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.getUsers();

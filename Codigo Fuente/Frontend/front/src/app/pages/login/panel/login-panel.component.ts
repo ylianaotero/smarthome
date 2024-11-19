@@ -45,13 +45,14 @@ export class LoginPanelComponent {
     if (res.user && res.user.roles) {
       const hasHomeOwnerRole = res.user.roles.some(role => role.kind === 'HomeOwner');
       const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
+      const hasAdministratorRole = res.user.roles.some(role => role.kind === 'Administrator');
 
       if (hasHomeOwnerRole) {
         this.router.navigate(['/home-owners']);
       } else if (hasCompanyOwnerRole) {
         this.router.navigate(['/company-owners']);
-      } else {
-        // Manejo si no tiene ninguno de los roles requeridos
+      } else if (hasAdministratorRole) {
+        this.router.navigate(['/administrators']);
       }
     } else {
       // Manejo si res.user o res.user.roles no existen

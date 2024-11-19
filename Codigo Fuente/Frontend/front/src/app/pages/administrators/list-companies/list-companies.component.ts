@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {GetCompanyResponse, GetCompaniesResponse} from '../../../interfaces/companies';
 import {CompanyService} from '../../../shared/company.service';
+import {ApiService} from '../../../shared/api.service';
 
 @Component({
   selector: 'app-list-companies',
@@ -21,7 +22,7 @@ export class ListCompaniesComponent {
   modalImage: string | null = null;
   isPhotoModalOpen = false;
 
-  constructor(private api: CompanyService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.getCompanies();

@@ -25,8 +25,8 @@ export class DevicesPanelComponent implements OnInit {
   modalImage: string | null = null;
   isModalOpen = false;
 
-  constructor(private router: Router, private api: AdministratorService, private apiDevices: DevicesService, private sharedApi: ApiService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
+  constructor(private router: Router, private sharedApi: ApiService) {
+    this.userName = this.sharedApi.currentSession?.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {

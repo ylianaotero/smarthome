@@ -18,7 +18,7 @@ public class CompanyController(ICompanyService companyService, IUserService user
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
 
     [HttpGet]
-    [RolesWithPermissions(RoleWithPermissionsToPostCompany)]
+    [RolesWithPermissions(RoleWithPermissionsToPostCompany, RoleWithPermissionsToGetCompanies)]
     public IActionResult GetCompanies([FromQuery] GetCompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
         GetCompaniesResponse getCompaniesResponse = new GetCompaniesResponse

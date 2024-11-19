@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { createAdministratorModel, createCompanyOwnerModel } from '../../../interfaces/users';
 import { AdministratorService } from '../../../shared/administrator.service';
+import {ApiService} from '../../../shared/api.service';
 
 @Component({
   selector: 'app-create-user',
@@ -22,7 +23,7 @@ export class CreateUserComponent {
   roleTypes: string[] = ['Administrador', 'Dueño de Empresa'];
   selectedRole: string = '';
 
-  constructor(private api: AdministratorService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   goHome(): void {
     this.router.navigate(['/administrators']);

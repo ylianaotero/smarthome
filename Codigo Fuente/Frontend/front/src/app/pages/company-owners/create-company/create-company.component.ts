@@ -30,7 +30,7 @@ export class CreateCompanyComponent {
 
   companies: GetCompanyResponse[] = [];
 
-  constructor(private api: ApiService, private router: Router, private apiCompany: CompanyService) {
+  constructor(private api: ApiService, private router: Router) {
     this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
     this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
     this.companyOwnerId = this.api.currentSession?.user?.id || -1;
@@ -42,7 +42,7 @@ export class CreateCompanyComponent {
 
   getCompany(): void {
 
-    this.apiCompany.getCompanies(this.companyOwnerEmail).subscribe({
+    this.api.getCompanies(this.companyOwnerEmail).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
       }
@@ -59,7 +59,7 @@ export class CreateCompanyComponent {
       return
     }
 
-    this.apiCompany
+    this.api
       .createCompany(new CreateCompanyRequest
       (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.companyOwnerId, this.validation))
       .subscribe({

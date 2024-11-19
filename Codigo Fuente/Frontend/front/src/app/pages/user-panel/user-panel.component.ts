@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AdministratorService } from '../../shared/administrator.service';
 import { GetDeviceRequest, GetDevicesResponse, GetDeviceResponse, GetDeviceTypesResponse } from '../../interfaces/devices';
 import { DevicesService } from '../../shared/devices.service';
+import {ApiService} from '../../shared/api.service';
+import {Implement} from '@angular/cli/lib/config/workspace-schema';
 
 @Component({
   selector: 'app-user-panel',
   templateUrl: './user-panel.component.html',
   styleUrl: './user-panel.component.css'
 })
-export class UserPanelComponent {
+export class UserPanelComponent implements OnInit{
 
   userName: string;
 
@@ -28,34 +30,18 @@ export class UserPanelComponent {
   devices : GetDeviceResponse[] = [];
   deviceTypes: string[] = [];
 
-  constructor(private router: Router, private api: AdministratorService, private apiDevices : DevicesService) {
+  constructor(private router: Router, private api: ApiService) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
-    this.getDevices();
     this.getDevicesTypes();
   }
 
-  getDevices(): void {
-    const request: GetDeviceRequest = {
-      name: this.selectedName,
-      model: this.selectedModel,
-      company: this.selectedCompany,
-      kind: this.selectedKind
-    }
 
-    this.apiDevices.getDevices(request).subscribe({
-      next: (res: GetDevicesResponse) => {
-        this.devices = res.devices || [];
-        this.totalDevices = res.devices.length;
-        console.log(this.devices);
-      }
-    });
-  }
 
   getDevicesTypes(): void {
-    this.apiDevices.getDeviceTypes().subscribe({
+    this.api.getDeviceTypes().subscribe({
       next: (res: GetDeviceTypesResponse) => {
         this.deviceTypes = res.deviceTypes || [];
         console.log(res.deviceTypes);
@@ -65,7 +51,6 @@ export class UserPanelComponent {
 
   changePage(page: number): void {
     this.currentPage = page;
-    this.getDevices();
   }
 
   get totalPages(): number {

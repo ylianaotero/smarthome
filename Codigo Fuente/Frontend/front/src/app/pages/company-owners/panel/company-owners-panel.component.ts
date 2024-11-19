@@ -51,10 +51,10 @@ export class CompanyOwnersPanelComponent implements OnInit {
   deviceTypes: string[] = [];
 
 
-  constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService, private sharedApi : ApiService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
-    this.userEmail = this.api.currentSession?.user?.email || '';
-    this.userId = this.api.currentSession?.user?.id || 0;
+  constructor(private router: Router, private sharedApi : ApiService) {
+    this.userName = this.sharedApi.currentSession?.user?.name || 'Usuario';
+    this.userEmail = this.sharedApi.currentSession?.user?.email || '';
+    this.userId = this.sharedApi.currentSession?.user?.id || 0;
   }
 
   ngOnInit(): void {
@@ -67,7 +67,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
   }
 
   getCompany(): void {
-    this.apiCompany.getCompanies(this.userEmail).subscribe({
+    this.sharedApi.getCompanies(this.userEmail).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
         this.totalCompanies = res.companies.length;
@@ -122,8 +122,8 @@ export class CompanyOwnersPanelComponent implements OnInit {
   }
 
   changeSelectedModal(modal: string, showModal: boolean): void{
-    if(modal == "showDevices"){
-      this.modalShowDevices = showModal;
+    if(modal == "modalShowCompanies"){
+      this.modalShowCompanies = showModal;
     }else if(modal == "showDevicesTypes"){
       this.modalShowDevicesTypes = showModal;
     }
@@ -131,7 +131,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
 
   closeModalBackdrop(event: MouseEvent,modal: string ): void {
     const target = event.target as HTMLElement;
-    if (target.id === 'myModalShowDevices') {
+    if (target.id === 'modalShowCompanies') {
       this.closeModal(modal);
     }else if(target.id === 'myModalShowDevicesTypes'){
       this.closeModal(modal);
@@ -157,7 +157,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
       return
     }
 
-    this.apiCompany
+    this.sharedApi
       .createCompany(new CreateCompanyRequest
       (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.userId, this.validation))
       .subscribe({

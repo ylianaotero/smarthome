@@ -41,7 +41,7 @@ export class CreateDeviceComponent implements OnInit  {
   possibleDeviceTypes: string[];
   possibleLocationTypes: string[] = ['Indoor', 'Outdoor'];
 
-  constructor(private api: ApiService, private router: Router, private apiDevices: DevicesService, private apiCompany: CompanyService) {
+  constructor(private api: ApiService, private router: Router) {
     this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
     this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
     this.deviceCompanyId = -1;
@@ -55,7 +55,7 @@ export class CreateDeviceComponent implements OnInit  {
 
   getCompanyId(): void {
 
-    this.apiCompany.getCompanies(this.companyOwnerEmail).subscribe({
+    this.api.getCompanies(this.companyOwnerEmail).subscribe({
       next: (res: GetCompaniesResponse) => {
         console.log(res)
         let company = res.companies || [];
@@ -72,7 +72,7 @@ export class CreateDeviceComponent implements OnInit  {
   }
 
   getDevicesTypes(): void {
-    this.apiDevices.getDeviceTypes().subscribe({
+    this.api.getDeviceTypes().subscribe({
       next: (res: GetDeviceTypesResponse) => {
         this.possibleDeviceTypes = res.deviceTypes || [];
         console.log(res.deviceTypes);

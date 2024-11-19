@@ -4,6 +4,7 @@ import { AdministratorService } from '../../../shared/administrator.service';
 import { CompanyService } from '../../../shared/company.service';
 import { GetCompanyResponse } from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
+import {ApiService} from '../../../shared/api.service';
 
 @Component({
   selector: 'app-administrator-panel',
@@ -27,7 +28,7 @@ export class AdministratorPanelComponent implements OnInit {
   modalShowUsers: boolean = false;
   modalShowCompanies: boolean = false;
 
-  constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
+  constructor(private router: Router, private api: ApiService) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
   }
 

@@ -22,6 +22,13 @@ import {
   PostSmartLampRequest,
   PostWindowSensorRequest
 } from '../interfaces/devices';
+import {
+  createAdministratorModel,
+  createCompanyOwnerModel, GetUsersRequest, GetUsersResponse,
+  PostAdministratorRequest,
+  PostCompanyOwnerRequest
+} from '../interfaces/users';
+import {CreateCompanyRequest, GetCompaniesResponse, PostCompaniesResponse} from '../interfaces/companies';
 
 @Injectable({
   providedIn: 'root'
@@ -133,9 +140,10 @@ export class ApiService {
     return this.httpClient.post(this.url + '/devices/window-sensors', {
       name: request.name,
       model: request.model,
+      PhotoUrls: request.photoUrls,
       description: request.description,
-      company: request.company,
-      functionalities: request.functionalities
+      functionalities: request.functionalities,
+      company: request.company
     }, {
       headers: { 'Authorization': `${this.currentSession?.token}` }
     });
@@ -145,9 +153,10 @@ export class ApiService {
     return this.httpClient.post(this.url + '/devices/smart-lamps', {
       name: request.name,
       model: request.model,
+      PhotoUrls: request.photoUrls,
       description: request.description,
-      company: request.company,
-      functionalities: request.functionalities
+      functionalities: request.functionalities,
+      company: request.company
     }, {
       headers: { 'Authorization': `${this.currentSession?.token}` }
     });
@@ -171,6 +180,7 @@ export class ApiService {
     return this.httpClient.post(this.url + '/devices/motion-sensors', {
       name: request.name,
       model: request.model,
+      PhotoUrls: request.photoUrls,
       description: request.description,
       company: request.company,
       functionalities: request.functionalities
@@ -178,5 +188,48 @@ export class ApiService {
       headers: { 'Authorization': `${this.currentSession?.token}` }
     });
   }
+
+  postAdministrator(data: createAdministratorModel) {
+    return this.httpClient.post<PostAdministratorRequest>(this.url + '/administrators', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
+  };
+
+  postCompanyOwner(data: createCompanyOwnerModel) {
+    return this.httpClient.post<PostCompanyOwnerRequest>(this.url + '/company-owners', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  getUsers(request: GetUsersRequest, currentPage?: number, pageSize?: number): Observable<GetUsersResponse> {
+    let params = new HttpParams();
+
+    params = request.fullName ? params.append('fullName', request.fullName ) : params;
+    params = request.role ? params.append('role', request.role ) : params;
+    params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
+    params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
+    return this.httpClient.get<GetUsersResponse>(this.url + '/users', {params , headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  deleteAdministrator(id: number) {
+    return this.httpClient.delete(this.url + `/administrators/${id}`, {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  getCompanies(request: string, currentPage?: number, pageSize?: number):
+    Observable<GetCompaniesResponse> {
+    let params = new HttpParams();
+
+    params = request ? params.append('ownerEmail', request ) : params;
+    params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
+    params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
+    return this.httpClient.get<GetCompaniesResponse>(this.url + '/companies',
+      {params, headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  createCompany(request: CreateCompanyRequest): Observable<PostCompaniesResponse> {
+    return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', request,
+      {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  getDeviceTypes(): Observable<GetDeviceTypesResponse> {
+    return this.httpClient.get<GetDeviceTypesResponse>(this.url + `/devices/types`);
+  }
+
 
 }
