@@ -7,7 +7,7 @@ import {
   PostSmartLampRequest,
   PostWindowSensorRequest
 } from '../../../interfaces/devices';
-import {GetCompaniesResponse} from '../../../interfaces/companies';
+import {GetCompaniesResponse, GetCompanyRequest} from '../../../interfaces/companies';
 import { CompanyService } from '../../../shared/company.service';
 
 @Component({
@@ -55,7 +55,13 @@ export class CreateDeviceComponent implements OnInit  {
 
   getCompanyId(): void {
 
-    this.api.getCompanies(this.companyOwnerEmail).subscribe({
+    const data: GetCompanyRequest = {
+      userEmail: this.companyOwnerEmail,
+      name: null,
+      fullName: null,
+    };
+
+    this.api.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         console.log(res)
         let company = res.companies || [];

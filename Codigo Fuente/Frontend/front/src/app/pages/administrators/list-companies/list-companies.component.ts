@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {GetCompanyResponse, GetCompaniesResponse} from '../../../interfaces/companies';
+import {GetCompanyResponse, GetCompaniesResponse, GetCompanyRequest} from '../../../interfaces/companies';
 import {CompanyService} from '../../../shared/company.service';
 import {ApiService} from '../../../shared/api.service';
 
@@ -29,7 +29,12 @@ export class ListCompaniesComponent {
   }
 
   getCompanies(): void {
-    this.api.getCompanies(this.selectedOwnerEmail).subscribe({
+    const data: GetCompanyRequest = {
+      userEmail: this.selectedOwnerEmail,
+      name: this.selectedCompanyName,
+      fullName: this.selectedOwnerName,
+    };
+    this.api.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
         this.totalCompanies = res.companies.length;

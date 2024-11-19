@@ -4,7 +4,7 @@ import { AdministratorService } from '../../../shared/administrator.service';
 import { CompanyService } from '../../../shared/company.service';
 import {
   CreateCompanyRequest,
-  GetCompaniesResponse,
+  GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
 import { GetUserResponse } from '../../../interfaces/users';
@@ -67,7 +67,12 @@ export class CompanyOwnersPanelComponent implements OnInit {
   }
 
   getCompany(): void {
-    this.sharedApi.getCompanies(this.userEmail).subscribe({
+    const data: GetCompanyRequest = {
+      userEmail: this.userEmail,
+      name: null,
+      fullName: null,
+    };
+    this.sharedApi.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
         this.totalCompanies = res.companies.length;

@@ -63,6 +63,7 @@ export interface GetUsersRequest {
 
 export interface GetUsersResponse {
     users: GetUserResponse[];
+    totalCount: number;
 }
 
 export interface GetUserResponse {

@@ -28,6 +28,14 @@ export class CreateCompanyRequest {
   }
 }
 
+export interface GetCompanyRequest {
+  name: string | null;
+  fullName: string | null;
+  userEmail: string | null;
+
+}
+
+
 export interface PostCompaniesResponse {
   name: string | null;
   rut: string | null;

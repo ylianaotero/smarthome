@@ -3,7 +3,7 @@ import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {
   CreateCompanyRequest,
-  GetCompaniesResponse,
+  GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
 import { CompanyService } from '../../../shared/company.service';
@@ -41,8 +41,12 @@ export class CreateCompanyComponent {
   }
 
   getCompany(): void {
-
-    this.api.getCompanies(this.companyOwnerEmail).subscribe({
+    const data: GetCompanyRequest = {
+      userEmail: this.companyOwnerEmail,
+      name: null,
+      fullName: null,
+    };
+    this.api.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
       }
