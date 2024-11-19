@@ -24,6 +24,16 @@ public class WindowSensor : Device
             throw new InputNotValid(WindowSensorStatusMessage);
         }
     }
+
+    public override string DefaultStatus()
+    {
+        if (Functionalities != null)
+        {
+            return "Closed";
+        }
+
+        return "";
+    }
     
     public override string RunFunctionality(string functionality, string currentStatus)
     {

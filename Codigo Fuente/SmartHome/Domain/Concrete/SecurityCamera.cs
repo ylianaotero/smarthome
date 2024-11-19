@@ -26,6 +26,11 @@ public class SecurityCamera : Device
         }
     }
     
+    public override string DefaultStatus()
+    {
+        return "";
+    }
+    
     public override string RunFunctionality(string functionality, string currentStatus)
     {
         if (!FunctionalityIsValid(functionality))

@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { sessionModel, sessionRequest } from '../logIn/sessionModel';
-import {userRegistrationModel, userRegistrationInstance, userRetrieveModel} from '../signUpHomeOwner/signUpUserModel';
+import { sessionModel, sessionRequest } from '../pages/login/panel/sessionModel';
+import {userRegistrationModel, userRegistrationInstance, userRetrieveModel} from '../pages/home-owners/create/signUpUserModel';
 import {
   deviceUnit,
   home,
@@ -11,11 +11,11 @@ import {
   addDeviceToHomeRequest,
   addDeviceRequest,
   addDeviceToHomeListRequest, ChangeMemberNotificationsRequest, ChangeMemberRequest
-} from '../homesOfHomeOwner/homeModels';
-import {createHomeModel, homeRetrieveModel} from '../createHome/createHomeModel';
+} from '../pages/home-owners/homes/panel/homeModels';
+import {createHomeModel, homeRetrieveModel} from '../pages/home-owners/homes/create/createHomeModel';
 import {Observable, tap} from 'rxjs';
-import {DeviceFilterRequestModel, deviceModel} from '../account/deviceModels';
-import {ImportDevicesRequest, importer} from '../import/importerModels';
+import {DeviceFilterRequestModel, deviceModel} from '../pages/home-owners/panel/deviceModels';
+import {ImportDevicesRequest, importer} from '../pages/company-owners/import-device/importerModels';
 
 @Injectable({
   providedIn: 'root'

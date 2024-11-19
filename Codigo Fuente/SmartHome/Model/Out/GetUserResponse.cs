@@ -9,8 +9,10 @@ public class GetUserResponse
     public string Name { get; set; }
     public string Surname { get; set; }
     public string FullName { get; set; }
+    public string Email { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<Role> Roles { get; set; }
+    public string? PhotoUrl { get; set; }
     
 
     public GetUserResponse(User user)
@@ -21,6 +23,11 @@ public class GetUserResponse
         FullName = user.Name + " " + user.Surname;
         CreatedAt = user.CreatedAt; 
         Roles =  LoadRolesList(user.Roles);
+        Email = user.Email;
+        if (user.Photo != null)
+        {
+            PhotoUrl = user.Photo;
+        }
     }
     
     public override bool Equals(object? obj)
@@ -31,7 +38,9 @@ public class GetUserResponse
                Surname == response.Surname &&
                FullName == response.FullName &&
                CreatedAt == response.CreatedAt &&
-               Roles.SequenceEqual(response.Roles);
+               Roles.SequenceEqual(response.Roles) &&
+               Email == response.Email &&
+               PhotoUrl == response.PhotoUrl;
     }
 
     private List<Role> LoadRolesList(List<Role> listOfRoles)
