@@ -1,3 +1,4 @@
+using CustomExceptions;
 using Domain.Concrete;
 using Domain.Enum;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
@@ -303,6 +304,178 @@ public class DevicesTest
         SmartLamp smartLamp = new SmartLamp() {Kind = SmartLampType};
         
         Assert.AreEqual(SmartLampType, smartLamp.Kind);
+    }
+    
+    [TestMethod]
+    public void TestSmartLampWithoutFunctionalitiesDefaultStatusIsEmpty()
+    {
+        SmartLamp smartLamp = new SmartLamp();
+        
+        string defaultStatus = "";
+        
+        Assert.AreEqual(defaultStatus, smartLamp.DefaultStatus());
+    }
+    
+    [TestMethod]
+    public void TestWindowSensorWithoutFunctionalitiesDefaultStatusIsEmpty()
+    {
+        WindowSensor windowSensor = new WindowSensor();
+        
+        string defaultStatus = "";
+        
+        Assert.AreEqual(defaultStatus, windowSensor.DefaultStatus());
+    }
+    
+    [TestMethod]
+    public void TestSmartLampWithFunctionalitiesDefaultStatusIsOff()
+    {
+        SmartLamp smartLamp = new SmartLamp();
+        smartLamp.Functionalities = _smartLampFunctionalities;
+        
+        string defaultStatus = "Off";
+        
+        Assert.AreEqual(defaultStatus, smartLamp.DefaultStatus());
+    }
+    
+    [TestMethod]
+    public void TestWindowSensorWithFunctionalitiesDefaultStatusIsClosed()
+    {
+        WindowSensor windowSensor = new WindowSensor();
+        windowSensor.Functionalities = _windowSensorfunctionalities;
+        
+        string defaultStatus = "Closed";
+        
+        Assert.AreEqual(defaultStatus, windowSensor.DefaultStatus());
+    }
+    
+    [TestMethod]
+    public void TestSecurityCameraDefaultStatusIsEmpty()
+    {
+        SecurityCamera securityCamera = new SecurityCamera();
+        
+        string defaultStatus = "";
+        
+        Assert.AreEqual(defaultStatus, securityCamera.DefaultStatus());
+    }
+    
+    [TestMethod]
+    public void TestMotionSensorWithoutFunctionalitiesDefaultStatusIsEmpty()
+    {
+        MotionSensor motionSensor = new MotionSensor();
+        
+        string defaultStatus = "";
+        
+        Assert.AreEqual(defaultStatus, motionSensor.DefaultStatus());
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSmartLampValidateStatus()
+    {
+        SmartLamp smartLamp = new SmartLamp();
+        
+        smartLamp.ValidateStatus("Invalid");
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestWindowSensorValidateStatus()
+    {
+        WindowSensor windowSensor = new WindowSensor();
+        
+        windowSensor.ValidateStatus("Invalid");
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSecurityCameraValidateStatus()
+    {
+        SecurityCamera securityCamera = new SecurityCamera();
+        
+        securityCamera.ValidateStatus("Invalid");
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestMotionSensorValidateStatus()
+    {
+        MotionSensor motionSensor = new MotionSensor();
+        
+        motionSensor.ValidateStatus("Invalid");
+    }
+    
+    [TestMethod]
+    public void TestSmartLampRunFunctionality()
+    {
+        SmartLamp smartLamp = new SmartLamp();
+        smartLamp.Functionalities = _smartLampFunctionalities;
+        
+        string status = "On";
+        
+        Assert.AreEqual("Off", smartLamp.RunFunctionality("OnOff", status));
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSmartLampRunFunctionalityThrowsException()
+    {
+        SmartLamp smartLamp = new SmartLamp();
+        smartLamp.Functionalities = _smartLampFunctionalities;
+        
+        smartLamp.RunFunctionality("Invalid", "On");
+    }
+    
+    [TestMethod]
+    public void TestWindowSensorRunFunctionality()
+    {
+        WindowSensor windowSensor = new WindowSensor();
+        windowSensor.Functionalities = _windowSensorfunctionalities;
+        
+        string status = "Open";
+        
+        Assert.AreEqual("Closed", windowSensor.RunFunctionality("OpenClosed", status));
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestWindowSensorRunFunctionalityThrowsException()
+    {
+        WindowSensor windowSensor = new WindowSensor();
+        windowSensor.Functionalities = _windowSensorfunctionalities;
+        
+        windowSensor.RunFunctionality("Invalid", "Open");
+    }
+    
+    [TestMethod]
+    public void TestSecurityCameraRunFunctionality()
+    {
+        SecurityCamera securityCamera = new SecurityCamera();
+        securityCamera.Functionalities = _cameraFunctionalities;
+        
+        string status = "";
+        
+        Assert.AreEqual(status, securityCamera.RunFunctionality("MotionDetection", status));
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestSecurityCameraRunFunctionalityThrowsException()
+    {
+        SecurityCamera securityCamera = new SecurityCamera();
+        securityCamera.Functionalities = _cameraFunctionalities;
+        
+        securityCamera.RunFunctionality("Invalid", "On");
+    }
+    
+    [TestMethod]
+    public void TestMotionSensorRunFunctionality()
+    {
+        MotionSensor motionSensor = new MotionSensor();
+        motionSensor.Functionalities = _motionSensorFunctionalities;
+        
+        string status = "";
+        
+        Assert.AreEqual(status, motionSensor.RunFunctionality("MotionDetection", status));
     }
     
     [TestMethod]
