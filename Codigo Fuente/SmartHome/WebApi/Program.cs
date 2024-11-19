@@ -5,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(option =>
 {
- /*   option.Filters.Add<CustomExceptionFilter>();
-    option.Filters.Add<AuthenticationFilterAttribute>();*/
+    option.Filters.Add<CustomExceptionFilter>();
+    option.Filters.Add<AuthenticationFilterAttribute>();
 });
 
 builder.Services.AddEndpointsApiExplorer();
