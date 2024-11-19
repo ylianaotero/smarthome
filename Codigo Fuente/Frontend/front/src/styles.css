@@ -69,7 +69,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   text-align: center;
@@ -78,7 +78,7 @@ body {
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: fixed;
-  height: 90vh;
+  height: 95vh;
   flex-direction: column;
   justify-content: center;
   display: flex;
