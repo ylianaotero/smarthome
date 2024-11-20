@@ -10,8 +10,15 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/home-owners")]
 [ApiController]
-public class HomeOwnerController(IUserService userService) : ControllerBase
+public class HomeOwnerController : ControllerBase
 {
+    private readonly IUserService _userService;
+    
+    public HomeOwnerController(IUserService userService)
+    {
+        this._userService = userService;
+    }
+    
     private const string RoleWithPermissions = "HomeOwner";
 
     [HttpPost]
@@ -20,7 +27,7 @@ public class HomeOwnerController(IUserService userService) : ControllerBase
     {
         try
         {
-            userService.CreateUser(postHomeOwnerRequest.ToEntity());
+            _userService.CreateUser(postHomeOwnerRequest.ToEntity());
             PostHomeOwnerResponse response = new PostHomeOwnerResponse(postHomeOwnerRequest.ToEntity());
             
             return CreatedAtAction(nameof(CreateHomeOwner), response);
@@ -42,7 +49,7 @@ public class HomeOwnerController(IUserService userService) : ControllerBase
      { 
          try 
          {
-               userService.UpdateUser(id, putHomeOwnerRequest.ToEntity());
+             _userService.UpdateUser(id, putHomeOwnerRequest.ToEntity());
                
                PostHomeOwnerResponse response = new PostHomeOwnerResponse(putHomeOwnerRequest.ToEntity());
                

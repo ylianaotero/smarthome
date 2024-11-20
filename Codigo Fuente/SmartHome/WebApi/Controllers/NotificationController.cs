@@ -8,8 +8,15 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/notifications")]
 [ApiController]
-public class NotificationController(INotificationService notificationService) : ControllerBase
+public class NotificationController : ControllerBase
 {
+    private readonly INotificationService _notificationService;
+    
+    public NotificationController(INotificationService notificationService)
+    {
+        this._notificationService = notificationService;
+    }
+    
     private const string ResourceNotFoundMessage = "The requested resource was not found.";
 
     [HttpGet]
@@ -19,7 +26,7 @@ public class NotificationController(INotificationService notificationService) : 
         try
         {
             getNotificationsResponse = new GetNotificationsResponse
-                (notificationService.GetNotificationsByFilter(request.ToFilter(), null));
+                (_notificationService.GetNotificationsByFilter(request.ToFilter(), null));
         }
         catch (CannotFindItemInList)
         {
@@ -34,7 +41,7 @@ public class NotificationController(INotificationService notificationService) : 
     {
         try
         {
-            notificationService.SendNotifications(request.ToEntity());
+            _notificationService.SendNotifications(request.ToEntity());
         }
         catch (CannotFindItemInList)
         {

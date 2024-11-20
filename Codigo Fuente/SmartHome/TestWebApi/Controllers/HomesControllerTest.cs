@@ -59,7 +59,7 @@ public class HomesControllerTest
     private const int CreatedStatusCode = 201;
     private const int NotFoundStatusCode = 404;
     private const int ConflictStatusCode = 409;
-    private const int PreconditionFailedStatusCode = 412;
+    private const int BadRequestStatusCode = 400;
     private const bool Permission = true;
     private const string WindowSensorName = "My Window Sensor";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
@@ -392,7 +392,7 @@ public class HomesControllerTest
 
         ObjectResult? result = _homeController.AddMemberToHome(_home.Id, postHomeMemberRequest) as ObjectResult;
 
-        Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
 
     [TestMethod]

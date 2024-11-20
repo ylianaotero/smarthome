@@ -9,11 +9,18 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/imports")]
 [ApiController]
-public class ImportController(IImporter.IImporter importer, ISessionService sessionService, ICompanyService companyService) : ControllerBase
+public class ImportController : ControllerBase
 {
-    private IImporter.IImporter _importer = importer;
-    private ISessionService _sessionService = sessionService;
-    private ICompanyService _companyService = companyService;
+    private IImporter.IImporter _importer;
+    private ISessionService _sessionService;
+    private ICompanyService _companyService;
+    
+    public ImportController(IImporter.IImporter importer, ISessionService sessionService, ICompanyService companyService)
+    {
+        this._importer = importer;
+        this._sessionService = sessionService;
+        this._companyService = companyService;
+    }
 
     private const string RoleWithPermissions = "CompanyOwner";
     private const string AuthorizationHeader = "Authorization";

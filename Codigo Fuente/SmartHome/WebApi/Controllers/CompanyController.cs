@@ -9,8 +9,17 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/companies")]
 [ApiController]
-public class CompanyController(ICompanyService companyService, IUserService userService) : ControllerBase
+public class CompanyController : ControllerBase
 {
+    private readonly ICompanyService _companyService;
+    private readonly IUserService _userService;
+    
+    public CompanyController(ICompanyService companyService, IUserService userService)
+    {
+        this._companyService = companyService;
+        this._userService = userService;
+    }
+    
     private const string RoleWithPermissionsToGetCompanies = "Administrator";
     private const string RoleWithPermissionsToPostCompany = "CompanyOwner";
     private const string CompanyOwnerNotFound = "CompanyOwner was not found.";
@@ -21,9 +30,9 @@ public class CompanyController(ICompanyService companyService, IUserService user
     [RolesWithPermissions(RoleWithPermissionsToPostCompany, RoleWithPermissionsToGetCompanies)]
     public IActionResult GetCompanies([FromQuery] GetCompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
-        int count = companyService.GetCompaniesByFilter(request.ToFilter(), null).Count; 
+        int count = _companyService.GetCompaniesByFilter(request.ToFilter(), null).Count; 
         GetCompaniesResponse getCompaniesResponse = new GetCompaniesResponse
-            (companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
+            (_companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
         
         return Ok(getCompaniesResponse);
     }
@@ -34,7 +43,7 @@ public class CompanyController(ICompanyService companyService, IUserService user
     {
         try
         {
-            companyService.CreateCompany(userService.AddOwnerToCompany(request.OwnerId,request.ToEntity()));
+            _companyService.CreateCompany(_userService.AddOwnerToCompany(request.OwnerId,request.ToEntity()));
             
             return CreatedAtAction(nameof(PostCompany), request);
         }
@@ -51,7 +60,7 @@ public class CompanyController(ICompanyService companyService, IUserService user
     {
         try
         {
-            companyService.UpdateValidationMethod(id, request.ValidationMethod);
+            _companyService.UpdateValidationMethod(id, request.ValidationMethod);
             return Ok(UpdatedCompanyMessage);
         }
         catch (ElementNotFound)
