@@ -62,6 +62,10 @@ export class CompanyOwnersPanelComponent implements OnInit {
     this.getDevicesTypes();
   }
 
+  goViewNotifications(): void {
+    this.router.navigate(['/notifications']);
+  }
+
   ownerHasCompany(): boolean {
     return this.companies.length > 0;
   }

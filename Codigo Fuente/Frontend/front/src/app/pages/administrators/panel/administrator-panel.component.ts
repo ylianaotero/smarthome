@@ -52,6 +52,10 @@ export class AdministratorPanelComponent implements OnInit {
     });
   }
 
+  goViewNotifications(): void {
+    this.router.navigate(['/notifications']);
+  }
+
   goViewDevices(): void {
     this.router.navigate(['devices']);
   }

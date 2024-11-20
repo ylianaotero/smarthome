@@ -60,6 +60,10 @@ export class HomeOwnersPanelComponent implements OnInit {
     this.router.navigate(['/devices']);
   }
 
+  goViewNotifications(): void {
+    this.router.navigate(['/notifications']);
+  }
+
   openModal(modal: string): void {
     this.changeSelectedModal(modal, true);
     document.body.classList.add('modal-open');

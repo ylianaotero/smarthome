@@ -24,6 +24,7 @@ import {ListUsersComponent} from './pages/administrators/list-users/list-users.c
 import {ListCompaniesComponent} from './pages/administrators/list-companies/list-companies.component';
 import {CreateDeviceComponent} from './pages/company-owners/create-device/create-device.component';
 import {CreateCompanyComponent} from './pages/company-owners/create-company/create-company.component';
+import {NotificationsPanelComponent} from './pages/notifications/panel/notifications-panel.component';
 
 const routes: Routes = [
   { path: '', component: HomePanelComponent },
@@ -44,6 +45,7 @@ const routes: Routes = [
   { path: 'company-owners/create-company', component: CreateCompanyComponent },
   { path: 'home', component: HomePanelComponent },
   { path: 'home/user-panel', component: UserPanelComponent },
+  { path: 'notifications', component: NotificationsPanelComponent }
 ];
 
 @NgModule({
@@ -78,7 +80,8 @@ const routes: Routes = [
     ListUsersComponent,
     ListCompaniesComponent,
     CreateDeviceComponent,
-    CreateCompanyComponent
+    CreateCompanyComponent,
+    NotificationsPanelComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
