@@ -49,10 +49,14 @@ export class LoginPanelComponent {
     if(storedUser){
       res = JSON.parse(storedUser) as userRetrieveModel;
     }
+    console.log(res);
     if (res && Array.isArray(res.roles)) {
       const hasHomeOwnerRole = res.roles.some(role => role.kind === 'HomeOwner');
       const hasCompanyOwnerRole = res.roles.some(role => role.kind=== 'CompanyOwner');
       const hasAdministratorRole = res.roles.some(role => role.kind === 'Administrator');
+
+      console.log("res.roles.length")
+      console.log(res.roles.length)
 
       if (hasHomeOwnerRole && res.roles.length == 1) {
         this.router.navigate(['/home-owners']);

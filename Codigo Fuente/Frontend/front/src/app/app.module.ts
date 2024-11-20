@@ -30,6 +30,7 @@ import {loggedGuard} from './guard/logged/logged.guard';
 import {notLoggedGuard} from './guard/not-logged/not-logged.guard';
 import {homeOwnerGuard} from './guard/homeoOwner/home-owner.guard';
 import {companyOwnerGuardGuard} from './guard/companyOwner/company-owner.guard.guard';
+import {twoRolesGuardGuard} from './guard/userWithTwoRoles/two-roles.guard.guard';
 
 const routes: Routes = [
   { path: '', component: HomePanelComponent, canActivate:[notLoggedGuard]},
@@ -49,7 +50,7 @@ const routes: Routes = [
   { path: 'company-owners/create-device', component: CreateDeviceComponent,canActivate: [companyOwnerGuardGuard]  },
   { path: 'company-owners/create-company', component: CreateCompanyComponent , canActivate: [companyOwnerGuardGuard] },
   { path: 'home', component: HomePanelComponent , canActivate:[notLoggedGuard]},
-  { path: 'home/user-panel', component: UserPanelComponent },
+  { path: 'home/user-panel', component: UserPanelComponent , canActivate:[twoRolesGuardGuard]},
   { path: 'notifications', component: NotificationsPanelComponent , canActivate:[loggedGuard]},
 ];
 
