@@ -1,15 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
-import { DevicesService } from '../../../shared/devices.service';
+import { ApiDeviceService } from '../../../shared/devices.service';
 import {
   GetDeviceTypesResponse, PostMotionSensorRequest, PostSecurityCameraRequest,
   PostSmartLampRequest,
   PostWindowSensorRequest
 } from '../../../interfaces/devices';
 import {GetCompaniesResponse, GetCompanyRequest} from '../../../interfaces/companies';
-import { CompanyService } from '../../../shared/company.service';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-create-device',
@@ -44,7 +43,7 @@ export class CreateDeviceComponent implements OnInit  {
 
   user : userRetrieveModel | null = null;
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private companyApi: ApiCompanyService, private router: Router, private deviceApi : ApiDeviceService) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;
@@ -68,7 +67,7 @@ export class CreateDeviceComponent implements OnInit  {
       fullName: null,
     };
 
-    this.api.getCompanies(data).subscribe({
+    this.companyApi.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         console.log(res)
         let company = res.companies || [];
@@ -85,7 +84,7 @@ export class CreateDeviceComponent implements OnInit  {
   }
 
   getDevicesTypes(): void {
-    this.api.getDeviceTypes().subscribe({
+    this.deviceApi.getSupportedDevices().subscribe({
       next: (res: GetDeviceTypesResponse) => {
         this.possibleDeviceTypes = res.deviceTypes || [];
         console.log(res.deviceTypes);
@@ -135,7 +134,7 @@ export class CreateDeviceComponent implements OnInit  {
         return;
       }
 
-      this.api.postWindowSensor(
+      this.deviceApi.postWindowSensor(
         new PostWindowSensorRequest(name, model, description, functionalities, photoUrls, this.deviceCompanyId)
       ).subscribe({
         next: res => {
@@ -153,7 +152,7 @@ export class CreateDeviceComponent implements OnInit  {
         return;
       }
 
-      this.api.postSmartLamp(
+      this.deviceApi.postSmartLamp(
         new PostSmartLampRequest(name, model, description, functionalities, photoUrls, this.deviceCompanyId)
       ).subscribe({
         next: res => {
@@ -171,7 +170,7 @@ export class CreateDeviceComponent implements OnInit  {
         return;
       }
 
-      this.api.postSecurityCamera(
+      this.deviceApi.postSecurityCamera(
         new PostSecurityCameraRequest(name, model, description, functionalities, photoUrls, locationType, this.deviceCompanyId)
       ).subscribe({
         next: res => {
@@ -189,7 +188,7 @@ export class CreateDeviceComponent implements OnInit  {
         return;
       }
 
-      this.api.postMotionSensor(
+      this.deviceApi.postMotionSensor(
         new PostMotionSensorRequest(name, model, description, functionalities, photoUrls, this.deviceCompanyId)
       ).subscribe({
         next: res => {

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../../shared/api.service';
-import {DeviceFilterRequestModel, deviceModel} from '../../devices/panel/model-device';
-import {GetDeviceResponse, GetDeviceTypesResponse} from '../../../interfaces/devices';
+import {deviceModel} from '../../devices/panel/model-device';
+import {GetDeviceTypesResponse} from '../../../interfaces/devices';
 import {userRetrieveModel} from '../create/signUpUserModel';
+import {ApiDeviceService} from '../../../shared/devices.service';
 
 @Component({
   selector: 'app-account',
@@ -23,7 +23,7 @@ export class HomeOwnersPanelComponent implements OnInit {
 
   deviceTypes: string[] = [];
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private api: ApiDeviceService, private router: Router) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;

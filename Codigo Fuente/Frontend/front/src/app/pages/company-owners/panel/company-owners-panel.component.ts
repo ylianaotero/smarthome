@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AdministratorService } from '../../../shared/administrator.service';
-import { CompanyService } from '../../../shared/company.service';
 import {
   CreateCompanyRequest,
   GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
 import { GetUserResponse } from '../../../interfaces/users';
-import {GetDeviceResponse, GetDeviceTypesResponse} from '../../../interfaces/devices';
-import {ApiService} from '../../../shared/api.service';
+import {GetDeviceTypesResponse} from '../../../interfaces/devices';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiDeviceService} from '../../../shared/devices.service';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-company-owner-panel',
@@ -51,7 +50,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
   user : userRetrieveModel | null = null;
 
 
-  constructor(private router: Router, private sharedApi : ApiService) {
+  constructor(private router: Router, private companyApi : ApiCompanyService, private deviceApi : ApiDeviceService) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;
@@ -86,7 +85,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
       name: null,
       fullName: null,
     };
-    this.sharedApi.getCompanies(data).subscribe({
+    this.companyApi.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
         this.totalCompanies = res.companies.length;
@@ -103,7 +102,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
 
 
   getDevicesTypes(): void {
-    this.sharedApi.getSupportedDevices().subscribe({
+    this.deviceApi.getSupportedDevices().subscribe({
       next: (res: GetDeviceTypesResponse) => {
         console.log(res)
         this.deviceTypes = res.deviceTypes || [];
@@ -176,7 +175,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
       return
     }
 
-    this.sharedApi
+    this.companyApi
       .createCompany(new CreateCompanyRequest
       (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.userId, this.validation))
       .subscribe({

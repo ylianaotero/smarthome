@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { AdministratorService } from '../../../shared/administrator.service';
 import { Router } from '@angular/router';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
-import {ApiService} from '../../../shared/api.service';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-delete-admin',
@@ -28,7 +27,7 @@ export class DeleteAdminComponent implements OnInit{
 
   user : userRetrieveModel | null = null;
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private router: Router, private userApi : ApiUserService) {}
 
   ngOnInit(): void {
     this.getUsers();
@@ -45,7 +44,7 @@ export class DeleteAdminComponent implements OnInit{
       role: "administrator"
     };
 
-    this.api.getUsers(request).subscribe({
+    this.userApi.getUsers(request).subscribe({
       next: (res: GetUsersResponse) => {
         this.users = res.users || [];
         this.totalUsers = res.users.length;
@@ -60,7 +59,7 @@ export class DeleteAdminComponent implements OnInit{
 
   deleteAdmin(id:number): void {
     this.feedback = "Cargando...";
-    this.api.deleteAdministrator(id).subscribe({
+    this.userApi.deleteAdministrator(id).subscribe({
       next: res => {
         this.feedback = "El administrador fue eliminado con éxito!";
         this.getUsers();

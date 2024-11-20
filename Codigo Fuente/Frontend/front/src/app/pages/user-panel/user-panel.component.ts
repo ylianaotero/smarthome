@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import {ApiService} from '../../shared/api.service';
 import {userRetrieveModel} from '../home-owners/create/signUpUserModel';
 
 @Component({
@@ -16,7 +15,7 @@ export class UserPanelComponent implements OnInit{
 
   user : userRetrieveModel | null = null;
 
-  constructor(private router: Router, private api: ApiService) {
+  constructor(private router: Router) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AdministratorService } from '../../../shared/administrator.service';
-import { CompanyService } from '../../../shared/company.service';
 import { GetCompanyResponse } from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
-import {ApiService} from '../../../shared/api.service';
 import {GetDeviceTypesResponse} from '../../../interfaces/devices';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiUserService} from '../../../shared/user.service';
+import {ApiDeviceService} from '../../../shared/devices.service';
 
 @Component({
   selector: 'app-administrator-panel',
@@ -36,7 +35,7 @@ export class AdministratorPanelComponent implements OnInit {
   user : userRetrieveModel | null = null;
 
 
-  constructor(private router: Router, private api: ApiService) {
+  constructor(private router: Router, private deviceApi: ApiDeviceService, private userApi: ApiUserService) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;
@@ -56,7 +55,7 @@ export class AdministratorPanelComponent implements OnInit {
   }
 
   getDevicesTypes(): void {
-    this.api.getSupportedDevices().subscribe({
+    this.deviceApi.getSupportedDevices().subscribe({
       next: (res: GetDeviceTypesResponse) => {
         console.log(res)
         this.deviceTypes = res.deviceTypes || [];
@@ -79,7 +78,7 @@ export class AdministratorPanelComponent implements OnInit {
       role: this.selectedRole
     };
 
-    this.api.getUsers(request).subscribe({
+    this.userApi.getUsers(request).subscribe({
       next: (res: GetUsersResponse) => {
         this.users = res.users || [];
         this.totalUsers = res.users.length;

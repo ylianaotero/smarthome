@@ -6,7 +6,6 @@
 }
 
 
-/* Background and basic styling */
 html, body {
   margin: 0;
   padding: 0;
@@ -14,7 +13,6 @@ html, body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Flex centering for content */
 body {
   background: linear-gradient(135deg, #74b9ff, #a29bfe);
 }
@@ -65,8 +63,7 @@ body {
   background-color: #ff7675;
   color: #fff;
 }
-/* styles.css */
-/* Contenedor con desplazamiento y un scroll bonito */
+
 .welcome-container {
   top: 50%;
   left: 50%;
@@ -79,31 +76,29 @@ body {
   max-width: 90%;
   width: 500px;
   position: fixed;
-  height: 95vh; /* altura del contenedor */
-  overflow-y: auto; /* Agrega el scroll vertical */
+  height: 95vh;
+  overflow-y: auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   flex-direction: column;
   justify-content: center;
   display: flex;
   font-family: 'Poppins', sans-serif;
 
-  /* Estilizado para que el scrollbar tenga un aspecto más bonito */
-  scrollbar-width: thin; /* Para navegadores Firefox */
-  scrollbar-color: #007bff #f0f0f0; /* Color del scroll (deslizador) y del fondo */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(179, 197, 201, 0.13) #f0f0f0;
 }
 
-/* Estilizado del scrollbar en navegadores Webkit como Chrome y Safari */
 .welcome-container::-webkit-scrollbar {
-  width: 8px; /* Ancho del scroll */
+  width: 8px;
 }
 
 .welcome-container::-webkit-scrollbar-thumb {
-  background-color: #007bff; /* Color del deslizador */
+  background-color: #B3C5C921;
   border-radius: 4px;
 }
 
 .welcome-container::-webkit-scrollbar-track {
-  background-color: #f0f0f0; /* Color de fondo del track del scroll */
+  background-color: #f0f0f0;
 }
 
 .welcome-container:hover {

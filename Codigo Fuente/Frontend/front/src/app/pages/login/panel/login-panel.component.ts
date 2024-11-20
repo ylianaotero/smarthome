@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
-import {sessionModel, sessionRequest} from './sessionModel';
+import {sessionRequest} from './sessionModel';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiSessionService} from '../../../shared/session.service';
 
 @Component({
   selector: 'app-log-in',
@@ -14,7 +14,7 @@ export class LoginPanelComponent {
   userEmail: string = '';
   userPassword: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private router: Router, private sessionApi : ApiSessionService) {}
 
   signInUser(email: string, password: string): void {
     this.feedback = "Loading...";
@@ -24,7 +24,7 @@ export class LoginPanelComponent {
       return;
     }
 
-    this.api.postSession(new sessionRequest(email, password)).subscribe({
+    this.sessionApi.postSession(new sessionRequest(email, password)).subscribe({
       next: res => {
         this.feedback = "success";
 

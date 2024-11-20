@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse } from '../../../interfaces/devices';
-import { AdministratorService } from '../../../shared/administrator.service';
-import { DevicesService } from '../../../shared/devices.service';
-import {ApiService} from '../../../shared/api.service';
+import { GetDeviceResponse} from '../../../interfaces/devices';
+import { ApiDeviceService } from '../../../shared/devices.service';
 import {DeviceFilterRequestModel} from './model-device';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
@@ -28,7 +26,7 @@ export class DevicesPanelComponent implements OnInit {
 
   user : userRetrieveModel | null = null;
 
-  constructor(private router: Router, private sharedApi: ApiService) {
+  constructor(private router: Router, private deviceApi : ApiDeviceService) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;
@@ -47,13 +45,14 @@ export class DevicesPanelComponent implements OnInit {
 
   getDevices(): void {
 
+
     const filters = new DeviceFilterRequestModel(
       this.selectedName,
       this.selectedModel,
       this.selectedCompany,
       this.selectedKind
     );
-    this.sharedApi.getDevices(filters, this.currentPage, this.pageSize).subscribe({
+    this.deviceApi.getDevices(filters, this.currentPage, this.pageSize).subscribe({
       next: (res: any) => {
         this.devices = res.devices || [];
         this.totalDevices =  res.totalCount || 0;
@@ -76,7 +75,7 @@ export class DevicesPanelComponent implements OnInit {
 
 
   getSupportedDevices(): void {
-    this.sharedApi.getSupportedDevices().subscribe({
+    this.deviceApi.getSupportedDevices().subscribe({
       next: (res: any) => {
         this.deviceTypes = res.deviceTypes || [];
       }

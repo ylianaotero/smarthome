@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../../shared/api.service';
 import {ImportDevicesRequest, importer, ImporterPath} from './importerModels';
 import {NgForm} from '@angular/forms';
+import {ApiImportService} from '../../../shared/import.service';
 
 @Component({
   selector: 'app-import',
@@ -23,7 +23,7 @@ export class ImportDeviceComponent implements OnInit {
   dllPath: string = '';
   statusMessage: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiImportService, private router: Router) {}
 
   AddImporter() {
     if (this.dllPath === '') {

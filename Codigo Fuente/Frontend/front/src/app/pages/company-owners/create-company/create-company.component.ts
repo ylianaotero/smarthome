@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {
   CreateCompanyRequest,
   GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
-import { CompanyService } from '../../../shared/company.service';
 import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-create-company',
@@ -33,7 +32,7 @@ export class CreateCompanyComponent {
 
   user : userRetrieveModel | null = null;
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private api: ApiCompanyService, private router: Router) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;

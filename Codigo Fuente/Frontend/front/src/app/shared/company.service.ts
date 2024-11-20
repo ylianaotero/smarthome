@@ -1,59 +1,50 @@
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { sessionModel, sessionRequest } from '../pages/login/panel/sessionModel';
+﻿import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {Observable, tap} from 'rxjs';
 import {
   CreateCompanyRequest,
   GetCompaniesResponse,
+  GetCompanyRequest,
   PostCompaniesResponse
 } from '../interfaces/companies';
-
+import {Observable} from 'rxjs';
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
-export class CompanyService {
+export class ApiCompanyService {
 
-      constructor(private httpClient: HttpClient) {
-     this.updateSession();
-      }
+  constructor(private httpClient: HttpClient) {
+  }
 
-      url: string = 'http://localhost:5217/api/v1';
+  url: string = 'http://localhost:5217/api/v1';
 
-      currentSession: sessionModel | undefined = undefined;
+  getCompanies(request:  GetCompanyRequest, currentPage?: number, pageSize?: number):
+    Observable<GetCompaniesResponse> {
+    const storedUser = localStorage.getItem('token');
+    let params = new HttpParams();
 
-     updateSession() {
-          if (!this.currentSession) {
-          const userSession = localStorage.getItem('user');
-          if (userSession) {
-                this.currentSession = JSON.parse(userSession) as sessionModel;
-          }
-          }
-     }
-     postSession(data: sessionRequest) {
-          return this.httpClient.post<sessionModel>(this.url + '/login', data).pipe(
-          tap((session: sessionModel) => {
-                this.currentSession = session;
-                localStorage.setItem('user', JSON.stringify(session)); // Guarda la sesión en localStorage
-          })
-          );
-     }
+    if(request.userEmail){
+      params = request ? params.append('OwnerEmail', request.userEmail) : params;
+    }
 
-     getCompanies(request: string, currentPage?: number, pageSize?: number):
-       Observable<GetCompaniesResponse> {
-          let params = new HttpParams();
+    if(request.name){
+      params = request ? params.append('Name', request.name) : params;
+    }
 
-          params = request ? params.append('ownerEmail', request ) : params;
-          params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
-          params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
-          return this.httpClient.get<GetCompaniesResponse>(this.url + '/companies',
-            {params, headers: {'Authorization': `${this.currentSession?.token}`}});
-     }
+    if(request.fullName){
+      params = request ? params.append('Owner', request.fullName) : params;
+    }
 
-     createCompany(request: CreateCompanyRequest): Observable<PostCompaniesResponse> {
-       return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', request,
-         {headers: {'Authorization': `${this.currentSession?.token}`}});
-     }
+    params = pageSize ? params.append('Page', currentPage!.toString()) : params;
+    params = currentPage ? params.append('PageSize', pageSize!.toString()) : params;
+    return this.httpClient.get<GetCompaniesResponse>(this.url + '/companies',
+      {params, headers: {'Authorization': `${storedUser}`}});
+  }
 
+  createCompany(request: CreateCompanyRequest): Observable<PostCompaniesResponse> {
+    const storedUser = localStorage.getItem('token');
+    return this.httpClient.post<PostCompaniesResponse>(this.url + '/companies', request,
+      {headers: {'Authorization': `${storedUser}`}});
+  }
 
 
 

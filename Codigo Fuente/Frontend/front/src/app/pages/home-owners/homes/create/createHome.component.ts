@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
-
-import {ApiService} from '../../../../shared/api.service';
 import {createHomeModel} from './createHomeModel';
 import {userRetrieveModel} from '../../create/signUpUserModel';
+import {ApiHomeService} from '../../../../shared/home.service';
 
 @Component({
   selector: 'app-create-home',
@@ -24,7 +23,7 @@ export class CreateHomeComponent {
 
   user : userRetrieveModel | null = null;
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private api: ApiHomeService, private router: Router) {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user = JSON.parse(storedUser) as userRetrieveModel;
