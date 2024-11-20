@@ -1,11 +1,16 @@
 
-//agregar nombre desp
 export interface home {
   id: number;
   street: string;
   doorNumber: number;
   latitude: number;
   longitude: number;
+}
+
+export interface patchDeviceRequest {
+  Name: string;
+  HardwareId: string;
+  HomeId: number;
 }
 
 export interface deviceUnit {
@@ -15,6 +20,17 @@ export interface deviceUnit {
   model: number;
   photo: string;
 }
+
+export class patchDeviceAlias {
+  HardwareId: string;
+  Name: string;
+
+  constructor(HardwareId: string, Name: string) {
+    this.HardwareId = HardwareId;
+    this.Name = Name;
+  }
+}
+
 
 export class addMemberRequest{
   id: number;

@@ -14,7 +14,7 @@ public class GetDeviceUnitResponse
     
     public GetDeviceUnitResponse(DeviceUnit deviceUnit)
     {
-        Name = deviceUnit.Device.Name;
+        Name = deviceUnit.Name;
         HardwareId = deviceUnit.HardwareId;
         IsConnected = deviceUnit.IsConnected;
         Model = deviceUnit.Device.Model;

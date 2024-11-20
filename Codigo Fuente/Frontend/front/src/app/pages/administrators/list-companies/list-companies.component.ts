@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {GetCompanyResponse, GetCompaniesResponse, GetCompanyRequest} from '../../../interfaces/companies';
 import {CompanyService} from '../../../shared/company.service';
@@ -9,7 +9,7 @@ import {ApiService} from '../../../shared/api.service';
   templateUrl: './list-companies.component.html',
   styleUrls: ['../../../../styles.css'],
 })
-export class ListCompaniesComponent {
+export class ListCompaniesComponent implements OnInit{
   companies: GetCompanyResponse[] = [];
   totalCompanies: number = 0;
   selectedCompanyName: string = "";
@@ -21,6 +21,9 @@ export class ListCompaniesComponent {
   modalCompany: string | null = '';
   modalImage: string | null = null;
   isPhotoModalOpen = false;
+
+  currentPage: number = 1;
+  pageSize: number = 6; //cuantos se van a ver por pagina
 
   constructor(private api: ApiService, private router: Router) {}
 
@@ -34,13 +37,21 @@ export class ListCompaniesComponent {
       name: this.selectedCompanyName,
       fullName: this.selectedOwnerName,
     };
-    this.api.getCompanies(data).subscribe({
+    this.api.getCompanies(data, this.currentPage, this.pageSize).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
-        this.totalCompanies = res.companies.length;
+        this.totalCompanies = res.totalCount;
         console.log(this.companies);
       }
     });
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getCompanies();
+  }
+  get totalPages(): number {
+    return Math.ceil(this.totalCompanies / this.pageSize);
   }
 
   formatDate(date: string): string {

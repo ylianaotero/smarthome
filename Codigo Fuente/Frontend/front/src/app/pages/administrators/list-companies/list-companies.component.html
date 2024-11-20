@@ -43,23 +43,42 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" [ngClass]="{'show': isPhotoModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isPhotoModalOpen">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="card-title" id="imageModalLabel">{{modalCompany}}</h5>
-        <button type="button" class="close" (click)="closeModal()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img [src]="modalImage" alt="{{modalCompany}}" class="img-fluid" />
+  <div class="modal fade" [ngClass]="{'show': isPhotoModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isPhotoModalOpen">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="card-title" id="imageModalLabel">{{modalCompany}}</h5>
+          <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img [src]="modalImage" alt="{{modalCompany}}" class="img-fluid" />
+        </div>
       </div>
     </div>
   </div>
+
+
+
+  <div class="modal-footer d-flex flex-column align-items-center">
+    <nav aria-label="Page navigation" class="mb-2">
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item">
+          <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span>
+        </li>
+        <li class="page-item">
+          <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

@@ -10,7 +10,11 @@ import {
   member,
   addDeviceToHomeRequest,
   addDeviceRequest,
-  addDeviceToHomeListRequest, ChangeMemberNotificationsRequest, ChangeMemberRequest
+  addDeviceToHomeListRequest,
+  ChangeMemberNotificationsRequest,
+  ChangeMemberRequest,
+  patchDeviceRequest,
+  patchDeviceAlias
 } from '../pages/home-owners/homes/panel/homeModels';
 import {createHomeModel, homeRetrieveModel} from '../pages/home-owners/homes/create/createHomeModel';
 import {Observable, tap} from 'rxjs';
@@ -69,6 +73,10 @@ export class ApiService {
 
   postHomeOwner(data: userRegistrationInstance) {
     return this.httpClient.post<userRetrieveModel>(this.url + '/home-owners', data);
+  }
+
+  patchDevice(data: patchDeviceRequest) {
+    return this.httpClient.patch(this.url + '/homes/'+ data.HomeId.toString()+ '/devices', new patchDeviceAlias(data.HardwareId, data.Name), {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   postHome(data: createHomeModel) {
@@ -233,8 +241,8 @@ export class ApiService {
       params = request ? params.append('Owner', request.fullName) : params;
     }
 
-    params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
-    params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
+    params = pageSize ? params.append('Page', currentPage!.toString()) : params;
+    params = currentPage ? params.append('PageSize', pageSize!.toString()) : params;
     return this.httpClient.get<GetCompaniesResponse>(this.url + '/companies',
       {params, headers: {'Authorization': `${this.currentSession?.token}`}});
   }

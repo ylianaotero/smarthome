@@ -30,7 +30,7 @@ export class CreateHomeComponent {
   registerHome(street: string, doorNumber: number, latitude: number, longitude: number, maximumMembers: number, alias: string): void {
     this.feedback = "Loading...";
 
-    if (!street || doorNumber === null || latitude === null || longitude === null || maximumMembers === null) {
+    if (!street || doorNumber === null || latitude === null || longitude === null || maximumMembers === null || !alias) {
       this.feedback = "Por favor, completa todos los campos obligatorios.";
       return;
     }

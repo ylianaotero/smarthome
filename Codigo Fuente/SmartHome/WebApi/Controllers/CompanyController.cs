@@ -21,8 +21,9 @@ public class CompanyController(ICompanyService companyService, IUserService user
     [RolesWithPermissions(RoleWithPermissionsToPostCompany, RoleWithPermissionsToGetCompanies)]
     public IActionResult GetCompanies([FromQuery] GetCompaniesRequest request, [FromQuery] PageDataRequest pageDataRequest)
     {
+        int count = companyService.GetCompaniesByFilter(request.ToFilter(), null).Count; 
         GetCompaniesResponse getCompaniesResponse = new GetCompaniesResponse
-            (companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+            (companyService.GetCompaniesByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
         
         return Ok(getCompaniesResponse);
     }

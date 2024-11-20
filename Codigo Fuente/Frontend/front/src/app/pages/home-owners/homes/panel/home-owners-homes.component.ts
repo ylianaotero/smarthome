@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../../shared/api.service';
 import {
@@ -7,13 +7,13 @@ import {
   home,
   member,
   deviceUnit,
-  ChangeMemberNotificationsRequest
+  ChangeMemberNotificationsRequest, patchDeviceRequest
 } from './homeModels';
 
 @Component({
   selector: 'app-homes-home-owner',
   templateUrl: './home-owners-homes.component.html',
-  styleUrls: ['../../../../../styles.css']
+  styleUrls: ['home-owners-homes.component.css','../../../../../styles.css']
 })
 export class HomeOwnersHomesComponent implements OnInit {
   homes!: home[];
@@ -44,7 +44,52 @@ export class HomeOwnersHomesComponent implements OnInit {
 
   isModalOfListOfDevicesOpen: boolean = false;
 
-  constructor(private api: ApiService, private router: Router) {}
+  newAlias: string = '';
+  deviceBeingEdited: any = null;
+
+  openEditAliasForm(device: any) {
+    this.deviceBeingEdited = device;
+    this.newAlias = device.name;
+  }
+
+  saveAlias() {
+    if (
+      this.newAlias.trim() === '' ||
+      !this.deviceBeingEdited ||
+      !this.selectedHome ||
+      this.selectedHome.id == null
+    ) {
+      this.deviceBeingEdited = null;
+      this.newAlias = '';
+      return;
+    }
+
+    const request: patchDeviceRequest = {
+      Name: this.newAlias,
+      HardwareId: this.deviceBeingEdited.hardwareId,
+      HomeId: this.selectedHome.id
+    };
+
+    this.api.patchDevice(request).subscribe({
+      next: (res: any) => {
+        this.getDevices(this.selectedHome?.id);
+      },
+    });
+
+    this.deviceBeingEdited = null;
+    this.newAlias = '';
+
+    this.closeModal('showDevices');
+    return;
+  }
+
+  cancelEdit() {
+    this.deviceBeingEdited = null;
+    this.newAlias = '';
+  }
+
+
+  constructor(private api: ApiService, private router: Router,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.getHomes();
@@ -85,6 +130,7 @@ export class HomeOwnersHomesComponent implements OnInit {
     this.api.getDevicesOfHome(id).subscribe({
       next: (res: any) => {
         this.devices = res.devicesUnit || [];
+        this.cdr.detectChanges();
         this.errorMessage = '';
       },
       error: (err) => {
@@ -99,6 +145,7 @@ export class HomeOwnersHomesComponent implements OnInit {
       }
     });
   }
+
 
 
   toggleNotification(member: member): void {

@@ -1,6 +1,7 @@
 
 export interface GetCompaniesResponse {
     companies: GetCompanyResponse[];
+    totalCount : number;
 }
 
 export interface GetCompanyResponse {
