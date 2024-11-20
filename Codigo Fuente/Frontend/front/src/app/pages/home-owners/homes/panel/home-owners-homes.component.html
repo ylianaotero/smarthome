@@ -36,6 +36,11 @@
           <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'showDevices')">
             <i class="fas fa-tablet-alt"></i> Listar Dispositivos
           </button>
+
+          <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'addRoom')">
+            <i class="fas fa-bed"></i> Agregar cuarto
+          </button>
+
         </div>
     </div>
     <ng-template #noHomes>
@@ -44,6 +49,49 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="myModalRooms" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="isModalOfRoomsOpen" [style.display]="isModalOfRoomsOpen ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'addRoom')">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar un cuarto a la casa {{ selectedHome?.id }}</h5>
+        <button type="button" class="close" (click)="closeModal('addRoom')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form #roomForm="ngForm" (ngSubmit)="postRoom()" novalidate>
+
+          <div class="form-group">
+
+            <label for="roomName">Nombre</label>
+            <input type="text" class="form-control" id="roomName"
+                   [(ngModel)]="newRoom.Name" name="roomName"
+                   required placeholder="Ingrese el nombre">
+            <div *ngIf="roomForm.submitted && roomForm.controls['roomName']?.invalid" class="text-danger">
+              El nombre es requerido y debe ser válido.
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('addRoom')">Cerrar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!roomForm.valid" (click)="saveRoom()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 <div class="modal fade" id="myModalMembers" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfMembersOpen" [style.display]="isModalOfMembersOpen ? 'block' : 'none'"
@@ -107,7 +155,6 @@
     </div>
   </div>
 </div>
-
 <div class="modal fade" id="myModalDevice" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfDeviceOpen" [style.display]="isModalOfDeviceOpen ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'addDevice')">
@@ -133,6 +180,16 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="room">Seleccionar Cuarto:</label>
+            <select class="form-control" id="room" [(ngModel)]="newDevice.roomName" name="room" required>
+              <option *ngFor="let room of listOfRooms" [value]="room">{{ room }}</option>
+            </select>
+            <div *ngIf="deviceForm.submitted && deviceForm.controls['room']?.invalid" class="text-danger">
+              Seleccionar un cuarto es obligatorio.
+            </div>
+          </div>
+
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="isConnected"
                    [(ngModel)]="newDevice.isConnected" name="isConnected">
@@ -155,6 +212,7 @@
     </div>
   </div>
 </div>
+
 
 
 
@@ -224,7 +282,6 @@
 </div>
 
 
-
 <div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfListOfDevicesOpen"
      [style.display]="isModalOfListOfDevicesOpen ? 'block' : 'none'"
@@ -243,7 +300,20 @@
         <div *ngIf="errorMessage !== ''" class="alert alert-danger">
           {{ errorMessage }}
         </div>
-        <table *ngIf="errorMessage === ''" class="table table-striped">
+
+        <div class="form-group mb-3" >
+          <label for="filterRoom" class="font-weight-bold">Filtrar por cuarto:</label>
+          <input type="text" id="filterRoom" class="form-control mb-2" [(ngModel)]="roomFilter" placeholder="Escribe el nombre del cuarto" />
+        </div>
+
+        <div class="form-row">
+          <div class="col">
+            <button type="button" class="input-btn" (click)="getDevices(selectedHome?.id)">Buscar</button>
+          </div>
+        </div>
+
+
+        <table class="table table-striped">
           <thead>
           <tr>
             <th scope="col">Foto</th>
@@ -251,6 +321,8 @@
             <th scope="col">ID del Hardware</th>
             <th scope="col">Modelo</th>
             <th scope="col">¿Conectado?</th>
+            <th scope="col">Cuarto</th>
+            <th scope="col">Status</th>
             <th scope="col">Acción</th>
           </tr>
           </thead>
@@ -266,6 +338,8 @@
               <i *ngIf="device.isConnected" class="fas fa-check text-success"></i>
               <i *ngIf="!device.isConnected" class="fas fa-times text-danger"></i>
             </td>
+            <td>{{ device.roomName }}</td>
+            <td>{{ device.status }}</td>
             <td>
               <button type="button" class="btn btn-primary btn-sm" (click)="openEditAliasForm(device)">
                 Cambiar alias
@@ -287,6 +361,8 @@
           </tr>
           </tbody>
         </table>
+
+
       </div>
 
       <div class="modal-footer">
@@ -295,6 +371,8 @@
     </div>
   </div>
 </div>
+
+
 
 
 

@@ -14,14 +14,14 @@ import {
   ChangeMemberNotificationsRequest,
   ChangeMemberRequest,
   patchDeviceRequest,
-  patchDeviceAlias
+  patchDeviceAlias, addRoomRequest, AddRoomToHomeRequest
 } from '../pages/home-owners/homes/panel/homeModels';
 import {createHomeModel, homeRetrieveModel} from '../pages/home-owners/homes/create/createHomeModel';
 import {Observable, tap} from 'rxjs';
 import {DeviceFilterRequestModel, deviceModel} from '../pages/devices/panel/model-device';
 import {ImportDevicesRequest, importer, ImporterPath} from '../pages/company-owners/import-device/importerModels';
 import {
-  GetDeviceTypesResponse, PostMotionSensorRequest,
+  GetDeviceTypesResponse, GetRoomResponse, PostMotionSensorRequest,
   PostSecurityCameraRequest,
   PostSmartLampRequest,
   PostWindowSensorRequest
@@ -91,17 +91,18 @@ export class ApiService {
     return this.httpClient.post(this.url + '/homes/' + data.id.toString() + '/members', new addMemberToHomeRequest(data.email, data.hasPermissionToListDevices, data.hasPermissionToAddDevice, data.recivesNotifications), {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
+  postRoomToHome(data: addRoomRequest) {
+    return this.httpClient.post(this.url + '/homes/' + data.id.toString() + '/rooms', new AddRoomToHomeRequest(data.name), {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
   postDeviceToHome(data: addDeviceRequest) {
-    return this.httpClient.post(this.url + '/homes/' + data.id.toString() + '/devices', new addDeviceToHomeListRequest(new addDeviceToHomeRequest(data.deviceId, data.isConnected)), {headers: {'Authorization': `${this.currentSession?.token}`}});
+    return this.httpClient.post(this.url + '/homes/' + data.id.toString() + '/devices', new addDeviceToHomeListRequest(new addDeviceToHomeRequest(data.deviceId, data.isConnected, data.roomName)), {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   getMembersOfHome(data: number) {
     return this.httpClient.get<member[]>(this.url + '/homes/' + data.toString() + '/members', {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
-  getDevicesOfHome(data: number) {
-    return this.httpClient.get<deviceUnit[]>(this.url + '/homes/' + data.toString() + '/devices', {headers: {'Authorization': `${this.currentSession?.token}`}});
-  }
 
   changeMemberNotifications(data: ChangeMemberNotificationsRequest) {
     return this.httpClient.patch(this.url + '/homes/' + data.IdHome.toString() + '/members', new ChangeMemberRequest(data.MemberEmail, data.ReceivesNotifications), {headers: {'Authorization': `${this.currentSession?.token}`}});
@@ -110,6 +111,11 @@ export class ApiService {
   getSupportedDevices() {
     return this.httpClient.get<GetDeviceTypesResponse>(this.url + '/devices' + '/types', {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
+
+  getRooms(data : string) {
+    return this.httpClient.get<GetRoomResponse>(this.url + '/homes/' + data + '/rooms', {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
 
   getImporters() {
     return this.httpClient.get<importer[]>(this.url + '/imports', {headers: {'Authorization': `${this.currentSession?.token}`}});
@@ -144,6 +150,19 @@ export class ApiService {
     params = params.set('PageSize', pageSize.toString());
 
     return this.httpClient.get<deviceModel[]>(url, {
+      params,
+      headers: { 'Authorization': `${this.currentSession?.token}` }
+    });
+  }
+
+  getDevicesOfHome(data: number, filter : string) {
+    let params = new HttpParams();
+
+    if (filter) {
+      params = params.set('RoomName', filter);
+    }
+
+    return this.httpClient.get<deviceUnit[]>(this.url + '/homes/' + data.toString() + '/devices', {
       params,
       headers: { 'Authorization': `${this.currentSession?.token}` }
     });

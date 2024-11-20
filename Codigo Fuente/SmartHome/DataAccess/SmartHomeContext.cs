@@ -170,6 +170,10 @@ namespace DataAccess
         private void ConfigureRoom(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Room>().Property(r => r.Id).ValueGeneratedOnAdd();
+            
+            modelBuilder.Entity<Room>()
+                .HasIndex(r => r.Name)
+                .IsUnique();
         }
     }
 }

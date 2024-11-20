@@ -6,6 +6,8 @@ public class DeviceUnitDTO
     public bool? IsConnected { get; set; }
     public Guid HardwareId { get; set; }
     public long? RoomId { get; set; }
+    
+    public string? RoomName { get; set; }
     public string? Name { get; set; }
     public string? Status { get; set; }
 }

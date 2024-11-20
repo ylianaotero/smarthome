@@ -21,6 +21,10 @@ export interface GetDeviceTypesResponse {
     deviceTypes: string[];
 }
 
+export interface GetRoomResponse {
+  rooms: string[];
+}
+
 export class PostWindowSensorRequest {
   name: string | null;
   model: string | null;
