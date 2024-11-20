@@ -19,8 +19,8 @@ public class CompanyOwnerController(IUserService userService) : ControllerBase
     {
         try
         {
-            userService.CreateUser(postCompanyOwnerRequest.ToEntity());
-            PostCompanyOwnerResponse response = new PostCompanyOwnerResponse(postCompanyOwnerRequest.ToEntity());
+            long id = userService.CreateUser(postCompanyOwnerRequest.ToEntity());
+            PostCompanyOwnerResponse response = new PostCompanyOwnerResponse(postCompanyOwnerRequest.ToEntity(), id);
             
             return CreatedAtAction(nameof(CreateCompanyOwner), response);
         }

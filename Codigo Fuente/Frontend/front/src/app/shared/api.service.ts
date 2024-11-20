@@ -27,10 +27,11 @@ import {
   PostWindowSensorRequest
 } from '../interfaces/devices';
 import {
+  addRole,
   createAdministratorModel,
   createCompanyOwnerModel, GetUsersRequest, GetUsersResponse,
   PostAdministratorRequest,
-  PostCompanyOwnerRequest
+  PostCompanyOwnerRequest, PostCompanyOwnerResponse, ResponseAdmin
 } from '../interfaces/users';
 import {
   CreateCompanyRequest,
@@ -85,6 +86,10 @@ export class ApiService {
 
   postHome(data: createHomeModel) {
     return this.httpClient.post<homeRetrieveModel>(this.url + '/homes', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
+  }
+
+  postRole(data: string) {
+    return this.httpClient.post(this.url + '/users/'+data+'/roles', new addRole("homeowner"), {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   getHomesOfHomeOwner() {
@@ -252,11 +257,11 @@ export class ApiService {
   }
 
   postAdministrator(data: createAdministratorModel) {
-    return this.httpClient.post<PostAdministratorRequest>(this.url + '/administrators', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
+    return this.httpClient.post<ResponseAdmin>(this.url + '/administrators', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
   };
 
   postCompanyOwner(data: createCompanyOwnerModel) {
-    return this.httpClient.post<PostCompanyOwnerRequest>(this.url + '/company-owners', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
+    return this.httpClient.post<PostCompanyOwnerResponse>(this.url + '/company-owners', data, {headers: {'Authorization': `${this.currentSession?.token}`}});
   }
 
   getUsers(request: GetUsersRequest, currentPage?: number, pageSize?: number): Observable<GetUsersResponse> {

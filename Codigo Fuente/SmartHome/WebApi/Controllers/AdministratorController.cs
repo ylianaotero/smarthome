@@ -20,8 +20,8 @@ public class AdministratorController(IUserService userService) : ControllerBase
     {
         try
         {
-            userService.CreateUser(postAdministratorRequest.ToEntity());
-            PostAdministratorResponse userResponse = new PostAdministratorResponse(postAdministratorRequest.ToEntity());
+            long id = userService.CreateUser(postAdministratorRequest.ToEntity());
+            PostAdministratorResponse userResponse = new PostAdministratorResponse(postAdministratorRequest.ToEntity(), id);
             
             return CreatedAtAction(nameof(CreateAdministrator), userResponse);
         }

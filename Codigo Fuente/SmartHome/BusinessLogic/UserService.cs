@@ -15,7 +15,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
     
     private readonly List<string> _assignableRoles = ["homeowner"];
 
-    public void CreateUser(User user)
+    public long CreateUser(User user)
     {
         try
         {
@@ -26,6 +26,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         catch (ElementNotFound)
         {
             userRepository.Add(user);
+            return userRepository.GetAll(null).FirstOrDefault(u => u.Email == user.Email).Id;
         }
     }
 
