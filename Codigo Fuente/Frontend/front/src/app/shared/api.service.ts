@@ -38,6 +38,10 @@ import {
   GetCompanyRequest,
   PostCompaniesResponse
 } from '../interfaces/companies';
+import {
+  GetNotificationResponse,
+  NotificationsFilterRequestModel
+} from '../pages/notifications/panel/model-notification';
 
 @Injectable({
   providedIn: 'root'
@@ -150,6 +154,32 @@ export class ApiService {
     params = params.set('PageSize', pageSize.toString());
 
     return this.httpClient.get<deviceModel[]>(url, {
+      params,
+      headers: { 'Authorization': `${this.currentSession?.token}` }
+    });
+  }
+
+
+  getNotifications(modelIn: NotificationsFilterRequestModel): Observable<GetNotificationResponse[]> {
+    const url = this.url + '/notifications';
+    let params = new HttpParams();
+    if (modelIn.Kind) {
+      params = params.set('Kind', modelIn.Kind);
+    }
+
+    if (modelIn.Read) {
+      params = params.set('Read', modelIn.Read);
+    }
+
+
+    if (modelIn.Date != null) {
+      console.log(modelIn.Date.toString());
+      params = params.set('Date', modelIn.Date.toString());
+    }
+
+
+
+    return this.httpClient.get<GetNotificationResponse[]>(url, {
       params,
       headers: { 'Authorization': `${this.currentSession?.token}` }
     });

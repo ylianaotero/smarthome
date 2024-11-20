@@ -19,7 +19,7 @@ public class NotificationService
     public void SendNotifications(NotificationDTO notificationData)
     {
         (Home home, DeviceUnit device) = ExtractNotificationDTOObjects(notificationData);
-
+        
         if (device.IsConnected)
         {
             List<Member> membersToSendNotification = home.Members.Where(m => m.ReceivesNotifications).ToList();
@@ -32,7 +32,8 @@ public class NotificationService
                 notification.Home = home;
                 notification.DeviceUnit = device;
                 notification.Member = member;
-                notification.ReadAt = DateTime.MinValue; 
+                notification.ReadAt = DateTime.MinValue;
+
                 
                 member.Notifications.Add(notification);
                 notificationRepository.Add(notification);
