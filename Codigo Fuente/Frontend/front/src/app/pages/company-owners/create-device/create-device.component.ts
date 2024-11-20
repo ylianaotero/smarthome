@@ -9,6 +9,7 @@ import {
 } from '../../../interfaces/devices';
 import {GetCompaniesResponse, GetCompanyRequest} from '../../../interfaces/companies';
 import { CompanyService } from '../../../shared/company.service';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-create-device',
@@ -41,9 +42,15 @@ export class CreateDeviceComponent implements OnInit  {
   possibleDeviceTypes: string[];
   possibleLocationTypes: string[] = ['Indoor', 'Outdoor'];
 
+  user : userRetrieveModel | null = null;
+
   constructor(private api: ApiService, private router: Router) {
-    this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
-    this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.companyOwnerName= this.user?.name || 'Usuario';
+    this.companyOwnerEmail = this.user?.email || '';
     this.deviceCompanyId = -1;
     this.possibleDeviceTypes = [];
   }

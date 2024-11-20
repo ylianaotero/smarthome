@@ -6,6 +6,7 @@ import { GetCompanyResponse } from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
 import {ApiService} from '../../../shared/api.service';
 import {GetDeviceTypesResponse} from '../../../interfaces/devices';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-administrator-panel',
@@ -32,14 +33,26 @@ export class AdministratorPanelComponent implements OnInit {
 
   deviceTypes: string[] = [];
 
+  user : userRetrieveModel | null = null;
+
 
   constructor(private router: Router, private api: ApiService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
     this.getUsers();
     this.getDevicesTypes();
+  }
+
+  logOut() : void {
+    localStorage.setItem('user', JSON.stringify(null));
+    localStorage.setItem('token', '');
+    this.router.navigate(['']);
   }
 
   getDevicesTypes(): void {

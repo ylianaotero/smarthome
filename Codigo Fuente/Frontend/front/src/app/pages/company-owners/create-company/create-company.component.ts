@@ -7,6 +7,7 @@ import {
   GetCompanyResponse
 } from '../../../interfaces/companies';
 import { CompanyService } from '../../../shared/company.service';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-create-company',
@@ -30,10 +31,16 @@ export class CreateCompanyComponent {
 
   companies: GetCompanyResponse[] = [];
 
+  user : userRetrieveModel | null = null;
+
   constructor(private api: ApiService, private router: Router) {
-    this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
-    this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
-    this.companyOwnerId = this.api.currentSession?.user?.id || -1;
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.companyOwnerName= this.user?.name || 'Usuario';
+    this.companyOwnerEmail = this.user?.email || '';
+    this.companyOwnerId  = this.user?.id || 0;
   }
 
   ngOnInit(): void {

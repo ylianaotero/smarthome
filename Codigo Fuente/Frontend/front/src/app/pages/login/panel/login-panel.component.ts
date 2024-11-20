@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {sessionModel, sessionRequest} from './sessionModel';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-log-in',
@@ -25,11 +26,12 @@ export class LoginPanelComponent {
 
     this.api.postSession(new sessionRequest(email, password)).subscribe({
       next: res => {
-        this.api.currentSession = res;
         this.feedback = "success";
-        localStorage.setItem('user', JSON.stringify(res));
-        console.log(res.user.roles);
-        this.redirection(res);
+
+        localStorage.setItem('user', JSON.stringify(res.user));
+        localStorage.setItem('token', res.token);
+
+        this.redirection();
 
       },
       error: err => {
@@ -41,19 +43,24 @@ export class LoginPanelComponent {
     });
   }
 
-  redirection(res: sessionModel){
-    if (res.user && res.user.roles) {
-      const hasHomeOwnerRole = res.user.roles.some(role => role.kind === 'HomeOwner');
-      const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
-      const hasAdministratorRole = res.user.roles.some(role => role.kind === 'Administrator');
+  redirection(){
+    const storedUser = localStorage.getItem('user');
+    let res: userRetrieveModel | null = null;
+    if(storedUser){
+      res = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    if (res && Array.isArray(res.roles)) {
+      const hasHomeOwnerRole = res.roles.some(role => role.kind === 'HomeOwner');
+      const hasCompanyOwnerRole = res.roles.some(role => role.kind=== 'CompanyOwner');
+      const hasAdministratorRole = res.roles.some(role => role.kind === 'Administrator');
 
-      if (hasHomeOwnerRole && res.user.roles.length == 1) {
+      if (hasHomeOwnerRole && res.roles.length == 1) {
         this.router.navigate(['/home-owners']);
-      } else if (hasCompanyOwnerRole && res.user.roles.length == 1) {
+      } else if (hasCompanyOwnerRole && res.roles.length == 1) {
         this.router.navigate(['/company-owners']);
-      } else if (hasAdministratorRole && res.user.roles.length == 1) {
+      } else if (hasAdministratorRole && res.roles.length == 1) {
         this.router.navigate(['/administrators']);
-      }else if(res.user.roles.length > 1){
+      }else if(res.roles.length > 1){
         this.router.navigate(['/home/user-panel']);
       }
     } else {

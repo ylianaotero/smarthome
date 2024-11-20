@@ -3,6 +3,7 @@ import { AdministratorService } from '../../../shared/administrator.service';
 import { Router } from '@angular/router';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
 import {ApiService} from '../../../shared/api.service';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-delete-admin',
@@ -25,11 +26,17 @@ export class DeleteAdminComponent implements OnInit{
   isPhotoModalOpen = false;
   isConfirmationModalOpen = false;
 
+  user : userRetrieveModel | null = null;
+
   constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.getUsers();
-    this.sessionUserEmail = this.api.currentSession?.user?.email || 'Usuario';
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.sessionUserEmail = this.user?.email|| 'Usuario';
   }
 
   getUsers(): void {

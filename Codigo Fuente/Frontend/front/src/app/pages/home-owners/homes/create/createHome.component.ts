@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 
 import {ApiService} from '../../../../shared/api.service';
 import {createHomeModel} from './createHomeModel';
+import {userRetrieveModel} from '../../create/signUpUserModel';
 
 @Component({
   selector: 'app-create-home',
@@ -21,7 +22,14 @@ export class CreateHomeComponent {
 
   feedback: string = "";
 
-  constructor(private api: ApiService, private router: Router) {}
+  user : userRetrieveModel | null = null;
+
+  constructor(private api: ApiService, private router: Router) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+  }
 
   goHome(): void {
     this.router.navigate(['/home-owners']);
@@ -35,7 +43,7 @@ export class CreateHomeComponent {
       return;
     }
 
-    const userId = this.api.currentSession?.user?.id;
+    const userId = this.user?.id;
 
     if (!userId) {
       this.feedback = "Could not retrieve the user ID.";

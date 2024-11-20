@@ -10,6 +10,7 @@ import {
 import { GetUserResponse } from '../../../interfaces/users';
 import {GetDeviceResponse, GetDeviceTypesResponse} from '../../../interfaces/devices';
 import {ApiService} from '../../../shared/api.service';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-company-owner-panel',
@@ -26,9 +27,6 @@ export class CompanyOwnersPanelComponent implements OnInit {
   totalCompanies: number = 0;
 
   modalShowCompanies: boolean = false;
-  modalCreateCompany: boolean = false;
-
-  modalShowDevices: boolean = false;
   modalShowDevicesTypes: boolean = false;
 
   selectedCompanyName: string = '';
@@ -50,16 +48,28 @@ export class CompanyOwnersPanelComponent implements OnInit {
 
   deviceTypes: string[] = [];
 
+  user : userRetrieveModel | null = null;
+
 
   constructor(private router: Router, private sharedApi : ApiService) {
-    this.userName = this.sharedApi.currentSession?.user?.name || 'Usuario';
-    this.userEmail = this.sharedApi.currentSession?.user?.email || '';
-    this.userId = this.sharedApi.currentSession?.user?.id || 0;
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
+    this.userEmail = this.user?.email || '';
+    this.userId = this.user?.id || 0;
   }
 
   ngOnInit(): void {
     this.getCompany();
     this.getDevicesTypes();
+  }
+
+  logOut() : void {
+    localStorage.setItem('user', JSON.stringify(null));
+    localStorage.setItem('token', '');
+    this.router.navigate(['']);
   }
 
   goViewNotifications(): void {

@@ -5,6 +5,7 @@ import { AdministratorService } from '../../../shared/administrator.service';
 import { DevicesService } from '../../../shared/devices.service';
 import {ApiService} from '../../../shared/api.service';
 import {DeviceFilterRequestModel} from './model-device';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-devices-list',
@@ -25,8 +26,14 @@ export class DevicesPanelComponent implements OnInit {
   modalImage: string | null = null;
   isModalOpen = false;
 
+  user : userRetrieveModel | null = null;
+
   constructor(private router: Router, private sharedApi: ApiService) {
-    this.userName = this.sharedApi.currentSession?.user?.name || 'Usuario';
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
