@@ -49,6 +49,23 @@
       </div>
     </div>
   </div>
+
+
+  <div class="modal-footer d-flex flex-column align-items-center">
+    <nav aria-label="Page navigation" class="mb-2">
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item">
+          <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span>
+        </li>
+        <li class="page-item">
+          <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
 
 <div class="modal fade" [ngClass]="{'show': isModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isModalOpen">

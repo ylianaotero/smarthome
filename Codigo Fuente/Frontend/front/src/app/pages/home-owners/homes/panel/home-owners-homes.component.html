@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="home-owners-homes.component.css">
 </head>
 <body>
 
@@ -35,6 +36,11 @@
           <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'showDevices')">
             <i class="fas fa-tablet-alt"></i> Listar Dispositivos
           </button>
+
+          <button class="btn btn-info btn-block mb-2" (click)="openModal(home, 'addRoom')">
+            <i class="fas fa-bed"></i> Agregar cuarto
+          </button>
+
         </div>
     </div>
     <ng-template #noHomes>
@@ -44,7 +50,49 @@
   </div>
 </div>
 
-<!-- Modal -->
+
+<div class="modal fade" id="myModalRooms" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="isModalOfRoomsOpen" [style.display]="isModalOfRoomsOpen ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'addRoom')">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar un cuarto a la casa {{ selectedHome?.id }}</h5>
+        <button type="button" class="close" (click)="closeModal('addRoom')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form #roomForm="ngForm" (ngSubmit)="postRoom()" novalidate>
+
+          <div class="form-group">
+
+            <label for="roomName">Nombre</label>
+            <input type="text" class="form-control" id="roomName"
+                   [(ngModel)]="newRoom.Name" name="roomName"
+                   required placeholder="Ingrese el nombre">
+            <div *ngIf="roomForm.submitted && roomForm.controls['roomName']?.invalid" class="text-danger">
+              El nombre es requerido y debe ser válido.
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('addRoom')">Cerrar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!roomForm.valid" (click)="saveRoom()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 <div class="modal fade" id="myModalMembers" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfMembersOpen" [style.display]="isModalOfMembersOpen ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'addMembers')">
@@ -60,7 +108,6 @@
       <div class="modal-body">
         <form #memberForm="ngForm" (ngSubmit)="postMember()" novalidate>
 
-          <!-- Email -->
           <div class="form-group">
             <label for="memberEmail">Correo Electrónico</label>
             <input type="email" class="form-control" id="memberEmail"
@@ -70,8 +117,6 @@
               El correo es requerido y debe ser válido.
             </div>
           </div>
-
-          <!-- Permiso para ver lista de dispositivos -->
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="canViewDevices"
                    [(ngModel)]="newMember.canViewDevices" name="canViewDevices">
@@ -80,7 +125,6 @@
             </label>
           </div>
 
-          <!-- Permiso para agregar dispositivos -->
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="canAddDevices"
                    [(ngModel)]="newMember.canAddDevices" name="canAddDevices">
@@ -89,7 +133,6 @@
             </label>
           </div>
 
-          <!-- Desea recibir notificaciones -->
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="receiveNotifications"
                    [(ngModel)]="newMember.receiveNotifications" name="receiveNotifications">
@@ -98,7 +141,6 @@
             </label>
           </div>
 
-          <!-- Mensaje de retroalimentación -->
           <div *ngIf="feedback" class="alert alert-info">
             {{ feedback }}
           </div>
@@ -113,8 +155,6 @@
     </div>
   </div>
 </div>
-
-<!-- Modal -->
 <div class="modal fade" id="myModalDevice" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfDeviceOpen" [style.display]="isModalOfDeviceOpen ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'addDevice')">
@@ -137,6 +177,16 @@
                    required placeholder="Ingrese el id del dispositivo">
             <div *ngIf="deviceForm.submitted && deviceForm.controls['deviceId']?.invalid" class="text-danger">
               El id del dispositivo es requerido y debe ser válido.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="room">Seleccionar Cuarto:</label>
+            <select class="form-control" id="room" [(ngModel)]="newDevice.roomName" name="room" required>
+              <option *ngFor="let room of listOfRooms" [value]="room">{{ room }}</option>
+            </select>
+            <div *ngIf="deviceForm.submitted && deviceForm.controls['room']?.invalid" class="text-danger">
+              Seleccionar un cuarto es obligatorio.
             </div>
           </div>
 
@@ -166,6 +216,7 @@
 
 
 
+
 <div class="modal fade" id="myModalShowMembers" tabindex="-1" role="dialog" aria-hidden="true"
      [class.show]="isModalOfListOfMembersOpen" [style.display]="isModalOfListOfMembersOpen ? 'block' : 'none'"
      (click)="closeModalBackdrop($event, 'showMembers')">
@@ -187,15 +238,31 @@
         <table class="table table-striped">
           <thead>
           <tr>
+            <th scope="col">Foto</th>
             <th scope="col">Nombre Completo</th>
+            <th scope="col">Email</th>
+            <th scope="col">¿Tiene permiso para asociar dispositivos?</th>
+            <th scope="col">¿Tiene permiso para listar dispositivos?</th>
             <th scope="col">¿Recibe Notificaciones?</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let member of members">
-            <td>{{ member.fullName }}</td>
             <td>
-              <button class="btn" (click)="toggleNotification(member)">
+              <img [src]="member.photo" alt="Foto de {{ member.fullName }}" style="width: 50px; height: 50px; object-fit: cover;" />
+            </td>
+            <td>{{ member.fullName }}</td>
+            <td>{{ member.email }}</td>
+            <td>
+              <i *ngIf="member.hasPermissionToAddDevice" class="fas fa-check text-success"></i>
+              <i *ngIf="!member.hasPermissionToAddDevice" class="fas fa-times text-danger"></i>
+            </td>
+            <td>
+              <i *ngIf="member.hasPermissionToListDevices" class="fas fa-check text-success"></i>
+              <i *ngIf="!member.hasPermissionToListDevices" class="fas fa-times text-danger"></i>
+            </td>
+            <td>
+              <button class="btn" (click)="toggleNotification(member)" style="background-color: transparent;">
                 <i
                   class="fas"
                   [ngClass]="{
@@ -204,6 +271,7 @@
                     }"
                 ></i>
               </button>
+
             </td>
           </tr>
           </tbody>
@@ -212,7 +280,6 @@
     </div>
   </div>
 </div>
-
 
 
 <div class="modal fade" id="myModalShowDevices" tabindex="-1" role="dialog" aria-hidden="true"
@@ -230,23 +297,40 @@
       </div>
 
       <div class="modal-body">
-        <!-- Mostrar mensaje de error si existe -->
-        <div *ngIf="errorMessage != '' " class="alert alert-danger">
+        <div *ngIf="errorMessage !== ''" class="alert alert-danger">
           {{ errorMessage }}
         </div>
 
-        <!-- Mostrar la tabla si no hay errores y hay dispositivos -->
-        <table *ngIf="errorMessage == '' " class="table table-striped">
+        <div class="form-group mb-3" >
+          <label for="filterRoom" class="font-weight-bold">Filtrar por cuarto:</label>
+          <input type="text" id="filterRoom" class="form-control mb-2" [(ngModel)]="roomFilter" placeholder="Escribe el nombre del cuarto" />
+        </div>
+
+        <div class="form-row">
+          <div class="col">
+            <button type="button" class="input-btn" (click)="getDevices(selectedHome?.id)">Buscar</button>
+          </div>
+        </div>
+
+
+        <table class="table table-striped">
           <thead>
           <tr>
+            <th scope="col">Foto</th>
             <th scope="col">Nombre</th>
             <th scope="col">ID del Hardware</th>
             <th scope="col">Modelo</th>
             <th scope="col">¿Conectado?</th>
+            <th scope="col">Cuarto</th>
+            <th scope="col">Status</th>
+            <th scope="col">Acción</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let device of devices">
+            <td>
+              <img [src]="device.photo" alt="Foto" style="width: 50px; height: 50px; object-fit: cover;" />
+            </td>
             <td>{{ device.name }}</td>
             <td>{{ device.hardwareId }}</td>
             <td>{{ device.model }}</td>
@@ -254,9 +338,31 @@
               <i *ngIf="device.isConnected" class="fas fa-check text-success"></i>
               <i *ngIf="!device.isConnected" class="fas fa-times text-danger"></i>
             </td>
+            <td>{{ device.roomName }}</td>
+            <td>{{ device.status }}</td>
+            <td>
+              <button type="button" class="btn btn-primary btn-sm" (click)="openEditAliasForm(device)">
+                Cambiar alias
+              </button>
+
+              <div *ngIf="deviceBeingEdited && device.hardwareId === deviceBeingEdited.hardwareId" class="mt-2">
+                <form (ngSubmit)="saveAlias()">
+                  <div class="input-group">
+                    <input type="text" class="form-control" [(ngModel)]="newAlias" placeholder="Nuevo alias"
+                           name="newAlias" required>
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-success">Guardar</button>
+                      <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </td>
           </tr>
           </tbody>
         </table>
+
+
       </div>
 
       <div class="modal-footer">
@@ -265,6 +371,9 @@
     </div>
   </div>
 </div>
+
+
+
 
 
 

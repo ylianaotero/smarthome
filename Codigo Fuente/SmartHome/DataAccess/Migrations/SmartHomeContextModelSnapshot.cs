@@ -115,8 +115,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("ValidateNumber")
-                        .HasColumnType("bit");
+                    b.Property<string>("ValidationMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

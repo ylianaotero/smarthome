@@ -31,7 +31,7 @@ public class DeviceUnitService : IDeviceUnitService
         
         List<DeviceUnit> devices = new List<DeviceUnit>();
       
-        MapDevices(homeDevices, devices);
+        MapDevices(homeDevices, devices, home);
         
         foreach(DeviceUnit device in devices)
         {
@@ -82,7 +82,7 @@ public class DeviceUnitService : IDeviceUnitService
         }
     }
 
-    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices, Home home)
     {
         foreach (var device in homeDevices)
         {
@@ -99,13 +99,39 @@ public class DeviceUnitService : IDeviceUnitService
                 isConnected = (bool)device.IsConnected;
             }
 
+            Room room = null; 
+            
+
+            if (device.RoomId != null)
+            {
+                room = home.Rooms.Find(r => r.Id == device.RoomId);
+
+                if (room == null)
+                {
+                    throw new ElementNotFound(RoomNotFoundMessage);
+                }
+            }
+
+            if (device.RoomName != null)
+            {
+                room = home.Rooms.Find(r => r.Name == device.RoomName);
+
+                if (room == null)
+                {
+                    throw new ElementNotFound(RoomNotFoundMessage);
+                }
+            }
+            
+
             DeviceUnit deviceUnit = new DeviceUnit()
             {
                 Device = deviceEntity,
                 Name = deviceEntity.Name,
                 IsConnected = isConnected,
                 HardwareId = Guid.NewGuid(),
-                Status = deviceEntity.DefaultStatus()
+                Status = deviceEntity.DefaultStatus(),
+                Room = room
+                
             };
             
             devices.Add(deviceUnit);

@@ -6,9 +6,12 @@ public class GetUsersResponse
 {
     public List<GetUserResponse> Users { get; set; }
     
-    public GetUsersResponse(List<User> users)
+    public int TotalCount { get; set; }
+    
+    public GetUsersResponse(List<User> users, int number)
     {
         Users = users.Select(user => new GetUserResponse(user)).ToList();
+        TotalCount = number; 
     }
     
     public override bool Equals(object? obj)

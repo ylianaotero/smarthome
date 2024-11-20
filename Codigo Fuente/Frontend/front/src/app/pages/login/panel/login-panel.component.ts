@@ -45,16 +45,19 @@ export class LoginPanelComponent {
     if (res.user && res.user.roles) {
       const hasHomeOwnerRole = res.user.roles.some(role => role.kind === 'HomeOwner');
       const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
+      const hasAdministratorRole = res.user.roles.some(role => role.kind === 'Administrator');
 
-      if (hasHomeOwnerRole) {
+      if (hasHomeOwnerRole && res.user.roles.length == 1) {
         this.router.navigate(['/home-owners']);
-      } else if (hasCompanyOwnerRole) {
+      } else if (hasCompanyOwnerRole && res.user.roles.length == 1) {
         this.router.navigate(['/company-owners']);
-      } else {
-        // Manejo si no tiene ninguno de los roles requeridos
+      } else if (hasAdministratorRole && res.user.roles.length == 1) {
+        this.router.navigate(['/administrators']);
+      }else if(res.user.roles.length > 1){
+        this.router.navigate(['/home/user-panel']);
       }
     } else {
-      // Manejo si res.user o res.user.roles no existen
+      this.feedback = "Invalid credentials";
     }
   }
 

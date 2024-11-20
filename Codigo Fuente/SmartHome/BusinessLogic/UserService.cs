@@ -15,7 +15,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
     
     private readonly List<string> _assignableRoles = ["homeowner"];
 
-    public void CreateUser(User user)
+    public long CreateUser(User user)
     {
         try
         {
@@ -26,6 +26,7 @@ public class UserService(IRepository<User> userRepository) : IUserService
         catch (ElementNotFound)
         {
             userRepository.Add(user);
+            return userRepository.GetAll(null).FirstOrDefault(u => u.Email == user.Email).Id;
         }
     }
 
@@ -56,7 +57,29 @@ public class UserService(IRepository<User> userRepository) : IUserService
     public void DeleteUser(long id)
     {
         User user = GetBy(u => u.Id == id, PageData.Default);
-        userRepository.Delete(user);
+        if (user == null)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+
+        if (user.Roles.Count > 1)
+        {
+            DeleteUserRoles(user);
+        }
+        else
+        {
+            userRepository.Delete(user);
+        }
+    }
+
+    private void DeleteUserRoles(User user)
+    {
+        Role adminRole = user.Roles.FirstOrDefault(role => role is Administrator);
+        if (adminRole != null)
+        {
+            user.DeleteRole(adminRole);
+        }
+        userRepository.Update(user);
     }
     
     public void UpdateUser(long id, User user)

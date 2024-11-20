@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {
   CreateCompanyRequest,
-  GetCompaniesRequest,
   GetCompaniesResponse,
   PostCompaniesResponse
 } from '../interfaces/companies';
@@ -39,13 +38,11 @@ export class CompanyService {
           );
      }
 
-     getCompanies(request: GetCompaniesRequest, currentPage?: number, pageSize?: number):
+     getCompanies(request: string, currentPage?: number, pageSize?: number):
        Observable<GetCompaniesResponse> {
           let params = new HttpParams();
 
-          params = request.name ? params.append('name', request.name ) : params;
-          params = request.owner ? params.append('owner', request.owner ) : params;
-          params = request.ownerEmail ? params.append('ownerEmail', request.ownerEmail ) : params;
+          params = request ? params.append('ownerEmail', request ) : params;
           params = pageSize ? params.append('currentPage', currentPage!.toString()) : params;
           params = currentPage ? params.append('pageSize', pageSize!.toString()) : params;
           return this.httpClient.get<GetCompaniesResponse>(this.url + '/companies',

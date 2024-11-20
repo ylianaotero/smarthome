@@ -5,45 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro de dueño de hogar</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="create-device.component.css">
 </head>
 <body>
 
-<div class="welcome-container">
-  <button (click)="goBack()" class="back-btn">
-    <i class="fas fa-arrow-left"></i>
-  </button>
-  <h1 class="welcome-title">Creación de Dispositivo</h1>
+<div class="form-container">
+  <h1>Creación de Dispositivo</h1>
   <form (ngSubmit)="createDevice(deviceName, deviceType, deviceModel, deviceDescription, deviceFunctionalities, deviceLocationType, devicePhotoUrls)" #createDeviceForm="ngForm" novalidate>
     <div class="input-group">
-      <label for="kind">Tipo de dispositivo</label>
-      <select class="form-control" [(ngModel)]="deviceType" name="kind" id="kind">
-        <option value="" disabled selected>Selecciona un tipo</option>
-        <option *ngFor="let type of possibleDeviceTypes" [value]="type">{{ type }}</option>
-      </select>
-    </div>
-
-    <div class="input-group">
       <label for="name">Nombre</label>
-      <input type="text" id="name" name="name" [(ngModel)]="deviceName" #name="ngModel" required placeholder="Ingresa un nombre">
-      <div *ngIf="name.invalid && (name.touched || createDeviceForm.submitted)" class="error-message">
-        <p>El nombre es obligatorio.</p>
+      <input type="text" id="name" name="name" [(ngModel)]="deviceName" #name="ngModel" required placeholder="Ingresa un nombre" class="form-control">
+      <div *ngIf="name.invalid && (name.touched || createDeviceForm.submitted)" class="text-danger">
+        El nombre es obligatorio.
       </div>
     </div>
 
     <div class="input-group">
       <label for="model">Modelo</label>
-      <input type="text" id="model" name="model" [(ngModel)]="deviceModel" #model="ngModel" required placeholder="Ingresa un modelo">
-      <div *ngIf="model.invalid && (model.touched || createDeviceForm.submitted)" class="error-message">
-        <p>El modelo es obligatorio.</p>
+      <input type="text" id="model" name="model" [(ngModel)]="deviceModel" #model="ngModel" required placeholder="Ingresa un modelo" class="form-control">
+      <div *ngIf="model.invalid && (model.touched || createDeviceForm.submitted)" class="text-danger">
+        El modelo es obligatorio.
       </div>
     </div>
 
     <div class="input-group">
       <label for="description">Descripción</label>
-      <input type="description" id="description" name="description" [(ngModel)]="deviceDescription" #description="ngModel" required placeholder="Ingresa una descripción">
-      <div *ngIf="description.invalid && (description.touched || createDeviceForm.submitted)" class="error-message">
-        <p>Ingresa una descripción válida.</p>
+      <input type="description" id="description" name="description" [(ngModel)]="deviceDescription" #description="ngModel" required placeholder="Ingresa una descripción" class="form-control">
+      <div *ngIf="description.invalid && (description.touched || createDeviceForm.submitted)" class="text-danger">
+        Ingresa una descripción válida.
       </div>
     </div>
 
@@ -63,10 +53,54 @@
       </select>
     </div>
 
+    <div class="input-group">
+      <label for="photoUrl">URLs de fotos</label>
+      <div class="input-group">
+        <input
+          type="text"
+          id="photoUrl"
+          name="photoUrl"
+          [(ngModel)]="currentPhotoUrl"
+          placeholder="Ingresa una URL de foto"
+          class="form-control">
+      </div>
+      <button
+        type="button"
+        (click)="addPhotoUrl()"
+        class="btn btn-primary btn-rounded">
+        Agregar
+      </button>
+        <ul class="list-group mt-1 w-100">
+          <li *ngFor="let url of devicePhotoUrls; let i = index"
+              class="list-group-item d-flex justify-content-between align-items-center w-100">
+            <span class="text-truncate" style="max-width: calc(100% - 80px);">
+              {{ url }}
+            </span>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm btn-rounded"
+              (click)="removePhotoUrl(i)">
+              Eliminar
+            </button>
+          </li>
+        </ul>
+    </div>
+
+    <div class="input-group">
+      <label for="kind">Tipo de dispositivo</label>
+      <div class="input-group">
+        <select class="form-control" [(ngModel)]="deviceType" name="kind" id="kind">
+          <option value="" disabled selected>Selecciona un tipo</option>
+          <option *ngFor="let type of possibleDeviceTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+    </div>
+
     <button type="submit" class="input-btn" [disabled]="createDeviceForm.invalid">Crear dispositivo</button>
   </form>
   <p class="feedback">{{ feedback }}</p>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

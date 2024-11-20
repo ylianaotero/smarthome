@@ -27,18 +27,20 @@
 
   <div class="card-container">
     <div class="card shadow-sm h-100" *ngFor="let user of users">
-      <img [src]=userPhotoUrl(user) alt="{{ user.fullName }}" class="card-img-top" style="height: 200px; object-fit: cover;" (click)="openPhotoModal(userPhotoUrl(user), user.fullName)">
+      <img [src]="userPhotoUrl(user)" alt="{{ user.fullName }}" class="card-img-top" style="height: 200px; object-fit: cover;" (click)="openPhotoModal(userPhotoUrl(user), user.fullName)">
       <div class="card-body">
-        <h5 class="card-title">{{ user.fullName}}</h5>
+        <h5 class="card-title">{{ user.fullName }}</h5>
         <p class="card-text"><strong>Id:</strong> {{ user.id }}</p>
         <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
         <p class="card-text"><strong>Fecha de creación:</strong> {{ formatDate(user.createdAt) }}</p>
-        <button class="btn btn-primary btn-sm" (click)="openConfirmationModal(user.id, user.fullName)">
+
+        <button *ngIf="user.email !== sessionUserEmail" class="btn btn-primary btn-sm" (click)="openConfirmationModal(user.id, user.fullName)">
           <i class="bi bi-person-dash"></i> Eliminar
         </button>
       </div>
     </div>
   </div>
+
 </div>
 
 <div class="modal fade" [ngClass]="{'show': isPhotoModalOpen}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" style="display: block;" *ngIf="isPhotoModalOpen">

@@ -67,25 +67,6 @@ public class DeviceServiceTest
         
         CollectionAssert.AreEqual(deviceTypes, retrievedDeviceTypes);
     }
-    
-
-    [TestMethod]
-    public void TestCreateDeviceWithValidationNumber()
-    {
-        _mockDeviceRepository.Setup(x => x.Add(_defaultCamera));
-        
-        _deviceService.CreateDevice(_defaultCamera);
-        _mockDeviceRepository.Verify(x => x.Add(_defaultCamera), Times.Once);
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(InputNotValid))]
-    public void TestCreateDeviceThrowsException()
-    {
-        _defaultCompany.ValidateNumber = false;
-        
-        _deviceService.CreateDevice(_defaultCamera);
-    }
 
     [TestMethod]
     public void TestGetDeviceById()
@@ -105,6 +86,14 @@ public class DeviceServiceTest
         _deviceService.GetDeviceById(1);
     }
     
+    [TestMethod]
+    public void TestCreateDevice()
+    {
+        _deviceService.CreateDevice(_defaultCamera);
+        
+        _mockDeviceRepository.Verify(x => x.Add(_defaultCamera), Times.Once);
+    }
+    
     private void SetupDefaultObjects()
     {
         _devices = new List<Device>();
@@ -112,7 +101,7 @@ public class DeviceServiceTest
         _defaultCompany = new Company
         {
             Name = CompanyName,
-            ValidateNumber = true
+            ValidationMethod = "VALIDATORNUMBER"
         };
         
         List<string> photos = new List<string>()

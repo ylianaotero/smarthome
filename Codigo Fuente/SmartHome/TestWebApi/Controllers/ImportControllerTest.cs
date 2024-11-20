@@ -64,7 +64,7 @@ public class ImportControllerTest
         ObjectResult result = _importController.GetNames() as OkObjectResult;
         List<ImportResponse> response = result.Value as List<ImportResponse>;
         
-        _mockImporter.Verify();
+        _mockImporter.VerifyAll();
         
         Assert.AreEqual(_listImporters, response);
     }
@@ -80,7 +80,7 @@ public class ImportControllerTest
         
         ObjectResult result = _importController.GetNames() as ObjectResult;
         
-        _mockImporter.Verify();
+        _mockImporter.VerifyAll();
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
@@ -119,7 +119,7 @@ public class ImportControllerTest
 
         ObjectResult result = _importController.Import(importRequest) as ObjectResult;
 
-        _mockImporter.Verify();
+        _mockImporter.VerifyAll();
         
         Assert.AreEqual(OKStatusCode, result.StatusCode);
     }
@@ -198,7 +198,7 @@ public class ImportControllerTest
 
         ObjectResult result = _importController.Import(importRequest) as ObjectResult;
 
-        _mockImporter.Verify();
+        _mockImporter.VerifyAll();
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }

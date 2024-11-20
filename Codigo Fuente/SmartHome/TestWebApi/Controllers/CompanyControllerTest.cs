@@ -32,7 +32,8 @@ public class CompanyControllerTest
     private int CreatedStatusCode = 201;
     private int NotFoundStatusCode = 404;
     private string LogoURL = "https://www.logo.com";
-    private bool ValidateNumberTrue = true;
+    //private bool ValidateNumberTrue = true;
+    private string ValidationMethodNumber = "ValidatorNumber";
     
     private const string UserName =  "John";
     private const string UserSurname = "Doe";
@@ -110,7 +111,7 @@ public class CompanyControllerTest
             RUT = RUT,
             LogoURL = LogoURL,
             OwnerId = _defaultUser.Id,
-            ValidateNumber = ValidateNumberTrue
+            ValidationMethod = ValidationMethodNumber
         };
 
         _mockIUserService
@@ -132,7 +133,7 @@ public class CompanyControllerTest
             RUT = RUT,
             LogoURL = LogoURL,
             OwnerId = _defaultUser.Id,
-            ValidateNumber = ValidateNumberTrue
+            ValidationMethod = ValidationMethodNumber
         };
 
         _mockIUserService.
@@ -141,6 +142,37 @@ public class CompanyControllerTest
         _mockICompanyService.Setup(service => service.CreateCompany(It.IsAny<Company>()));
         
         ObjectResult? result = _companyController.PostCompany(request) as ObjectResult;
+        
+        Assert.AreEqual(NotFoundStatusCode, result?.StatusCode);
+    }
+
+    [TestMethod]
+    public void TestUpdateCompanyValidationMethod()
+    {
+        PatchCompanyRequest request = new PatchCompanyRequest()
+        {
+            ValidationMethod = ValidationMethodNumber
+        };
+        
+        _mockICompanyService.Setup(service => service.UpdateValidationMethod(Id, ValidationMethodNumber));
+        
+        ObjectResult? result = _companyController.UpdateValidationMethod(Id, request) as ObjectResult;
+        
+        Assert.AreEqual(OkStatusCode, result?.StatusCode);
+    }
+    
+    [TestMethod]
+    public void TestUpdateCompanyValidationMethodNotFound()
+    {
+        PatchCompanyRequest request = new PatchCompanyRequest()
+        {
+            ValidationMethod = ValidationMethodNumber
+        };
+        
+        _mockICompanyService.Setup(service => service.UpdateValidationMethod(Id, ValidationMethodNumber))
+            .Throws(new ElementNotFound("Company not found"));
+        
+        ObjectResult? result = _companyController.UpdateValidationMethod(Id, request) as ObjectResult;
         
         Assert.AreEqual(NotFoundStatusCode, result?.StatusCode);
     }
@@ -180,7 +212,7 @@ public class CompanyControllerTest
             RUT = RUT,
             LogoURL = LogoURL,
             Owner = _defaultUser,
-            ValidateNumber = ValidateNumberTrue
+            ValidationMethod = ValidationMethodNumber
         };
         
         _defaultCompany2 = new Company()
@@ -190,7 +222,7 @@ public class CompanyControllerTest
             RUT = RUT,
             LogoURL = LogoURL,
             Owner = _defaultUser,
-            ValidateNumber = ValidateNumberTrue
+            ValidationMethod = ValidationMethodNumber
         };
         
         _companies = new List<Company>

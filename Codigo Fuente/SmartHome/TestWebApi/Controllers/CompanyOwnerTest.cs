@@ -63,7 +63,7 @@ public class CompanyOwnerTest
         ObjectResult result = _companyOwnerController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
         PostCompanyOwnerResponse userResponse = result?.Value as PostCompanyOwnerResponse;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(expectedResponse, userResponse);
     }
@@ -85,7 +85,7 @@ public class CompanyOwnerTest
         
         ObjectResult result = _companyOwnerController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
         
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
@@ -108,7 +108,7 @@ public class CompanyOwnerTest
         
         ObjectResult result = _companyOwnerController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
         
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }

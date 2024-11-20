@@ -42,6 +42,23 @@ public class ImportController : ControllerBase
             return NotFound(ex.Message);
         }
     }
+    
+    [HttpPost]
+    [Route("new")]
+    [RolesWithPermissions(RoleWithPermissions)]
+    public IActionResult PostImporter([FromBody] PostImportRequest path)
+    {
+        if (this._importer.MoveDllFile(path.Path))
+        {
+            return Ok();
+        }else{
+            
+            return NotFound();
+        }
+    }
+    
+    
+    
 
     [HttpPost]
     [RolesWithPermissions(RoleWithPermissions)]

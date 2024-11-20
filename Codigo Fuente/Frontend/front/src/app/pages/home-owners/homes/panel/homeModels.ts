@@ -1,5 +1,4 @@
 
-//agregar nombre desp
 export interface home {
   id: number;
   street: string;
@@ -8,13 +7,38 @@ export interface home {
   longitude: number;
 }
 
+export interface home {
+  id: number;
+
+
+}
+
+export interface patchDeviceRequest {
+  Name: string;
+  HardwareId: string;
+  HomeId: number;
+}
+
 export interface deviceUnit {
   name: string;
   hardwareId: string;
   isConnected: boolean;
   model: number;
   photo: string;
+  roomName: string;
+  status: string;
 }
+
+export class patchDeviceAlias {
+  HardwareId: string;
+  Name: string;
+
+  constructor(HardwareId: string, Name: string) {
+    this.HardwareId = HardwareId;
+    this.Name = Name;
+  }
+}
+
 
 export class addMemberRequest{
   id: number;
@@ -37,30 +61,47 @@ export class addMemberRequest{
   }
 }
 
+export class addRoomRequest {
+  id: number;
+  name: string;
+
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+
 export class addDeviceRequest{
   id: number;
   deviceId : number;
   isConnected: boolean;
+  roomName : string;
   constructor(
     id: number,
     deviceId : number,
     isConnected: boolean,
+    roomName : string
   ) {
     this.id = id;
     this.deviceId = deviceId;
     this.isConnected = isConnected;
+    this.roomName = roomName
   }
 }
 
 export class addDeviceToHomeRequest {
   deviceId : number;
   isConnected: boolean;
+  roomName : string;
   constructor(
     deviceId : number,
     isConnected: boolean,
+    roomName : string
   ) {
     this.deviceId = deviceId;
     this.isConnected = isConnected;
+    this.roomName = roomName
   }
 }
 
@@ -98,6 +139,15 @@ export class addMemberToHomeRequest {
     this.ReceivesNotifications = receivesNotifications;
   }
 }
+
+export class AddRoomToHomeRequest {
+  Name: string = "";
+
+  constructor(name: string) {
+    this.Name = name;
+  }
+}
+
 
 export class ChangeMemberNotificationsRequest {
   IdHome: number;

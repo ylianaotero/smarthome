@@ -3,6 +3,16 @@ export interface importer {
   assemblyLocation: string;
 }
 
+export class ImporterPath {
+  Path: string;
+
+  constructor(dllPath: string) {
+    this.Path = dllPath;
+  }
+}
+
+
+
 
 export class ImportDevicesRequest {
   DllPath: string;

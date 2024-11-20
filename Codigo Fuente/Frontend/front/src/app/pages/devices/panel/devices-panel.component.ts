@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse } from '../../../interfaces/devices';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { DevicesService } from '../../../shared/devices.service';
+import {ApiService} from '../../../shared/api.service';
+import {DeviceFilterRequestModel} from './model-device';
 
 @Component({
   selector: 'app-devices-list',
@@ -13,9 +15,6 @@ export class DevicesPanelComponent implements OnInit {
   userName: string;
   devices: GetDeviceResponse[] = [];
   deviceTypes: string[] = [];
-  totalDevices: number = 0;
-  currentPage: number = 1;
-  pageSize: number = 1;
 
   selectedName: string = '';
   selectedModel: string = '';
@@ -26,40 +25,57 @@ export class DevicesPanelComponent implements OnInit {
   modalImage: string | null = null;
   isModalOpen = false;
 
-  constructor(private router: Router, private api: AdministratorService, private apiDevices: DevicesService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
+  constructor(private router: Router, private sharedApi: ApiService) {
+    this.userName = this.sharedApi.currentSession?.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
     this.getDevices();
-    this.getDevicesTypes();
+    this.getSupportedDevices();
   }
+
+  currentPage: number = 1;
+  pageSize: number = 6; //cuantos se van a ver por pagina
+  totalDevices: number = 0;
 
   getDevices(): void {
-    const request: GetDeviceRequest = {
-      name: this.selectedName,
-      model: this.selectedModel,
-      company: this.selectedCompany,
-      kind: this.selectedKind
-    };
 
-    this.apiDevices.getDevices(request).subscribe({
-      next: (res: GetDevicesResponse) => {
+    const filters = new DeviceFilterRequestModel(
+      this.selectedName,
+      this.selectedModel,
+      this.selectedCompany,
+      this.selectedKind
+    );
+    this.sharedApi.getDevices(filters, this.currentPage, this.pageSize).subscribe({
+      next: (res: any) => {
         this.devices = res.devices || [];
-        this.totalDevices = res.devices.length;
-        console.log(this.devices);
+        this.totalDevices =  res.totalCount || 0;
+      },
+      error: (err) => {
+        console.error('Error al obtener dispositivos', err);
       }
     });
   }
 
-  getDevicesTypes(): void {
-    this.apiDevices.getDeviceTypes().subscribe({
-      next: (res: GetDeviceTypesResponse) => {
+
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getDevices();
+  }
+  get totalPages(): number {
+    return Math.ceil(this.totalDevices / this.pageSize);
+  }
+
+
+
+  getSupportedDevices(): void {
+    this.sharedApi.getSupportedDevices().subscribe({
+      next: (res: any) => {
         this.deviceTypes = res.deviceTypes || [];
-        console.log(res.deviceTypes);
       }
     });
   }
+
 
   openModal(imageUrl: string | null, device: string | null): void {
     this.modalDevice = device;

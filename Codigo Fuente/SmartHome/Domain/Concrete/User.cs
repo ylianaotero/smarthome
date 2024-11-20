@@ -105,6 +105,7 @@ public class User
         Roles.Add(role);
     }
 
+    /*
     public void DeleteRole(Role role)
     {
         if (Roles.Contains(role))
@@ -115,7 +116,22 @@ public class User
         {
             throw new ElementNotFound(MessageRoleNotFound);
         }
+    }*/
+    
+    public void DeleteRole(Role role)
+    {
+        Role roleToDelete = Roles.FirstOrDefault(r => r.Id == role.Id);
+        if (roleToDelete != null)
+        {
+            Roles.Remove(roleToDelete);
+        }
+        else
+        {
+            throw new ElementNotFound(MessageRoleNotFound);
+        }
     }
+
+
 
     public void Update(User user)
     {

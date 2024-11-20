@@ -22,12 +22,53 @@
     <a class="btn btn-primary" (click)="goHomesOfHomeOwner()">
       <i class="bi bi-list-ul"></i> Listar Hogares
     </a>
+
     <a class="btn btn-primary" (click)="goViewDevices()">
-      <i class="bi bi-display"></i> Listar Dispositivos
+      <i class="bi bi-laptop"></i> Ver dispositivos
     </a>
 
-  </div>
+    <a class="btn btn-primary" (click)="openModal('showDevicesTypes')">
+      <i class="bi bi-list-ul"></i> Listar Dispositivos Soportados
+    </a>
 
+    <a class="btn btn-primary" (click)="goViewNotifications()">
+      <i class="bi bi-bell"></i> Notificaciones
+    </a>
+
+
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModalShowDevicesTypes" tabindex="-1" role="dialog" aria-hidden="true"
+     [class.show]="modalShowDevicesTypes" [style.display]="modalShowDevicesTypes ? 'block' : 'none'"
+     (click)="closeModalBackdrop($event, 'showDevicesTypes')">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Visualizar Dispositivos soportados</h5>
+        <button type="button" class="close" (click)="closeModal('showDevicesTypes')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="deviceTypes.length === 0" class="text-center">
+          <p class="text-muted">No hay dispositivos para mostrar</p>
+        </div>
+        <div *ngIf="deviceTypes.length > 0">
+          <ul class="list-group">
+            <li *ngFor="let type of deviceTypes" class="list-group-item">
+              <span class="fw-bold">{{ type }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer d-flex flex-column align-items-center">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('showDevicesTypes')">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Enlace a Bootstrap JS y jQuery -->

@@ -31,8 +31,11 @@ public class UserController : ControllerBase
 
         try
         {
+            
+            int count =  _userService.GetUsersByFilter(request.ToFilter(),null).Count;
+
             getUsersResponse = new GetUsersResponse
-                (_userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+                (_userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
         }
         catch (CannotFindItemInList)
         {

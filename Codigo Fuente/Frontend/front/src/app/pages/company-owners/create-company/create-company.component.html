@@ -25,7 +25,7 @@
 
     <div class="input-group">
       <label for="rut">RUT</label>
-      <input type="number" id="rut" name="rut" [(ngModel)]="newCompanyRUT" #rut="ngModel" required placeholder="Ingresa un RUT">
+      <input type="text" id="rut" name="rut" [(ngModel)]="newCompanyRUT" #rut="ngModel" required placeholder="Ingresa un RUT">
       <div *ngIf="rut.invalid && (rut.touched || createCompanyForm.submitted)" class="error-message">
         <p>El RUT es obligatorio.</p>
       </div>
@@ -38,6 +38,28 @@
         <p>El logo es obligatorio.</p>
       </div>
     </div>
+
+
+    <div class="input-group">
+      <label for="val">Método de validación</label>
+
+    <div class="input-group">
+      <br>
+      <br>
+      <br>
+      <select id="val" name="val" [(ngModel)]="validation" #val="ngModel" class="form-control mt-2">
+        <option value="">Sin validador</option>
+        <option value="VALIDATORNUMBER">Validador númerico</option>
+        <option value="VALIDATORLETTER">Validador con letras</option>
+      </select>
+    </div>
+
+    </div>
+
+
+
+
+
     <button type="submit" class="input-btn" [disabled]="createCompanyForm.invalid">Crear empresa</button>
   </form>
   <p class="feedback">{{ feedback }}</p>

@@ -4,6 +4,8 @@ import { AdministratorService } from '../../../shared/administrator.service';
 import { CompanyService } from '../../../shared/company.service';
 import { GetCompanyResponse } from '../../../interfaces/companies';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse} from '../../../interfaces/users';
+import {ApiService} from '../../../shared/api.service';
+import {GetDeviceTypesResponse} from '../../../interfaces/devices';
 
 @Component({
   selector: 'app-administrator-panel',
@@ -24,15 +26,38 @@ export class AdministratorPanelComponent implements OnInit {
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
 
-  modalShowUsers: boolean = false;
-  modalShowCompanies: boolean = false;
 
-  constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
+  modalShowDevices: boolean = false;
+  modalShowDevicesTypes: boolean = false;
+
+  deviceTypes: string[] = [];
+
+
+  constructor(private router: Router, private api: ApiService) {
     this.userName = this.api.currentSession?.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
     this.getUsers();
+    this.getDevicesTypes();
+  }
+
+  getDevicesTypes(): void {
+    this.api.getSupportedDevices().subscribe({
+      next: (res: GetDeviceTypesResponse) => {
+        console.log(res)
+        this.deviceTypes = res.deviceTypes || [];
+        console.log(res.deviceTypes);
+      }
+    });
+  }
+
+  goViewNotifications(): void {
+    this.router.navigate(['/notifications']);
+  }
+
+  goViewDevices(): void {
+    this.router.navigate(['devices']);
   }
 
   getUsers(): void {
@@ -66,8 +91,10 @@ export class AdministratorPanelComponent implements OnInit {
     this.router.navigate(['/administrators/list-companies']);
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.totalUsers / this.pageSize);
+  openModal(modal: string): void {
+    this.changeSelectedModal(modal, true);
+    document.body.classList.add('modal-open');
+    this.createBackdrop();
   }
 
   closeModal(modal: string): void {
@@ -77,11 +104,26 @@ export class AdministratorPanelComponent implements OnInit {
   }
 
   changeSelectedModal(modal: string, showModal: boolean): void{
-    if(modal == "showUsers"){
-      this.modalShowUsers = showModal;
-    }else if(modal == "showCompanies"){
-      this.modalShowCompanies = showModal;
+    if(modal == "showDevices"){
+      this.modalShowDevices = showModal;
+    }else if(modal == "showDevicesTypes"){
+      this.modalShowDevicesTypes = showModal;
     }
+  }
+
+  closeModalBackdrop(event: MouseEvent,modal: string ): void {
+    const target = event.target as HTMLElement;
+    if (target.id === 'myModalShowDevices') {
+      this.closeModal(modal);
+    }else if(target.id === 'myModalShowDevicesTypes'){
+      this.closeModal(modal);
+    }
+  }
+
+  private createBackdrop(): void {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop fade show';
+    document.body.appendChild(backdrop);
   }
 
   private removeBackdrop(): void {
@@ -90,4 +132,5 @@ export class AdministratorPanelComponent implements OnInit {
       document.body.removeChild(backdrop);
     }
   }
+
 }

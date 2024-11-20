@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { AdministratorService } from '../../../shared/administrator.service';
 import { Router } from '@angular/router';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
+import {ApiService} from '../../../shared/api.service';
 
 @Component({
   selector: 'app-delete-admin',
   templateUrl: './delete-admin.component.html',
   styleUrls: ['../../../../styles.css'],
 })
-export class DeleteAdminComponent {
+export class DeleteAdminComponent implements OnInit{
 
   users: GetUserResponse[] = [];
   totalUsers: number = 0;
@@ -16,16 +17,19 @@ export class DeleteAdminComponent {
 
   feedback: string = "";
 
+  sessionUserEmail: string = "";
+
   modalUser: string | null = '';
   modalImage: string | null = null;
   modalUserId: number = -1
   isPhotoModalOpen = false;
   isConfirmationModalOpen = false;
 
-  constructor(private api: AdministratorService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.getUsers();
+    this.sessionUserEmail = this.api.currentSession?.user?.email || 'Usuario';
   }
 
   getUsers(): void {
@@ -41,27 +45,10 @@ export class DeleteAdminComponent {
         console.log(this.users);
       }
     });
+
+    this.closeModal();
   }
 
-  /*deleteAdmin(user: GetUserResponse): void {
-    this.feedback = "Cargando...";
-
-    if (user.roles.length === 1 && user.roles[0].kind === 'administrator') {
-        this.api.deleteAdministrator(user.id).subscribe({
-            next: res => {
-                this.feedback = "El administrador fue eliminado con éxito!";
-                this.getUsers();
-            },
-            error: err => {
-                this.handleError(err);
-                console.error(err);
-            }
-        });
-    } else {
-        // Si el usuario tiene más roles, solo elimina el rol "Administrador"
-        //Hacer el remove por rol
-    }
-  }*/
 
 
   deleteAdmin(id:number): void {

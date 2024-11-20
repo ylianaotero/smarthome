@@ -59,7 +59,7 @@ public class SessionControllerTest
         OkObjectResult result = _sessionController.LogIn(_createLoginRequest) as OkObjectResult;
         LoginResponse response = result?.Value as LoginResponse;
         
-        _sessionServiceMock.Verify();
+        _sessionServiceMock.VerifyAll();
         
         Assert.IsTrue(
             result != null &&
@@ -79,7 +79,7 @@ public class SessionControllerTest
         
         ObjectResult result = _sessionController.LogIn(_createLoginRequest) as ObjectResult;
         
-        _sessionServiceMock.Verify();
+        _sessionServiceMock.VerifyAll();
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }

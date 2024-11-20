@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../../shared/api.service';
 import {
@@ -7,13 +7,15 @@ import {
   home,
   member,
   deviceUnit,
-  ChangeMemberNotificationsRequest
+  ChangeMemberNotificationsRequest, patchDeviceRequest, addRoomRequest
 } from './homeModels';
+import {GetCompanyResponse} from '../../../../interfaces/companies';
+import {GetDeviceTypesResponse, GetRoomResponse} from '../../../../interfaces/devices';
 
 @Component({
   selector: 'app-homes-home-owner',
   templateUrl: './home-owners-homes.component.html',
-  styleUrls: ['../../../../../styles.css']
+  styleUrls: ['home-owners-homes.component.css','../../../../../styles.css']
 })
 export class HomeOwnersHomesComponent implements OnInit {
   homes!: home[];
@@ -24,6 +26,12 @@ export class HomeOwnersHomesComponent implements OnInit {
   feedback: string = "";
   errorMessage: string = "";
 
+  listOfRooms!: string[];
+
+  newRoom = {
+    Name : ''
+  }
+
   newMember = {
     email: '',
     canViewDevices: false,
@@ -33,6 +41,7 @@ export class HomeOwnersHomesComponent implements OnInit {
 
   newDevice = {
     deviceId: -1,
+    roomName: '',
     isConnected: false,
   };
 
@@ -44,7 +53,56 @@ export class HomeOwnersHomesComponent implements OnInit {
 
   isModalOfListOfDevicesOpen: boolean = false;
 
-  constructor(private api: ApiService, private router: Router) {}
+  isModalOfRoomsOpen: boolean = false;
+
+  newAlias: string = '';
+  deviceBeingEdited: any = null;
+
+  roomFilter: string = '';
+
+  openEditAliasForm(device: any) {
+    this.deviceBeingEdited = device;
+    this.newAlias = device.name;
+  }
+
+  saveAlias() {
+    if (
+      this.newAlias.trim() === '' ||
+      !this.deviceBeingEdited ||
+      !this.selectedHome ||
+      this.selectedHome.id == null
+    ) {
+      this.deviceBeingEdited = null;
+      this.newAlias = '';
+      return;
+    }
+
+    const request: patchDeviceRequest = {
+      Name: this.newAlias,
+      HardwareId: this.deviceBeingEdited.hardwareId,
+      HomeId: this.selectedHome.id
+    };
+
+    this.api.patchDevice(request).subscribe({
+      next: (res: any) => {
+        this.getDevices(this.selectedHome?.id);
+      },
+    });
+
+    this.deviceBeingEdited = null;
+    this.newAlias = '';
+
+    this.closeModal('showDevices');
+    return;
+  }
+
+  cancelEdit() {
+    this.deviceBeingEdited = null;
+    this.newAlias = '';
+  }
+
+
+  constructor(private api: ApiService, private router: Router,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.getHomes();
@@ -60,10 +118,6 @@ export class HomeOwnersHomesComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  goHome(): void {
-    this.router.navigate(['/account']);
   }
 
   getMembers(id?: number): void {
@@ -82,9 +136,11 @@ export class HomeOwnersHomesComponent implements OnInit {
     if (!id) {
       return;
     }
-    this.api.getDevicesOfHome(id).subscribe({
+    this.api.getDevicesOfHome(id, this.roomFilter).subscribe({
       next: (res: any) => {
         this.devices = res.devicesUnit || [];
+        console.log(this.devices);
+        this.cdr.detectChanges();
         this.errorMessage = '';
       },
       error: (err) => {
@@ -99,6 +155,7 @@ export class HomeOwnersHomesComponent implements OnInit {
       }
     });
   }
+
 
 
   toggleNotification(member: member): void {
@@ -159,9 +216,18 @@ export class HomeOwnersHomesComponent implements OnInit {
     this.selectedHome = null;
     this.resetMemberForm();
     this.resetDeviceForm();
+    this.resetRoomForm();
     document.body.classList.remove('modal-open');
     this.removeBackdrop();
   }
+
+  private resetRoomForm(): void {
+    this.newRoom = {
+      Name: ""
+    };
+    this.feedback = "";
+  }
+
 
   changeSelectedModal(modal: string, bool: boolean): void{
     if(modal == "addMembers"){
@@ -172,11 +238,16 @@ export class HomeOwnersHomesComponent implements OnInit {
         this.isModalOfListOfMembersOpen = bool;
       }else{
         if(modal == "addDevice"){
+          this.getRooms();
           this.isModalOfDeviceOpen = bool;
         }else{
           if(modal == "showDevices"){
             this.getDevices(this.selectedHome?.id);
             this.isModalOfListOfDevicesOpen = bool;
+          }else{
+            if(modal == "addRoom"){
+              this.isModalOfRoomsOpen = bool;
+            }
           }
         }
       }
@@ -185,7 +256,7 @@ export class HomeOwnersHomesComponent implements OnInit {
 
   closeModalBackdrop(event: MouseEvent,modal: string ): void {
     const target = event.target as HTMLElement;
-    if (target.id === 'myModalMembers' || target.id === 'myModalShowMembers' || target.id === 'myModalDevice' || target.id === 'myModalShowDevices') {
+    if (target.id === 'myModalMembers' || target.id === 'myModalShowMembers' || target.id === 'myModalDevice' || target.id === 'myModalShowDevices' || target.id === 'myModalRooms') {
       this.closeModal(modal);
     }
   }
@@ -213,6 +284,43 @@ export class HomeOwnersHomesComponent implements OnInit {
       return;
     }
   }
+
+  saveRoom(): void {
+    if (this.selectedHome && this.newRoom.Name != '') {
+
+      this.postRoom();
+
+    } else {
+      this.feedback = 'Datos inválidos. Verifica la información e intenta nuevamente.';
+      return;
+    }
+  }
+
+  postRoom(): void {
+
+    if (!this.selectedHome || !this.selectedHome.id) {
+      this.feedback = "Error al identificar la casa seleccionada, reeintente.";
+      return;
+    }
+
+    const request = new addRoomRequest(
+      this.selectedHome.id,
+      this.newRoom.Name
+    );
+
+    this.api.postRoomToHome(request).subscribe({
+      error: (err) => {
+        if(err.status == 200){
+          this.feedback = 'Cuarto agregado exitosamente.';
+          this.closeModal('addRoom');
+          return;
+        }
+        this.handleError(err);
+        return;
+      }
+    });
+  }
+
 
   isValidEmail(email: string): boolean {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -270,10 +378,17 @@ export class HomeOwnersHomesComponent implements OnInit {
       return;
     }
 
+    if (this.newDevice.roomName == '') {
+      this.feedback = "Ingrese un cuarto";
+      return;
+    }
+
+
     const request = new addDeviceRequest(
       this.selectedHome.id,
       this.newDevice.deviceId,
       this.newDevice.isConnected,
+      this.newDevice.roomName
     );
 
     this.api.postDeviceToHome(request).subscribe({
@@ -316,8 +431,23 @@ export class HomeOwnersHomesComponent implements OnInit {
     this.newDevice = {
       deviceId: -1,
       isConnected: false,
+      roomName: ''
     };
     this.feedback = "";
+  }
+
+  getRooms(): void {
+
+    if (!this.selectedHome || !this.selectedHome.id) {
+      return;
+    }
+
+    this.api.getRooms(this.selectedHome.id.toString()).subscribe({
+      next: (res: GetRoomResponse) => {
+        console.log(res)
+        this.listOfRooms = res.rooms|| [];
+      }
+    });
   }
 
 

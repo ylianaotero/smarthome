@@ -53,7 +53,7 @@ public class NotificationControllerTest
         ObjectResult result = _notificationController.GetNotifications(request) as OkObjectResult;
         GetNotificationsResponse response = result.Value as GetNotificationsResponse;
         
-        _mockINotificationService.Verify();
+        _mockINotificationService.VerifyAll();
         
         Assert.AreEqual(getNotificationResponse, response);
     }
@@ -69,7 +69,7 @@ public class NotificationControllerTest
         
         ObjectResult result = _notificationController.GetNotifications(request) as NotFoundObjectResult;
         
-        _mockINotificationService.Verify();
+        _mockINotificationService.VerifyAll();
         
         Assert.AreEqual(CannotFindItemInListMessage, result.Value);
     }

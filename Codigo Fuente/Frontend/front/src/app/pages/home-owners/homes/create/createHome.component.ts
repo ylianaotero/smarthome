@@ -12,6 +12,7 @@ import {createHomeModel} from './createHomeModel';
 
 export class CreateHomeComponent {
 
+  aliasValue: string = '';
   streetValue: string = '';
   doorNumberValue: number = 0;
   latitudeValue: number = 0;
@@ -26,10 +27,10 @@ export class CreateHomeComponent {
     this.router.navigate(['/home-owners']);
   }
 
-  registerHome(street: string, doorNumber: number, latitude: number, longitude: number, maximumMembers: number): void {
+  registerHome(street: string, doorNumber: number, latitude: number, longitude: number, maximumMembers: number, alias: string): void {
     this.feedback = "Loading...";
 
-    if (!street || doorNumber === null || latitude === null || longitude === null || maximumMembers === null) {
+    if (!street || doorNumber === null || latitude === null || longitude === null || maximumMembers === null || !alias) {
       this.feedback = "Por favor, completa todos los campos obligatorios.";
       return;
     }
@@ -41,7 +42,7 @@ export class CreateHomeComponent {
       return;
     }
 
-    this.api.postHome(new createHomeModel(userId, street, doorNumber, latitude, longitude, maximumMembers))
+    this.api.postHome(new createHomeModel(userId, street, doorNumber, latitude, longitude, maximumMembers, alias))
       .subscribe({
         next: res => {
           this.feedback = "Home created successfully!";
