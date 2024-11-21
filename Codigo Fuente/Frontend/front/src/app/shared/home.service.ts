@@ -10,7 +10,7 @@ import {
   home, member
 } from '../pages/home-owners/homes/panel/homeModels';
 import {GetRoomResponse} from '../interfaces/devices';
-import {environment} from '../../enviroments/environment';
+import {environment} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'

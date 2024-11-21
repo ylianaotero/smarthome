@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { sessionModel, sessionRequest } from '../pages/login/panel/sessionModel';
 import {tap} from 'rxjs';
-import {environment} from '../../enviroments/environment';
+import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
