@@ -38,7 +38,8 @@ public class UserServiceTest
             Name = NewName,
             Email = NewEmail,
             Password = NewPassword,
-            Surname = NewSurname
+            Surname = NewSurname,
+            Id = 1
         };
         
         _company = new Company();
@@ -55,6 +56,10 @@ public class UserServiceTest
             .Setup(repo => repo
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(new List<User>());
+        
+        _mockUserRepository
+            .Setup(repo => repo
+                .GetAll(It.IsAny<PageData>())).Returns(new List<User>(){_user});
         
         _userService.CreateUser(_user);
         
@@ -77,7 +82,7 @@ public class UserServiceTest
         
         _userService.CreateUser(_user);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
     
     [TestMethod]
@@ -94,7 +99,7 @@ public class UserServiceTest
         
         List<User> responseList = _userService.GetUsersByFilter(filter, PageData.Default);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.AreEqual(_listOfUsers, responseList);
 
@@ -114,7 +119,7 @@ public class UserServiceTest
         
         bool response = _userService.IsAdmin(NewEmail);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsTrue(response);
         
@@ -134,7 +139,7 @@ public class UserServiceTest
         
         bool response = _userService.CompanyOwnerIsComplete(_user.Id);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsFalse(response);
         
@@ -155,7 +160,7 @@ public class UserServiceTest
         
         bool response = _userService.CompanyOwnerIsComplete(_user.Id);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsTrue(response);
         
@@ -176,7 +181,7 @@ public class UserServiceTest
         
         Company response = _userService.AddOwnerToCompany(_user.Id, _company);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsTrue(response.Id == _company.Id && response.Owner.Email == _user.Email);
         
@@ -198,7 +203,7 @@ public class UserServiceTest
         
         _userService.AddOwnerToCompany(_user.Id, _company);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
     
     [TestMethod]
@@ -214,7 +219,7 @@ public class UserServiceTest
         
         _userService.AddOwnerToCompany(_user.Id, _company);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
     }
     
@@ -232,7 +237,7 @@ public class UserServiceTest
         
         bool response = _userService.IsAdmin(NewEmail);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsFalse(response);
         
@@ -249,7 +254,7 @@ public class UserServiceTest
         
         _userService.IsAdmin(NewEmail);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
     
     [TestMethod]
@@ -266,40 +271,57 @@ public class UserServiceTest
         
         bool response = _userService.IsAdmin(NewEmail);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsFalse(response);
         
     }
     
     [TestMethod]
-    public void TestDeleteUser()
+    public void TestDeleteUserWithOnlyAdministratorRole()
     {
+        _user.Roles = new List<Role> { _administrator };
         _listOfUsers.Add(_user);
 
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers);
-        
-        _userService.DeleteUser(1);
-        
+
+        _userService.DeleteUser(_user.Id);
+
         _mockUserRepository
-            .Verify(repo => repo
-                .Delete(It.Is<User>(u => u == _user)), Times.Once);
+            .Verify(repo => repo.Delete(It.Is<User>(u => u == _user)), Times.Once);
     }
-    
+
     [TestMethod]
-    [ExpectedException(typeof(ElementNotFound))]
-    public void TestDeleteUserNotFound()
+    public void TestDeleteUserWithTwoRoles()
     {
+        _user.Roles = new List<Role> { _administrator, _homeOwner };
+        _listOfUsers.Add(_user);
+
         _mockUserRepository
             .Setup(v => v
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(_listOfUsers);
-        
-        _userService.DeleteUser(1);
-        
+
+        _userService.DeleteUser(_user.Id);
+
+        _mockUserRepository
+            .Verify(repo => repo.Update(It.Is<User>(u => u.Roles.Count == 1 && !u.Roles.Contains(_administrator))), Times.Once);
+
+        _mockUserRepository
+            .Verify(repo => repo.Delete(It.IsAny<User>()), Times.Never);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void DeleteUserReturnsNotFound()
+    {
+        _mockUserRepository
+            .Setup(v => v.GetById(_user.Id))
+            .Returns((User?)null);
+        _userService.DeleteUser(_user.Id);
         _mockUserRepository.Verify();
     }
     
@@ -331,7 +353,7 @@ public class UserServiceTest
         
         _userService.UpdateUser(1, _user);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
 
     [TestMethod]
@@ -341,7 +363,7 @@ public class UserServiceTest
         
         User user = _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.IsTrue(user.Roles.Exists(r => r.Kind == _homeOwner.Kind));
     }
@@ -354,7 +376,7 @@ public class UserServiceTest
         
         _userService.AssignRoleToUser(_user.Id, _administrator.Kind);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
     
     [TestMethod]
@@ -365,7 +387,7 @@ public class UserServiceTest
         
         _userService.AssignRoleToUser(_user.Id, InvalidRole);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
     
     [TestMethod]
@@ -378,7 +400,7 @@ public class UserServiceTest
         
         _userService.AssignRoleToUser(_user.Id, _homeOwner.Kind);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
     
     [TestMethod]
@@ -388,7 +410,7 @@ public class UserServiceTest
         
         User response = _userService.GetUserById(_user.Id);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
         
         Assert.AreEqual(_user, response);
     }
@@ -401,6 +423,6 @@ public class UserServiceTest
         
         _userService.GetUserById(_user.Id);
         
-        _mockUserRepository.Verify();
+        _mockUserRepository.VerifyAll();
     }
 }

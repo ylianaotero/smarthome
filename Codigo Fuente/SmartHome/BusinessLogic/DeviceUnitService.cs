@@ -31,7 +31,7 @@ public class DeviceUnitService : IDeviceUnitService
         
         List<DeviceUnit> devices = new List<DeviceUnit>();
       
-        MapDevices(homeDevices, devices);
+        MapDevices(homeDevices, devices, home);
         
         foreach(DeviceUnit device in devices)
         {
@@ -82,7 +82,7 @@ public class DeviceUnitService : IDeviceUnitService
         }
     }
 
-    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices)
+    private void MapDevices(List<DeviceUnitDTO> homeDevices, List<DeviceUnit> devices, Home home)
     {
         foreach (var device in homeDevices)
         {
@@ -94,23 +94,50 @@ public class DeviceUnitService : IDeviceUnitService
             Device deviceEntity = _deviceService.GetDeviceById((long)device.DeviceId);
 
             bool isConnected = false;
-            if (!device.IsConnected == null)
+            if (device.IsConnected != null)
             {
                 isConnected = (bool)device.IsConnected;
             }
 
-            DeviceUnit deviceUnitService = new DeviceUnit()
+            Room room = null; 
+            
+
+            if (device.RoomId != null)
+            {
+                room = home.Rooms.Find(r => r.Id == device.RoomId);
+
+                if (room == null)
+                {
+                    throw new ElementNotFound(RoomNotFoundMessage);
+                }
+            }
+
+            if (device.RoomName != null)
+            {
+                room = home.Rooms.Find(r => r.Name == device.RoomName);
+
+                if (room == null)
+                {
+                    throw new ElementNotFound(RoomNotFoundMessage);
+                }
+            }
+            
+
+            DeviceUnit deviceUnit = new DeviceUnit()
             {
                 Device = deviceEntity,
                 Name = deviceEntity.Name,
                 IsConnected = isConnected,
                 HardwareId = Guid.NewGuid(),
+                Status = deviceEntity.DefaultStatus(),
+                Room = room
+                
             };
             
-            devices.Add(deviceUnitService);
+            devices.Add(deviceUnit);
             
-            _deviceUnitRepository.Add(deviceUnitService);
-            _deviceUnitRepository.Update(deviceUnitService);
+            _deviceUnitRepository.Add(deviceUnit);
+            _deviceUnitRepository.Update(deviceUnit);
         }
     }
     

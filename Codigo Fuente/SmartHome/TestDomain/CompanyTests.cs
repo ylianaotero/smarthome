@@ -85,10 +85,10 @@ public class CompanyTests
     }
     
     [TestMethod]
-    public void TestAddValidateNumberToCompany()
+    public void TestAddValidationMethodToCompany()
     {
-        _company.ValidateNumber = true;
+        _company.ValidationMethod = "ValidatorNumber";
         
-        Assert.IsTrue(_company.ValidateNumber);
+        Assert.AreEqual("ValidatorNumber", _company.ValidationMethod);
     }
 }

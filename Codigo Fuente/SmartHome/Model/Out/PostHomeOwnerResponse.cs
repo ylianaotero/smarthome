@@ -10,6 +10,8 @@ public class PostHomeOwnerResponse
     public string Surname { get; set; }
     public string Photo { get; set; }
     public List<Role> Roles { get; set; }
+    
+    public long Id{ get; set; }
 
     public PostHomeOwnerResponse(User user)
     {
@@ -18,6 +20,7 @@ public class PostHomeOwnerResponse
         Email = user.Email;
         Surname = user.Surname;
         Roles = listOfRoles;
-        Photo = user.Photo; 
+        Photo = user.Photo;
+        Id = user.Id; 
     }
 }

@@ -1,0 +1,40 @@
+﻿.modal-dialog {
+  max-width: 80%;
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.table {
+  table-layout: auto;
+  width: 100%;
+  text-align: center;
+}
+
+.table img {
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+th, td {
+  vertical-align: middle;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 95%;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+}

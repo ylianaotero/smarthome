@@ -108,7 +108,7 @@ namespace DataAccess
             modelBuilder.Entity<DeviceUnit>().HasOne<Room>(du => du.Room)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-
+            
             modelBuilder.Entity<DeviceUnit>().Navigation(du => du.Room).AutoInclude();
         }
 
@@ -170,6 +170,10 @@ namespace DataAccess
         private void ConfigureRoom(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Room>().Property(r => r.Id).ValueGeneratedOnAdd();
+            
+            modelBuilder.Entity<Room>()
+                .HasIndex(r => r.Name)
+                .IsUnique();
         }
     }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { createAdministratorModel, createCompanyOwnerModel } from '../../../interfaces/users';
-import { AdministratorService } from '../../../shared/administrator.service';
+import {createAdministratorModel, createCompanyOwnerModel} from '../../../interfaces/users';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-create-user',
@@ -17,15 +17,29 @@ export class CreateUserComponent {
   passwordValue: string = '';
   photoValue: string = '';
 
+  homeOwner : boolean = false;
+
   feedback: string = "";
 
   roleTypes: string[] = ['Administrador', 'Dueño de Empresa'];
   selectedRole: string = '';
 
-  constructor(private api: AdministratorService, private router: Router) {}
+  userId : number = -1;
+
+  constructor(private userApi: ApiUserService, private router: Router) {}
 
   goHome(): void {
     this.router.navigate(['/administrators']);
+  }
+
+  addRole(): void {
+    this.userApi.postRole(this.userId.toString())
+      .subscribe({
+        next: res => {
+          this.router.navigate(['/home/user-panel']);
+        }
+      });
+
   }
 
   register(name: string, surname: string, email: string, password: string, photo: string): void {
@@ -37,11 +51,16 @@ export class CreateUserComponent {
     }
 
     if(this.selectedRole === 'Administrador'){
-      this.api.postAdministrator(new createAdministratorModel(name, email, password, surname, photo))
+      this.userApi.postAdministrator(new createAdministratorModel(name, email, password, surname, photo))
       .subscribe({
         next: res => {
           this.feedback = "El administrador fue creado con éxito!";
-          this.router.navigate(['administrator']);
+          if(this.homeOwner){
+            this.userId = res.id
+            this.addRole()
+          }else{
+            this.router.navigate(['/administrator']);
+          }
         },
         error: err => {
           this.handleError(err);
@@ -49,11 +68,15 @@ export class CreateUserComponent {
         }
       });
     }else{
-      this.api.postCompanyOwner(new createCompanyOwnerModel(name, email, password, surname))
+      this.userApi.postCompanyOwner(new createCompanyOwnerModel(name, email, password, surname))
       .subscribe({
         next: res => {
-          this.feedback = "El dueño de empresa fue creado con éxito!";
-          this.router.navigate(['administrator']);
+          if(this.homeOwner){
+            this.userId = res.id
+            this.addRole();
+          }else{
+            this.router.navigate(['/company-owners']);
+          }
         },
         error: err => {
           this.handleError(err);

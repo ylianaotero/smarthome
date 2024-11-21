@@ -13,21 +13,7 @@ public class DeviceUnit
     public string Name { get; set; }
     public Device Device { get; set; }
     public bool IsConnected { get; set; }
-    
-    public string? Status
-    {
-        get => _status;
-        set
-        {
-            if (value == null)
-            {
-                value = "";
-            }
-            
-            Device.ValidateStatus(value);
-            _status = value;
-        }
-    }
+    public string? Status { get; set; }
         
     [ForeignKey("RoomId")]
     public Room? Room
@@ -39,7 +25,6 @@ public class DeviceUnit
         }
     }
     
-    private string? _status { get; set; }
     private Room? _room { get; set; }
     
     public DeviceUnit()

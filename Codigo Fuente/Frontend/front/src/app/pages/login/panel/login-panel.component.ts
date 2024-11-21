@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
-import {sessionModel, sessionRequest} from './sessionModel';
+import {sessionRequest} from './sessionModel';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiSessionService} from '../../../shared/session.service';
 
 @Component({
   selector: 'app-log-in',
@@ -13,7 +14,7 @@ export class LoginPanelComponent {
   userEmail: string = '';
   userPassword: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private router: Router, private sessionApi : ApiSessionService) {}
 
   signInUser(email: string, password: string): void {
     this.feedback = "Loading...";
@@ -23,13 +24,14 @@ export class LoginPanelComponent {
       return;
     }
 
-    this.api.postSession(new sessionRequest(email, password)).subscribe({
+    this.sessionApi.postSession(new sessionRequest(email, password)).subscribe({
       next: res => {
-        this.api.currentSession = res;
         this.feedback = "success";
-        localStorage.setItem('user', JSON.stringify(res));
-        console.log(res.user.roles);
-        this.redirection(res);
+
+        localStorage.setItem('user', JSON.stringify(res.user));
+        localStorage.setItem('token', res.token);
+
+        this.redirection();
 
       },
       error: err => {
@@ -41,20 +43,32 @@ export class LoginPanelComponent {
     });
   }
 
-  redirection(res: sessionModel){
-    if (res.user && res.user.roles) {
-      const hasHomeOwnerRole = res.user.roles.some(role => role.kind === 'HomeOwner');
-      const hasCompanyOwnerRole = res.user.roles.some(role => role.kind === 'CompanyOwner');
+  redirection(){
+    const storedUser = localStorage.getItem('user');
+    let res: userRetrieveModel | null = null;
+    if(storedUser){
+      res = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    console.log(res);
+    if (res && Array.isArray(res.roles)) {
+      const hasHomeOwnerRole = res.roles.some(role => role.kind === 'HomeOwner');
+      const hasCompanyOwnerRole = res.roles.some(role => role.kind=== 'CompanyOwner');
+      const hasAdministratorRole = res.roles.some(role => role.kind === 'Administrator');
 
-      if (hasHomeOwnerRole) {
+      console.log("res.roles.length")
+      console.log(res.roles.length)
+
+      if (hasHomeOwnerRole && res.roles.length == 1) {
         this.router.navigate(['/home-owners']);
-      } else if (hasCompanyOwnerRole) {
+      } else if (hasCompanyOwnerRole && res.roles.length == 1) {
         this.router.navigate(['/company-owners']);
-      } else {
-        // Manejo si no tiene ninguno de los roles requeridos
+      } else if (hasAdministratorRole && res.roles.length == 1) {
+        this.router.navigate(['/administrators']);
+      }else if(res.roles.length > 1){
+        this.router.navigate(['/home/user-panel']);
       }
     } else {
-      // Manejo si res.user o res.user.roles no existen
+      this.feedback = "Invalid credentials";
     }
   }
 

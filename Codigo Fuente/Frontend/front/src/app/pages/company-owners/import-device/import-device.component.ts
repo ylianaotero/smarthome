@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../../shared/api.service';
-import { ImportDevicesRequest, importer } from './importerModels';
+import {ImportDevicesRequest, importer, ImporterPath} from './importerModels';
+import {NgForm} from '@angular/forms';
+import {ApiImportService} from '../../../shared/import.service';
 
 @Component({
   selector: 'app-import',
@@ -9,12 +10,44 @@ import { ImportDevicesRequest, importer } from './importerModels';
   styleUrls: ['../../../../styles.css']
 })
 export class ImportDeviceComponent implements OnInit {
+
+  @ViewChild('importForm') importForm1!: NgForm;
+
+  @ViewChild('addImporterForm') importForm2!: NgForm;
+
   importers!: importer[];
   importRequest: ImportDevicesRequest = new ImportDevicesRequest('', '', '');
   feedback: string = '';
   isLoading: boolean = false;
 
-  constructor(private api: ApiService, private router: Router) {}
+  dllPath: string = '';
+  statusMessage: string = '';
+
+  constructor(private api: ApiImportService, private router: Router) {}
+
+  AddImporter() {
+    if (this.dllPath === '') {
+      this.statusMessage = 'Por favor, ingresa una ruta de DLL válida.';
+      return;
+    }
+
+    this.dllPath = this.dllPath.replace(/\\/g, '\\\\');
+
+    this.api.postImporter(new ImporterPath(this.dllPath)).subscribe({
+      next: (res: any) => {
+        this.getImporters();
+        this.statusMessage = 'Importador agregado exitosamente!';
+        this.importForm2.reset();
+
+        this.dllPath = '';
+      },
+      error: (err: any) => {
+        this.statusMessage = 'Ocurrió un error al agregar el importador.';
+        this.importForm2.reset();
+      }
+    });
+  }
+
 
   ngOnInit() {
     this.getImporters();
@@ -46,18 +79,24 @@ export class ImportDeviceComponent implements OnInit {
 
     if (err.status === 0) {
       this.feedback = 'No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.';
+      this.importForm1.reset();
     } else if (err.status === 400) {
       this.feedback = 'Datos inválidos. Verifica la información e intenta nuevamente.';
+      this.importForm1.reset();
     } else if (err.status === 404) {
       this.feedback = 'Datos no encontrados.';
+      this.importForm1.reset();
     } else if (err.status === 401) {
       this.feedback = 'No autorizado. Por favor, verifica tu sesión o credenciales.';
+      this.importForm1.reset();
     }else if (err.status === 200) {
       this.feedback = 'Importación realizada exitosamente.';
       this.resetForm();
+      this.importForm1.reset();
     }
     else {
       this.feedback = 'Ocurrió un error inesperado. Por favor, intenta más tarde.';
+      this.importForm1.reset();
     }
   }
 

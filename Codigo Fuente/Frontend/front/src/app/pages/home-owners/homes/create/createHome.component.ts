@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
-
-import {ApiService} from '../../../../shared/api.service';
 import {createHomeModel} from './createHomeModel';
+import {userRetrieveModel} from '../../create/signUpUserModel';
+import {ApiHomeService} from '../../../../shared/home.service';
 
 @Component({
   selector: 'app-create-home',
@@ -12,6 +12,7 @@ import {createHomeModel} from './createHomeModel';
 
 export class CreateHomeComponent {
 
+  aliasValue: string = '';
   streetValue: string = '';
   doorNumberValue: number = 0;
   latitudeValue: number = 0;
@@ -20,28 +21,35 @@ export class CreateHomeComponent {
 
   feedback: string = "";
 
-  constructor(private api: ApiService, private router: Router) {}
+  user : userRetrieveModel | null = null;
+
+  constructor(private api: ApiHomeService, private router: Router) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+  }
 
   goHome(): void {
     this.router.navigate(['/home-owners']);
   }
 
-  registerHome(street: string, doorNumber: number, latitude: number, longitude: number, maximumMembers: number): void {
+  registerHome(street: string, doorNumber: number, latitude: number, longitude: number, maximumMembers: number, alias: string): void {
     this.feedback = "Loading...";
 
-    if (!street || doorNumber === null || latitude === null || longitude === null || maximumMembers === null) {
+    if (!street || doorNumber === null || latitude === null || longitude === null || maximumMembers === null || !alias) {
       this.feedback = "Por favor, completa todos los campos obligatorios.";
       return;
     }
 
-    const userId = this.api.currentSession?.user?.id;
+    const userId = this.user?.id;
 
     if (!userId) {
       this.feedback = "Could not retrieve the user ID.";
       return;
     }
 
-    this.api.postHome(new createHomeModel(userId, street, doorNumber, latitude, longitude, maximumMembers))
+    this.api.postHome(new createHomeModel(userId, street, doorNumber, latitude, longitude, maximumMembers, alias))
       .subscribe({
         next: res => {
           this.feedback = "Home created successfully!";

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AdministratorService } from '../../../shared/administrator.service';
-import { CompanyService } from '../../../shared/company.service';
 import {
   CreateCompanyRequest,
-  GetCompaniesRequest,
-  GetCompaniesResponse,
+  GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
 import { GetUserResponse } from '../../../interfaces/users';
+import {GetDeviceTypesResponse} from '../../../interfaces/devices';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiDeviceService} from '../../../shared/devices.service';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-company-owner-panel',
@@ -25,7 +26,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
   totalCompanies: number = 0;
 
   modalShowCompanies: boolean = false;
-  modalCreateCompany: boolean = false;
+  modalShowDevicesTypes: boolean = false;
 
   selectedCompanyName: string = '';
   selectedOwner: string = '';
@@ -36,6 +37,7 @@ export class CompanyOwnersPanelComponent implements OnInit {
   newCompanyName: string = '';
   newCompanyRUT: string = '';
   newCompanyLogoURL: string = '';
+  validation : string = '';
 
   users: GetUserResponse[] = [];
   companies: GetCompanyResponse[] = [];
@@ -43,14 +45,34 @@ export class CompanyOwnersPanelComponent implements OnInit {
   feedback: string = '';
   companyCreatedCorrectly: boolean = false;
 
-  constructor(private router: Router, private api: AdministratorService, private apiCompany: CompanyService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
-    this.userEmail = this.api.currentSession?.user?.email || '';
-    this.userId = this.api.currentSession?.user?.id || 0;
+  deviceTypes: string[] = [];
+
+  user : userRetrieveModel | null = null;
+
+
+  constructor(private router: Router, private companyApi : ApiCompanyService, private deviceApi : ApiDeviceService) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
+    this.userEmail = this.user?.email || '';
+    this.userId = this.user?.id || 0;
   }
 
   ngOnInit(): void {
     this.getCompany();
+    this.getDevicesTypes();
+  }
+
+  logOut() : void {
+    localStorage.setItem('user', JSON.stringify(null));
+    localStorage.setItem('token', '');
+    this.router.navigate(['']);
+  }
+
+  goViewNotifications(): void {
+    this.router.navigate(['/notifications']);
   }
 
   ownerHasCompany(): boolean {
@@ -58,13 +80,12 @@ export class CompanyOwnersPanelComponent implements OnInit {
   }
 
   getCompany(): void {
-    const request: GetCompaniesRequest = {
-      name: "",
-      owner: this.userName,
-      ownerEmail: this.userEmail
+    const data: GetCompanyRequest = {
+      userEmail: this.userEmail,
+      name: null,
+      fullName: null,
     };
-
-    this.apiCompany.getCompanies(request).subscribe({
+    this.companyApi.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
         this.totalCompanies = res.companies.length;
@@ -75,6 +96,17 @@ export class CompanyOwnersPanelComponent implements OnInit {
         this.selectedPhotoURL = this.companies[0].logoURL;
 
         console.log(this.companies);
+      }
+    });
+  }
+
+
+  getDevicesTypes(): void {
+    this.deviceApi.getSupportedDevices().subscribe({
+      next: (res: GetDeviceTypesResponse) => {
+        console.log(res)
+        this.deviceTypes = res.deviceTypes || [];
+        console.log(res.deviceTypes);
       }
     });
   }
@@ -96,29 +128,44 @@ export class CompanyOwnersPanelComponent implements OnInit {
   }
 
   openModal(modal: string): void {
-    if (modal === 'modalShowCompanies') {
-      this.modalShowCompanies = true;
-    } else if (modal === 'modalCreateCompany') {
-      this.modalCreateCompany = true;
-    }
+    this.changeSelectedModal(modal, true);
     document.body.classList.add('modal-open');
     this.createBackdrop();
   }
 
   closeModal(modal: string): void {
-    if (modal === 'showCompanies') {
-      this.modalShowCompanies = false;
-    } else if (modal === 'createCompany') {
-      this.modalCreateCompany = false;
-    }
-    this.feedback = '';
+    this.changeSelectedModal(modal, false);
     document.body.classList.remove('modal-open');
     this.removeBackdrop();
   }
 
-  closeModalBackdrop(event: MouseEvent, modal: string): void {
-    if ((event.target as HTMLElement).classList.contains('modal')) {
+  changeSelectedModal(modal: string, showModal: boolean): void{
+    if(modal == "modalShowCompanies"){
+      this.modalShowCompanies = showModal;
+    }else if(modal == "showDevicesTypes"){
+      this.modalShowDevicesTypes = showModal;
+    }
+  }
+
+  closeModalBackdrop(event: MouseEvent,modal: string ): void {
+    const target = event.target as HTMLElement;
+    if (target.id === 'modalShowCompanies') {
       this.closeModal(modal);
+    }else if(target.id === 'myModalShowDevicesTypes'){
+      this.closeModal(modal);
+    }
+  }
+
+  private createBackdrop(): void {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop fade show';
+    document.body.appendChild(backdrop);
+  }
+
+  private removeBackdrop(): void {
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+      document.body.removeChild(backdrop);
     }
   }
 
@@ -128,9 +175,9 @@ export class CompanyOwnersPanelComponent implements OnInit {
       return
     }
 
-    this.apiCompany
+    this.companyApi
       .createCompany(new CreateCompanyRequest
-      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.userId))
+      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.userId, this.validation))
       .subscribe({
       next: (response) => {
         console.log('Company created successfully', response);
@@ -161,16 +208,4 @@ export class CompanyOwnersPanelComponent implements OnInit {
     });
   }
 
-  private createBackdrop(): void {
-    const backdrop = document.createElement('div');
-    backdrop.className = 'modal-backdrop fade show';
-    document.body.appendChild(backdrop);
-  }
-
-  private removeBackdrop(): void {
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      document.body.removeChild(backdrop);
-    }
-  }
 }

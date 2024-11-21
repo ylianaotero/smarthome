@@ -8,4 +8,6 @@ public interface IImporter
     List<ImportResponse> GetImplementationsNamesAndPath();
     
     bool Import(string dllPath, string filePath, string type, List<Company> listRoles); 
+    
+    bool MoveDllFile(string sourcePath);
 }

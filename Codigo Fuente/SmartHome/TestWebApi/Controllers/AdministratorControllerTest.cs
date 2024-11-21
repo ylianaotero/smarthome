@@ -76,15 +76,16 @@ public class AdministratorControllerTest
             u.Name == _user.Name &&
             u.Email == _user.Email &&
             u.Password == _user.Password &&
-            u.Surname == _user.Surname 
-        )));
+            u.Surname == _user.Surname &&
+            u.Id == _user.Id
+        ))).Returns(_user.Id);
         
         ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         PostAdministratorResponse userResponse = result?.Value as PostAdministratorResponse;
 
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
-        PostAdministratorResponse expectedResponse = new PostAdministratorResponse(_user);
+        PostAdministratorResponse expectedResponse = new PostAdministratorResponse(_user, _user.Id);
 
         Assert.AreEqual(userResponse, expectedResponse);
         Assert.AreEqual(CreatedStatusCode, result.StatusCode);
@@ -99,7 +100,7 @@ public class AdministratorControllerTest
         
         ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(ConflictStatusCode, result.StatusCode);
     }
@@ -113,7 +114,7 @@ public class AdministratorControllerTest
         
         ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
@@ -125,7 +126,7 @@ public class AdministratorControllerTest
         
         OkResult result = _administratorController.DeleteAdministrator(1) as OkResult;
         
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(OkStatusCode, result.StatusCode);
     }
@@ -138,7 +139,7 @@ public class AdministratorControllerTest
         
         NotFoundResult result = _administratorController.DeleteAdministrator(1) as NotFoundResult;
         
-        _userServiceMock.Verify();
+        _userServiceMock.VerifyAll();
         
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }

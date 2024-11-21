@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { AdministratorService } from '../../../shared/administrator.service';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {GetUsersRequest, GetUsersResponse, GetUserResponse, Role} from '../../../interfaces/users';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-list-users',
   templateUrl: './list-users.component.html',
   styleUrls: ['../../../../styles.css'],
 })
-export class ListUsersComponent {
+export class ListUsersComponent implements OnInit{
   users: GetUserResponse[] = [];
   totalUsers: number = 0;
   selectedName: string = "";
@@ -21,7 +21,19 @@ export class ListUsersComponent {
   modalImage: string | null = null;
   isPhotoModalOpen = false;
 
-  constructor(private api: AdministratorService, private router: Router) {}
+  currentPage: number = 1;
+  pageSize: number = 6;
+
+
+  constructor(private router: Router, private userApi : ApiUserService) {}
+
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getUsers();
+  }
+  get totalPages(): number {
+    return Math.ceil(this.totalUsers / this.pageSize);
+  }
 
   ngOnInit(): void {
     this.getUsers();
@@ -32,10 +44,11 @@ export class ListUsersComponent {
       role: this.selectedRole
     };
 
-    this.api.getUsers(request).subscribe({
+    this.userApi.getUsers(request,this.currentPage, this.pageSize).subscribe({
       next: (res: GetUsersResponse) => {
         this.users = res.users || [];
-        this.totalUsers = res.users.length;
+        console.log(res.totalCount);
+        this.totalUsers = res.totalCount;
         console.log(this.users);
       }
     });
@@ -48,7 +61,7 @@ export class ListUsersComponent {
   }
 
   formatRoles(roles: Role[]): string {
-    return roles.join(', ');
+    return roles.map(role => role.kind).join(', ');
   }
 
   userPhotoUrl(user: GetUserResponse): string {

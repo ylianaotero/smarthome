@@ -1,19 +1,19 @@
-export interface deviceModel {
+﻿export interface deviceModel {
   name: string;
-  model: number;
+  model: string;
   photoUrl?: string;
   companyName?: string;
 }
 
 export class DeviceFilterRequestModel {
   Name: string | undefined = undefined;
-  Model: number | undefined = undefined;
+  Model: string | undefined = undefined;
   Company: string | undefined = undefined;
   Kind: string | undefined = undefined;
 
   constructor(
     name: string | undefined,
-    model: number | undefined,
+    model: string | undefined,
     company: string | undefined,
     kind: string | undefined
   ) {

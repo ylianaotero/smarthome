@@ -102,6 +102,28 @@ public class CompanyServiceTest
 
         Assert.AreEqual(0, list.Count);
     }
+    
+    [TestMethod]
+    public void TestUpdateValidationMethod()
+    {
+        const string validationMethod = "SHA-256";
+        _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns(_company);
+
+        _companyService.UpdateValidationMethod(CompanyId, validationMethod);
+
+        _mockCompanyRepository.Verify(x => x.Update(_company), Times.Once);
+        Assert.AreEqual(validationMethod, _company.ValidationMethod);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ElementNotFound))]
+    public void TestUpdateValidationMethodThrowsException()
+    {
+        const string validationMethod = "SHA-256";
+        _mockCompanyRepository.Setup(x => x.GetById(CompanyId)).Returns((Company?)null);
+
+        _companyService.UpdateValidationMethod(CompanyId, validationMethod);
+    }
 
     private void SetupDefaultObjects()
     {

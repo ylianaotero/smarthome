@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { AdministratorService } from '../../../shared/administrator.service';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { GetUsersRequest, GetUsersResponse, GetUserResponse } from '../../../interfaces/users';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-delete-admin',
   templateUrl: './delete-admin.component.html',
   styleUrls: ['../../../../styles.css'],
 })
-export class DeleteAdminComponent {
+export class DeleteAdminComponent implements OnInit{
 
   users: GetUserResponse[] = [];
   totalUsers: number = 0;
@@ -16,16 +17,25 @@ export class DeleteAdminComponent {
 
   feedback: string = "";
 
+  sessionUserEmail: string = "";
+
   modalUser: string | null = '';
   modalImage: string | null = null;
   modalUserId: number = -1
   isPhotoModalOpen = false;
   isConfirmationModalOpen = false;
 
-  constructor(private api: AdministratorService, private router: Router) {}
+  user : userRetrieveModel | null = null;
+
+  constructor(private router: Router, private userApi : ApiUserService) {}
 
   ngOnInit(): void {
     this.getUsers();
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.sessionUserEmail = this.user?.email|| 'Usuario';
   }
 
   getUsers(): void {
@@ -34,39 +44,22 @@ export class DeleteAdminComponent {
       role: "administrator"
     };
 
-    this.api.getUsers(request).subscribe({
+    this.userApi.getUsers(request).subscribe({
       next: (res: GetUsersResponse) => {
         this.users = res.users || [];
         this.totalUsers = res.users.length;
         console.log(this.users);
       }
     });
+
+    this.closeModal();
   }
 
-  /*deleteAdmin(user: GetUserResponse): void {
-    this.feedback = "Cargando...";
-
-    if (user.roles.length === 1 && user.roles[0].kind === 'administrator') {
-        this.api.deleteAdministrator(user.id).subscribe({
-            next: res => {
-                this.feedback = "El administrador fue eliminado con éxito!";
-                this.getUsers();
-            },
-            error: err => {
-                this.handleError(err);
-                console.error(err);
-            }
-        });
-    } else {
-        // Si el usuario tiene más roles, solo elimina el rol "Administrador"
-        //Hacer el remove por rol
-    }
-  }*/
 
 
   deleteAdmin(id:number): void {
     this.feedback = "Cargando...";
-    this.api.deleteAdministrator(id).subscribe({
+    this.userApi.deleteAdministrator(id).subscribe({
       next: res => {
         this.feedback = "El administrador fue eliminado con éxito!";
         this.getUsers();

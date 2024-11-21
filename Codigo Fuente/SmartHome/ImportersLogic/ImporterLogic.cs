@@ -11,7 +11,7 @@ namespace ImportersLogic;
 public class ImporterLogic : IImporter.IImporter
 {
     private const string DllSearchPattern = "*.dll";
-    private const string DllDirectoryPath = @"..\..\..\..\DLLsImports";
+    private const string DllDirectoryPath = @"DLLsImports";
     private const string JsonImportType = "json";
     private const string JsonImplementationName = "json";
     private const string FileNotFoundMessage = "File not found";
@@ -25,8 +25,12 @@ public class ImporterLogic : IImporter.IImporter
     }
 
     public List<ImportResponse> GetImplementationsNamesAndPath()
+    
+    
     {
+        Console.WriteLine(Directory.GetCurrentDirectory());
         string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), DllDirectoryPath));
+        
 
         var assemblyPaths = Directory.GetFiles(directoryOfDll, DllSearchPattern, SearchOption.AllDirectories);
         var assemblies = assemblyPaths
@@ -46,6 +50,37 @@ public class ImporterLogic : IImporter.IImporter
         }
 
         return ret;
+    }
+    
+    public bool MoveDllFile(string sourcePath)
+    {
+        try
+        {
+            if (Path.GetExtension(sourcePath).ToLower() != ".dll")
+            {
+                return false;  
+            }
+            
+            string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), DllDirectoryPath));
+            
+            if (File.Exists(sourcePath))
+            {
+                string fileName = Path.GetFileName(sourcePath);
+                
+                string destinationPath = Path.Combine(directoryOfDll, fileName);
+                
+                File.Move(sourcePath, destinationPath);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     private List<(string ImplementationName, string AssemblyLocation)> FindImplementations(List<Assembly> assemblies)

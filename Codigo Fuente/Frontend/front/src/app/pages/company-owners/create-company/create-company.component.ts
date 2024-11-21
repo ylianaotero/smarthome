@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {
   CreateCompanyRequest,
-  GetCompaniesRequest,
-  GetCompaniesResponse,
+  GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
-import { CompanyService } from '../../../shared/company.service';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-create-company',
@@ -23,16 +22,24 @@ export class CreateCompanyComponent {
   companyOwnerEmail: string = '';
   companyOwnerId: number;
 
+  validation : string = '';
+
   newCompanyName: string = '';
   newCompanyRUT: string = '';
   newCompanyLogoURL: string = '';
 
   companies: GetCompanyResponse[] = [];
 
-  constructor(private api: ApiService, private router: Router, private apiCompany: CompanyService) {
-    this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
-    this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
-    this.companyOwnerId = this.api.currentSession?.user?.id || -1;
+  user : userRetrieveModel | null = null;
+
+  constructor(private api: ApiCompanyService, private router: Router) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.companyOwnerName= this.user?.name || 'Usuario';
+    this.companyOwnerEmail = this.user?.email || '';
+    this.companyOwnerId  = this.user?.id || 0;
   }
 
   ngOnInit(): void {
@@ -40,13 +47,12 @@ export class CreateCompanyComponent {
   }
 
   getCompany(): void {
-    const request: GetCompaniesRequest = {
-      name: "",
-      owner: this.companyOwnerName,
-      ownerEmail: this.companyOwnerEmail
+    const data: GetCompanyRequest = {
+      userEmail: this.companyOwnerEmail,
+      name: null,
+      fullName: null,
     };
-
-    this.apiCompany.getCompanies(request).subscribe({
+    this.api.getCompanies(data).subscribe({
       next: (res: GetCompaniesResponse) => {
         this.companies = res.companies || [];
       }
@@ -63,9 +69,9 @@ export class CreateCompanyComponent {
       return
     }
 
-    this.apiCompany
+    this.api
       .createCompany(new CreateCompanyRequest
-      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.companyOwnerId))
+      (this.newCompanyName, this.newCompanyRUT.toString(), this.newCompanyLogoURL, this.companyOwnerId, this.validation))
       .subscribe({
         next: (response) => {
           this.getCompany();

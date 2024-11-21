@@ -16,7 +16,7 @@
         <div class="card-body">
           <h5 class="card-title text-center mb-4">Selecciona o Ingresa el Tipo de Importación</h5>
 
-          <form id="importForm" (ngSubmit)="onImportFormSubmit()">
+          <form id="importForm" (ngSubmit)="onImportFormSubmit()" #importForm="ngForm">
             <div class="mb-3">
               <label for="importerType" class="form-label">Tipo de Importador</label>
               <select
@@ -66,25 +66,29 @@
             <div class="alert alert-info">{{ feedback }}</div>
           </div>
         </div>
-      </div>
 
-      <div class="card shadow-sm">
-        <div class="card-body">
+        <div class="card-body" >
           <h5 class="card-title text-center mb-4">Agregar Importador</h5>
 
-          <form id="addImporterForm">
+          <form id="addImporterForm" (ngSubmit)="AddImporter()" #addImporterForm="ngForm" >
             <div class="mb-3">
               <label for="dllPath" class="form-label">Ruta del DLL</label>
-              <input type="text" id="dllPath" name="dllPath" class="form-control"
+              <input type="text" id="dllPath" name="dllPath" [(ngModel)]="dllPath" class="form-control"
                      placeholder="Ingresa la ruta del DLL" required>
             </div>
 
             <button type="submit" class="btn btn-outline-primary w-100">Agregar Importador</button>
           </form>
 
-          <div id="addStatus" class="mt-3 text-center"></div>
+          <div id="addStatus" class="mt-3 text-center" *ngIf="statusMessage">
+            <div class="alert alert-info">{{ statusMessage }}</div>
+          </div>
         </div>
       </div>
+
+
+
+
     </div>
   </div>
 

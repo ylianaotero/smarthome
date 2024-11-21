@@ -107,15 +107,18 @@ public class User
 
     public void DeleteRole(Role role)
     {
-        if (Roles.Contains(role))
+        Role roleToDelete = Roles.FirstOrDefault(r => r.Id == role.Id);
+        if (roleToDelete != null)
         {
-            Roles.Remove(role);
+            Roles.Remove(roleToDelete);
         }
         else
         {
             throw new ElementNotFound(MessageRoleNotFound);
         }
     }
+
+
 
     public void Update(User user)
     {

@@ -10,8 +10,15 @@ namespace WebApi.Controllers;
 
 [Route("api/v1/users")]
 [ApiController]
-public class UserController(IUserService userService) : ControllerBase
+public class UserController : ControllerBase
 {
+    private readonly IUserService _userService;
+    
+    public UserController(IUserService userService)
+    {
+        this._userService = userService;
+    }
+    
     private const string NotFoundMessage = "The requested resource was not found.";
     private const string AdministratorRole = "Administrator";
     private const string HomeOwnerRole = "HomeOwner";
@@ -24,8 +31,11 @@ public class UserController(IUserService userService) : ControllerBase
 
         try
         {
+            
+            int count =  _userService.GetUsersByFilter(request.ToFilter(),null).Count;
+
             getUsersResponse = new GetUsersResponse
-                (userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()));
+                (_userService.GetUsersByFilter(request.ToFilter(), pageDataRequest.ToPageData()), count);
         }
         catch (CannotFindItemInList)
         {
@@ -44,7 +54,7 @@ public class UserController(IUserService userService) : ControllerBase
         
         try
         {
-            getUserResponse = new GetUserResponse(userService.GetUserById(id));
+            getUserResponse = new GetUserResponse(_userService.GetUserById(id));
         }
         catch (ElementNotFound e)
         {
@@ -63,7 +73,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         try
         {
-            getUserResponse = new GetUserResponse(userService.AssignRoleToUser(id, request.Role));
+            getUserResponse = new GetUserResponse(_userService.AssignRoleToUser(id, request.Role));
         }
         catch (ElementNotFound)
         {

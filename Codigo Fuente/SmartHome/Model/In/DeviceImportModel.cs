@@ -22,6 +22,12 @@ public class DeviceImportModel
     private const string CameraType = "camera";
     private const string SensorMovementType = "sensor-movement";
     private const string SmartLampType = "smart-lamp";
+    
+    private const string CameraTypeValue = "SecurityCamera";
+    private const string SensorMovementTypeValue = "MotionSensor";
+    private const string SmartLampTypeValue = "SmartLamp";
+
+    private const string WindowSensor = "WindowSensor";
 
     public Device ToEntity(Company company)
     {
@@ -33,7 +39,7 @@ public class DeviceImportModel
                     Name = Nombre,
                     Model = Modelo,
                     PhotoURLs = Fotos.Select(f => f.Path).ToList(),
-                    Kind = Tipo,
+                    Kind = CameraTypeValue,
                     Functionalities = GetCameraFunctionalities(),
                     Description = Nombre,
                     Company = company
@@ -45,7 +51,7 @@ public class DeviceImportModel
                     Name = Nombre,
                     Model = Modelo,
                     PhotoURLs = Fotos.Select(f => f.Path).ToList(),
-                    Kind = Tipo,
+                    Kind = SensorMovementTypeValue,
                     Description = Nombre,
                     Company = company
                 };
@@ -56,7 +62,7 @@ public class DeviceImportModel
                     Name = Nombre,
                     Model = Modelo,
                     PhotoURLs = Fotos.Select(f => f.Path).ToList(),
-                    Kind = Tipo,
+                    Kind = SmartLampTypeValue,
                     Description = Nombre,
                     Company = company
                 };
@@ -67,7 +73,7 @@ public class DeviceImportModel
                     Name = Nombre,
                     Model = Modelo,
                     PhotoURLs = Fotos.Select(f => f.Path).ToList(),
-                    Kind = Tipo,
+                    Kind = WindowSensor,
                     Description = Nombre,
                     Company = company
                 };

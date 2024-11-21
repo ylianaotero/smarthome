@@ -14,6 +14,14 @@ export class createAdministratorModel {
     }
 }
 
+export class addRole{
+  Role: string;
+
+  constructor(role: string) {
+    this.Role = role;
+  }
+}
+
 export interface PostAdministratorRequest {
     name: string;
     email: string;
@@ -42,6 +50,13 @@ export class createCompanyOwnerModel {
     }
 }
 
+export interface ResponseAdmin {
+  name: string;
+  email: string;
+  surname: string;
+  id: number;
+}
+
 export interface PostCompanyOwnerRequest {
     name: string;
     email: string;
@@ -53,7 +68,9 @@ export interface PostCompanyOwnerResponse {
     name: string;
     email: string;
     surname: string;
-    role: string;
+    photo: string;
+    role: string[];
+    id: number;
 }
 
 export interface GetUsersRequest {
@@ -63,6 +80,7 @@ export interface GetUsersRequest {
 
 export interface GetUsersResponse {
     users: GetUserResponse[];
+    totalCount: number;
 }
 
 export interface GetUserResponse {

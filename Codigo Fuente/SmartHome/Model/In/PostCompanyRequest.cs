@@ -9,8 +9,7 @@ public class PostCompanyRequest
     public string RUT { get; set; }
     public string LogoURL { get; set; }
     public long OwnerId { get; set; }
-    
-    public bool ValidateNumber { get; set; }
+    public string? ValidationMethod { get; set; }
 
     public Company ToEntity()
     {
@@ -19,7 +18,7 @@ public class PostCompanyRequest
             Name = this.Name,
             RUT = this.RUT,
             LogoURL = this.LogoURL,
-            ValidateNumber = this.ValidateNumber
+            ValidationMethod = this.ValidationMethod
         };
     }
 }

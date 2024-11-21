@@ -17,6 +17,8 @@ public class PostHomeDevicesRequest
                 deviceUnits.Add(new DeviceUnitDTO
                 {
                     DeviceId = deviceUnitRequest.DeviceId,
+                    RoomId = deviceUnitRequest.RoomId, 
+                    RoomName = deviceUnitRequest.RoomName, 
                     IsConnected = deviceUnitRequest.IsConnected
                 });
             }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetDeviceRequest, GetDeviceResponse, GetDevicesResponse, GetDeviceTypesResponse } from '../../../interfaces/devices';
-import { AdministratorService } from '../../../shared/administrator.service';
-import { DevicesService } from '../../../shared/devices.service';
+import { GetDeviceResponse} from '../../../interfaces/devices';
+import { ApiDeviceService } from '../../../shared/devices.service';
+import {DeviceFilterRequestModel} from './model-device';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-devices-list',
@@ -13,9 +14,6 @@ export class DevicesPanelComponent implements OnInit {
   userName: string;
   devices: GetDeviceResponse[] = [];
   deviceTypes: string[] = [];
-  totalDevices: number = 0;
-  currentPage: number = 1;
-  pageSize: number = 1;
 
   selectedName: string = '';
   selectedModel: string = '';
@@ -26,40 +24,62 @@ export class DevicesPanelComponent implements OnInit {
   modalImage: string | null = null;
   isModalOpen = false;
 
-  constructor(private router: Router, private api: AdministratorService, private apiDevices: DevicesService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
+  user : userRetrieveModel | null = null;
+
+  constructor(private router: Router, private deviceApi : ApiDeviceService) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
     this.getDevices();
-    this.getDevicesTypes();
+    this.getSupportedDevices();
   }
+
+  currentPage: number = 1;
+  pageSize: number = 6; //cuantos se van a ver por pagina
+  totalDevices: number = 0;
 
   getDevices(): void {
-    const request: GetDeviceRequest = {
-      name: this.selectedName,
-      model: this.selectedModel,
-      company: this.selectedCompany,
-      kind: this.selectedKind
-    };
-
-    this.apiDevices.getDevices(request).subscribe({
-      next: (res: GetDevicesResponse) => {
+    const filters = new DeviceFilterRequestModel(
+      this.selectedName,
+      this.selectedModel,
+      this.selectedCompany,
+      this.selectedKind
+    );
+    this.deviceApi.getDevices(filters, this.currentPage, this.pageSize).subscribe({
+      next: (res: any) => {
         this.devices = res.devices || [];
-        this.totalDevices = res.devices.length;
-        console.log(this.devices);
+        this.totalDevices =  res.totalCount || 0;
+      },
+      error: (err) => {
+        console.error('Error al obtener dispositivos', err);
       }
     });
   }
 
-  getDevicesTypes(): void {
-    this.apiDevices.getDeviceTypes().subscribe({
-      next: (res: GetDeviceTypesResponse) => {
+
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getDevices();
+  }
+  get totalPages(): number {
+    return Math.ceil(this.totalDevices / this.pageSize);
+  }
+
+
+
+  getSupportedDevices(): void {
+    this.deviceApi.getSupportedDevices().subscribe({
+      next: (res: any) => {
         this.deviceTypes = res.deviceTypes || [];
-        console.log(res.deviceTypes);
       }
     });
   }
+
 
   openModal(imageUrl: string | null, device: string | null): void {
     this.modalDevice = device;
