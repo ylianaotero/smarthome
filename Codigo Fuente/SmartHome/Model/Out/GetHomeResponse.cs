@@ -25,6 +25,7 @@ public class GetHomeResponse
                Street == response.Street &&
                DoorNumber == response.DoorNumber &&
                Latitude == response.Latitude &&
-               Longitude == response.Longitude;
+               Longitude == response.Longitude &&
+               Id == response.Id;
     }
 }

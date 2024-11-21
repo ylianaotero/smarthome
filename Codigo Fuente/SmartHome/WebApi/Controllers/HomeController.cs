@@ -54,7 +54,7 @@ public class HomeController : ControllerBase
         }
         catch (CannotAddItem e)
         {
-            return StatusCode(StatusCodes.Status412PreconditionFailed, e.Message);
+            return BadRequest(e.Message);
         }
         
         GetHomeResponse getHomeResponse = new GetHomeResponse(request.ToEntity());

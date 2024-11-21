@@ -25,6 +25,8 @@
       <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
       <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\IDataAccess\IDataAccess.csproj" />
+      <ProjectReference Include="..\ValidatorLetter\ValidatorLetter.csproj" />
+      <ProjectReference Include="..\ValidatorNumber\ValidatorNumber.csproj" />
     </ItemGroup>
 
 </Project>

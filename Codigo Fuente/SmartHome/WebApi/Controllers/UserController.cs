@@ -85,7 +85,7 @@ public class UserController : ControllerBase
         }
         catch (CannotAddItem e)
         {
-            return StatusCode(StatusCodes.Status412PreconditionFailed, e.Message);
+            return BadRequest(e.Message);
         }
         catch (ElementAlreadyExist e)
         {

@@ -226,7 +226,7 @@ public class HomesControllerTest
     }
 
     [TestMethod]
-    public void TestPostHomePreconditionFailedStatusCode()
+    public void TestPostHomeBadRequestStatusCode()
     {
         PostHomeRequest request = new PostHomeRequest()
         {
@@ -244,7 +244,7 @@ public class HomesControllerTest
 
         ObjectResult? result2 = (ObjectResult?)_homeController.PostHomes(request);
 
-        Assert.AreEqual(412, result2!.StatusCode);
+        Assert.AreEqual(400, result2!.StatusCode);
     }
 
     [TestMethod]
