@@ -23,7 +23,9 @@ export class NotificationsPanelComponent implements OnInit {
 
   selectedRead : boolean = false;
 
-  selectedDate: Date | null = null;
+  selectedCreatedDate: Date | null = null;
+
+  selectedReadDate: Date | null = null;
 
 
   ngOnInit(): void {
@@ -43,7 +45,8 @@ export class NotificationsPanelComponent implements OnInit {
     const filters = new NotificationsFilterRequestModel(
       this.selectedRead,
       this.selectedKind,
-      this.selectedDate
+      this.selectedCreatedDate,
+      this.selectedReadDate
     );
     this.api.getNotifications(filters).subscribe({
       next: (res: any) => {

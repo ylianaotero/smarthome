@@ -29,9 +29,14 @@ export class ApiNotificationService {
     }
 
 
-    if (modelIn.Date != null) {
-      console.log(modelIn.Date.toString());
-      params = params.set('Date', modelIn.Date.toString());
+    if (modelIn.ReadDate != null) {
+      console.log(modelIn.ReadDate.toString());
+      params = params.set('ReadDate', modelIn.ReadDate.toString());
+    }
+
+    if (modelIn.CreatedDate != null) {
+      console.log(modelIn.CreatedDate.toString());
+      params = params.set('CreatedDate', modelIn.CreatedDate.toString());
     }
 
 

@@ -11,6 +11,7 @@ import {
 import {GetRoomResponse} from '../../../../interfaces/devices';
 import {ApiDeviceService} from '../../../../shared/devices.service';
 import {ApiHomeService} from '../../../../shared/home.service';
+import {GetUserResponse} from '../../../../interfaces/users';
 
 @Component({
   selector: 'app-homes-home-owner',
@@ -127,7 +128,6 @@ export class HomeOwnersHomesComponent implements OnInit {
     this.api.getMembersOfHome(id).subscribe({
       next: (res: any) => {
         this.members = res.members || [];
-        console.log(this.members);
       }
     });
   }
@@ -139,7 +139,6 @@ export class HomeOwnersHomesComponent implements OnInit {
     this.api.getDevicesOfHome(id, this.roomFilter).subscribe({
       next: (res: any) => {
         this.devices = res.devicesUnit || [];
-        console.log(this.devices);
         this.cdr.detectChanges();
         this.errorMessage = '';
       },
@@ -444,12 +443,14 @@ export class HomeOwnersHomesComponent implements OnInit {
 
     this.api.getRooms(this.selectedHome.id.toString()).subscribe({
       next: (res: GetRoomResponse) => {
-        console.log(res)
         this.listOfRooms = res.rooms|| [];
       }
     });
   }
 
+  userPhotoUrl(photoUrl: string): string {
+    return photoUrl ? photoUrl : 'https://i.postimg.cc/hP6nR6FY/smarthomeuser.webp'
+  }
 
 
 }
