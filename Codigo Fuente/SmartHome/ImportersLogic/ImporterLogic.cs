@@ -28,8 +28,13 @@ public class ImporterLogic : IImporter.IImporter
     
     
     {
-        Console.WriteLine(Directory.GetCurrentDirectory());
-        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), DllDirectoryPath));
+        string baseDirectory = AppContext.BaseDirectory;
+        
+        string codigoFuenteDirectory = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent?.Parent?.Parent?.FullName ?? throw new InvalidOperationException("No se pudo encontrar el directorio 'Codigo Fuente'.");
+        
+        string directoryOfDlll = Path.Combine(codigoFuenteDirectory, DllDirectoryPath);
+        
+        string directoryOfDll = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), directoryOfDlll));
         
 
         var assemblyPaths = Directory.GetFiles(directoryOfDll, DllSearchPattern, SearchOption.AllDirectories);
