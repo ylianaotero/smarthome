@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import {ApiService} from '../../shared/api.service';
+import {userRetrieveModel} from '../home-owners/create/signUpUserModel';
 
 @Component({
   selector: 'app-user-panel',
@@ -13,10 +13,15 @@ export class UserPanelComponent implements OnInit{
 
   rol : string = "";
 
-  constructor(private router: Router, private api: ApiService) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
-    console.log(this.api.currentSession?.user?.roles);
-    for (const role of this.api.currentSession?.user?.roles || []) {
+  user : userRetrieveModel | null = null;
+
+  constructor(private router: Router) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
+    for (const role of this.user?.roles || []) {
       if (role.kind === "Administrator") {
         this.rol = "administrator";
         break;

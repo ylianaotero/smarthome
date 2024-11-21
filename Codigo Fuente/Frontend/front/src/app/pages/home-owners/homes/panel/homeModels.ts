@@ -178,7 +178,7 @@ export interface member {
   email: string;
   photo: string;
   hasPermissionToListDevices: boolean,
-  hasPermissionToAddDevice: boolean,
+  hasPermissionToAddADevice: boolean,
   receivesNotifications: boolean
 }
 

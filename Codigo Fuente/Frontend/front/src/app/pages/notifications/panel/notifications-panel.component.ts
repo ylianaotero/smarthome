@@ -1,7 +1,8 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {ApiService} from '../../../shared/api.service';
 import {GetNotificationResponse, NotificationsFilterRequestModel} from './model-notification';
+import {ApiDeviceService} from '../../../shared/devices.service';
+import {ApiNotificationService} from '../../../shared/notification.service';
 
 
 @Component({
@@ -10,7 +11,7 @@ import {GetNotificationResponse, NotificationsFilterRequestModel} from './model-
   styleUrls: [ '../../../../styles.css']
 })
 export class NotificationsPanelComponent implements OnInit {
-  constructor(private router: Router, private api: ApiService) {
+  constructor(private router: Router, private api: ApiNotificationService, private deviceApi : ApiDeviceService) {
     console.log("Componente creado");
   }
 
@@ -31,7 +32,7 @@ export class NotificationsPanelComponent implements OnInit {
   }
 
   getSupportedDevices(): void {
-    this.api.getSupportedDevices().subscribe({
+    this.deviceApi.getSupportedDevices().subscribe({
       next: (res: any) => {
         this.deviceTypes = res.deviceTypes || [];
       }

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {createAdministratorModel, createCompanyOwnerModel, ResponseAdmin} from '../../../interfaces/users';
-import { AdministratorService } from '../../../shared/administrator.service';
-import {ApiService} from '../../../shared/api.service';
+import {createAdministratorModel, createCompanyOwnerModel} from '../../../interfaces/users';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-create-user',
@@ -27,14 +26,14 @@ export class CreateUserComponent {
 
   userId : number = -1;
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private userApi: ApiUserService, private router: Router) {}
 
   goHome(): void {
     this.router.navigate(['/administrators']);
   }
 
   addRole(): void {
-    this.api.postRole(this.userId.toString())
+    this.userApi.postRole(this.userId.toString())
       .subscribe({
         next: res => {
           this.router.navigate(['/home/user-panel']);
@@ -52,7 +51,7 @@ export class CreateUserComponent {
     }
 
     if(this.selectedRole === 'Administrador'){
-      this.api.postAdministrator(new createAdministratorModel(name, email, password, surname, photo))
+      this.userApi.postAdministrator(new createAdministratorModel(name, email, password, surname, photo))
       .subscribe({
         next: res => {
           this.feedback = "El administrador fue creado con éxito!";
@@ -69,7 +68,7 @@ export class CreateUserComponent {
         }
       });
     }else{
-      this.api.postCompanyOwner(new createCompanyOwnerModel(name, email, password, surname))
+      this.userApi.postCompanyOwner(new createCompanyOwnerModel(name, email, password, surname))
       .subscribe({
         next: res => {
           if(this.homeOwner){

@@ -1,6 +1,5 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../../../shared/api.service';
 import {
   addDeviceRequest,
   addMemberRequest,
@@ -9,8 +8,9 @@ import {
   deviceUnit,
   ChangeMemberNotificationsRequest, patchDeviceRequest, addRoomRequest
 } from './homeModels';
-import {GetCompanyResponse} from '../../../../interfaces/companies';
-import {GetDeviceTypesResponse, GetRoomResponse} from '../../../../interfaces/devices';
+import {GetRoomResponse} from '../../../../interfaces/devices';
+import {ApiDeviceService} from '../../../../shared/devices.service';
+import {ApiHomeService} from '../../../../shared/home.service';
 
 @Component({
   selector: 'app-homes-home-owner',
@@ -60,6 +60,9 @@ export class HomeOwnersHomesComponent implements OnInit {
 
   roomFilter: string = '';
 
+  constructor(private api: ApiHomeService, private router: Router,private cdr: ChangeDetectorRef,  private deviceApi : ApiDeviceService) {}
+
+
   openEditAliasForm(device: any) {
     this.deviceBeingEdited = device;
     this.newAlias = device.name;
@@ -83,8 +86,8 @@ export class HomeOwnersHomesComponent implements OnInit {
       HomeId: this.selectedHome.id
     };
 
-    this.api.patchDevice(request).subscribe({
-      next: (res: any) => {
+    this.deviceApi.patchDevice(request).subscribe({
+      next: () => {
         this.getDevices(this.selectedHome?.id);
       },
     });
@@ -100,9 +103,6 @@ export class HomeOwnersHomesComponent implements OnInit {
     this.deviceBeingEdited = null;
     this.newAlias = '';
   }
-
-
-  constructor(private api: ApiService, private router: Router,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.getHomes();

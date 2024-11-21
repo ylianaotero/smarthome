@@ -254,8 +254,8 @@
             <td>{{ member.fullName }}</td>
             <td>{{ member.email }}</td>
             <td>
-              <i *ngIf="member.hasPermissionToAddDevice" class="fas fa-check text-success"></i>
-              <i *ngIf="!member.hasPermissionToAddDevice" class="fas fa-times text-danger"></i>
+              <i *ngIf="member.hasPermissionToAddADevice" class="fas fa-check text-success"></i>
+              <i *ngIf="!member.hasPermissionToAddADevice" class="fas fa-times text-danger"></i>
             </td>
             <td>
               <i *ngIf="member.hasPermissionToListDevices" class="fas fa-check text-success"></i>

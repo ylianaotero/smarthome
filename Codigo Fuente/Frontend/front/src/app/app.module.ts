@@ -25,27 +25,33 @@ import {ListCompaniesComponent} from './pages/administrators/list-companies/list
 import {CreateDeviceComponent} from './pages/company-owners/create-device/create-device.component';
 import {CreateCompanyComponent} from './pages/company-owners/create-company/create-company.component';
 import {NotificationsPanelComponent} from './pages/notifications/panel/notifications-panel.component';
+import {administratorGuard} from './guard/administrator/administrator.guard';
+import {loggedGuard} from './guard/logged/logged.guard';
+import {notLoggedGuard} from './guard/not-logged/not-logged.guard';
+import {homeOwnerGuard} from './guard/homeoOwner/home-owner.guard';
+import {companyOwnerGuardGuard} from './guard/companyOwner/company-owner.guard.guard';
+import {twoRolesGuardGuard} from './guard/userWithTwoRoles/two-roles.guard.guard';
 
 const routes: Routes = [
-  { path: '', component: HomePanelComponent },
-  { path: 'login', component: LoginPanelComponent },
-  { path: 'devices', component: DevicesPanelComponent },
-  { path: 'administrators', component: AdministratorPanelComponent },
-  { path: 'administrators/create-user', component: CreateUserComponent },
-  { path: 'administrators/delete-admin', component: DeleteAdminComponent },
-  { path: 'administrators/list-users', component: ListUsersComponent },
-  { path: 'administrators/list-companies', component: ListCompaniesComponent },
-  { path: 'home-owners', component: HomeOwnersPanelComponent },
+  { path: '', component: HomePanelComponent, canActivate:[notLoggedGuard]},
+  { path: 'login', component: LoginPanelComponent, canActivate:[notLoggedGuard]},
+  { path: 'devices', component: DevicesPanelComponent, canActivate:[loggedGuard]},
+  { path: 'administrators', component: AdministratorPanelComponent, canActivate:[administratorGuard]},
+  { path: 'administrators/create-user', component: CreateUserComponent, canActivate:[administratorGuard] },
+  { path: 'administrators/delete-admin', component: DeleteAdminComponent, canActivate:[administratorGuard] },
+  { path: 'administrators/list-users', component: ListUsersComponent, canActivate:[administratorGuard] },
+  { path: 'administrators/list-companies', component: ListCompaniesComponent, canActivate:[administratorGuard] },
+  { path: 'home-owners', component: HomeOwnersPanelComponent, canActivate:[homeOwnerGuard] },
   { path: 'home-owners/create', component: CreateHomeOwnerComponent },
-  { path: 'home-owners/homes', component: HomeOwnersHomesComponent },
-  { path: 'home-owners/homes/create', component: CreateHomeComponent },
-  { path: 'company-owners', component: CompanyOwnersPanelComponent },
-  { path: 'company-owners/import-device', component: ImportDeviceComponent },
-  { path: 'company-owners/create-device', component: CreateDeviceComponent },
-  { path: 'company-owners/create-company', component: CreateCompanyComponent },
-  { path: 'home', component: HomePanelComponent },
-  { path: 'home/user-panel', component: UserPanelComponent },
-  { path: 'notifications', component: NotificationsPanelComponent }
+  { path: 'home-owners/homes', component: HomeOwnersHomesComponent,canActivate:[homeOwnerGuard] },
+  { path: 'home-owners/homes/create', component: CreateHomeComponent, canActivate:[homeOwnerGuard]},
+  { path: 'company-owners', component: CompanyOwnersPanelComponent, canActivate: [companyOwnerGuardGuard] },
+  { path: 'company-owners/import-device', component: ImportDeviceComponent, canActivate: [companyOwnerGuardGuard]  },
+  { path: 'company-owners/create-device', component: CreateDeviceComponent,canActivate: [companyOwnerGuardGuard]  },
+  { path: 'company-owners/create-company', component: CreateCompanyComponent , canActivate: [companyOwnerGuardGuard] },
+  { path: 'home', component: HomePanelComponent , canActivate:[notLoggedGuard]},
+  { path: 'home/user-panel', component: UserPanelComponent , canActivate:[twoRolesGuardGuard]},
+  { path: 'notifications', component: NotificationsPanelComponent , canActivate:[loggedGuard]},
 ];
 
 @NgModule({

@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import { AdministratorService } from '../../../shared/administrator.service';
 import { Router } from '@angular/router';
 import {GetUsersRequest, GetUsersResponse, GetUserResponse, Role} from '../../../interfaces/users';
-import {ApiService} from '../../../shared/api.service';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-list-users',
@@ -26,7 +25,7 @@ export class ListUsersComponent implements OnInit{
   pageSize: number = 6; //cuantos se van a ver por pagina
 
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private router: Router, private userApi : ApiUserService) {}
 
   changePage(page: number): void {
     this.currentPage = page;
@@ -45,7 +44,7 @@ export class ListUsersComponent implements OnInit{
       role: this.selectedRole
     };
 
-    this.api.getUsers(request,this.currentPage, this.pageSize).subscribe({
+    this.userApi.getUsers(request,this.currentPage, this.pageSize).subscribe({
       next: (res: GetUsersResponse) => {
         this.users = res.users || [];
         console.log(res.totalCount);

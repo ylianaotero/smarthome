@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
-import { userRegistrationInstance } from './signUpUserModel';
+import {userRegistrationInstance, userRetrieveModel} from './signUpUserModel';
+import {ApiSessionService} from '../../../shared/session.service';
+import {ApiUserService} from '../../../shared/user.service';
 
 @Component({
   selector: 'app-sign-up-home-owner',
@@ -17,7 +18,14 @@ export class CreateHomeOwnerComponent {
   userPassword: string = '';
   userPhoto: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  user : userRetrieveModel | null = null;
+
+  constructor(private api: ApiUserService, private router: Router, private sessionApi : ApiSessionService) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+  }
 
   goToLogin(): void {
     this.router.navigate(['/login']);
@@ -46,9 +54,8 @@ export class CreateHomeOwnerComponent {
       .subscribe({
         next: res => {
           this.feedback = "Registration successful!";
-          this.api.postSession({ email: email, password: password }).subscribe({
+          this.sessionApi.postSession({ email: email, password: password }).subscribe({
             next: (sessionInfo) => {
-              this.api.currentSession = sessionInfo;
               this.router.navigate(['/home-owners']);
             }
           })

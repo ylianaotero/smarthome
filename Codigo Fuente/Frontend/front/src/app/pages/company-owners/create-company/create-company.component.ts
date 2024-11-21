@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/api.service';
 import { Router } from '@angular/router';
 import {
   CreateCompanyRequest,
   GetCompaniesResponse, GetCompanyRequest,
   GetCompanyResponse
 } from '../../../interfaces/companies';
-import { CompanyService } from '../../../shared/company.service';
+import {userRetrieveModel} from '../../home-owners/create/signUpUserModel';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-create-company',
@@ -30,10 +30,16 @@ export class CreateCompanyComponent {
 
   companies: GetCompanyResponse[] = [];
 
-  constructor(private api: ApiService, private router: Router) {
-    this.companyOwnerName = this.api.currentSession?.user?.name || 'Usuario';
-    this.companyOwnerEmail = this.api.currentSession?.user?.email || '';
-    this.companyOwnerId = this.api.currentSession?.user?.id || -1;
+  user : userRetrieveModel | null = null;
+
+  constructor(private api: ApiCompanyService, private router: Router) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.companyOwnerName= this.user?.name || 'Usuario';
+    this.companyOwnerEmail = this.user?.email || '';
+    this.companyOwnerId  = this.user?.id || 0;
   }
 
   ngOnInit(): void {

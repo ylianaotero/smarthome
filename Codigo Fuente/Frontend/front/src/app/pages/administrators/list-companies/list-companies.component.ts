@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {GetCompanyResponse, GetCompaniesResponse, GetCompanyRequest} from '../../../interfaces/companies';
-import {CompanyService} from '../../../shared/company.service';
-import {ApiService} from '../../../shared/api.service';
+import {ApiCompanyService} from '../../../shared/company.service';
 
 @Component({
   selector: 'app-list-companies',
@@ -25,7 +24,7 @@ export class ListCompaniesComponent implements OnInit{
   currentPage: number = 1;
   pageSize: number = 6; //cuantos se van a ver por pagina
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiCompanyService, private router: Router) {}
 
   ngOnInit(): void {
     this.getCompanies();

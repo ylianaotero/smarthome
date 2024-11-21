@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../../shared/api.service';
-import {DeviceFilterRequestModel, deviceModel} from '../../devices/panel/model-device';
-import {GetDeviceResponse, GetDeviceTypesResponse} from '../../../interfaces/devices';
+import {deviceModel} from '../../devices/panel/model-device';
+import {GetDeviceTypesResponse} from '../../../interfaces/devices';
+import {userRetrieveModel} from '../create/signUpUserModel';
+import {ApiDeviceService} from '../../../shared/devices.service';
 
 @Component({
   selector: 'app-account',
@@ -12,25 +13,22 @@ import {GetDeviceResponse, GetDeviceTypesResponse} from '../../../interfaces/dev
 export class HomeOwnersPanelComponent implements OnInit {
 
   userName: string;
-
-  supportedDevices!: string[];
-
-
   devices!: deviceModel[];
-
-  selectedName: string = "";
-  selectedCompany: string = "";
-  selectedKind: string = "";
-  selectedModel: string = "";
 
 
   modalShowDevices: boolean = false;
   modalShowDevicesTypes: boolean = false;
 
+  user : userRetrieveModel | null = null;
+
   deviceTypes: string[] = [];
 
-  constructor(private api: ApiService, private router: Router) {
-    this.userName = this.api.currentSession?.user?.name || 'Usuario';
+  constructor(private api: ApiDeviceService, private router: Router) {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user = JSON.parse(storedUser) as userRetrieveModel;
+    }
+    this.userName = this.user?.name || 'Usuario';
   }
 
   ngOnInit(): void {
@@ -45,6 +43,12 @@ export class HomeOwnersPanelComponent implements OnInit {
         console.log(res.deviceTypes);
       }
     });
+  }
+
+  logOut() : void {
+    localStorage.setItem('user', JSON.stringify(null));
+    localStorage.setItem('token', '');
+    this.router.navigate(['']);
   }
 
 
