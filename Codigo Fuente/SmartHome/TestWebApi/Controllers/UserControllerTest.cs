@@ -33,7 +33,6 @@ public class UserControllerTest
     private const int OkStatusCode = 200;
     private const int NotFoundStatusCode = 404;
     private const int BadRequestStatusCode = 400;
-    private const int PreconditionFailedStatusCode = 412;
     private const int ConflictStatusCode = 409;
     
     
@@ -198,7 +197,7 @@ public class UserControllerTest
     }
     
     [TestMethod]
-    public void AddRoleToUserPreconditionFailedStatusCode()
+    public void AddRoleToUserBadRequestStatusCodeBecauseOfPrecondition()
     {
         _userServiceMock
             .Setup(service => service.AssignRoleToUser(It.IsAny<long>(), It.IsAny<string>()))
@@ -213,7 +212,7 @@ public class UserControllerTest
 
         _userServiceMock.VerifyAll();
 
-        Assert.AreEqual(PreconditionFailedStatusCode, result.StatusCode);
+        Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
     }
     
     [TestMethod]

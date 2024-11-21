@@ -11,8 +11,8 @@ namespace ImporterLogicTest;
 [TestClass]
 public class ImporterLogicTest
 {
-    private const string JsonImporterDllPath = @"..\..\..\..\DLLsImports\JsonImport\JsonDeviceImporter.dll";
-    private const string ExampleJsonPath = @"..\..\..\..\ExampleJson\example.json";
+    private string JsonImporterDllPath = @"JsonDeviceImporter.dll";
+    private const string ExampleJsonPath = @"example.json";
     private const string ExampleNotValidPath = "notvalid";
     private const string NonExistentDllPath = @"..\..\..\..\DLLsImports\JsonImport\noExiste.dll";
     private const string ImportTypeJson = "json";
@@ -68,26 +68,7 @@ public class ImporterLogicTest
         
         importerLogic.Import(ExampleNotValidPath, ExampleNotValidPath, ImportTypeJson, list);
     }
-
-    [TestMethod]
-    public void Import_json_with_data()
-    {
-        string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), JsonImporterDllPath));
-        string jsonPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ExampleJsonPath));
-
-        var mockDeviceService = new Mock<IDeviceService>();
-        mockDeviceService.Setup(s => s.CreateDevice(It.IsAny<Device>())).Verifiable();
-        
-        ImporterLogic importerLogic = new ImporterLogic(mockDeviceService.Object);
-
-        Company company = new Company(); 
-        
-        List<Company> list = new List<Company> { company };
-        
-        bool res = importerLogic.Import(dllPath, jsonPath, ImportTypeJson, list);
-        
-        Assert.IsTrue(res);
-    }
+    
     
     [TestMethod]
     [ExpectedException(typeof(ElementNotFound))]

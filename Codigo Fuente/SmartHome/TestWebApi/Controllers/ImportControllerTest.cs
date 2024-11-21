@@ -203,4 +203,38 @@ public class ImportControllerTest
         Assert.AreEqual(NotFoundStatusCode, result.StatusCode);
     }
     
+    [TestMethod]
+    public void TestPostImporterOk()
+    {
+        _mockImporter.Setup(x => x.MoveDllFile(It.IsAny<string>())).Returns(true);
+
+        _importController = new ImportController(_mockImporter.Object, _mockSessionService.Object, _mockCompanyService.Object) {};
+
+        _importController.PostImporter(new PostImportRequest() { Path = _dllFile });
+
+        _mockImporter.VerifyAll();
+    }
+    
+    [TestMethod]
+    public void TestPostImporterNotFound()
+    {
+        _mockImporter.Setup(x => x.MoveDllFile(_dllFile)).Returns(false);
+        
+        _importController = new ImportController(_mockImporter.Object, _mockSessionService.Object, _mockCompanyService.Object);
+
+        _importController.PostImporter(new PostImportRequest() { Path = _dllFile });
+        
+        _mockImporter.VerifyAll();
+    }
+    
+    [TestMethod]
+    public void TestPostImportRequest()
+    {
+        PostImportRequest postImportRequest = new PostImportRequest()
+        {
+            Path = _dllFile
+        };
+        
+        Assert.AreEqual(_dllFile, postImportRequest.Path);
+    }
 }

@@ -302,7 +302,40 @@ public class HomeServiceTest
         
         _homeService.GetRoomsFromHome(_defaultHome.Id);
     }
+
+    [TestMethod]
+    public void TestUpdateHome()
+    {
+        _mockHomeRepository.Setup(m => m.GetById(_defaultHome.Id)).Returns(_defaultHome);
+        
+        _homeService.UpdateHome(_defaultHome.Id);
+        
+        _mockHomeRepository.Verify(m => m.Update(_defaultHome), Times.Once);
+    }
+
+    [TestMethod]
+    public void TestGetDevicesFromHomeByFilter()
+    {
+        List<DeviceUnit> devices = new List<DeviceUnit>
+        {
+            _windowSensorUnit,
+            _securityCameraUnit
+        };
+        
+        List<DeviceUnit> expected = new List<DeviceUnit>
+        {
+            _windowSensorUnit,
+        };
     
+        _defaultHome.Devices = devices;
+        
+        Func<DeviceUnit, bool> filter = device => device.IsConnected;
+        
+        _mockHomeRepository.Setup(m => m.GetById(1)).Returns(_defaultHome);
+
+        List<DeviceUnit> retrievedDevices = _homeService.GetDevicesFromHomeByFilter(1, filter);
+        CollectionAssert.AreEqual(expected, retrievedDevices);
+    }
     
     private void SetupDefaultObjects()
     {

@@ -10,8 +10,14 @@ namespace BusinessLogic
 
         public List<IModelValidator> GetAllValidators()
         {
-            Console.WriteLine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-            string[] filePaths = Directory.GetFiles(ImportersDirectory); 
+            string baseDirectory = AppContext.BaseDirectory;
+        
+            string codigoFuenteDirectory = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent?.Parent?.Parent?.FullName ?? throw new InvalidOperationException("No se pudo encontrar el directorio 'Codigo Fuente'.");
+        
+            string directoryOfDlll = Path.Combine(codigoFuenteDirectory, ImportersDirectory);
+            
+            string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), directoryOfDlll));
+            string[] filePaths = Directory.GetFiles(dllPath ); 
             
             string[] dllFiles = filePaths.Where(file => FileIsDll(file)).ToArray();
             

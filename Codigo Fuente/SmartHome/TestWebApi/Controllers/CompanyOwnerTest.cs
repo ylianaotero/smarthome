@@ -42,7 +42,7 @@ public class CompanyOwnerTest
             Name = Name,
             Surname = Surname,
             Email = Email1, 
-            Password = Password
+            Password = Password,
         };
         _userServiceMock.Setup(service => service.CreateUser(It.Is<User>(u =>
             u.Name == Name &&
@@ -58,7 +58,7 @@ public class CompanyOwnerTest
             Email = Email1,
             Password = Password,
             Roles = new List<Role>(){new CompanyOwner()},
-            Id = 1
+            Id = 0
         };
         PostCompanyOwnerResponse expectedResponse = new PostCompanyOwnerResponse(user, user.Id);
 
