@@ -38,7 +38,8 @@ public class UserServiceTest
             Name = NewName,
             Email = NewEmail,
             Password = NewPassword,
-            Surname = NewSurname
+            Surname = NewSurname,
+            Id = 1
         };
         
         _company = new Company();
@@ -313,9 +314,9 @@ public class UserServiceTest
             .Verify(repo => repo.Delete(It.IsAny<User>()), Times.Never);
     }
     
-    /*
     [TestMethod]
-    public void DeleteUser_UserNotFound_ReturnsNotFound()
+    [ExpectedException(typeof(ElementNotFound))]
+    public void DeleteUserReturnsNotFound()
     {
         _mockUserRepository
             .Setup(v => v.GetById(_user.Id))
@@ -323,7 +324,6 @@ public class UserServiceTest
         _userService.DeleteUser(_user.Id);
         _mockUserRepository.Verify();
     }
-    */
     
     [TestMethod]
     public void TestUpdateUser()
