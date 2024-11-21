@@ -94,6 +94,93 @@ public class DeviceServiceTest
         _mockDeviceRepository.Verify(x => x.Add(_defaultCamera), Times.Once);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(InputNotValid))]
+    public void TestCreateDeviceFailsBecauseOfValidationMethod()
+    {
+        Company company = new Company
+        {
+            Name = CompanyName,
+            Id = 1,
+            ValidationMethod = "VALIDATORNUMBER"
+        };
+        
+        SecurityCamera camera = new SecurityCamera
+        {
+            Name = CameraName,
+            Model = "abcdef",
+            PhotoURLs = new List<string>() { DevicePhotoUrl },
+            Company = company,
+            Kind = SecurityCameraType
+        };
+        
+        _deviceService.CreateDevice(camera);
+    }
+    
+    [TestMethod]
+    public void TestCreateDeviceWithValidationMethod()
+    {
+        Company company = new Company
+        {
+            Name = CompanyName,
+            Id = 1,
+            ValidationMethod = "VALIDATORLETTER"
+        };
+        
+        SecurityCamera camera = new SecurityCamera
+        {
+            Name = CameraName,
+            Model = "abcdef",
+            PhotoURLs = new List<string>() { DevicePhotoUrl },
+            Company = company,
+            Kind = SecurityCameraType
+        };
+        
+        _deviceService.CreateDevice(camera);
+        
+        _mockDeviceRepository.Verify(x => x.Add(_defaultCamera), Times.Once);
+    }
+    
+    [TestMethod]
+    public void TestModelValidatorLetterIsValid()
+    {
+        IModelValidator validator = new ValidatorLetter.ValidatorLetter();
+        Modelo modelo = new Modelo();
+        modelo.set_Value("abcdef");
+        
+        Assert.IsTrue(validator.EsValido(modelo));
+    }
+    
+    [TestMethod]
+    public void TestModelValidatorLetterIsNotValid()
+    {
+        IModelValidator validator = new ValidatorLetter.ValidatorLetter();
+        Modelo modelo = new Modelo();
+        modelo.set_Value("123456");
+        
+        Assert.IsFalse(validator.EsValido(modelo));
+    }
+    
+    [TestMethod]
+    public void TestModelValidatorNumberIsValid()
+    {
+        IModelValidator validator = new ValidatorNumber.ValidatorNumber();
+        Modelo modelo = new Modelo();
+        modelo.set_Value("abc123");
+        
+        Assert.IsTrue(validator.EsValido(modelo));
+    }
+    
+    [TestMethod]
+    public void TestModelValidatorNumberIsInvalid()
+    {
+        IModelValidator validator = new ValidatorNumber.ValidatorNumber();
+        Modelo modelo = new Modelo();
+        modelo.set_Value("abc1233");
+        
+        Assert.IsFalse(validator.EsValido(modelo));
+    }
+    
     private void SetupDefaultObjects()
     {
         _devices = new List<Device>();

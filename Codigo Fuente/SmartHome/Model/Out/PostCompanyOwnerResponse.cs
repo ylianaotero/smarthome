@@ -26,6 +26,7 @@ public class PostCompanyOwnerResponse
                Name == response.Name &&
                Email == response.Email &&
                Surname == response.Surname &&
-               Role == response.Role;
+               Role == response.Role &&
+               Id == response.Id;
     }
 }

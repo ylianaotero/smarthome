@@ -75,6 +75,7 @@ public class HomeOwnerControllerTest
             _postHomeOwnerRequest.Email == userResponse.Email &&
             _postHomeOwnerRequest.Surname == userResponse.Surname &&
             _postHomeOwnerRequest.Photo == userResponse.Photo &&
+            userResponse.Id == _user.Id &&
             userResponse.Roles.Count == 1
         );
     }
