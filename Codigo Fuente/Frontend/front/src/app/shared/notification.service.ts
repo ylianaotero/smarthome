@@ -5,15 +5,17 @@ import {
   NotificationsFilterRequestModel
 } from '../pages/notifications/panel/model-notification';
 import {Observable} from 'rxjs';
+import {environment} from '../../enviroments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiNotificationService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+  url: string;
 
-  url: string = 'http://localhost:5217/api/v1';
+  constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
+  }
 
 
   getNotifications(modelIn: NotificationsFilterRequestModel): Observable<GetNotificationResponse[]> {

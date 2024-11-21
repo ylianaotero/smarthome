@@ -7,15 +7,17 @@ import {
   PostCompaniesResponse
 } from '../interfaces/companies';
 import {Observable} from 'rxjs';
+import {environment} from '../../enviroments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiCompanyService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+  url: string;
 
-  url: string = 'http://localhost:5217/api/v1';
+  constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
+  }
 
   getCompanies(request:  GetCompanyRequest, currentPage?: number, pageSize?: number):
     Observable<GetCompaniesResponse> {

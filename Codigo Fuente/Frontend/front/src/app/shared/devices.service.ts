@@ -9,16 +9,18 @@ import {
   PostWindowSensorRequest
 } from '../interfaces/devices';
 import {DeviceFilterRequestModel, deviceModel} from '../pages/devices/panel/model-device';
+import {environment} from '../../enviroments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiDeviceService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+  url: string;
 
-  url: string = 'http://localhost:5217/api/v1';
+  constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
+  }
 
   patchDevice(data: patchDeviceRequest) {
     const storedUser = localStorage.getItem('token');

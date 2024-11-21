@@ -2,15 +2,17 @@
 import { Injectable } from '@angular/core';
 import { sessionModel, sessionRequest } from '../pages/login/panel/sessionModel';
 import {tap} from 'rxjs';
+import {environment} from '../../enviroments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiSessionService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+  url: string;
 
-  url: string = 'http://localhost:5217/api/v1';
+  constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
+  }
 
   postSession(data: sessionRequest) {
     return this.httpClient.post<sessionModel>(this.url + '/login', data).pipe(
