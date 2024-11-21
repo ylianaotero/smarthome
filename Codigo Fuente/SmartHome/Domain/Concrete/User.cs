@@ -105,19 +105,6 @@ public class User
         Roles.Add(role);
     }
 
-    /*
-    public void DeleteRole(Role role)
-    {
-        if (Roles.Contains(role))
-        {
-            Roles.Remove(role);
-        }
-        else
-        {
-            throw new ElementNotFound(MessageRoleNotFound);
-        }
-    }*/
-    
     public void DeleteRole(Role role)
     {
         Role roleToDelete = Roles.FirstOrDefault(r => r.Id == role.Id);

@@ -149,6 +149,12 @@ public class UserService(IRepository<User> userRepository) : IUserService
     private User GetBy(Func<User, bool> predicate, PageData pageData)
     {
         List<User> listOfuser = userRepository.GetByFilter(predicate, pageData); 
+        
+        if (listOfuser == null || listOfuser.Count == 0)
+        {
+            throw new ElementNotFound(UserDoesNotExistExceptionMessage);
+        }
+        
         User user = listOfuser.FirstOrDefault();
         
         if (user == null)

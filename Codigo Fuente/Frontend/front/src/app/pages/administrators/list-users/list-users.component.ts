@@ -22,7 +22,7 @@ export class ListUsersComponent implements OnInit{
   isPhotoModalOpen = false;
 
   currentPage: number = 1;
-  pageSize: number = 6; //cuantos se van a ver por pagina
+  pageSize: number = 6;
 
 
   constructor(private router: Router, private userApi : ApiUserService) {}

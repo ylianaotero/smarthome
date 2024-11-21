@@ -40,7 +40,6 @@ body {
   text-shadow: #4b4edb 3px 3px 3px;
 }
 
-/* Button styling */
 .btn {
   width: 200px;
   margin: 10px;
@@ -146,8 +145,6 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-
-/* Modal backdrop for focus effect */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -267,13 +264,12 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Styling the dropdown for functionalities with custom width and height */
 .form-control[multiple] {
-  width: 100%; /* Full width of the container */
-  max-width: 500px; /* Sets a maximum width to avoid stretching too far */
+  width: 100%;
+  max-width: 500px;
   height: auto;
-  min-height: 50px; /* Minimum height */
-  max-height: 70px; /* Restrict height for a compact look */
+  min-height: 50px;
+  max-height: 70px;
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -285,7 +281,6 @@ body {
   outline: none;
 }
 
-/* Option styling for improved readability */
 .form-control option {
   padding: 5px;
   background-color: #fff;
@@ -293,26 +288,20 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* Highlight selected options */
 .form-control option:checked {
   background-color: #6c5ce7;
   color: #fff;
 }
 
-/* Hover effect for options */
 .form-control option:hover {
   background-color: #ddd;
 }
 
-
-/* Make the functionalities label stand out */
 .input-group label[for="functionalities"] {
   font-size: 1rem;
   color: #6c5ce7;
   font-weight: 600;
 }
-
-
 
 
 .feedback-error {

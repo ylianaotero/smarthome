@@ -26,7 +26,6 @@ public class RepositoryTest
     private const string WindowSensorName = "My Window Sensor";
     private const string DeviceDescription = "This is a device";
     private const string DevicePhotoUrl = "https://example.com/photo.jpg";
-    //private const string DeviceModel = "1345354616346";
     private const string DeviceModel = "edf124";
     
     private const string CompanyName = "IoT Devices & Co.";
