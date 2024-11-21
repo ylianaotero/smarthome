@@ -10,8 +10,9 @@ namespace BusinessLogic
 
         public List<IModelValidator> GetAllValidators()
         {
-            Console.WriteLine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-            string[] filePaths = Directory.GetFiles(ImportersDirectory); 
+            Console.WriteLine(Directory.GetCurrentDirectory());
+            string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ImportersDirectory));
+            string[] filePaths = Directory.GetFiles(dllPath ); 
             
             string[] dllFiles = filePaths.Where(file => FileIsDll(file)).ToArray();
             
