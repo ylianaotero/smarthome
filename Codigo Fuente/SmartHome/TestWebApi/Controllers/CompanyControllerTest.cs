@@ -250,6 +250,6 @@ public class CompanyControllerTest
             _defaultCompany2
         };
         
-        return new GetCompaniesResponse(companies);
+        return new GetCompaniesResponse(companies, 2);
     }
 }

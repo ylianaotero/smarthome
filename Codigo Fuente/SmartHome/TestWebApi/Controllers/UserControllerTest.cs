@@ -67,7 +67,7 @@ public class UserControllerTest
             .Returns(_listOfUsers); 
         _userController = new UserController(_userServiceMock.Object);
         GetUsersRequest request = new GetUsersRequest();
-        GetUsersResponse expectedResponse = new GetUsersResponse(_listOfUsers);
+        GetUsersResponse expectedResponse = new GetUsersResponse(_listOfUsers, PageData.DefaultPageSize);
         
         ObjectResult result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
         GetUsersResponse getUserResponse = result.Value as GetUsersResponse;
@@ -94,7 +94,7 @@ public class UserControllerTest
                 .GetUsersByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(listOfUsers); 
         _userController = new UserController(_userServiceMock.Object);
-        GetUsersResponse expectedResponse = new GetUsersResponse(listOfUsers);
+        GetUsersResponse expectedResponse = new GetUsersResponse(listOfUsers, PageData.DefaultPageSize);
         
         ObjectResult result = _userController.GetUsers(request, DefaultPageDataRequest()) as OkObjectResult;
         GetUsersResponse getUsersResponse = result.Value as GetUsersResponse;

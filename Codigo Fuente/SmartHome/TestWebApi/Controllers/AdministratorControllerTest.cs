@@ -76,8 +76,9 @@ public class AdministratorControllerTest
             u.Name == _user.Name &&
             u.Email == _user.Email &&
             u.Password == _user.Password &&
-            u.Surname == _user.Surname 
-        )));
+            u.Surname == _user.Surname &&
+            u.Id == _user.Id
+        ))).Returns(_user.Id);
         
         ObjectResult result = _administratorController.CreateAdministrator(_postAdministratorRequest) as ObjectResult;
         PostAdministratorResponse userResponse = result?.Value as PostAdministratorResponse;

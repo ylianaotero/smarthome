@@ -58,8 +58,9 @@ public class HomeOwnerControllerTest
             u.Email == _user.Email &&
             u.Password == _user.Password &&
             u.Surname == _user.Surname &&
-            u.Photo == _user.Photo
-        )));
+            u.Photo == _user.Photo &&
+            u.Id == _user.Id
+        ))).Returns(_user.Id);
 
         ObjectResult result = _homeOwnerController.CreateHomeOwner(_postHomeOwnerRequest) as ObjectResult;
         PostHomeOwnerResponse userResponse = result?.Value as PostHomeOwnerResponse;
