@@ -84,7 +84,7 @@ public class AdministratorControllerTest
 
         _userServiceMock.VerifyAll();
         
-        PostAdministratorResponse expectedResponse = new PostAdministratorResponse(_user);
+        PostAdministratorResponse expectedResponse = new PostAdministratorResponse(_user, _user.Id);
 
         Assert.AreEqual(userResponse, expectedResponse);
         Assert.AreEqual(CreatedStatusCode, result.StatusCode);
