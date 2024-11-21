@@ -9,7 +9,7 @@ import {
   PostWindowSensorRequest
 } from '../interfaces/devices';
 import {DeviceFilterRequestModel, deviceModel} from '../pages/devices/panel/model-device';
-import {environment} from '../../enviroments/environment';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

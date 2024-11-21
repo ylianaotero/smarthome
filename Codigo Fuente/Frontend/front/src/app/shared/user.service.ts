@@ -9,7 +9,7 @@ import {
   ResponseAdmin
 } from '../interfaces/users';
 import {userRegistrationInstance, userRetrieveModel} from '../pages/home-owners/create/signUpUserModel';
-import {environment} from '../../enviroments/environment';
+import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
