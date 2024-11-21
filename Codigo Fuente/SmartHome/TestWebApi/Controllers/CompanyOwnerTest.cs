@@ -51,14 +51,16 @@ public class CompanyOwnerTest
             u.Surname == Surname
         )));
         _companyOwnerController = new CompanyOwnerController(_userServiceMock.Object);
-        PostCompanyOwnerResponse expectedResponse = new PostCompanyOwnerResponse(new User()
+        User user = new User()
         {
             Name = Name,
             Surname = Surname,
             Email = Email1,
             Password = Password,
-            Roles = new List<Role>(){new CompanyOwner()}
-        });
+            Roles = new List<Role>(){new CompanyOwner()},
+            Id = 1
+        };
+        PostCompanyOwnerResponse expectedResponse = new PostCompanyOwnerResponse(user, user.Id);
 
         ObjectResult result = _companyOwnerController.CreateCompanyOwner(postCompanyOwnerRequest) as ObjectResult;
         PostCompanyOwnerResponse userResponse = result?.Value as PostCompanyOwnerResponse;
