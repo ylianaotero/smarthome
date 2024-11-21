@@ -10,10 +10,12 @@
         "dependencies": {
           "CustomExceptions": "1.0.0",
           "IBusinessLogic": "1.0.0",
+          "IImporter": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "8.0.8",
           "Microsoft.EntityFrameworkCore.Design": "8.0.8",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8",
           "Model": "1.0.0",
+          "Newtonsoft.Json": "13.0.1",
           "ServiceFactory": "1.0.0",
           "Swashbuckle.AspNetCore": "6.4.0"
         },
@@ -639,6 +641,14 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.1.25517"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/6.4.0": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
@@ -936,7 +946,8 @@
         "dependencies": {
           "Domain": "1.0.0",
           "IBusinessLogic": "1.0.0",
-          "IDataAccess": "1.0.0"
+          "IDataAccess": "1.0.0",
+          "IModelValidator": "1.0.0"
         },
         "runtime": {
           "BusinessLogic.dll": {
@@ -986,7 +997,8 @@
       "IBusinessLogic/1.0.0": {
         "dependencies": {
           "Domain": "1.0.0",
-          "IDataAccess": "1.0.0"
+          "IDataAccess": "1.0.0",
+          "IModelValidator": "1.0.0"
         },
         "runtime": {
           "IBusinessLogic.dll": {
@@ -1001,6 +1013,41 @@
         },
         "runtime": {
           "IDataAccess.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "IImporter/1.0.0": {
+        "dependencies": {
+          "Model": "1.0.0"
+        },
+        "runtime": {
+          "IImporter.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "IModelValidator/1.0.0": {
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "runtime": {
+          "IModelValidator.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ImportersLogic/1.0.0": {
+        "dependencies": {
+          "IBusinessLogic": "1.0.0",
+          "IImporter": "1.0.0",
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "runtime": {
+          "ImportersLogic.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1023,6 +1070,8 @@
           "BusinessLogic": "1.0.0",
           "DataAccess": "1.0.0",
           "IBusinessLogic": "1.0.0",
+          "IImporter": "1.0.0",
+          "ImportersLogic": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
         },
         "runtime": {
@@ -1362,6 +1411,13 @@
       "path": "moq/4.20.72",
       "hashPath": "moq.4.20.72.nupkg.sha512"
     },
+    "Newtonsoft.Json/13.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "path": "newtonsoft.json/13.0.1",
+      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
+    },
     "Swashbuckle.AspNetCore/6.4.0": {
       "type": "package",
       "serviceable": true,
@@ -1661,6 +1717,21 @@
       "sha512": ""
     },
     "IDataAccess/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IImporter/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IModelValidator/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ImportersLogic/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
