@@ -11,7 +11,7 @@ namespace ImporterLogicTest;
 [TestClass]
 public class ImporterLogicTest
 {
-    private const string JsonImporterDllPath = @"JsonDeviceImporter.dll";
+    private string JsonImporterDllPath = @"JsonDeviceImporter.dll";
     private const string ExampleJsonPath = @"example.json";
     private const string ExampleNotValidPath = "notvalid";
     private const string NonExistentDllPath = @"..\..\..\..\DLLsImports\JsonImport\noExiste.dll";
@@ -74,6 +74,8 @@ public class ImporterLogicTest
     {
         string dllPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), JsonImporterDllPath));
         string jsonPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ExampleJsonPath));
+        
+        
 
         var mockDeviceService = new Mock<IDeviceService>();
         mockDeviceService.Setup(s => s.CreateDevice(It.IsAny<Device>())).Verifiable();
