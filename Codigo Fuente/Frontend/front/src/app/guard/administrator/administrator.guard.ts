@@ -7,6 +7,11 @@ export const administratorGuard: CanActivateFn = (route, state) => {
   const router = new Router();
   if(storedUser){
     res = JSON.parse(storedUser) as userRetrieveModel;
+    if (res === undefined || res === null) {
+      router.navigate(['home']);
+      return false;
+    }
+
     if (res.roles && res.roles.some(role => role.kind === 'Administrator')) {
       return true;
     } else if (res.roles && res.roles.some(role => role.kind === 'HomeOwner' && res?.roles.length === 1)) {

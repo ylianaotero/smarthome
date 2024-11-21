@@ -8,6 +8,10 @@ export const notLoggedGuard: CanActivateFn = (route, state) => {
   if(storedUser){
     res = JSON.parse(storedUser) as userRetrieveModel;
     if (res) {
+      if (res.roles === undefined || res.roles === null) {
+        return true;
+      }
+
       if (res.roles && res.roles.some(role => role.kind === 'HomeOwner' && res?.roles.length === 1)) {
         router.navigate(['home-owners']);
         return false;
@@ -22,6 +26,9 @@ export const notLoggedGuard: CanActivateFn = (route, state) => {
         return false;
       }
     }
+  } else {
+    router.navigate(['login']);
+    return true;
   }
   return true;
 };

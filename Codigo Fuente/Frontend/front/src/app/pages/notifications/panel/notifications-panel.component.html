@@ -34,8 +34,17 @@
         <input
           type="date"
           class="form-control"
-          [(ngModel)]="selectedDate"
-          name="date"
+          [(ngModel)]="selectedCreatedDate"
+          name="createdDate"
+          [ngModelOptions]="{standalone: true}" />
+      </div>
+
+      <div class="col">
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="selectedReadDate"
+          name="readDate"
           [ngModelOptions]="{standalone: true}" />
       </div>
     </div>
@@ -55,7 +64,8 @@
       <th>Evento</th>
       <th>Dispositivo</th>
       <th>Estado</th>
-      <th>Fecha y Hora</th>
+      <th>Creado</th>
+      <th>Leido</th>
     </tr>
     </thead>
     <tbody>
@@ -66,6 +76,7 @@
         <i class="bi" [ngClass]="{'bi-check-circle text-success': notification.read, 'bi-x-circle text-danger': !notification.read}"></i>
         {{ notification.read ? 'Leído' : 'No leído' }}
       </td>
+      <td>{{ notification.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
       <td>{{ notification.readAt | date: 'yyyy-MM-dd HH:mm' }}</td>
     </tr>
     </tbody>

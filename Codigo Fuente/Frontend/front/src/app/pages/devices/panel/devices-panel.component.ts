@@ -44,8 +44,6 @@ export class DevicesPanelComponent implements OnInit {
   totalDevices: number = 0;
 
   getDevices(): void {
-
-
     const filters = new DeviceFilterRequestModel(
       this.selectedName,
       this.selectedModel,

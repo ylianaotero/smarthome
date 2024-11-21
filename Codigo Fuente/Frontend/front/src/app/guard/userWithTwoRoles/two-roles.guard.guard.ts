@@ -8,6 +8,10 @@ export const twoRolesGuardGuard: CanActivateFn = (route, state) => {
 
   if (storedUser) {
     res = JSON.parse(storedUser) as userRetrieveModel;
+    if (res === undefined || res === null) {
+      router.navigate(['home']);
+      return false;
+    }
 
     if (res.roles && res.roles.some(role => role.kind === 'HomeOwner') && res?.roles.length === 1) {
       router.navigate(['home-owners']);

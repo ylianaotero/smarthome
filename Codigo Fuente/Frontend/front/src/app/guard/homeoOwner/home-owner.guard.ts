@@ -9,6 +9,10 @@ export const homeOwnerGuard: CanActivateFn = (route, state) => {
 
   if (storedUser) {
     res = JSON.parse(storedUser) as userRetrieveModel;
+    if (res === undefined || res === null) {
+      router.navigate(['home']);
+      return false;
+    }
 
     if (res.roles && res.roles.some(role => role.kind === 'HomeOwner')) {
       return true;

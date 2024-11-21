@@ -56,6 +56,10 @@ public class UserServiceTest
                 .GetByFilter(It.IsAny<Func<User, bool>>(), It.IsAny<PageData>()))
             .Returns(new List<User>());
         
+        _mockUserRepository
+            .Setup(repo => repo
+                .GetAll(It.IsAny<PageData>())).Returns(new List<User>(){_user});
+        
         _userService.CreateUser(_user);
         
         _mockUserRepository
