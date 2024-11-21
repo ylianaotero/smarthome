@@ -9,15 +9,17 @@ import {
   ResponseAdmin
 } from '../interfaces/users';
 import {userRegistrationInstance, userRetrieveModel} from '../pages/home-owners/create/signUpUserModel';
+import {environment} from '../../enviroments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiUserService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+  url: string;
 
-  url: string = 'http://localhost:5217/api/v1';
+  constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
+  }
 
   postHomeOwner(data: userRegistrationInstance) {
     return this.httpClient.post<userRetrieveModel>(this.url + '/home-owners', data);

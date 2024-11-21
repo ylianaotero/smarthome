@@ -1,17 +1,18 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {ImportDevicesRequest, importer, ImporterPath} from '../pages/company-owners/import-device/importerModels';
+import {environment} from '../../enviroments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiImportService {
 
+  url: string;
+
   constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
   }
-
-  url: string = 'http://localhost:5217/api/v1';
-
   getImporters() {
     const storedUser = localStorage.getItem('token');
     return this.httpClient.get<importer[]>(this.url + '/imports', {headers: {'Authorization': `${storedUser}`}});

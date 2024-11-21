@@ -10,16 +10,18 @@ import {
   home, member
 } from '../pages/home-owners/homes/panel/homeModels';
 import {GetRoomResponse} from '../interfaces/devices';
+import {environment} from '../../enviroments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiHomeService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+  url: string;
 
-  url: string = 'http://localhost:5217/api/v1';
+  constructor(private httpClient: HttpClient) {
+    this.url = environment.apiUrl;
+  }
 
   postHome(data: createHomeModel) {
     const storedUser = localStorage.getItem('token');
