@@ -11,8 +11,8 @@ namespace ImporterLogicTest;
 [TestClass]
 public class ImporterLogicTest
 {
-    private const string JsonImporterDllPath = @"..\..\..\..\DLLsImports\JsonImport\JsonDeviceImporter.dll";
-    private const string ExampleJsonPath = @"..\..\..\..\ExampleJson\example.json";
+    private const string JsonImporterDllPath = @"JsonDeviceImporter.dll";
+    private const string ExampleJsonPath = @"example.json";
     private const string ExampleNotValidPath = "notvalid";
     private const string NonExistentDllPath = @"..\..\..\..\DLLsImports\JsonImport\noExiste.dll";
     private const string ImportTypeJson = "json";
